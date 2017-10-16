@@ -1,0 +1,287 @@
+/*
+** A flexbox layout derived from a codepen by Anthony Lukes at:
+** https://codepen.io/anthonyLukes/pen/DLBeE
+** and Philip Walton's "Solved by Flexbox" Sticky Footer code at:
+** https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/
+**
+** The intent with this layout is to have a page layout that remains
+** constant except for the content in the middle. It contains an
+** horizontal menu, header, content area, and footer. The "difficult"
+** part was putting the footer at the bottom of the window when there
+** is little content and the bottom of the content when there is lots,
+** all without knowing or estimating the height of the footer.
+**
+** The other thing I wanted were left and right-justified parts in the
+** footer.
+*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Some typography */
+h1,h2,h3,h4,h5,h6 {
+    background-color: transparent;
+    color: dimgray;
+    font-family: "Segoe UI", "Lucida Grande", Tahoma, Verdana, Helvetica,
+    Arial, sans-serif;
+}
+
+body {
+    font-family: "Segoe UI", Candara, "Helvetica Neue", "Lucida Grande",
+    Tahoma, Verdana, Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    color: #111111;
+    background-color: #fafafa;
+    font-size: 0.95em;
+    margin:0; /*gets rid of white space around body*/
+    position:relative; /*REQUIRED Sets up positioning for your footer*/
+}
+
+/* Some link styling. */
+a {
+    color: #a0e0ff;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #a0e0ff;
+    text-decoration: underline;
+}
+
+a:visited {
+    color: #cfe7ed;
+    text-decoration: none;
+}
+
+a:active {
+    color: #a0e0ff;
+    text-decoration: underline;
+}
+
+a:focus {
+    color: #a0e0ff;
+    text-decoration: underline;
+}
+
+.present-link-style a {
+    color: chartreuse;
+}
+
+.absent-link-style a {
+    color: red;
+}
+
+pre
+{
+    font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono",
+    "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace,
+    serif;
+    margin-bottom: 10px;
+    margin-left: 50px;
+    overflow: auto;
+    background-color: #eee;
+    width: 650px;
+    padding: 5px 5px 20px;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+.page {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.author-line {
+    margin-bottom: 0;
+    font-size: 0.8em;
+}
+
+.author-header {
+    font-weight: bold;
+}
+
+.date-header {
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.date-text {
+    font-size: 0.8em;
+}
+
+.header {
+    margin: 0;
+    padding: 0 0.5em;
+    flex: 0 0 auto;
+    background-color: dimgray;
+}
+
+.header-wrapper {
+    margin: 0;
+    padding: 1em 0.5em 0;
+    line-height: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.left-header-wrapper {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.hmenu {
+    margin: 0;
+    padding: 0.5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background-color: dimgray;
+}
+
+.menu-item {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0 0.5em;
+    color: #cfe7ed;
+}
+
+.dashboard-row {
+    padding-left: 0;
+    padding-right: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.dashboard-category {
+    padding-right: 0.5em;
+}
+
+.dashboard-value {
+
+}
+
+.content {
+    padding: 0.5em;
+    flex: 1 1 auto;
+    position: relative;/* need this to position inner content */
+    overflow-y: auto;
+}
+
+.centered-content {
+    padding: 0.5em;
+    margin-left: auto;/* center content horizontally */
+    margin-right: auto;
+    flex: 1 1 auto;
+    position: relative;/* need this to position inner content */
+    overflow-y: auto;
+}
+
+.centered-content, .short-text-lines {
+    max-width: 60ch;
+}
+
+.centered-content a:link, .content a:link {
+    color: #a0e0ff;
+}
+
+.centered-content a:visited, .content a:visited {
+    color: #5689a9;
+}
+
+.centered-content a:hover:active:focus, .content a:hover:active:focus {
+    color: #a0e0ff;
+    text-decoration: underline;
+}
+
+.footer {
+    margin: 0;
+    padding: 0;
+    flex: 0 0 auto;
+    font-size: 0.825em;
+    color: lightgrey;
+    background-color: dimgray;
+}
+
+.footer-wrapper {
+    margin: 0;
+    padding: 1em 0.5em 0;
+    line-height: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Some color */
+.brand-box {
+    background-color: #505e9f;
+    padding: 4px;
+}
+
+.brand-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #cfe7ed;
+    padding-bottom: 0.6em;
+}
+
+.brand-sub-title {
+    font-size: 0.8em;
+    color: #cfe7ed;
+    padding-top: 0.8em;
+}
+
+.brand-sub-title>a:link {
+    color: #a0e0ff;
+    font-weight: bold;}
+
+.brand-sub-title>a:visited {
+    color: #cfe7ed;
+}
+
+.brand-sub-title>a:hover:active:focus {
+    text-decoration: underline;
+}
+
+/* Styles for displaying the content of a map. */
+.mp-list {
+    list-style: none;
+}
+
+.mp-key-list {
+    list-style: none;
+}
+
+.mp-key-list-item {
+    list-style: none;
+    padding: 0 0.5em 0 0;
+    text-align: right;
+}
+
+.mp-val-list {
+    list-style: none;
+}
+
+.mp-val-list-item {
+    padding: 0;
+    text-align: left;
+}
+
+.mp-val-list-item:before {
+    content: '\2014 \0000a0 \0000a0';
+}
+
+.map-pair {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}

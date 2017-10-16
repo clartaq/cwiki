@@ -1,0 +1,9 @@
+syntax: glob
+target/**
+*.jar
+*.xml
+/.lein-*
+/.nrepl-port
+.gitignore
+.git/**
+resources/public/db/**
