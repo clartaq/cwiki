@@ -24,20 +24,34 @@
   [body]
   (fn [request]
     (let [raw-title (u/url-decode (:uri request))
-          title (s/replace raw-title "//" "")]
-      (if-let [raw-post (db/find-post-by-title title)]
-        (let [new-body (:content raw-post)
-              new-page (layout/view-wiki-page raw-post)] ;(layout/compose-wiki-page new-body)]
-          (println "Found title:" title)
-          (-> (response/render new-page request)
-              (status 200)
-              (assoc :body new-page)))
-        (do
-          (println "COULD NOT FIND TITLE:" title)
-          (println ":request-method:" (:request-method request))
-          (-> (response/render body request)
-              (status 404)
-              (cond-> (= (:request-method request) :head) (assoc :body nil))))))))
+          title (s/replace raw-title "//" "")
+          raw-post (db/find-post-by-title title)]
+     ; (println "raw-title:" raw-title ", title:" title ", raw-post:" raw-post)
+      (cond
+        raw-post (let [new-body (:content raw-post)
+                       new-page (layout/view-wiki-page raw-post)] ;(layout/compose-wiki-page new-body)]
+                   (println "Found title:" title)
+                   (-> (response/render new-page request)
+                       (status 200)
+                       (assoc :body new-page)))
+
+        (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
+                                          ; _ (println "saw edit request for:" title-only)
+                                           new-body (layout/compose-edit-page
+                                                      (db/find-post-by-title title-only))]
+                                       (-> (response/render new-body request)
+                                           (status 200)
+                                           (assoc :body new-body)))
+        (s/ends-with? title "/create") (let [title-only (s/replace title "/create" "")
+                                         ;  _ (println "saw create request for:" title-only)
+                                           new-body (layout/compose-create-page
+                                                      (db/create-new-post-map title-only))]
+                                         ;(println "new-body:" new-body)
+                                       (-> (response/render new-body request)
+                                           (status 200)
+                                           (assoc :body new-body)))
+
+        :else nil))))
 
 (defroutes app-routes
            (route/resources "/")

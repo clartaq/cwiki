@@ -13,6 +13,19 @@
    :subname     "resources/public/db/database.db"
    })
 
+(defn create-new-post-map
+  ([title]
+   (create-new-post-map title ""))
+  ([title content]
+   (println "create-new-post-map: title:" title ", content:" content)
+   (let [pm {:date     (c/to-sql-time (t/now))
+             :modified (c/to-sql-time (t/now))
+             :author   "admin"
+             :title    title
+             :content  content}]
+     (println "pm:" pm)
+     pm)))
+
 (def preferences-post
   {:date     (c/to-sql-time (t/now))
    :modified (c/to-sql-time (t/now))
@@ -76,6 +89,24 @@
 (defn find-post-by-title
   [title]
   (first (jdbc/query db ["select * from posts where title=?" title])))
+
+  (defn update-page-title-and-content
+    [id title content]
+    (println "update-page... ")
+    (jdbc/update! db :posts {:title    title
+                             :content  content
+                             :modified (c/to-sql-time (t/now))}
+                  ["id=?" id]))
+
+  ;(jdbc/insert! db-spec :table {:col1 42 :col2 "123"})               ;; Create
+  ;(jdbc/query   db-spec ["SELECT * FROM table WHERE id = ?" 13])     ;; Read
+  ;(jdbc/update! db-spec :table {:col1 77 :col2 "456"} ["id = ?" 13]) ;; Update
+  ;(jdbc/delete! db-spec :table ["id = ?" 13])                        ;; Delete
+
+  (defn insert-new-page!
+    [title content]
+    (let [post-map (create-new-post-map title content)]
+      (jdbc/insert! db :posts post-map)))
 
 (defn init-db
   "Initialize the database. Will create the database and
