@@ -97,12 +97,19 @@ p {
 }
 
 .author-line {
+    text-align: left;
     margin-bottom: 0;
     font-size: 0.8em;
 }
 
 .author-header {
     font-weight: bold;
+}
+
+.date-line {
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 0.8em;
 }
 
 .date-header {
@@ -185,7 +192,7 @@ p {
 }
 
 .centered-content, .short-text-lines {
-    max-width: 60ch;
+    max-width: 70ch;
 }
 
 .centered-content a:link, .content a:link {
@@ -284,4 +291,9 @@ p {
     display: flex;
     flex-direction: row;
     justify-content: center;
+}
+
+textarea#content {
+    width: 70ch;
+    height: 30em;
 }
