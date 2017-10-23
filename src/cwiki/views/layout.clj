@@ -2,7 +2,8 @@
   (:require [clj-time.format :as f]
             [clj-time.coerce :as c]
             [cwiki.util.wikilinks :refer [replace-wikilinks
-                                          get-edit-link-for-existing-page]]
+                                          get-edit-link-for-existing-page
+                                          get-delete-link-for-existing-page]]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to hidden-field submit-button text-area
                                  text-field]]
@@ -49,26 +50,32 @@
   [time-as-long]
   (f/unparse custom-formatter (c/from-long time-as-long)))
 
-(defn hmenu-component
-  "Return the standard menu component for the application."
-  []
-  [:menu {:class "hmenu"}
-   [:p {:class "menu-item"}
-    [:a {:href "/"} "Home"] " "
-    [:a {:href "/about"} "About"] " "
-    [:a {:href "/subscriptions"} "Subscriptions"] " "
-    [:a {:href "/now"} "Now"] " "
-    [:a {:href "/stats"} "Stats"] " "
-    [:a {:href "/config"} "Config"]]])
+;(defn hmenu-component
+;  "Return the standard menu component for the application."
+;  []
+;  [:menu {:class "hmenu"}
+;   [:p {:class "menu-item"}
+;    [:a {:href "/"} "Home"] " "
+;    [:a {:href "/about"} "About"] " "
+;    [:a {:href "/subscriptions"} "Subscriptions"] " "
+;    [:a {:href "/now"} "Now"] " "
+;    [:a {:href "/stats"} "Stats"] " "
+;    [:a {:href "/config"} "Config"]]])
 
 (defn wiki-hmenu-component
   "Return the standard menu component for the application."
   [post-map]
-  (let [edit-link (get-edit-link-for-existing-page post-map)]
+  (let [edit-link (and post-map (get-edit-link-for-existing-page post-map))
+        delete-link (and post-map (get-delete-link-for-existing-page post-map))]
     [:menu {:class "hmenu"}
      [:p {:class "menu-item"}
-      edit-link " "
+      (when edit-link
+        (str edit-link " "))
+     ; edit-link " "
+
       ; [:a {:href "/edit"} "Edit"] " "
+      (when delete-link
+        (str delete-link " "))
       [:a {:href "/"} "Home"] " "
       [:a {:href "/about"} "About"] " "
       [:a {:href "/search"} "Search"]]]))
@@ -84,17 +91,17 @@
                    "Wiki"]]]
     (wiki-hmenu-component post-map)]])
 
-(defn header-component
-  "Return the standard page header for the application."
-  []
-  [:header {:class "header"}
-   [:div {:class "header-wrapper"}
-    [:div {:class "left-header-wrapper"}
-     [:h1 {:class "brand-title"} "cwiki"]
-     [:p {:class "brand-sub-title"}
-      "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
-                   "Wiki"]]]
-    (hmenu-component)]])
+;(defn header-component
+;  "Return the standard page header for the application."
+;  []
+;  [:header {:class "header"}
+;   [:div {:class "header-wrapper"}
+;    [:div {:class "left-header-wrapper"}
+;     [:h1 {:class "brand-title"} "cwiki"]
+;     [:p {:class "brand-sub-title"}
+;      "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
+;                   "Wiki"]]]
+;    (hmenu-component)]])
 
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
@@ -177,31 +184,31 @@
   [m]
   (map->two-col-list m))
 
-(defn compose-page
-  "Compose a standard page with the given content and
-  return it."
-  [content]
-  (html5
-    [:head
-     [:title "Welcome to cwiki"]
-     (include-css "/css/styles.css")]
-    [:body {:class "page"}
-     (header-component)
-     (content-component content)
-     (footer-component)]))
-
-(defn compose-centered-page
-  "Compose a standard page with the given content
-  centered and return it."
-  [content]
-  (html5
-    [:head
-     [:title "Welcome to cwiki"]
-     (include-css "/css/styles.css")]
-    [:body {:class "page"}
-     (header-component)
-     (centered-content-component content)
-     (footer-component)]))
+;(defn compose-page
+;  "Compose a standard page with the given content and
+;  return it."
+;  [content]
+;  (html5
+;    [:head
+;     [:title "Welcome to cwiki"]
+;     (include-css "/css/styles.css")]
+;    [:body {:class "page"}
+;     (wiki-header-component)
+;     (content-component content)
+;     (footer-component)]))
+;
+;(defn compose-centered-page
+;  "Compose a standard page with the given content
+;  centered and return it."
+;  [content]
+;  (html5
+;    [:head
+;     [:title "Welcome to cwiki"]
+;     (include-css "/css/styles.css")]
+;    [:body {:class "page"}
+;     (wiki-header-component)
+;     (centered-content-component content)
+;     (footer-component)]))
 
 (defn view-wiki-page
   [post-map]
@@ -223,20 +230,20 @@
         (limited-width-content-component content)]
        (footer-component)])))
 
-(defn compose-wiki-page
-  [content]
-  (html5
-    [:head
-     [:title "Welcome to cwiki"]
-     (include-css "/css/styles.css")
-     (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
-     (include-js "/js/mathjax-config.js")
-     (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]
-
-    [:body {:class "page"}
-     (header-component)
-     (limited-width-content-component content)
-     (footer-component)]))
+;(defn compose-wiki-page
+;  [content]
+;  (html5
+;    [:head
+;     [:title "Welcome to cwiki"]
+;     (include-css "/css/styles.css")
+;     (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
+;     (include-js "/js/mathjax-config.js")
+;     (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]
+;
+;    [:body {:class "page"}
+;     (wiki-header-component)
+;     (limited-width-content-component content)
+;     (footer-component)]))
 
 (defn compose-404-page
   "Build and return a 'Not Found' page."
@@ -246,7 +253,7 @@
      [:title "Welcome to cwiki"]
      (include-css "/css/styles.css")]
     [:body {:class "page"}
-     (header-component)
+     (wiki-header-component nil)
      (centered-content-component
        [:div
         [:h1 {:class "info-warning"} "Page Not Found"]
@@ -264,7 +271,7 @@
        [:title "Welcome to cwiki"]
        (include-css "/css/styles.css")]
       [:body {:class "page"}
-       (header-component)
+       (wiki-header-component post-map)
        (centered-content-component
          [:div
           (form-to {:enctype "multipart/form-data"}
@@ -295,7 +302,7 @@
        [:title "Welcome to cwiki"]
        (include-css "/css/styles.css")]
       [:body {:class "page"}
-       (header-component)
+       (wiki-header-component post-map)
        (centered-content-component
          [:div
           (form-to {:enctype "multipart/form-data"}
