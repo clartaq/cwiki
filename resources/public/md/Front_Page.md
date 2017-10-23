@@ -1,12 +1,10 @@
 This is the [[Front Page]] of your new [wiki](https://en.wikipedia.org/wiki/Wiki).
 
-As the linked article describes, a wiki is a program that allows you to organize (or not) bits of information that you want to record somewhere. A wiki differs from a note taking application in that it allows you to link it's various parts together.
+As the article linked above describes, a wiki is a program that allows you to organize (or not) bits of information that you want to record somewhere. A wiki differs from a note taking application in that it allows you to link it's various parts together.
 
 The syntax used is a slight variant of [Markdown](https://daringfireball.net/projects/markdown/). The syntax accepted by this wiki includes an extension to allow [wikilinks](https://en.wikipedia.org/wiki/Help:Link), that is, links to other pages within the wiki, in a Markdown file.
 
 Here is an internal link to another page in this wiki about [[Other Wiki Software]].
-
-an empty link [[wamble boota]] on a line
 
 Here is a link to a [[Non-Existent Page]] so you can see what that looks like. Just like links to existing pages, the links to non-existent pages can have [[Non-Existent Page|display text]] and link text. You can click the link to create and edit the page. That's how you create new pages in CWiki, create a link with the title of the new page, click the new link, and edit it. CWiki knows which pages already exist and which do not.
 
