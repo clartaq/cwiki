@@ -62,10 +62,20 @@
   [post-map]
   (let [page-title (:title post-map)
         uri (u/url-encode (str "/" page-title "/edit"))
-        html (hc/html (link-to {:class "present-button-style"}
+        h (hc/html (link-to {:class "present-button-style"}
                                uri "Edit"))]
-    ;(println "get-edit-link-for-existing-page: returning:\n" html)
-    html))
+    ;(println "get-edit-link-for-existing-page: returning:\n" h)
+    h))
+
+(defn get-delete-link-for-existing-page
+  "Return a link to be used with a button or menu."
+  [post-map]
+  (let [page-title (:title post-map)
+        uri (u/url-encode (str "/" page-title "/delete"))
+        h (hc/html (link-to {:class "present-button-style"}
+                            uri "Delete"))]
+    ;(println "get-delete-link-for-existing-page: returning:\n" h)
+    h))
 
 (defn get-creation-link-for-new-page
   "Return a link to a non-existent page to be display in a page.
