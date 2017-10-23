@@ -21,7 +21,7 @@
   (let [actual-id (Integer. ^String page-id)]
    ; (println "save-edits: actual-id:" actual-id ", new-title:" new-title ",
    ; new-content:" new-content)
-    (db/update-page-title-and-content actual-id new-title new-content)
+    (db/update-page-title-and-content! actual-id new-title new-content)
     (layout/view-wiki-page (db/find-post-by-title new-title))))
 
 (defn save-new-page
