@@ -1,6 +1,19 @@
 Here are some other open-source wikis that I find interesting. Some of these are quite mature and very polished. Each has an opinionated approach to information management that works very smoothly when used as intended. Of course, each is missing something that I want. Otherwise, I would not have found it necessary to write CWiki.
 
-## WikiPad ##
+## WikidPad ##
+
+This is a stand-alone desktop application that lets you
+organize notes and random knowledge in a wiki-like structure.
+It is written in Python. See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
+
+Pros:
+
+- It is cross-platform.
+- It is under active development as of the summer of 2017.
+
+Cons:
+- It is written in Python.
+
 ## TiddlyWiki ##
 
 I have used TiddlyWiki for many years.

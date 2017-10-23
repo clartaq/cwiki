@@ -1,4 +1,4 @@
-This is the [[root page]] of your new [wiki](https://en.wikipedia.org/wiki/Wiki).
+This is the [[Front Page]] of your new [wiki](https://en.wikipedia.org/wiki/Wiki).
 
 As the linked article describes, a wiki is a program that allows you to organize (or not) bits of information that you want to record somewhere. A wiki differs from a note taking application in that it allows you to link it's various parts together.
 
@@ -6,13 +6,21 @@ The syntax used is a slight variant of [Markdown](https://daringfireball.net/pro
 
 Here is an internal link to another page in this wiki about [[Other Wiki Software]].
 
+an empty link [[wamble boota]] on a line
+
+Here is a link to a [[Non-Existent Page]] so you can see what that looks like. Just like links to existing pages, the links to non-existent pages can have [[Non-Existent Page|display text]] and link text. You can click the link to create and edit the page. That's how you create new pages in CWiki, create a link with the title of the new page, click the new link, and edit it. CWiki knows which pages already exist and which do not.
+
+When you are done editing, use the "Save Changes" button below the edit area to save the new page. The next time you see the link, it will look like all the other links that point to real pages.
+
+See [[Internal Links]] for details on adding internal links to your pages.
+
 ## Special Pages ##
 
 This wiki has some "special" pages, described here.
 
-### The Root Page ###
+### The Front Page ###
 
-The [[Root Page]] is the page that will be displayed when the program starts. Initially, it is set to a page named [[Front Page]], but you can change it to anything else by editing the setting in the [[Preferences]] page (see below.)
+The [[Front Page]] is the page that will be displayed when the program starts. Initially, it is set to a page named [[Front Page]], but you can change it to anything else by editing the setting in the [[Preferences]] page (see below.)
 
 If you set it to the name of a non-existent page, the program will display the [[Front Page]] instead.
 
@@ -20,9 +28,9 @@ If you set it to the name of a non-existent page, the program will display the [
 
 The [[Preferences]] page, as its' name suggests, is a page where you can set the preferences for the way you want the program to operate.
 
-### The Index Page ###
+### The Table of Contents Pane ###
 
-To be defined.
+This is a side pane on the left side of the screen. It is multi-purpose, depending on the contents of the main page.
 
 ### The "Orphaned Pages" Page ###
 
