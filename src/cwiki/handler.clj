@@ -42,6 +42,13 @@
                                        (-> (response/render new-body request)
                                            (status 200)
                                            (assoc :body new-body)))
+        (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
+                                             new-body (layout/view-wiki-page
+                                                        (db/find-post-by-title "Front Page"))]
+                                         (db/delete-page-by-id (db/title->page-id title-only))
+                                         (-> (response/render new-body request)
+                                             (status 200)
+                                             (assoc :body new-body)))
         (s/ends-with? title "/create") (let [title-only (s/replace title "/create" "")
                                          ;  _ (println "saw create request for:" title-only)
                                            new-body (layout/compose-create-page
