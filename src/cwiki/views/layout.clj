@@ -18,7 +18,7 @@
            (com.vladsch.flexmark.util.options MutableDataSet)
            (java.util ArrayList)))
 
-(def program-name-and-version "cwiki v0.1.0")
+(def program-name-and-version "CWiki v0.1.0")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.
@@ -50,18 +50,6 @@
   [time-as-long]
   (f/unparse custom-formatter (c/from-long time-as-long)))
 
-;(defn hmenu-component
-;  "Return the standard menu component for the application."
-;  []
-;  [:menu {:class "hmenu"}
-;   [:p {:class "menu-item"}
-;    [:a {:href "/"} "Home"] " "
-;    [:a {:href "/about"} "About"] " "
-;    [:a {:href "/subscriptions"} "Subscriptions"] " "
-;    [:a {:href "/now"} "Now"] " "
-;    [:a {:href "/stats"} "Stats"] " "
-;    [:a {:href "/config"} "Config"]]])
-
 (defn wiki-hmenu-component
   "Return the standard menu component for the application."
   [post-map]
@@ -71,9 +59,6 @@
      [:p {:class "menu-item"}
       (when edit-link
         (str edit-link " "))
-     ; edit-link " "
-
-      ; [:a {:href "/edit"} "Edit"] " "
       (when delete-link
         (str delete-link " "))
       [:a {:href "/"} "Home"] " "
@@ -85,7 +70,7 @@
   [:header {:class "header"}
    [:div {:class "header-wrapper"}
     [:div {:class "left-header-wrapper"}
-     [:h1 {:class "brand-title"} "cwiki"]
+     [:h1 {:class "brand-title"} "CWiki"]
      [:p {:class "brand-sub-title"}
       "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
                    "Wiki"]]]
@@ -106,13 +91,13 @@
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
 
-(defn content-component
-  "Put the content in and return it."
-  [& content]
-  [:content {:class "content"}
-   (if content
-     (first content)
-     [:p error-span "There is no content for this page."])])
+;(defn content-component
+;  "Put the content in and return it."
+;  [& content]
+;  [:content {:class "content"}
+;   (if content
+;     (first content)
+;     [:p error-span "There is no content for this page."])])
 
 (defn centered-content-component
   "Put the content in a centered element and return it."
@@ -156,59 +141,33 @@
     [:p "Copyright \u00A9 2017, David D. Clark"]
     [:p program-name-and-version]]])
 
-(defonce unique-key (atom 0))
-(defn gen-key
-  "Generate a unique key for use with list items and things that
-  require them."
-  []
-  (swap! unique-key inc))
+;(defonce unique-key (atom 0))
+;(defn gen-key
+;  "Generate a unique key for use with list items and things that
+;  require them."
+;  []
+;  (swap! unique-key inc))
 
-(defn map->two-col-list
-  "A component that creates a two column list from a single-level map."
-  [m]
-  (fn []
-    (let [key-column [:ul.mp-list
-                      (for [[k v] m]
-                        ^{:key (gen-key)} [:li.mp-key-list-item (str k)])]
-          val-column [:ul.mp-list
-                      (for [[k v] m]
-                        ^{:key (gen-key)} [:li.mp-val-list-item (if v
-                                                                  (str v)
-                                                                  " ")])]]
-      [:div.map-pair key-column val-column])))
+;(defn map->two-col-list
+;  "A component that creates a two column list from a single-level map."
+;  [m]
+;  (fn []
+;    (let [key-column [:ul.mp-list
+;                      (for [[k v] m]
+;                        ^{:key (gen-key)} [:li.mp-key-list-item (str k)])]
+;          val-column [:ul.mp-list
+;                      (for [[k v] m]
+;                        ^{:key (gen-key)} [:li.mp-val-list-item (if v
+;                                                                  (str v)
+;                                                                  " ")])]]
+;      [:div.map-pair key-column val-column])))
 
-(defn single-layer-map-component
-  "Return a component consisting of a two columns showing the
-  keys and values in the input map (only one level allowed, no
-  nesting). Nil values are blank. Will blow up with nested lists."
-  [m]
-  (map->two-col-list m))
-
-;(defn compose-page
-;  "Compose a standard page with the given content and
-;  return it."
-;  [content]
-;  (html5
-;    [:head
-;     [:title "Welcome to cwiki"]
-;     (include-css "/css/styles.css")]
-;    [:body {:class "page"}
-;     (wiki-header-component)
-;     (content-component content)
-;     (footer-component)]))
-;
-;(defn compose-centered-page
-;  "Compose a standard page with the given content
-;  centered and return it."
-;  [content]
-;  (html5
-;    [:head
-;     [:title "Welcome to cwiki"]
-;     (include-css "/css/styles.css")]
-;    [:body {:class "page"}
-;     (wiki-header-component)
-;     (centered-content-component content)
-;     (footer-component)]))
+;(defn single-layer-map-component
+;  "Return a component consisting of a two columns showing the
+;  keys and values in the input map (only one level allowed, no
+;  nesting). Nil values are blank. Will blow up with nested lists."
+;  [m]
+;  (map->two-col-list m))
 
 (defn view-wiki-page
   [post-map]
@@ -229,21 +188,6 @@
        (limited-width-title-component post-map)
         (limited-width-content-component content)]
        (footer-component)])))
-
-;(defn compose-wiki-page
-;  [content]
-;  (html5
-;    [:head
-;     [:title "Welcome to cwiki"]
-;     (include-css "/css/styles.css")
-;     (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
-;     (include-js "/js/mathjax-config.js")
-;     (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]
-;
-;    [:body {:class "page"}
-;     (wiki-header-component)
-;     (limited-width-content-component content)
-;     (footer-component)]))
 
 (defn compose-404-page
   "Build and return a 'Not Found' page."
@@ -317,78 +261,3 @@
                    " "
                    (link-to {:class "btn btn-primary"} "/" "Take me Home"))])
        (footer-component)])))
-
-
-
-;
-;A complete example looks like:
-;
-;(ns myapp.routes.home
-;  (:use [hiccup core form])
-;  (:require [compojure.core :refer :all]))
-;
-;(defn quick-form [& [name message error]]
-;  (html
-;   (form-to {:enctype "multipart/form-data"}
-;    [:post "/form-out"]
-;   (text-field "Hello")
-;   (submit-button {:class "btn" :name "submit"} "Save")
-;   (submit-button {:class "btn" :name "submit"} "Clone"))))
-;
-;Note that using the same name for both submit buttons allows you to do a simple lookup of the "submit" key in the result map.
-;
-;(defroutes home-routes
-; (GET "/form-in" [] (quick-form))
-; (POST "/form-out" [:as request] (str (request :multipart-params))))
-;
-;When opening the following page:
-;
-; http://localhost:3000/form-in
-;
-;And filling the form, the result out of the POST route is:
-;
-; {"submit" "Save", "Hello" "hello2"}
-;
-;By the way, I found an old useful post about the way the request map is structured in Compojure, so it makes it easier to destructure it in the Clojure code.
-;shareeditflag
-;
-;edited Jan 13 '15 at 2:26
-;
-;answered Jan 13 '15 at 1:00
-;Nicolas Modrzyk
-;10.1k12134
-;
-;
-;
-;
-;Thanks! This is what I was looking for. – sakh1979 Jan 13 '15 at 1:41
-;
-;add a comment
-;up vote
-;1
-;down vote
-;
-;
-;submit-button generate HTML <input type="text" ...> element. You can add "name" and "value" attributes to them:
-;
-;(submit-button {:name "button" :value "save" :class "btn"} "Save")
-;(submit-button {:name "button" :value "clone" :class "btn"} "Clone")
-;
-;and find it out in your server side code. In your case lib-noir is used. But recent version of lib-noir no longer provide utils for destructuring requests and encourage people to utilize other libraries like Compojure or bare Ring.
-;
-;Basically you need: - ensure your server side app use wrap-params Ring middleware - in case the above "Save" button is click, your server side handler for [:post "/add-data"] should receive a hash map like this:
-;
-;{:http-method :post
-; :uri "/add-data"
-; :form-params {"button" "save"
-;               ;; other form data as key/value pairs
-;               ;; where: key is input element's "name" attribute and value is input element's "value" attribute
-;               ...
-;               }
-; ...}
-;
-;I hope you can figure out yourself how to find the value you need in such a map.
-;
-;More in-depth reading:
-;
-;https://github.com/mmcgrana/ring/wiki/Parameters
