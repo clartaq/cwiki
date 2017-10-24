@@ -10,10 +10,9 @@
   []
   (db/find-post-by-title "Front Page"))
 
-(defn read-front-page-content
-  "Read in the front page for a new wiki."
+(defn read-about-page
   []
-  (:content (read-front-page)))
+  (db/find-post-by-title "About"))
 
 (defn save-edits
   [page-id new-title new-content]
@@ -37,8 +36,12 @@
 (defn home []
   (layout/view-wiki-page (read-front-page)))
 
+(defn about []
+  (layout/view-wiki-page (read-about-page)))
+
 (defroutes home-routes
            (GET "/" [] (home))
+           (GET "/about" [] (about))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
                (save-edits (get params "page-id")
