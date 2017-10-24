@@ -35,7 +35,7 @@
   "Used to initialize the database, if needed, and start the
   server in development mode from the REPL."
   [& [port]]
-  (init-db)
+  (init-db!)
   (start-server port))
 
 (defn stop-server []
