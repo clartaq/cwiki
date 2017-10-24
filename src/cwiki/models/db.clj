@@ -10,7 +10,7 @@
 (def sqlite-db
   {:classname   "org.sqlite.JDBC"
    :subprotocol "sqlite"
-   :subname     "resources/public/db/database.db"
+   :subname     db-file-name
    })
 
 (defn create-new-post-map
@@ -19,10 +19,21 @@
   ([title content]
    (let [pm {:date     (c/to-sql-time (t/now))
              :modified (c/to-sql-time (t/now))
-             :author   "admin"
+             :author   "cwiki"
              :title    title
              :content  content}]
      pm)))
+
+(def initial-pages [{:title "Front Page" :file-name "Front_Page.md"}
+                    {:title "About" :file-name "About.md"}
+                    {:title "Features" :file-name "Features.md"}
+                    {:title "Preferences" :file-name "Preferences.md"}
+                    {:title "Other Wiki Software" :file-name "Other_Wiki_Software.md"}
+                    {:title "Special Pages" :file-name "Special_Pages.md"}
+                    {:title "Pages Primer" :file-name "Pages_Primer.md"}
+                    {:title "Links Primer" :file-name "Links_Primer.md"}
+                    {:title "Text Formatting" :file-name "Text_Formatting.md"}
+                    {:title "CWiki Name" :file-name "CWiki_Name.md"}])
 
 (def preferences-post
   {:date     (c/to-sql-time (t/now))
@@ -47,8 +58,8 @@
    :content  (slurp (io/reader "resources/public/md/Other_Wiki_Software.md"))})
 
 (def initial-user
-  {:user "admin"
-   :role "admin"
+  {:user "cwiki"
+   :role "cwiki"
    :pwdate (c/to-sql-time (t/now))
    :mustchangepw true
    :digest "Blahblahbla"
@@ -78,9 +89,9 @@
         the-key (first (keys result))
         rowid (the-key result)
         new-user (assoc initial-user :front_page rowid)]
-    (jdbc/insert! sqlite-db :posts initial-post)
-    (jdbc/insert! sqlite-db :posts other-wiki-software-post)
-    (jdbc/insert! sqlite-db :posts preferences-post)
+;    (jdbc/insert! sqlite-db :posts initial-post)
+;    (jdbc/insert! sqlite-db :posts other-wiki-software-post)
+;    (jdbc/insert! sqlite-db :posts preferences-post)
     (jdbc/insert! sqlite-db :users initial-user)
     new-user))
 
@@ -132,7 +143,22 @@
   (println "delete-page-by-id:"
            (jdbc/delete! sqlite-db :posts ["id=?" page-id])))
 
-(defn init-db
+(defn- add-page-from-file!
+  [m]
+  (println "add-page-from-file!: m:" m)
+  (let [resource-prefix "resources/public/md/"
+        title (:title m)
+        content (slurp (io/reader
+                         (str resource-prefix (:file-name m))))
+        post-map (create-new-post-map title content)]
+    (jdbc/insert! sqlite-db :posts post-map)))
+
+(defn- add-initial-pages!
+  []
+  (println "add-initial-pages!")
+  (mapv add-page-from-file! initial-pages))
+
+(defn init-db!
   "Initialize the database. Will create the database and
   tables if needed."
   []
@@ -142,15 +168,17 @@
     (let [user (create-db)
           fp (:front_page user)
           _ (println "fp:" fp)
-          content (:content (first (jdbc/query sqlite-db ["select * from posts where id=?" fp])))]
+          ;content (:content (first (jdbc/query sqlite-db ["select * from posts where id=?" fp])))
+          ]
      ; (println "user:" user)
      ; (println "  front page:" content)
-      )
-    (let [result (jdbc/query sqlite-db "select * from users")]
-          (println "(keys (first result)):" (keys (first result)))
-          (println "(:user (first result)):" (:user (first result))))
-    (let [result (jdbc/query sqlite-db "select * from posts")]
-          (println "(keys (first result)):" (keys (first result)))
-          (println "(:content (first result)):" (:content (first result))))
+
+     (add-initial-pages!))
+    ;(let [result (jdbc/query sqlite-db "select * from users")]
+    ;      (println "(keys (first result)):" (keys (first result)))
+    ;      (println "(:user (first result)):" (:user (first result))))
+    ;(let [result (jdbc/query sqlite-db "select * from posts")]
+    ;      (println "(keys (first result)):" (keys (first result)))
+    ;      (println "(:content (first result)):" (:content (first result))))
     ))
 
