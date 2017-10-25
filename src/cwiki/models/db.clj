@@ -35,28 +35,6 @@
                     {:title "Text Formatting" :file-name "Text_Formatting.md"}
                     {:title "CWiki Name" :file-name "CWiki_Name.md"}])
 
-(def preferences-post
-  {:date     (c/to-sql-time (t/now))
-   :modified (c/to-sql-time (t/now))
-   :author   "admin"
-   :title    "Preferences"
-   :content  (slurp (io/reader "resources/public/md/Preferences.md"))})
-
-
-(def initial-post
-  {:date     (c/to-sql-time (t/now))
-   :modified (c/to-sql-time (t/now))
-   :author   "admin"
-   :title    "Front Page"
-   :content  (slurp (io/reader "resources/public/md/Front_Page.md"))})
-
-(def other-wiki-software-post
-  {:date     (c/to-sql-time (t/now))
-   :modified (c/to-sql-time (t/now))
-   :author   "admin"
-   :title    "Other Wiki Software"
-   :content  (slurp (io/reader "resources/public/md/Other_Wiki_Software.md"))})
-
 (def initial-user
   {:user "cwiki"
    :role "cwiki"
@@ -65,7 +43,7 @@
    :digest "Blahblahbla"
    :front_page 0})
 
-(defn create-db
+(defn- create-db
   "Create the database tables for the application."
   []
   (try (jdbc/db-do-commands sqlite-db
@@ -85,15 +63,7 @@
                                                      [:title :text]
                                                      [:content :text]])])
        (catch Exception e (println e)))
-  (let [result (first (jdbc/insert! sqlite-db :posts initial-post))
-        the-key (first (keys result))
-        rowid (the-key result)
-        new-user (assoc initial-user :front_page rowid)]
-;    (jdbc/insert! sqlite-db :posts initial-post)
-;    (jdbc/insert! sqlite-db :posts other-wiki-software-post)
-;    (jdbc/insert! sqlite-db :posts preferences-post)
-    (jdbc/insert! sqlite-db :users initial-user)
-    new-user))
+  (jdbc/insert! sqlite-db :users initial-user))
 
 (defn find-post-by-title
   ([title] (find-post-by-title title sqlite-db))
@@ -125,11 +95,6 @@
                                   :modified (c/to-sql-time (t/now))}
                 ["id=?" id]))
 
-  ;(jdbc/insert! db-spec :table {:col1 42 :col2 "123"})               ;; Create
-  ;(jdbc/query   db-spec ["SELECT * FROM table WHERE id = ?" 13])     ;; Read
-  ;(jdbc/update! db-spec :table {:col1 77 :col2 "456"} ["id = ?" 13]) ;; Update
-  ;(jdbc/delete! db-spec :table ["id = ?" 13])                        ;; Delete
-
 (defn insert-new-page!
   "Insert a new page into the database given a title and content.
   Return the post map for the new page (including id and dates)."
@@ -146,7 +111,7 @@
 (defn- add-page-from-file!
   [m]
   (println "add-page-from-file!: m:" m)
-  (let [resource-prefix "resources/public/md/"
+  (let [resource-prefix "resources/private/md/"
         title (:title m)
         content (slurp (io/reader
                          (str resource-prefix (:file-name m))))
@@ -165,20 +130,6 @@
   (when-not (.exists ^File (clojure.java.io/as-file db-file-name))
     (println "Need to create database.")
     (io/make-parents db-file-name)
-    (let [user (create-db)
-          fp (:front_page user)
-          _ (println "fp:" fp)
-          ;content (:content (first (jdbc/query sqlite-db ["select * from posts where id=?" fp])))
-          ]
-     ; (println "user:" user)
-     ; (println "  front page:" content)
-
-     (add-initial-pages!))
-    ;(let [result (jdbc/query sqlite-db "select * from users")]
-    ;      (println "(keys (first result)):" (keys (first result)))
-    ;      (println "(:user (first result)):" (:user (first result))))
-    ;(let [result (jdbc/query sqlite-db "select * from posts")]
-    ;      (println "(keys (first result)):" (keys (first result)))
-    ;      (println "(:content (first result)):" (:content (first result))))
-    ))
+    (create-db)
+    (add-initial-pages!)))
 
