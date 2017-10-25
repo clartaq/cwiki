@@ -2,10 +2,24 @@ This page describes the ways you can format text in CWiki.
 
 Here are some examples of the types of formatting and things you can do.
 
-Here is a list:
+You can make headers. Here are the different types supported
+
+# Header 1 #
+## Header 2 ##
+### Header 3 ###
+#### Header 4 ####
+##### Header 5 #####
+###### Header 6 ######
+
+Here is a horizontal rule.
+
+----------
+
+
+Here is an unordered list:
 
 - a list item
-- b list item
+- another list item
 - list item with formatting like **bold**, *italic*.
 
 Here is a numbered list:
@@ -14,6 +28,7 @@ Here is a numbered list:
 1. The second item.
 1. And the third.
 
+Here is some code.
 
 ```prettyprint
 (defn f [x]

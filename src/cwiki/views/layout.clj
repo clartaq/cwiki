@@ -113,7 +113,7 @@
         author (:author post-map)
         created (:date post-map)
         modified (:modified post-map)]
-    [:div
+    [:div {:class "page-title-div"}
       [:h1 title]
      [:p {:class "author-line"}
       [:span {:class "author-header"} "Author: "] author]
@@ -180,7 +180,6 @@
        (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
        (include-js "/js/mathjax-config.js")
        (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]
-
       [:body {:class "page"}
        (wiki-header-component post-map)
        ;(header-component)
