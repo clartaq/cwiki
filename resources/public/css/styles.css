@@ -26,15 +26,48 @@ h1,h2,h3,h4,h5,h6 {
     color: dimgray;
     font-family: "Segoe UI", "Lucida Grande", Tahoma, Verdana, Helvetica,
     Arial, sans-serif;
+    margin-top: 1.25em;
+    margin-bottom: 0.8em;
+    line-height: 1.25em;
+}
+
+h1 {
+    font-size: 2em;
+    padding-bottom: 0.3em;
+}
+
+h2 {
+    font-size: 1.5em;
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 0.3em;
+}
+
+h3 {
+    font-size: 1.25em;
+}
+
+h4 {
+    font-size: 1em;
+}
+
+h5 {
+    font-size: 0.875em;
+}
+
+h6 {
+    font-size: 0.85em;
 }
 
 body {
+    padding: 0.15em; /*10px;*/
+
     font-family: "Segoe UI", Candara, "Helvetica Neue", "Lucida Grande",
     Tahoma, Verdana, Helvetica, Arial, sans-serif;
     font-weight: normal;
     color: #111111;
     background-color: #fafafa;
-    font-size: 0.95em;
+    font-size: 1em;
+    line-height: 1.5em;
     margin:0; /*gets rid of white space around body*/
     position:relative; /*REQUIRED Sets up positioning for your footer*/
 }
@@ -96,10 +129,15 @@ p {
     flex-direction: column;
 }
 
+.page-title-div {
+    padding-bottom: 1em;
+}
+
 .author-line {
     text-align: left;
     margin-bottom: 0;
     font-size: 0.8em;
+    padding-bottom: 0;
 }
 
 .author-header {
@@ -235,8 +273,11 @@ p {
 .brand-title {
     font-size: 1.5em;
     font-weight: bold;
+    line-height: 0.8em;
     color: #cfe7ed;
-    padding-bottom: 0.6em;
+    margin: 0;
+    padding-bottom: 0;
+    /*padding-bottom: 0.6em;*/
 }
 
 .brand-sub-title {

@@ -77,3 +77,9 @@ echo "<?=phpinfo()?>" >/var/www/html/info.php
 ```
 
 Installed caddy as directed.
+
+# CSS #
+
+CSS is inspired by that used by Github. See the [primer-css](https://github.com/primer/primer-css) project.
+
+Flexbox question [here](https://stackoverflow.com/questions/23794713/flexbox-two-fixed-width-columns-one-flexible) seems to provide solution for fixed and variable columns in a row.
