@@ -28,9 +28,15 @@ Here is a numbered list:
 1. The second item.
 1. And the third.
 
+## Code Listings
+
+CWiki handles code listings too. You can show code inline by surrounding it with grave characters (backquotes) "\`". Here is an example: `a = b + c*34;`.
+
+For multi-line listings, we use the same convention as Github -- precede the code with a line consisting of three graves and end the listing with another line of three graves. You can get language-specific syntax highlighting by following the initial three graves with the word "prettyprint".
+
 Here is some code.
 
-```prettyprint
+```prettyprint lang-clj
 (defn f [x]
   "A comment at the beginning."
   (let [my-x x]
@@ -38,8 +44,24 @@ Here is some code.
     (+ 2 my-x)))
 ```
 
+There are a couple of additional ways to show code listings. Since Markdown passes through HTML unchanged, you can use the `<pre></pre>` and `<code></code>` tags directly.
+
+The `<code></code>` can be used for inline code like <code>a37 = 1.5*c2 + 15.346;</code>
+
+The `<pre></pre>`  tags can be used for code blocks. This might be useful if "prettyprint" is not recognizing the language in the block. You can specify a class containing the language like this `<pre class="prettyprint lang-clj">`, which indicates that the listing is in Clojure. Here's a listing of the same function as above, but the `<pre class="prettyprint lang-clj"></pre>` surround the code block.
+
+<pre class="prettyprint lang-clj">(defn f [x]
+  "A comment at the beginning."
+  (let [my-x x]
+    (println "my-x: " my-x) ; a line comment.
+    (+ 2 my-x)))
+</pre>
+
 Whew!
 
+## Mathematics
+
+You can also enter mathematics. The program uses MathJax
 Some math:
 
 $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
@@ -49,10 +71,9 @@ inline.
 
 Some inline code `a = c + 45;`.
 
-<code><pre class="prettyprint">(defn f [x]
+<pre class="prettyprint lang-clj">(defn f [x]
   "A comment at the beginning."
   (let [my-x x]
     (println "my-x: " my-x) ; a line comment.
     (+ 2 my-x)))
-</pre></code>
-
+</pre>
