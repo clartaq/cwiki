@@ -26,6 +26,9 @@
 
 (def initial-pages [{:title "Front Page" :file-name "Front_Page.md"}
                     {:title "About" :file-name "About.md"}
+                    {:title "About CWiki" :file-name "About_CWiki.md"}
+                    {:title "CWiki FAQ" :file-name "CWiki_FAQ.md"}
+                    {:title "Technical Notes" :file-name "Technical_Notes.md"}
                     {:title "Features" :file-name "Features.md"}
                     {:title "Preferences" :file-name "Preferences.md"}
                     {:title "Other Wiki Software" :file-name "Other_Wiki_Software.md"}
