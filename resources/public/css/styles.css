@@ -106,18 +106,91 @@ a:focus {
     color: red;
 }
 
-pre
+pre, code
 {
     font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono",
     "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace,
     serif;
     margin-bottom: 10px;
-    margin-left: 50px;
+    margin-left: 2em; /*50px;*/
     overflow: auto;
     background-color: #eee;
-    width: 650px;
+   /* width: 650px;*/
     padding: 5px 5px 20px;
 }
+
+/*// Inline code snippets*/
+   code,
+   tt {
+       padding: 0.2em 0;
+       margin: 0;
+       font-size: 100%; /*85%;*/
+       background-color: rgba(0, 0, 0, 0.05);
+       border-radius: 3px; /*// don't add padding, gives scrollbars*/
+
+/*&::before,
+&::after {
+     letter-spacing: -0.2em; // this creates padding
+ content: "\00a0";*/
+ }
+
+br { display: none; }
+
+del code { text-decoration: inherit; }
+
+pre {
+    word-wrap: normal; }
+
+/*// Code tags within code blocks (<pre>s)*/
+pre > code {
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+    word-break: normal;
+    white-space: pre;
+    background: transparent;
+    border: 0;
+}
+/*}*/
+
+.highlight {
+    margin-bottom: 16px; /*$spacer-3;*/
+}
+
+pre {
+    margin-bottom: 0;
+    word-break: normal;
+}
+/*}*/
+
+.highlight pre,
+pre {
+    padding: 16px; /*$spacer-3;*/
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f6f8fa; /*$gray-100;*/
+    border-radius: 3px;
+}
+
+pre code,
+pre tt {
+    display: inline;
+    /*max-width: auto;*/
+    padding: 0;
+    margin: 0;
+    overflow: visible;
+    line-height: inherit;
+    word-wrap: normal;
+    background-color: transparent;
+    border: 0;
+}
+
+/*&::before,
+&::after {
+     content: normal;
+ }
+}*/
 
 p {
     margin-bottom: 1em;
@@ -130,7 +203,13 @@ p {
 }
 
 .page-title-div {
-    padding-bottom: 1em;
+    padding-bottom: 1.2em;
+}
+
+.page-title-header {
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .author-line {
@@ -151,12 +230,10 @@ p {
 }
 
 .date-header {
-    font-size: 0.8em;
     font-weight: bold;
 }
 
 .date-text {
-    font-size: 0.8em;
 }
 
 .header {
@@ -198,6 +275,29 @@ p {
     color: #cfe7ed;
 }
 
+hr,
+.rule {
+    height: 0;
+    margin: 15px 0;
+    overflow: hidden;
+    background: transparent;
+    border: 0;
+    /*color: #d1d5da;*/
+    border-bottom: 1px solid #cccccc;/*lighten($gray-300, 5%);*/
+/*@include clearfix();*/
+}
+
+li {
+    margin-left: 2em;
+}
+
+li:last-child {
+    padding-bottom: 1em;
+}
+
+li:first-child {
+    margin-top: -0.8em;
+}
 .dashboard-row {
     padding-left: 0;
     padding-right: 0;
