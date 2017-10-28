@@ -105,6 +105,24 @@ a:focus {
     color: red;
 }
 
+br {
+    display: none
+}
+
+blockquote {
+    border-left: 4px solid #dddddd;
+    padding: 0 15px;
+    color: #777777;
+}
+
+blockquote > :first-child {
+    margin-top: 0;
+}
+
+blockquote > :last-child {
+    margin-bottom: 0;
+}
+
 /* pre and code blocks */
 pre,code {
     background-color:#eee;
@@ -120,10 +138,6 @@ code {
     font-size:100%;
     margin:0;
     padding:.2em 0
-}
-
-br {
-    display: none
 }
 
 del code {
