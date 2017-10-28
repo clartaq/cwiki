@@ -114,7 +114,7 @@
         created (:date post-map)
         modified (:modified post-map)]
     [:div {:class "page-title-div"}
-      [:h1 title]
+      [:h1 {:class "page-title-header"} title]
      [:p {:class "author-line"}
       [:span {:class "author-header"} "Author: "] author]
      [:p {:class "date-line"}
@@ -182,9 +182,8 @@
        (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]
       [:body {:class "page"}
        (wiki-header-component post-map)
-       ;(header-component)
        [:content {:class "centered-content"}
-       (limited-width-title-component post-map)
+        (limited-width-title-component post-map)
         (limited-width-content-component content)]
        (footer-component)])))
 

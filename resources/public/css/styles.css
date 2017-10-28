@@ -59,8 +59,7 @@ h6 {
 }
 
 body {
-    padding: 0.15em; /*10px;*/
-
+    padding: 0.15em;
     font-family: "Segoe UI", Candara, "Helvetica Neue", "Lucida Grande",
     Tahoma, Verdana, Helvetica, Arial, sans-serif;
     font-weight: normal;
@@ -106,91 +105,65 @@ a:focus {
     color: red;
 }
 
-pre, code
-{
-    font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono",
-    "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace,
-    serif;
-    margin-bottom: 10px;
-    margin-left: 2em; /*50px;*/
-    overflow: auto;
-    background-color: #eee;
-   /* width: 650px;*/
-    padding: 5px 5px 20px;
+/* pre and code blocks */
+pre,code {
+    background-color:#eee;
+    font-family:Consolas,Menlo,Monaco,"Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New",monospace,serif;
+    margin-bottom:10px;
+    margin-left:2em;
+    overflow:auto;
+    padding:5px 5px 20px
 }
 
-/*// Inline code snippets*/
-   code,
-   tt {
-       padding: 0.2em 0;
-       margin: 0;
-       font-size: 100%; /*85%;*/
-       background-color: rgba(0, 0, 0, 0.05);
-       border-radius: 3px; /*// don't add padding, gives scrollbars*/
+code {
+    background-color:rgba(0,0,0,0.05);
+    font-size:100%;
+    margin:0;
+    padding:.2em 0
+}
 
-/*&::before,
-&::after {
-     letter-spacing: -0.2em; // this creates padding
- content: "\00a0";*/
- }
+br {
+    display: none
+}
 
-br { display: none; }
+del code {
+    text-decoration:inherit
+}
 
-del code { text-decoration: inherit; }
-
-pre {
-    word-wrap: normal; }
-
-/*// Code tags within code blocks (<pre>s)*/
 pre > code {
-    padding: 0;
-    margin: 0;
-    font-size: 100%;
-    word-break: normal;
-    white-space: pre;
-    background: transparent;
-    border: 0;
+    background:transparent;
+    border:0;
+    font-size:100%;
+    margin:0;
+    padding:0;
+    white-space:pre
 }
-/*}*/
 
 .highlight {
-    margin-bottom: 16px; /*$spacer-3;*/
+    margin-bottom:16px
 }
 
 pre {
-    margin-bottom: 0;
-    word-break: normal;
-}
-/*}*/
-
-.highlight pre,
-pre {
-    padding: 16px; /*$spacer-3;*/
-    overflow: auto;
-    font-size: 85%;
-    line-height: 1.45;
-    background-color: #f6f8fa; /*$gray-100;*/
-    border-radius: 3px;
+    margin-bottom:0
 }
 
-pre code,
-pre tt {
-    display: inline;
-    /*max-width: auto;*/
-    padding: 0;
-    margin: 0;
-    overflow: visible;
-    line-height: inherit;
-    word-wrap: normal;
-    background-color: transparent;
-    border: 0;
+.highlight pre,pre {
+    background-color:#f6f8fa;
+    font-size:85%;
+    line-height:1.45;
+    overflow:auto;
+    padding:16px
 }
 
-/*&::before,
-&::after {
-     content: normal;
- }
-}*/
+pre code {
+    background-color:transparent;
+    border:0;
+    display:inline;
+    line-height:inherit;
+    margin:0;
+    overflow:visible;
+    padding:0
+}
 
 p {
     margin-bottom: 1em;
@@ -322,6 +295,7 @@ li:first-child {
 
 .centered-content {
     padding: 0.5em;
+    max-width: 70ch;
     margin-left: auto;/* center content horizontally */
     margin-right: auto;
     flex: 1 1 auto;
@@ -329,9 +303,8 @@ li:first-child {
     overflow-y: auto;
 }
 
-.centered-content, .short-text-lines {
-    max-width: 70ch;
-}
+/*.centered-content, .short-text-lines {
+}*/
 
 .centered-content a:link, .content a:link {
     color: #a0e0ff;
