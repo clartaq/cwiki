@@ -28,6 +28,13 @@ Here is a numbered list:
 1. The second item.
 1. And the third.
 
+> This is what a block quote looks like.
+> It can go on and on, just like the
+> person you are quoting. You don't
+> have to use it for quotes though. You
+> can use it just as another way to make
+> a particular piece of text stand out.
+
 ## Code Listings
 
 CWiki handles code listings too. You can show code inline by surrounding it with grave characters (backquotes) "\`". Here is an example: `a = b + c*34;`.
