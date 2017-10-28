@@ -1,4 +1,5 @@
 (ns cwiki.repl
+  (:gen-class)
   (:use cwiki.handler
         cwiki.models.db
      ;   cwiki.components.registration
