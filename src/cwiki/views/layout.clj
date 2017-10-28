@@ -18,7 +18,7 @@
            (com.vladsch.flexmark.util.options MutableDataSet)
            (java.util ArrayList)))
 
-(def program-name-and-version "CWiki v0.1.0")
+(def program-name-and-version "CWiki v0.0.1")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.
@@ -76,28 +76,8 @@
                    "Wiki"]]]
     (wiki-hmenu-component post-map)]])
 
-;(defn header-component
-;  "Return the standard page header for the application."
-;  []
-;  [:header {:class "header"}
-;   [:div {:class "header-wrapper"}
-;    [:div {:class "left-header-wrapper"}
-;     [:h1 {:class "brand-title"} "cwiki"]
-;     [:p {:class "brand-sub-title"}
-;      "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
-;                   "Wiki"]]]
-;    (hmenu-component)]])
-
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
-
-;(defn content-component
-;  "Put the content in and return it."
-;  [& content]
-;  [:content {:class "content"}
-;   (if content
-;     (first content)
-;     [:p error-span "There is no content for this page."])])
 
 (defn centered-content-component
   "Put the content in a centered element and return it."
@@ -141,41 +121,12 @@
     [:p "Copyright \u00A9 2017, David D. Clark"]
     [:p program-name-and-version]]])
 
-;(defonce unique-key (atom 0))
-;(defn gen-key
-;  "Generate a unique key for use with list items and things that
-;  require them."
-;  []
-;  (swap! unique-key inc))
-
-;(defn map->two-col-list
-;  "A component that creates a two column list from a single-level map."
-;  [m]
-;  (fn []
-;    (let [key-column [:ul.mp-list
-;                      (for [[k v] m]
-;                        ^{:key (gen-key)} [:li.mp-key-list-item (str k)])]
-;          val-column [:ul.mp-list
-;                      (for [[k v] m]
-;                        ^{:key (gen-key)} [:li.mp-val-list-item (if v
-;                                                                  (str v)
-;                                                                  " ")])]]
-;      [:div.map-pair key-column val-column])))
-
-;(defn single-layer-map-component
-;  "Return a component consisting of a two columns showing the
-;  keys and values in the input map (only one level allowed, no
-;  nesting). Nil values are blank. Will blow up with nested lists."
-;  [m]
-;  (map->two-col-list m))
-
 (defn view-wiki-page
   [post-map]
-  ;(println "view-wiki-page")
   (let [content (:content post-map)]
     (html5
       [:head
-       [:title "Welcome to cwiki"]
+       [:title "Welcome to CWiki"]
        (include-css "/css/styles.css")
        (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
        (include-js "/js/mathjax-config.js")
@@ -192,7 +143,7 @@
   []
   (html5
     [:head
-     [:title "Welcome to cwiki"]
+     [:title "Welcome to CWiki"]
      (include-css "/css/styles.css")]
     [:body {:class "page"}
      (wiki-header-component nil)
@@ -210,7 +161,7 @@
         content (:content post-map)]
     (html5
       [:head
-       [:title "Welcome to cwiki"]
+       [:title "Welcome to CWiki"]
        (include-css "/css/styles.css")]
       [:body {:class "page"}
        (wiki-header-component post-map)
@@ -233,15 +184,11 @@
 (defn compose-create-page
   [post-map]
   (let [id (:id post-map)
-       ; _ (println "id:" id)
         title (:title post-map)
-        ;_ (println "title:" title)
-        content (:content post-map)
-       ; _ (println "content:" content)
-       ]
+        content (:content post-map)]
     (html5
       [:head
-       [:title "Welcome to cwiki"]
+       [:title "Welcome to CWiki"]
        (include-css "/css/styles.css")]
       [:body {:class "page"}
        (wiki-header-component post-map)
@@ -249,7 +196,6 @@
          [:div
           (form-to {:enctype "multipart/form-data"}
                    [:post "/save-new-page"]
-                   ;(hidden-field :page-id id)
                    (text-field "title" title)
                    (text-area "content" content)
                    [:br]
