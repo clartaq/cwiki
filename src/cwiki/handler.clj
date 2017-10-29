@@ -47,8 +47,7 @@
        :else (let [title-only (s/replace title "/create" "")
                    new-body (layout/compose-create-page
                               (db/create-new-post-map title-only))]
-               (build-response new-body request))
-       ))))
+               (build-response new-body request))))))
 
 (defroutes app-routes
            (route/resources "/")
