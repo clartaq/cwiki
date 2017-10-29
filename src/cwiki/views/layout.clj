@@ -50,6 +50,14 @@
   [time-as-long]
   (f/unparse custom-formatter (c/from-long time-as-long)))
 
+(defn get-tab-title
+  "Return a string to be displayed in the browser tab."
+  [post-map]
+  (if-let [junk (and post-map
+                     (:title post-map))]
+    (str "CWiki: " (:title post-map))
+    "Welcome to CWiki"))
+
 (defn wiki-hmenu-component
   "Return the standard menu component for the application."
   [post-map]
@@ -123,10 +131,11 @@
 
 (defn view-wiki-page
   [post-map]
-  (let [content (:content post-map)]
+  (let [content (:content post-map)
+        title (:title post-map)]
     (html5
       [:head
-       [:title "Welcome to CWiki"]
+       [:title (get-tab-title post-map)]
        (include-css "/css/styles.css")
        (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
        (include-js "/js/mathjax-config.js")
@@ -143,7 +152,7 @@
   []
   (html5
     [:head
-     [:title "Welcome to CWiki"]
+     [:title (get-tab-title nil)]
      (include-css "/css/styles.css")]
     [:body {:class "page"}
      (wiki-header-component nil)
@@ -161,7 +170,7 @@
         content (:content post-map)]
     (html5
       [:head
-       [:title "Welcome to CWiki"]
+       [:title (get-tab-title post-map)]
        (include-css "/css/styles.css")]
       [:body {:class "page"}
        (wiki-header-component post-map)
@@ -188,7 +197,7 @@
         content (:content post-map)]
     (html5
       [:head
-       [:title "Welcome to CWiki"]
+       [:title (get-tab-title post-map)]
        (include-css "/css/styles.css")]
       [:body {:class "page"}
        (wiki-header-component post-map)
