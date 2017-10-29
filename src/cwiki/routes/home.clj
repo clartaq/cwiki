@@ -1,9 +1,7 @@
 (ns cwiki.routes.home
   (:require [compojure.core :refer :all]
             [cwiki.views.layout :as layout]
-            [clojure.java.jdbc :as jdbc]
-            [cwiki.models.db :as db])
-  (:import (java.io FileReader)))
+            [cwiki.models.db :as db]))
 
 (defn read-front-page
   "Read the complete post for the front page."
