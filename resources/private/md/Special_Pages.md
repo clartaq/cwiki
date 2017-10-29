@@ -10,9 +10,9 @@ The Front Page is the first page the wiki displays when it starts up. It is also
 
 The About page can be used to record some information about the wiki in general. You should edit it to reflect your intentions for the wiki.
 
-#### Table of Contents ####
+#### Sidebar ####
 
-This is a special area off to the left of the main display area. The program will automatically generate some of this area. There are special page link formats that you can use to add pages to this area.
+This is a special area off to the left of the main display area. It can be used as a special place to put links that are useful from anywhere in the wiki. The list of links can be broken into sections to group links with related functionality. See [[The Sidebar]] for details on changing the content of this area.
 
 #### Preferences ####
 
