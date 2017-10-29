@@ -63,7 +63,7 @@
   [post-map]
   (let [edit-link (and post-map (get-edit-link-for-existing-page post-map))
         delete-link (and post-map (get-delete-link-for-existing-page post-map))]
-    [:menu {:class "hmenu"}
+    [:nav {:class "hmenu"}
      [:p {:class "menu-item"}
       (when edit-link
         (str edit-link " "))
@@ -77,7 +77,7 @@
   [post-map]
   [:header {:class "header"}
    [:div {:class "header-wrapper"}
-    [:div {:class "left-header-wrapper"}
+    [:hgroup {:class "left-header-wrapper"}
      [:h1 {:class "brand-title"} "CWiki"]
      [:p {:class "brand-sub-title"}
       "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
@@ -90,7 +90,7 @@
 (defn centered-content-component
   "Put the content in a centered element and return it."
   [& content]
-  [:content {:class "centered-content"}
+  [:div {:class "centered-content"}
    (if content
      (first content)
      [:p error-span "There is not centered content for this page."])])
@@ -102,7 +102,7 @@
         created (:date post-map)
         modified (:modified post-map)]
     [:div {:class "page-title-div"}
-      [:h1 {:class "page-title-header"} title]
+     [:h1 {:class "page-title-header"} title]
      [:p {:class "author-line"}
       [:span {:class "author-header"} "Author: "] author]
      [:p {:class "date-line"}
@@ -142,9 +142,12 @@
        (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]
       [:body {:class "page"}
        (wiki-header-component post-map)
-       [:content {:class "centered-content"}
-        (limited-width-title-component post-map)
-        (limited-width-content-component content)]
+       [:div {:class "sidebar-and-article"}
+        [:aside {:class "left-aside"}
+         [:p "Here's the aside"]]
+        [:article {:class "page-content"}
+         (limited-width-title-component post-map)
+         (limited-width-content-component content)]]
        (footer-component)])))
 
 (defn compose-404-page
@@ -183,9 +186,9 @@
 
                    (text-area "content" content)
                    [:br]
-                   (submit-button {:id id} "Save Changes")
+                   (submit-button {:id "Save Button"} "Save Changes")
                    " "
-                   (submit-button {:id id} "Cancel")
+                   (submit-button {:id "Cancel Button"} "Cancel")
                    " "
                    (link-to {:class "btn btn-primary"} "/" "Take me Home"))])
        (footer-component)])))
