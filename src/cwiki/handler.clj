@@ -15,10 +15,16 @@
             [cwiki.models.db :as db]))
 
 (defn init []
-  (println "cwiki is starting"))
+  (println "CWiki is starting"))
 
 (defn destroy []
-  (println "cwiki is shutting down"))
+  (println "CWiki is shutting down"))
+
+(defn- build-response
+  [body req]
+  (-> (response/render body req)
+      (status 200)
+      (assoc :body body)))
 
 (defn page-finder-route
   [body]
@@ -27,38 +33,44 @@
           title (s/replace raw-title "//" "")
           raw-post (db/find-post-by-title title)]
      ; (println "raw-title:" raw-title ", title:" title ", raw-post:" raw-post)
-      (cond
-        raw-post (let [new-body (:content raw-post)
-                       new-page (layout/view-wiki-page raw-post)] ;(layout/compose-wiki-page new-body)]
-                   (println "Found title:" title)
-                   (-> (response/render new-page request)
-                       (status 200)
-                       (assoc :body new-page)))
+     (cond
+       raw-post (let [new-body (:content raw-post)
+                      new-page (layout/view-wiki-page raw-post)] ;(layout/compose-wiki-page new-body)]
+                  (println "Found title:" title)
+                  (build-response new-page request))
+       ;(-> (response/render new-page request)
+       ;    (status 200)
+       ;    (assoc :body new-page)))
 
-        (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
+       (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
                                           ; _ (println "saw edit request for:" title-only)
-                                           new-body (layout/compose-edit-page
-                                                      (db/find-post-by-title title-only))]
-                                       (-> (response/render new-body request)
-                                           (status 200)
-                                           (assoc :body new-body)))
-        (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
-                                             new-body (layout/view-wiki-page
-                                                        (db/find-post-by-title "Front Page"))]
-                                         (db/delete-page-by-id (db/title->page-id title-only))
-                                         (-> (response/render new-body request)
-                                             (status 200)
-                                             (assoc :body new-body)))
-        (s/ends-with? title "/create") (let [title-only (s/replace title "/create" "")
-                                         ;  _ (println "saw create request for:" title-only)
-                                           new-body (layout/compose-create-page
-                                                      (db/create-new-post-map title-only))]
-                                         ;(println "new-body:" new-body)
-                                       (-> (response/render new-body request)
-                                           (status 200)
-                                           (assoc :body new-body)))
+                                          new-body (layout/compose-edit-page
+                                                     (db/find-post-by-title title-only))]
+                                      (build-response new-body request))
+       ;(-> (response/render new-body request)
+       ;    (status 200)
+       ;    (assoc :body new-body)))
+       (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
+                                            new-body (layout/view-wiki-page
+                                                       (db/find-post-by-title "Front Page"))]
+                                        (db/delete-page-by-id (db/title->page-id title-only))
+                                        (build-response new-body request))
+       ;(-> (response/render new-body request)
+       ;    (status 200)
+       ;    (assoc :body new-body)))
+       ;(s/ends-with? title "/create")
+       :else (let [title-only (s/replace title "/create" "")
+                   ;  _ (println "saw create request for:" title-only)
+                   new-body (layout/compose-create-page
+                              (db/create-new-post-map title-only))]
+               ;(println "new-body:" new-body)
+               (build-response new-body request))
+       ;(-> (response/render new-body request)
+       ;    (status 200)
+       ;    (assoc :body new-body)))
+       ))))
 
-        :else nil))))
+     ;   :else nil))))
 
 (defroutes app-routes
            (route/resources "/")

@@ -83,7 +83,7 @@
   be handled."
   [link-parts]
   (let [page-title (:title-part link-parts)
-        uri (u/url-encode (str "/" page-title "/create"))
+        uri (u/url-encode (str "/" page-title )) ;"/create"))
         h (hc/html (link-to {:class "absent-button-style"}
                                uri (:display-part link-parts)))]
     ;(println "get-creation-link-for-new-page: returning:\n" h)
