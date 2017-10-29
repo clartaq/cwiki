@@ -19,7 +19,7 @@
   ([title content]
    (let [pm {:date     (c/to-sql-time (t/now))
              :modified (c/to-sql-time (t/now))
-             :author   "cwiki"
+             :author   "CWiki"
              :title    title
              :content  content}]
      pm)))
@@ -39,8 +39,8 @@
                     {:title "CWiki Name" :file-name "CWiki_Name.md"}])
 
 (def initial-user
-  {:user "cwiki"
-   :role "cwiki"
+  {:user "CWiki"
+   :role "CWiki"
    :pwdate (c/to-sql-time (t/now))
    :mustchangepw true
    :digest "Blahblahbla"
