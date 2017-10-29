@@ -97,14 +97,6 @@ a:focus {
     text-decoration: underline;
 }
 
-.present-link-style a {
-    color: chartreuse;
-}
-
-.absent-link-style a {
-    color: red;
-}
-
 br {
     display: none
 }

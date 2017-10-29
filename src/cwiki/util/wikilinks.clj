@@ -31,7 +31,6 @@
 (defn- get-different-parts
   [clean-link]
   (let [splits (s/split clean-link #"\|")]
-    ;(println "splits:" splits)
     {:title-part (first splits) :display-part (second splits)}))
 
 (defn get-wikilink-parts
@@ -40,21 +39,14 @@
   (let [clean-link (strip-link-brackets wikilink)]
     (if (s/includes? clean-link "|")
       (get-different-parts clean-link)
-      ; else both parts are the same
       {:title-part clean-link :display-part clean-link})))
-
-(defn wikilink->title
-  "Return an article title based on the input wikilink."
-  [wikilink]
-  (:title-part (get-wikilink-parts wikilink)))
 
 (defn get-view-link-for-existing-page
   "Return a link to be displayed in an existing page. As such, it
   may have separate display and link parts that must be handled."
   [link-parts]
   (let [uri (u/url-encode (str "/" (:title-part link-parts)))
-        h (hc/html (link-to {:class "present-button-style"}
-                            uri (:display-part link-parts)))]
+        h (hc/html (link-to uri (:display-part link-parts)))]
     h))
 
 (defn get-edit-link-for-existing-page
@@ -62,9 +54,7 @@
   [post-map]
   (let [page-title (:title post-map)
         uri (u/url-encode (str "/" page-title "/edit"))
-        h (hc/html (link-to {:class "present-button-style"}
-                               uri "Edit"))]
-    ;(println "get-edit-link-for-existing-page: returning:\n" h)
+        h (hc/html (link-to uri "Edit"))]
     h))
 
 (defn get-delete-link-for-existing-page
@@ -72,9 +62,7 @@
   [post-map]
   (let [page-title (:title post-map)
         uri (u/url-encode (str "/" page-title "/delete"))
-        h (hc/html (link-to {:class "present-button-style"}
-                            uri "Delete"))]
-    ;(println "get-delete-link-for-existing-page: returning:\n" h)
+        h (hc/html (link-to uri "Delete"))]
     h))
 
 (defn get-creation-link-for-new-page
@@ -83,10 +71,9 @@
   be handled."
   [link-parts]
   (let [page-title (:title-part link-parts)
-        uri (u/url-encode (str "/" page-title )) ;"/create"))
-        h (hc/html (link-to {:class "absent-button-style"}
-                               uri (:display-part link-parts)))]
-    ;(println "get-creation-link-for-new-page: returning:\n" h)
+        uri (u/url-encode (str "/" page-title))
+        h (hc/html (link-to {:style "color:red"}
+                            uri (:display-part link-parts)))]
     h))
 
 (defn link-parts->html-link
@@ -102,12 +89,9 @@
   "Substitute an html-style link for a single
   wikilink and return the text with the substitution."
   [wikilink txt]
-  ;(println "do-one-substitution: wikilink:" wikilink ", txt:" txt)
   (let [link-parts (get-wikilink-parts wikilink)
-        ;_ (println "link-parts:" link-parts)
         html (link-parts->html-link link-parts)]
     (let [rt (s/replace txt wikilink html)]
-      ;(println "rt:" rt)
       rt)))
 
 (defn replace-wikilinks
@@ -115,9 +99,7 @@
   links and return the text with the replacements."
   [md-txt]
   (let [link-coll (find-wikilinks md-txt)]
-    ;(println "link-coll:" link-coll)
     (loop [lc link-coll txt md-txt]
-      ;(println "inside loop: lc:" lc ", txt:" txt)
       (if (empty? lc)
         txt
         (recur (rest lc) (do-one-substitution (first lc) txt))))))
