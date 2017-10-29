@@ -26,4 +26,4 @@
    :dev
             {:dependencies [[ring-mock "0.1.5"] [ring/ring-devel "1.6.2"]]}}
 
-  :main cwiki.repl)
+  :main cwiki.main)

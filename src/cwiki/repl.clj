@@ -1,5 +1,4 @@
 (ns cwiki.repl
-  (:gen-class)
   (:use cwiki.handler
         cwiki.models.db
      ;   cwiki.components.registration
@@ -48,5 +47,3 @@
   []
   (stop-server))
 
-(defn -main [& args]
-  (start-app))
