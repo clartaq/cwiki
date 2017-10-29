@@ -75,12 +75,3 @@ $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 
 Here is the same equation $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$
 inline.
-
-Some inline code `a = c + 45;`.
-
-<pre class="prettyprint lang-clj">(defn f [x]
-  "A comment at the beginning."
-  (let [my-x x]
-    (println "my-x: " my-x) ; a line comment.
-    (+ 2 my-x)))
-</pre>
