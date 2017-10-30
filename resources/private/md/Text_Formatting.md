@@ -2,7 +2,15 @@ This page describes the ways you can format text in CWiki.
 
 Here are some examples of the types of formatting and things you can do.
 
-You can make headers. Here are the different types supported
+You can do inline formatting like:
+
+* Making **bold** items.
+* Marking words and *phrases* as italic.
+* You can <u>underline</u> some things.
+* You can also mark some things as deleted with ~~strikethrough~~.
+* And do various combinations of the above like <u>***underlined bold italics***</u>.
+
+You can make headers. Here are the different types supported.
 
 # Header 1 #
 ## Header 2 ##
@@ -37,7 +45,7 @@ Here is a numbered list:
 
 ## Code Listings
 
-CWiki handles code listings too. You can show code inline by surrounding it with grave characters (backquotes) "\`". Here is an example: `a = b + c*34;`.
+CWiki handles code listings too. You can show code inline by surrounding it with the grave character (backquote) "\`". Here is an example: `a = b + c*34;`.
 
 For multi-line listings, we use the same convention as Github -- precede the code with a line consisting of three graves and end the listing with another line of three graves. You can get language-specific syntax highlighting by following the initial three graves with the word "prettyprint".
 
@@ -68,8 +76,9 @@ Whew!
 
 ## Mathematics
 
-You can also enter mathematics. The program uses MathJax
-Some math:
+You can also enter mathematics. You use the familiar  [[About Latex|$\rm\LaTeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
+
+Some math in an independent block on it's own line:
 
 $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 
