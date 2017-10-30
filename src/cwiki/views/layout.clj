@@ -170,7 +170,13 @@
   [post-map]
   (let [id (:id post-map)
         title (:title post-map)
-        content (:content post-map)]
+        content (:content post-map)
+        cancel-button (submit-button {:id "Cancel Button"
+                                      :on-click
+                                          (fn [e]
+                                            (println "e:" e)
+                                            (println "You pressed the button!"))} "Cancel")]
+    (println "cancel-button:" cancel-button)
     (html5
       [:head
        [:title (get-tab-title post-map)]
@@ -183,12 +189,13 @@
                    [:post "save-edits"]
                    (hidden-field :page-id id)
                    (text-field "title" title)
-
                    (text-area "content" content)
                    [:br]
                    (submit-button {:id "Save Button"} "Save Changes")
                    " "
-                   (submit-button {:id "Cancel Button"} "Cancel")
+                   [:input {:type "button" :name "cancel-button"
+                            :value "Cancel"
+                            :onclick "window.history.back();"}]
                    " "
                    (link-to {:class "btn btn-primary"} "/" "Take me Home"))])
        (footer-component)])))
@@ -213,7 +220,9 @@
                    [:br]
                    (submit-button {:id "Save Button"} "Save Changes")
                    " "
-                   (submit-button {:id "Cancel Button"} "Cancel")
+                   [:input {:type "button" :name "cancel-button"
+                            :value "Cancel"
+                            :onclick "window.history.back();"}]
                    " "
                    (link-to {:class "btn btn-primary"} "/" "Take me Home"))])
        (footer-component)])))
