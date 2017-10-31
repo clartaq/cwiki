@@ -71,30 +71,223 @@ body {
     position:relative; /*REQUIRED Sets up positioning for your footer*/
 }
 
-/* Some link styling. */
-a {
-    color: #a0e0ff;
-    text-decoration: none;
+/* All of the visible content is held within a page div. */
+
+.page {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
-a:hover {
-    color: #a0e0ff;
-    text-decoration: underline;
+/* The pieces of the page header. */
+
+.header {
+    margin: 0;
+    padding: 0 0.5em;
+    flex: 0 0 auto;
+    background-color: dimgray;
 }
 
-a:visited {
+.header-wrapper {
+    margin: 0;
+    padding: 1em 0.5em 0;
+    line-height: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.left-header-wrapper {
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+/* Some color */
+/*.brand-box {
+    background-color: #505e9f;
+    padding: 4px;
+}*/
+
+.brand-title {
+    font-size: 1.5em;
+    font-weight: bold;
+    line-height: 0.8em;
     color: #cfe7ed;
-    text-decoration: none;
+    margin: 0;
+    padding-bottom: 0;
+    /*padding-bottom: 0.6em;*/
 }
 
-a:active {
+.brand-sub-title {
+    font-size: 0.8em;
+    color: #cfe7ed;
+    padding-top: 0.8em;
+}
+
+.brand-sub-title>a:link {
+    color: #a0e0ff;
+    font-weight: bold;}
+
+.brand-sub-title>a:visited {
+    color: #cfe7ed;
+}
+
+.brand-sub-title>a:hover:active:focus {
+    text-decoration: underline;
+}
+
+.hmenu {
+    margin: 0;
+    padding: 0.5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background-color: dimgray;
+}
+
+.menu-item {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0 0.5em;
+    color: #cfe7ed;
+}
+
+/* The sidebar and article is itself a flexbox, but also an element
+inside another flexbox. */
+.sidebar-and-article {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: row;
+    overflow-y: auto;
+}
+
+.left-aside {
+    padding: 1.5em;
+    flex: 0 0 10em;
+}
+
+.page-content {
+    padding: 0.5em 0.5em 0.5em 1.5em;
+    max-width: 70ch;
+    flex: 1 1 auto;
+    border-left: 1px solid #dddddd;
+}
+
+/* content and centered content are used for 404, edit, and create
+pages at the moment.
+ */
+
+textarea#content {
+    width: 70ch;
+    height: 30em;
+}
+
+.button-bar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    background: red;
+    margin:2em;
+}
+
+.button-bar-item {
+    flex: 1 1 auto;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    background: green;
+}
+
+.content {
+    padding: 0.5em;
+    flex: 1 1 auto;
+    position: relative;/* need this to position inner content */
+    overflow-y: auto;
+}
+
+.centered-content {
+    padding: 0.5em;
+    max-width: 70ch;
+    margin-left: auto;/* center content horizontally */
+    margin-right: auto;
+    flex: 1 1 auto;
+    position: relative;/* need this to position inner content */
+    overflow-y: auto;
+}
+
+.centered-content a:link, .content a:link {
+    color: #a0e0ff;
+}
+
+.centered-content a:visited, .content a:visited {
+    color: #5689a9;
+}
+
+.centered-content a:hover:active:focus, .content a:hover:active:focus {
     color: #a0e0ff;
     text-decoration: underline;
 }
 
-a:focus {
-    color: #a0e0ff;
-    text-decoration: underline;
+/* The page title and meta info at the top of the page content. */
+.page-title-div {
+    padding-bottom: 1.2em;
+}
+
+.page-title-header {
+    padding-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.author-line {
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 0.8em;
+    padding-bottom: 0;
+}
+
+.author-header {
+    font-weight: bold;
+}
+
+.date-line {
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 0.8em;
+}
+
+.date-header {
+    font-weight: bold;
+}
+
+.date-text {
+}
+
+/* The footer. */
+
+.footer {
+    margin: 0;
+    padding: 0;
+    flex: 0 0 auto;
+    font-size: 0.825em;
+    color: lightgrey;
+    background-color: dimgray;
+}
+
+.footer-wrapper {
+    margin: 0;
+    padding: 1em 0.5em 0;
+    line-height: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* Some miscellaneous, simple elements. */
+
+p {
+    margin-bottom: 1em;
 }
 
 br {
@@ -113,6 +306,54 @@ blockquote > :first-child {
 
 blockquote > :last-child {
     margin-bottom: 0;
+}
+
+hr {
+    height: 0;
+    margin: 15px 0;
+    overflow: hidden;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid #cccccc;
+}
+
+li {
+    margin-left: 2em;
+}
+
+li:last-child {
+    padding-bottom: 1em;
+}
+
+li:first-child {
+    margin-top: -0.8em;
+}
+
+/* Some link styling. */
+a {
+    color: #a0e0ff;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #a0e0ff;
+    text-decoration: underline;
+}
+
+a:visited {
+/*    color: #cfe7ed;*/
+    color: #a0e0ff;
+    text-decoration: none;
+}
+
+a:active {
+    color: #a0e0ff;
+    text-decoration: underline;
+}
+
+a:focus {
+    color: #a0e0ff;
+    text-decoration: underline;
 }
 
 /* pre and code blocks */
@@ -171,215 +412,6 @@ pre code {
     padding:0
 }
 
-p {
-    margin-bottom: 1em;
-}
-
-.page {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-}
-
-.page-title-div {
-    padding-bottom: 1.2em;
-}
-
-.page-title-header {
-    padding-bottom: 0;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.author-line {
-    text-align: left;
-    margin-bottom: 0;
-    font-size: 0.8em;
-    padding-bottom: 0;
-}
-
-.author-header {
-    font-weight: bold;
-}
-
-.date-line {
-    text-align: left;
-    margin-bottom: 0;
-    font-size: 0.8em;
-}
-
-.date-header {
-    font-weight: bold;
-}
-
-.date-text {
-}
-
-.header {
-    margin: 0;
-    padding: 0 0.5em;
-    flex: 0 0 auto;
-    background-color: dimgray;
-}
-
-.header-wrapper {
-    margin: 0;
-    padding: 1em 0.5em 0;
-    line-height: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-.left-header-wrapper {
-    display:flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-.hmenu {
-    margin: 0;
-    padding: 0.5em;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    background-color: dimgray;
-}
-
-.menu-item {
-    font-size: 0.8em;
-    font-weight: bold;
-    margin: 0;
-    padding: 0 0.5em;
-    color: #cfe7ed;
-}
-
-hr {
-    height: 0;
-    margin: 15px 0;
-    overflow: hidden;
-    background: transparent;
-    border: 0;
-    /*color: #d1d5da;*/
-    border-bottom: 1px solid #cccccc;/*lighten($gray-300, 5%);*/
-/*@include clearfix();*/
-}
-
-li {
-    margin-left: 2em;
-}
-
-li:last-child {
-    padding-bottom: 1em;
-}
-
-li:first-child {
-    margin-top: -0.8em;
-}
-
-/* The sidebar and article is itself a flexbox, but also an element
-inside another flexbox. */
-.sidebar-and-article {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: row;
-    overflow-y: auto;
-}
-
-.left-aside {
-    padding: 1.5em;
-    flex: 0 0 10em;
-}
-
-.page-content {
-    padding: 0.5em 0.5em 0.5em 1.5em;
-    max-width: 70ch;
-    flex: 1 1 auto;
-    border-left: 1px solid #dddddd;
-}
-
-.content {
-    padding: 0.5em;
-    flex: 1 1 auto;
-    position: relative;/* need this to position inner content */
-    overflow-y: auto;
-}
-
-.centered-content {
-    padding: 0.5em;
-    max-width: 70ch;
-    margin-left: auto;/* center content horizontally */
-    margin-right: auto;
-    flex: 1 1 auto;
-    position: relative;/* need this to position inner content */
-    overflow-y: auto;
-}
-
-.centered-content a:link, .content a:link {
-    color: #a0e0ff;
-}
-
-.centered-content a:visited, .content a:visited {
-    color: #5689a9;
-}
-
-.centered-content a:hover:active:focus, .content a:hover:active:focus {
-    color: #a0e0ff;
-    text-decoration: underline;
-}
-
-.footer {
-    margin: 0;
-    padding: 0;
-    flex: 0 0 auto;
-    font-size: 0.825em;
-    color: lightgrey;
-    background-color: dimgray;
-}
-
-.footer-wrapper {
-    margin: 0;
-    padding: 1em 0.5em 0;
-    line-height: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-/* Some color */
-.brand-box {
-    background-color: #505e9f;
-    padding: 4px;
-}
-
-.brand-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    line-height: 0.8em;
-    color: #cfe7ed;
-    margin: 0;
-    padding-bottom: 0;
-    /*padding-bottom: 0.6em;*/
-}
-
-.brand-sub-title {
-    font-size: 0.8em;
-    color: #cfe7ed;
-    padding-top: 0.8em;
-}
-
-.brand-sub-title>a:link {
-    color: #a0e0ff;
-    font-weight: bold;}
-
-.brand-sub-title>a:visited {
-    color: #cfe7ed;
-}
-
-.brand-sub-title>a:hover:active:focus {
-    text-decoration: underline;
-}
-
 /* Styles for displaying the content of a map. */
 .mp-list {
     list-style: none;
@@ -416,7 +448,3 @@ inside another flexbox. */
     justify-content: center;
 }
 
-textarea#content {
-    width: 70ch;
-    height: 30em;
-}
