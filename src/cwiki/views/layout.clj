@@ -1,6 +1,7 @@
 (ns cwiki.views.layout
   (:require [clj-time.format :as f]
             [clj-time.coerce :as c]
+            [cwiki.util.special :refer [is-special?]]
             [cwiki.util.wikilinks :refer [replace-wikilinks
                                           get-edit-link-for-existing-page
                                           get-delete-link-for-existing-page]]
@@ -144,7 +145,7 @@
        (wiki-header-component post-map)
        [:div {:class "sidebar-and-article"}
         [:aside {:class "left-aside"}
-         [:p "Here's the aside"]]
+         [:p "Here's the sidebar"]]
         [:article {:class "page-content"}
          (limited-width-title-component post-map)
          (limited-width-content-component content)]]
@@ -166,17 +167,12 @@
         (link-to {:class "btn btn-primary"} "/" "Take me Home")])
      (footer-component)]))
 
-(defn compose-edit-page
+(defn compose-create-or-edit-page
   [post-map]
   (let [id (:id post-map)
         title (:title post-map)
-        content (:content post-map)
-        cancel-button (submit-button {:id "Cancel Button"
-                                      :on-click
-                                          (fn [e]
-                                            (println "e:" e)
-                                            (println "You pressed the button!"))} "Cancel")]
-    (println "cancel-button:" cancel-button)
+        content (:content post-map)]
+    (println "title:" title)
     (html5
       [:head
        [:title (get-tab-title post-map)]
@@ -186,24 +182,34 @@
        (centered-content-component
          [:div
           (form-to {:enctype "multipart/form-data"}
-                   [:post "save-edits"]
-                   (hidden-field :page-id id)
+                   (if id
+                     [:post "save-edits"]
+                     [:post "save-new-page"])
+                   (when id
+                     (hiccup.form/hidden-field :page-id id))
                    (text-field "title" title)
                    (text-area "content" content)
                    [:br]
-                   (submit-button {:id "Save Button"} "Save Changes")
-                   " "
-                   [:input {:type "button" :name "cancel-button"
-                            :value "Cancel"
-                            :onclick "window.history.back();"}]
-                   " "
-                   (link-to {:class "btn btn-primary"} "/" "Take me Home"))])
+                   [:div {:class "button-bar-container"}
+                    (submit-button {:id    "Save Button"
+                                    :class "topcoat-button--large"} "Save Changes")
+                    [:input {:type    "button" :name "cancel-button"
+                             :value   "Cancel"
+                             :class   "topcoat-button--large"
+                             :onclick "window.history.back();"}]])])
        (footer-component)])))
+
+(defn compose-edit-page
+  [post-map]
+  (compose-create-or-edit-page post-map))
 
 (defn compose-create-page
   [post-map]
-  (let [id (:id post-map)
-        title (:title post-map)
+  ;(let [pg (compose-create-or-edit-page post-map)]
+  ;  (println "pg:" (pretty-print-html pg))
+  ;  pg))
+
+(let [title (:title post-map)
         content (:content post-map)]
     (html5
       [:head
@@ -218,11 +224,11 @@
                    (text-field "title" title)
                    (text-area "content" content)
                    [:br]
-                   (submit-button {:id "Save Button"} "Save Changes")
-                   " "
-                   [:input {:type "button" :name "cancel-button"
-                            :value "Cancel"
-                            :onclick "window.history.back();"}]
-                   " "
-                   (link-to {:class "btn btn-primary"} "/" "Take me Home"))])
+                   [:div {:class "button-bar-container"}
+                    (submit-button {:id    "Save Button"
+                                    :class "topcoat-button--large"} "Save Changes")
+                    [:input {:type    "button" :name "cancel-button"
+                             :value   "Cancel"
+                             :class   "topcoat-button--large"
+                             :onclick "window.history.back();"}]])])
        (footer-component)])))
