@@ -2,6 +2,7 @@
   (:require [cemerick.url :as u]
             [clojure.string :as s]
             [cwiki.models.db :as db]
+            [cwiki.util.special :as special]
             [hiccup.core :as hc]
             [hiccup.element :refer [link-to]]))
 
@@ -52,18 +53,21 @@
 (defn get-edit-link-for-existing-page
   "Return a link to be used with a button or menu."
   [post-map]
-  (let [page-title (:title post-map)
-        uri (u/url-encode (str "/" page-title "/edit"))
-        h (hc/html (link-to uri "Edit"))]
-    h))
+  (let [page-title (:title post-map)]
+    (when (special/is-editable? page-title)
+      (let [uri (u/url-encode (str "/" page-title "/edit"))
+            h (hc/html (link-to uri "Edit"))]
+        h))))
 
 (defn get-delete-link-for-existing-page
-  "Return a link to be used with a button or menu."
+  "Return a link to be used with a button or menu. If the page
+  is special and cannot be deleted, return nil."
   [post-map]
-  (let [page-title (:title post-map)
-        uri (u/url-encode (str "/" page-title "/delete"))
-        h (hc/html (link-to uri "Delete"))]
-    h))
+  (let [page-title (:title post-map)]
+    (when (special/is-deletable? page-title)
+      (let [uri (u/url-encode (str "/" page-title "/delete"))
+            h (hc/html (link-to uri "Delete"))]
+        h))))
 
 (defn get-creation-link-for-new-page
   "Return a link to a non-existent page to be display in a page.
