@@ -17,18 +17,22 @@
   (some #(when (= (:name %) page-name) %) special-pages))
 
 (defn is-special?
+  "Return true if the page-name represent a 'special' page
+  in the wiki, nil otherwise."
   [page-name]
   (find-first-with-name page-name))
 
 (defn is-deletable?
-  "Return false if the page-name is the name of a special page
-  which cannot be deleted, true otherwise."
+  "Return nil if the page-name is the name of a 'special' page
+  that cannot be deleted, true otherwise."
   [page-name]
   (if-let [m (find-first-with-name page-name)]
     (:deletable? m)
     true))
 
 (defn is-editable?
+  "Return nil if the page-name is the name of a 'special' page
+  that cannot be edited, true otherwise."
   [page-name]
   (if-let [m (find-first-with-name page-name)]
     (:editable? m)
