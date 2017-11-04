@@ -10,9 +10,9 @@
    {:name "Orphans" :editable? nil :deletable? nil}
    {:name "Preferences" :editable? true :deletable? nil}])
 
-(def any? (complement not-any?))
-
 (defn find-first-with-name
+  "Return the map for the 'special' page with the name
+  page-name, nil otherwise."
   [page-name]
   (some #(when (= (:name %) page-name) %) special-pages))
 
