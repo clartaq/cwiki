@@ -126,11 +126,16 @@
   (println "add-initial-pages!")
   (mapv add-page-from-file! initial-pages))
 
+(defn db-exists?
+  "Return true if the wiki database already exists."
+  []
+  (.exists ^File (clojure.java.io/as-file db-file-name)))
+
 (defn init-db!
   "Initialize the database. Will create the database and
   tables if needed."
   []
-  (when-not (.exists ^File (clojure.java.io/as-file db-file-name))
+  (when-not (db-exists?)
     (println "Need to create database.")
     (io/make-parents db-file-name)
     (create-db)
