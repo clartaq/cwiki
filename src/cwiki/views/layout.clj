@@ -59,20 +59,27 @@
     (str "CWiki: " (:title post-map))
     "Welcome to CWiki"))
 
+(defn- menu-item-span
+  "Return a span with CSS class 'menu-item' around the given content."
+  [content]
+  [:span {:class "menu-item"} content])
+
 (defn wiki-hmenu-component
   "Return the standard menu component for the application."
   [post-map]
   (let [edit-link (and post-map (get-edit-link-for-existing-page post-map))
         delete-link (and post-map (get-delete-link-for-existing-page post-map))]
     [:nav {:class "hmenu"}
-     [:p {:class "menu-item"}
+     [:p
       (when edit-link
-        (str edit-link " "))
+        (menu-item-span edit-link))
       (when delete-link
-        (str delete-link " "))
-      [:a {:href "/"} "Home"] " "
-      [:a {:href "/about"} "About"] " "
-      [:a {:href "/search"} "Search"]]]))
+        (menu-item-span delete-link))
+      (menu-item-span [:a {:href "/"} "Home"])
+      (when (and (db/db-exists?)
+                 (db/find-post-by-title "About"))
+        (menu-item-span [:a {:href "/about"} "About"]))
+      (menu-item-span [:a {:href "/search"} "Search"])]]))
 
 (defn wiki-header-component
   [post-map]
