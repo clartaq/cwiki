@@ -92,13 +92,6 @@
    (:content (first (jdbc/query db-name
                                 ["select * from posts where id=?" id])))))
 
-(defn x [r]
-  (loop [m (first r)
-         ss #{}]
-    (if (nil? m)
-      ss
-      (recur (rest r) (conj ss (:title m))))))
-
 (defn get-all-page-names
   "Return a sorted set of all of the page titles in the wiki,
   including all of the 'special' pages."
@@ -111,7 +104,6 @@
 
 (defn update-page-title-and-content!
   [id title content]
-  (println "update-page... ")
   (jdbc/update! sqlite-db :posts {:title    title
                                   :content  content
                                   :modified (c/to-sql-time (t/now))}
@@ -127,8 +119,7 @@
 
 (defn delete-page-by-id
   [page-id]
-  (println "delete-page-by-id:"
-           (jdbc/delete! sqlite-db :posts ["id=?" page-id])))
+  (jdbc/delete! sqlite-db :posts ["id=?" page-id]))
 
 (defn- add-page-from-file!
   [m]
@@ -142,7 +133,6 @@
 
 (defn- add-initial-pages!
   []
-  (println "add-initial-pages!")
   (mapv add-page-from-file! initial-pages))
 
 (defn db-exists?
@@ -155,7 +145,7 @@
   tables if needed."
   []
   (when-not (db-exists?)
-    (println "Need to create database.")
+    (println "Creating initial database.")
     (io/make-parents db-file-name)
     (create-db)
     (add-initial-pages!)))
