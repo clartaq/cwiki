@@ -39,12 +39,12 @@
                     {:title "CWiki Name" :file-name "CWiki_Name.md"}])
 
 (def initial-user
-  {:user "CWiki"
-   :role "CWiki"
-   :pwdate (c/to-sql-time (t/now))
+  {:user         "CWiki"
+   :role         "CWiki"
+   :pwdate       (c/to-sql-time (t/now))
    :mustchangepw true
-   :digest "Blahblahbla"
-   :front_page 0})
+   :digest       "Blahblahbla"
+   :front_page   0})
 
 (defn- create-db
   "Create the database tables for the application."
@@ -52,6 +52,7 @@
   (try (jdbc/db-do-commands sqlite-db
                             [(jdbc/create-table-ddl :users
                                                     [[:id :integer :primary :key]
+
                                                      [:user :text]
                                                      [:role :text]
                                                      [:pwdate :datetime]
@@ -89,6 +90,21 @@
   ([id db-name]
    (:content (first (jdbc/query db-name
                                 ["select * from posts where id=?" id])))))
+
+(defn x [r]
+  (loop [m (first r)
+         ss #{}]
+    (if (nil? m)
+      ss
+      (recur (rest r) (conj ss (:title m))))))
+
+(defn get-all-page-names
+  "Return a sorted set of all of the page titles in the wiki."
+  ([]
+   (get-all-page-names sqlite-db))
+  ([db-name]
+   (when-let [title-array (jdbc/query db-name ["select title from posts"])]
+     (into (sorted-set) (mapv #(:title %) title-array)))))
 
 (defn update-page-title-and-content!
   [id title content]
