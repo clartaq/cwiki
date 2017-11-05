@@ -11,7 +11,8 @@
             [hiccup.element :refer [link-to]]
             [clj-time.core :as t]
             [compojure.response :as response]
-            [cwiki.models.db :as db])
+            [cwiki.models.db :as db]
+            [clojure.string :as s])
   (:import (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.html HtmlRenderer HtmlRenderer$Builder)
            (com.vladsch.flexmark.parser Parser Parser$Builder
@@ -139,8 +140,7 @@
 
 (defn view-wiki-page
   [post-map]
-  (let [content (:content post-map)
-        title (:title post-map)]
+  (let [content (:content post-map)]
     (html5
       [:head
        [:title (get-tab-title post-map)]
@@ -157,6 +157,26 @@
          (limited-width-title-component post-map)
          (limited-width-content-component content)]]
        (footer-component)])))
+
+(defn process-title-set
+  "Process a sorted set of page titles into a Markdown-formatted
+  unordered list and return it"
+  [titles]
+  (loop [t titles
+         st ""]
+    (if (empty? t)
+      (str st"\n")
+      (recur (rest t) (str st "\n- [[" (first t) "]]")))))
+
+(defn compose-all-pages-page
+  "Return a page listing all of the pages in the wiki."
+  []
+  (let [all-pages-query (db/get-all-page-names)
+        processed-titles (process-title-set all-pages-query)
+        content (s/join ["All Pages Content:\n"
+                         processed-titles])
+        post-map (db/create-new-post-map "All Pages" content)]
+    (view-wiki-page post-map)))
 
 (defn compose-404-page
   "Build and return a 'Not Found' page."
@@ -239,3 +259,4 @@
                              :class   "topcoat-button--large"
                              :onclick "window.history.back();"}]])])
        (footer-component)])))
+

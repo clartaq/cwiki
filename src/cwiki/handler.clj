@@ -29,11 +29,17 @@
     (let [raw-title (u/url-decode (:uri request))
           title (s/replace raw-title "//" "")
           raw-post (db/find-post-by-title title)]
+      (println "raw-title:" raw-title)
+      (println "title:" title)
      (cond
        raw-post (let [new-body (:content raw-post)
                       new-page (layout/view-wiki-page raw-post)]
                   (println "Found title:" title)
                   (build-response new-page request))
+
+       (= title "All Pages") (let [new-body (layout/compose-all-pages-page)]
+                               (println "Saw route for All Pages")
+                               (build-response new-body request))
 
        (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
                                           new-body (layout/compose-edit-page
