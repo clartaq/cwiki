@@ -37,3 +37,9 @@
   (if-let [m (find-first-with-name page-name)]
     (:editable? m)
     true))
+
+(defn get-all-special-page-names
+  "Return a sorted set of all of the special page titles in the wiki."
+  []
+  (into (sorted-set) (mapv #(:name %) special-pages)))
+
