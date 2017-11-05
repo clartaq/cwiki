@@ -2,7 +2,8 @@
   (require [clojure.java.jdbc :as jdbc]
            [clojure.java.io :as io]
            [clj-time.core :as t]
-           [clj-time.coerce :as c])
+           [clj-time.coerce :as c]
+           [cwiki.util.special :as special])
   (:import (java.io File)))
 
 (def db-file-name "resources/public/db/database.db")
@@ -99,12 +100,14 @@
       (recur (rest r) (conj ss (:title m))))))
 
 (defn get-all-page-names
-  "Return a sorted set of all of the page titles in the wiki."
+  "Return a sorted set of all of the page titles in the wiki,
+  including all of the 'special' pages."
   ([]
    (get-all-page-names sqlite-db))
   ([db-name]
    (when-let [title-array (jdbc/query db-name ["select title from posts"])]
-     (into (sorted-set) (mapv #(:title %) title-array)))))
+     (into (special/get-all-special-page-names)
+           (mapv #(:title %) title-array)))))
 
 (defn update-page-title-and-content!
   [id title content]
