@@ -168,6 +168,31 @@ inside another flexbox. */
     flex: 0 0 10em;
 }
 
+.left-aside h6 {
+    font-size: 0.8em;
+    border-bottom: 1px solid #cccccc;
+}
+
+.left-aside p {
+    font-size: 0.85em;
+    line-height: 1.4em;
+}
+
+.left-aside li {
+    font-size: 0.8em;
+    list-style-type: none;
+    margin-left: 0.5em;
+    line-height: 1.4em;
+}
+
+.left-aside li:last-child {
+    padding-bottom: 0.5em;
+}
+
+.left-aside li:first-child {
+    margin-top: -0.4em;
+}
+
 .page-content {
     padding: 0.5em 0.5em 0.5em 1.5em;
     max-width: 70ch;
@@ -334,29 +359,33 @@ li:first-child {
 
 /* Some link styling. */
 a {
-    color: #a0e0ff;
+    color: #5580ff;
     text-decoration: none;
 }
 
 a:hover {
-    color: #a0e0ff;
+    color: #5580ff;
     text-decoration: underline;
 }
 
 a:visited {
 /*    color: #cfe7ed;*/
-    color: #a0e0ff;
+    color: #5580ff;
     text-decoration: none;
 }
 
 a:active {
-    color: #a0e0ff;
+    color: #5580ff;
     text-decoration: underline;
 }
 
 a:focus {
-    color: #a0e0ff;
+    color: #5580ff;
     text-decoration: underline;
+}
+
+.menu-item a {
+    color: #a0e0ff;
 }
 
 /* pre and code blocks */
