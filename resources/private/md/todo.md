@@ -11,3 +11,4 @@ This is an ever-evolving list of things that need doing.
 * Any maintenance tasks to perform? Database compression for example.
 * How to handle images. Should they go in a the database? (Almost certainly yes.)
 * Tables?
+* Beautify and style the edit/create pages.
