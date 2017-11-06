@@ -140,7 +140,8 @@
 
 (defn view-wiki-page
   [post-map]
-  (let [content (:content post-map)]
+  (let [content (:content post-map)
+        sidebar-content (:content (db/find-post-by-title "Sidebar"))]
     (html5
       [:head
        [:title (get-tab-title post-map)]
@@ -152,7 +153,7 @@
        (wiki-header-component post-map)
        [:div {:class "sidebar-and-article"}
         [:aside {:class "left-aside"}
-         [:p "Here's the sidebar"]]
+         (limited-width-content-component sidebar-content)]
         [:article {:class "page-content"}
          (limited-width-title-component post-map)
          (limited-width-content-component content)]]
