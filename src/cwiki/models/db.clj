@@ -28,6 +28,7 @@
 (def initial-pages [{:title "Front Page" :file-name "Front_Page.md"}
                     {:title "About" :file-name "About.md"}
                     {:title "About CWiki" :file-name "About_CWiki.md"}
+                    {:title "About the Sidebar" :file-name "About_the_Sidebar.md"}
                     {:title "CWiki FAQ" :file-name "CWiki_FAQ.md"}
                     {:title "Technical Notes" :file-name "Technical_Notes.md"}
                     {:title "Features" :file-name "Features.md"}
