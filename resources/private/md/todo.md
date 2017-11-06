@@ -1,4 +1,4 @@
-TODO
+This is an ever-evolving list of things that need doing.
 
 * Be consistent in the use of the name -- either "CWiki" or "cwiki".
 * Layout and use the Sidebar.
@@ -8,3 +8,6 @@ TODO
 * Implement Namespaces? Would make separating out groups of pages easier, like all "Help" pages.
 * Add a tagging system.
 * Implement within-wiki search.
+* Any maintenance tasks to perform? Database compression for example.
+* How to handle images. Should they go in a the database? (Almost certainly yes.)
+* Tables?
