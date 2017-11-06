@@ -37,6 +37,8 @@
                     {:title "Pages Primer" :file-name "Pages_Primer.md"}
                     {:title "Links Primer" :file-name "Links_Primer.md"}
                     {:title "Text Formatting" :file-name "Text_Formatting.md"}
+                    {:title "Sidebar" :file-name "Sidebar.md"}
+                    {:title "To Do" :file-name "todo.md"}
                     {:title "CWiki Name" :file-name "CWiki_Name.md"}])
 
 (def initial-user
