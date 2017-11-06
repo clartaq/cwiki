@@ -85,7 +85,8 @@
   a link and some text to be displayed for the link,
   return the html for a link."
   [link-parts]
-  (if (article-is-present? (:title-part link-parts))
+  (if (or (article-is-present? (:title-part link-parts))
+          (special/is-generated? (:title-part link-parts)))
     (get-view-link-for-existing-page link-parts)
     (get-creation-link-for-new-page link-parts)))
 
