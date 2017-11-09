@@ -38,7 +38,7 @@
                                (build-response new-body request))
 
        (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
-                                          new-body (layout/compose-edit-page
+                                          new-body (layout/compose-create-or-edit-page
                                                      (db/find-post-by-title title-only))]
                                       (build-response new-body request))
        (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
@@ -47,7 +47,7 @@
                                         (db/delete-page-by-id (db/title->page-id title-only))
                                         (build-response new-body request))
        :else (let [title-only (s/replace title "/create" "")
-                   new-body (layout/compose-create-page
+                   new-body (layout/compose-create-or-edit-page
                               (db/create-new-post-map title-only))]
                (build-response new-body request))))))
 
