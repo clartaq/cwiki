@@ -7,4 +7,5 @@ This page contains settings that you can edit to control the way that CWiki oper
 - Autosave Edits: \"Yes\"
 - Editing Font: \"Calibri\"
 - Confirm Deletions: \"Yes\"
+- Use WYSIWIG Editor: \"No\"
 
