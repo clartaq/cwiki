@@ -84,3 +84,27 @@ $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 
 Here is the same equation $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$
 inline.
+
+## Tables ##
+
+Tables are not a part of the original Markdown. However, they are very useful. CWiki implements the Github Flavored Markdown (GFM) version of tables.
+
+Colons can be used to align columns.
+
+| Fruit |  Color | Description | Price ($/lb) |
+|-------|:------:|:-----------|-------------:|
+| Apple  |   Red  |    Crisp    |         0.99 |
+| Pear   |  Green |    Sweet    |         1.49 |
+| Plum   | Purple |     Tart    |         1.99 |
+| Orange | Orange | Tangy |      1.29
+
+(From the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)))
+
+There must be at least 3 dashes separating each header cell.
+The outer pipes (|) are optional, and you don't need to make the 
+raw Markdown line up prettily. You can also use inline Markdown.
+
+Less | Pretty | Markdown
+--- | --- | ---
+*Still* | `renders` | **nicely**
+1 | 2 | 3
