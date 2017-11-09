@@ -180,7 +180,7 @@
   (loop [t titles
          st ""]
     (if (empty? t)
-      (str st"\n")
+      (str st "\n")
       (recur (rest t) (str st "\n- [[" (first t) "]]")))))
 
 (defn compose-all-pages-page
@@ -210,18 +210,29 @@
      (footer-component)]))
 
 (defn compose-create-or-edit-page
+  "Will compose a page to create or edit a page in the wiki. The
+  difference is based on whether or not the post-map passed as
+  argument has a nil entry for the :id key in the map -- nil causes
+  creation, non-nil is an edit."
   [post-map]
   (let [id (:id post-map)
         title (:title post-map)
-        content (:content post-map)]
-    (println "title:" title)
+        content (:content post-map)
+        sidebar-content (:content (db/find-post-by-title "Sidebar"))
+        t-title (get-tab-title post-map)
+        tab-title (if id
+                    (str "Editing " t-title)
+                    (str "Creating " t-title))]
     (html5
       [:head
-       [:title (get-tab-title post-map)]
+       [:title tab-title]
        (include-css "/css/styles.css")]
       [:body {:class "page"}
        (wiki-header-component post-map)
-       (centered-content-component
+       [:div {:class "sidebar-and-article"}
+        [:aside {:class "left-aside"}
+         (limited-width-content-component sidebar-content)]
+        [:article {:class "page-content"}
          [:div
           (form-to {:enctype "multipart/form-data"}
                    (if id
@@ -238,40 +249,6 @@
                     [:input {:type    "button" :name "cancel-button"
                              :value   "Cancel"
                              :class   "topcoat-button--large"
-                             :onclick "window.history.back();"}]])])
-       (footer-component)])))
-
-(defn compose-edit-page
-  [post-map]
-  (compose-create-or-edit-page post-map))
-
-(defn compose-create-page
-  [post-map]
-  ;(let [pg (compose-create-or-edit-page post-map)]
-  ;  (println "pg:" (pretty-print-html pg))
-  ;  pg))
-
-(let [title (:title post-map)
-        content (:content post-map)]
-    (html5
-      [:head
-       [:title (get-tab-title post-map)]
-       (include-css "/css/styles.css")]
-      [:body {:class "page"}
-       (wiki-header-component post-map)
-       (centered-content-component
-         [:div
-          (form-to {:enctype "multipart/form-data"}
-                   [:post "/save-new-page"]
-                   (text-field "title" title)
-                   (text-area "content" content)
-                   [:br]
-                   [:div {:class "button-bar-container"}
-                    (submit-button {:id    "Save Button"
-                                    :class "topcoat-button--large"} "Save Changes")
-                    [:input {:type    "button" :name "cancel-button"
-                             :value   "Cancel"
-                             :class   "topcoat-button--large"
-                             :onclick "window.history.back();"}]])])
+                             :onclick "window.history.back();"}]])]]]
        (footer-component)])))
 
