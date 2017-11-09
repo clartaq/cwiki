@@ -14,21 +14,35 @@
             [cwiki.models.db :as db]
             [clojure.string :as s])
   (:import (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
+           (com.vladsch.flexmark.ext.tables TablesExtension)
            (com.vladsch.flexmark.html HtmlRenderer HtmlRenderer$Builder)
            (com.vladsch.flexmark.parser Parser Parser$Builder
                                         ParserEmulationProfile)
            (com.vladsch.flexmark.util.options MutableDataSet)
-           (java.util ArrayList)))
+           (java.util ArrayList)
+           (com.vladsch.flexmark.util KeepType)))
 
-(def program-name-and-version "CWiki v0.0.2")
+(def program-name-and-version "CWiki v0.0.3-SNAPSHOT")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.
 ;;------------------------------------------------------------------------------
 
-(def options (.set (MutableDataSet.)
-                   Parser/EXTENSIONS
-                   (ArrayList. [(StrikethroughExtension/create)])))
+(def options (-> (MutableDataSet.)
+                 (.set Parser/REFERENCES_KEEP KeepType/LAST)
+                 (.set HtmlRenderer/INDENT_SIZE (Integer. 2))
+                 (.set HtmlRenderer/PERCENT_ENCODE_URLS true)
+                 (.set TablesExtension/COLUMN_SPANS false)
+                 (.set TablesExtension/MIN_HEADER_ROWS (Integer. 1))
+                 (.set TablesExtension/MAX_HEADER_ROWS (Integer. 1))
+                 (.set TablesExtension/APPEND_MISSING_COLUMNS true)
+                 (.set TablesExtension/DISCARD_EXTRA_COLUMNS true)
+                 (.set TablesExtension/WITH_CAPTION false)
+                 (.set TablesExtension/HEADER_SEPARATOR_COLUMN_MATCH true)
+                 (.set Parser/EXTENSIONS (ArrayList.
+                                           [(StrikethroughExtension/create)
+                                            (TablesExtension/create)]))))
+
 (def parser (.build (Parser/builder options)))
 (def renderer (.build (HtmlRenderer/builder options)))
 

@@ -21,7 +21,7 @@
 }
 
 /* Some typography */
-h1,h2,h3,h4,h5,h6 {
+h1, h2, h3, h4, h5, h6 {
     background-color: transparent;
     color: dimgray;
     font-family: "Segoe UI", "Lucida Grande", Tahoma, Verdana, Helvetica,
@@ -67,8 +67,8 @@ body {
     background-color: #fafafa;
     font-size: 1em;
     line-height: 1.5em;
-    margin:0; /*gets rid of white space around body*/
-    position:relative; /*REQUIRED Sets up positioning for your footer*/
+    margin: 0; /*gets rid of white space around body*/
+    position: relative; /*REQUIRED Sets up positioning for your footer*/
 }
 
 /* All of the visible content is held within a page div. */
@@ -98,7 +98,7 @@ body {
 }
 
 .left-header-wrapper {
-    display:flex;
+    display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
@@ -125,15 +125,16 @@ body {
     padding-top: 0.8em;
 }
 
-.brand-sub-title>a:link {
+.brand-sub-title > a:link {
     color: #a0e0ff;
-    font-weight: bold;}
+    font-weight: bold;
+}
 
-.brand-sub-title>a:visited {
+.brand-sub-title > a:visited {
     color: #cfe7ed;
 }
 
-.brand-sub-title>a:hover:active:focus {
+.brand-sub-title > a:hover:active:focus {
     text-decoration: underline;
 }
 
@@ -212,17 +213,17 @@ textarea#content {
 .content {
     padding: 0.5em;
     flex: 1 1 auto;
-    position: relative;/* need this to position inner content */
+    position: relative; /* need this to position inner content */
     overflow-y: auto;
 }
 
 .centered-content {
     padding: 0.5em;
     max-width: 70ch;
-    margin-left: auto;/* center content horizontally */
+    margin-left: auto; /* center content horizontally */
     margin-right: auto;
     flex: 1 1 auto;
-    position: relative;/* need this to position inner content */
+    position: relative; /* need this to position inner content */
     overflow-y: auto;
 }
 
@@ -274,6 +275,40 @@ textarea#content {
 .date-text {
 }
 
+/* Tables */
+
+table {
+    font-size: 0.85em;
+    color: #333333;
+    border: 1px #999999;
+    border-collapse: collapse;
+    margin-bottom: 1em;
+}
+
+th {
+    background-color: #cfe7ed;
+    padding: 8px;
+    border: 1px solid #a9c6c9;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #fafafa;
+}
+
+tr {
+    background-color: #f6f8fa;
+}
+
+td {
+    padding: 8px;
+    border: 1px solid #a9c6c9;
+}
+
+tr:hover td
+{
+    background: #fcffc6;
+}
+
 /* The footer. */
 
 .footer {
@@ -299,7 +334,7 @@ textarea#content {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-   /* background: red;*/
+    /* background: red;*/
     /* margin:2em;*/
     margin-top: 2em;
 }
@@ -369,7 +404,7 @@ a:hover {
 }
 
 a:visited {
-/*    color: #cfe7ed;*/
+    /*    color: #cfe7ed;*/
     color: #5580ff;
     text-decoration: none;
 }
@@ -389,59 +424,59 @@ a:focus {
 }
 
 /* pre and code blocks */
-pre,code {
-    background-color:#eee;
-    font-family:Consolas,Menlo,Monaco,"Lucida Console","Liberation Mono","DejaVu Sans Mono","Bitstream Vera Sans Mono","Courier New",monospace,serif;
-    margin-bottom:10px;
-    margin-left:2em;
-    overflow:auto;
-    padding:5px 5px 20px
+pre, code {
+    background-color: #eee;
+    font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
+    margin-bottom: 10px;
+    margin-left: 2em;
+    overflow: auto;
+    padding: 5px 5px 20px
 }
 
 code {
-    background-color:rgba(0,0,0,0.05);
-    font-size:100%;
-    margin:0;
-    padding:.2em 0
+    background-color: rgba(0, 0, 0, 0.05);
+    font-size: 100%;
+    margin: 0;
+    padding: .2em 0
 }
 
 del code {
-    text-decoration:inherit
+    text-decoration: inherit
 }
 
 pre > code {
-    background:transparent;
-    border:0;
-    font-size:100%;
-    margin:0;
-    padding:0;
-    white-space:pre
+    background: transparent;
+    border: 0;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+    white-space: pre
 }
 
 .highlight {
-    margin-bottom:16px
+    margin-bottom: 16px
 }
 
 pre {
-    margin-bottom:0
+    margin-bottom: 0
 }
 
-.highlight pre,pre {
-    background-color:#f6f8fa;
-    font-size:85%;
-    line-height:1.45;
-    overflow:auto;
-    padding:16px
+.highlight pre, pre {
+    background-color: #f6f8fa;
+    font-size: 85%;
+    line-height: 1.45;
+    overflow: auto;
+    padding: 16px
 }
 
 pre code {
-    background-color:transparent;
-    border:0;
-    display:inline;
-    line-height:inherit;
-    margin:0;
-    overflow:visible;
-    padding:0
+    background-color: transparent;
+    border: 0;
+    display: inline;
+    line-height: inherit;
+    margin: 0;
+    overflow: visible;
+    padding: 0
 }
 
 /* Styles for displaying the content of a map. */
@@ -483,145 +518,145 @@ pre code {
 /* Fiddling with buttons. */
 
 /* CSSTidy 1.5.5: Wed, 01 Nov 2017 10:30:49 -0400 */
-.button,.topcoat-button,.topcoat-button--quiet,.topcoat-button--large,.topcoat-button--large--quiet,.topcoat-button--cta,.topcoat-button--large--cta,.topcoat-button-bar__button,.topcoat-button-bar__button--large {
-    position:relative;
-    display:inline-block;
-    vertical-align:top;
-    -moz-box-sizing:border-box;
-    box-sizing:border-box;
-    background-clip:padding-box;
-    padding:0;
-    margin:0;
-    font:inherit;
-    color:inherit;
-    background:transparent;
-    border:none;
-    cursor:default;
-    -webkit-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    overflow:hidden;
-    text-decoration:none
+.button, .topcoat-button, .topcoat-button--quiet, .topcoat-button--large, .topcoat-button--large--quiet, .topcoat-button--cta, .topcoat-button--large--cta, .topcoat-button-bar__button, .topcoat-button-bar__button--large {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-clip: padding-box;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-decoration: none
 }
 
 .button--quiet {
-    background:transparent;
-    border:1px solid transparent;
-    box-shadow:none
+    background: transparent;
+    border: 1px solid transparent;
+    box-shadow: none
 }
 
-.button--disabled,.topcoat-button:disabled,.topcoat-button--quiet:disabled,.topcoat-button--large:disabled,.topcoat-button--large--quiet:disabled,.topcoat-button--cta:disabled,.topcoat-button--large--cta:disabled,.topcoat-button-bar__button:disabled,.topcoat-button-bar__button--large:disabled {
-    opacity:.3;
-    cursor:default;
-    pointer-events:none
+.button--disabled, .topcoat-button:disabled, .topcoat-button--quiet:disabled, .topcoat-button--large:disabled, .topcoat-button--large--quiet:disabled, .topcoat-button--cta:disabled, .topcoat-button--large--cta:disabled, .topcoat-button-bar__button:disabled, .topcoat-button-bar__button--large:disabled {
+    opacity: .3;
+    cursor: default;
+    pointer-events: none
 }
 
-.topcoat-button,.topcoat-button--quiet,.topcoat-button--large,.topcoat-button--large--quiet,.topcoat-button--cta,.topcoat-button--large--cta,.topcoat-button-bar__button,.topcoat-button-bar__button--large {
-    padding:0 .563rem;
-    font-size:12px;
-    line-height:1.313rem;
-    letter-spacing:0;
-    color:#454545;
-    text-shadow:0 1px #fff;
-    vertical-align:top;
-    background-color:#e5e9e8;
-    box-shadow:inset 0 1px #fff;
-    border:1px solid #9daca9;
-    border-radius:4px
+.topcoat-button, .topcoat-button--quiet, .topcoat-button--large, .topcoat-button--large--quiet, .topcoat-button--cta, .topcoat-button--large--cta, .topcoat-button-bar__button, .topcoat-button-bar__button--large {
+    padding: 0 .563rem;
+    font-size: 12px;
+    line-height: 1.313rem;
+    letter-spacing: 0;
+    color: #454545;
+    text-shadow: 0 1px #fff;
+    vertical-align: top;
+    background-color: #e5e9e8;
+    box-shadow: inset 0 1px #fff;
+    border: 1px solid #9daca9;
+    border-radius: 4px
 }
 
-.topcoat-button:hover,.topcoat-button--quiet:hover,.topcoat-button--large:hover,.topcoat-button--large--quiet:hover,.topcoat-button-bar__button:hover,.topcoat-button-bar__button--large:hover {
-    background-color:#eff1f1
+.topcoat-button:hover, .topcoat-button--quiet:hover, .topcoat-button--large:hover, .topcoat-button--large--quiet:hover, .topcoat-button-bar__button:hover, .topcoat-button-bar__button--large:hover {
+    background-color: #eff1f1
 }
 
-.topcoat-button:focus,.topcoat-button--quiet:focus,.topcoat-button--quiet:hover:focus,.topcoat-button--large:focus,.topcoat-button--large--quiet:focus,.topcoat-button--large--quiet:hover:focus,.topcoat-button--cta:focus,.topcoat-button--large--cta:focus,.topcoat-button-bar__button:focus,.topcoat-button-bar__button--large:focus {
-    border:1px solid #0036ff;
-    box-shadow:inset 0 1px rgba(255,255,255,0.36),0 0 0 2px #6fb5f1;
-    outline:0
+.topcoat-button:focus, .topcoat-button--quiet:focus, .topcoat-button--quiet:hover:focus, .topcoat-button--large:focus, .topcoat-button--large--quiet:focus, .topcoat-button--large--quiet:hover:focus, .topcoat-button--cta:focus, .topcoat-button--large--cta:focus, .topcoat-button-bar__button:focus, .topcoat-button-bar__button--large:focus {
+    border: 1px solid #0036ff;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px #6fb5f1;
+    outline: 0
 }
 
-.topcoat-button:active,.topcoat-button--large:active,.topcoat-button-bar__button:active,.topcoat-button-bar__button--large:active,:checked + .topcoat-button-bar__button {
-    border:1px solid #9daca9;
-    background-color:#d2d6d6;
-    box-shadow:inset 0 1px rgba(0,0,0,0.1)
+.topcoat-button:active, .topcoat-button--large:active, .topcoat-button-bar__button:active, .topcoat-button-bar__button--large:active, :checked + .topcoat-button-bar__button {
+    border: 1px solid #9daca9;
+    background-color: #d2d6d6;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1)
 }
 
 .topcoat-button--quiet {
-    background:transparent;
-    border:1px solid transparent;
-    box-shadow:none
+    background: transparent;
+    border: 1px solid transparent;
+    box-shadow: none
 }
 
-.topcoat-button--quiet:hover,.topcoat-button--large--quiet:hover {
-    text-shadow:0 1px #fff;
-    border:1px solid #9daca9;
-    box-shadow:inset 0 1px #fff
+.topcoat-button--quiet:hover, .topcoat-button--large--quiet:hover {
+    text-shadow: 0 1px #fff;
+    border: 1px solid #9daca9;
+    box-shadow: inset 0 1px #fff
 }
 
-.topcoat-button--quiet:active,.topcoat-button--quiet:focus:active,.topcoat-button--large--quiet:active,.topcoat-button--large--quiet:focus:active {
-    color:#454545;
-    text-shadow:0 1px #fff;
-    background-color:#d2d6d6;
-    border:1px solid #9daca9;
-    box-shadow:inset 0 1px rgba(0,0,0,0.1)
+.topcoat-button--quiet:active, .topcoat-button--quiet:focus:active, .topcoat-button--large--quiet:active, .topcoat-button--large--quiet:focus:active {
+    color: #454545;
+    text-shadow: 0 1px #fff;
+    background-color: #d2d6d6;
+    border: 1px solid #9daca9;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1)
 }
 
-.topcoat-button--large,.topcoat-button--large--quiet,.topcoat-button-bar__button--large {
-    font-size:.875rem;
-    font-weight:600;
-    line-height:1.688rem;
-    padding:0 .875rem
+.topcoat-button--large, .topcoat-button--large--quiet, .topcoat-button-bar__button--large {
+    font-size: .875rem;
+    font-weight: 600;
+    line-height: 1.688rem;
+    padding: 0 .875rem
 }
 
-.button,.topcoat-button,.topcoat-button--quiet,.topcoat-button--large,.topcoat-button--large--quiet,.topcoat-button--cta,.topcoat-button--large--cta {
-    position:relative;
-    display:inline-block;
-    vertical-align:top;
-    -moz-box-sizing:border-box;
-    box-sizing:border-box;
-    background-clip:padding-box;
-    padding:0;
-    margin:0;
-    font:inherit;
-    color:inherit;
-    background:transparent;
-    border:none;
-    cursor:default;
-    -webkit-user-select:none;
-    -moz-user-select:none;
-    -ms-user-select:none;
-    user-select:none;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-    overflow:hidden;
-    text-decoration:none
+.button, .topcoat-button, .topcoat-button--quiet, .topcoat-button--large, .topcoat-button--large--quiet, .topcoat-button--cta, .topcoat-button--large--cta {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background-clip: padding-box;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-decoration: none
 }
 
-.button--disabled,.topcoat-button:disabled,.topcoat-button--quiet:disabled,.topcoat-button--large:disabled,.topcoat-button--large--quiet:disabled,.topcoat-button--cta:disabled,.topcoat-button--large--cta:disabled {
-    opacity:.3;
-    cursor:default;
-    pointer-events:none
+.button--disabled, .topcoat-button:disabled, .topcoat-button--quiet:disabled, .topcoat-button--large:disabled, .topcoat-button--large--quiet:disabled, .topcoat-button--cta:disabled, .topcoat-button--large--cta:disabled {
+    opacity: .3;
+    cursor: default;
+    pointer-events: none
 }
 
-.topcoat-button,.topcoat-button--quiet,.topcoat-button--large,.topcoat-button--large--quiet,.topcoat-button--cta,.topcoat-button--large--cta {
-    padding:0 .563rem;
-    font-size:12px;
-    line-height:1.313rem;
-    letter-spacing:0;
-    color:#454545;
-    text-shadow:0 1px #fff;
-    vertical-align:top;
-    background-color:#e5e9e8;
-    box-shadow:inset 0 1px #fff;
-    border:1px solid #9daca9;
-    border-radius:4px
+.topcoat-button, .topcoat-button--quiet, .topcoat-button--large, .topcoat-button--large--quiet, .topcoat-button--cta, .topcoat-button--large--cta {
+    padding: 0 .563rem;
+    font-size: 12px;
+    line-height: 1.313rem;
+    letter-spacing: 0;
+    color: #454545;
+    text-shadow: 0 1px #fff;
+    vertical-align: top;
+    background-color: #e5e9e8;
+    box-shadow: inset 0 1px #fff;
+    border: 1px solid #9daca9;
+    border-radius: 4px
 }
 
-.topcoat-button:hover,.topcoat-button--quiet:hover,.topcoat-button--large:hover,.topcoat-button--large--quiet:hover {
-    background-color:#eff1f1
+.topcoat-button:hover, .topcoat-button--quiet:hover, .topcoat-button--large:hover, .topcoat-button--large--quiet:hover {
+    background-color: #eff1f1
 }
 
 .topcoat-button:focus,
@@ -632,24 +667,24 @@ pre code {
 .topcoat-button--large--quiet:hover:focus,
 .topcoat-button--cta:focus,
 .topcoat-button--large--cta:focus {
-    border:1px solid #0036ff;
-    box-shadow:inset 0 1px rgba(255,255,255,0.36),0 0 0 2px #6fb5f1;
-    outline:0
+    border: 1px solid #0036ff;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px #6fb5f1;
+    outline: 0
 }
 
 .topcoat-button:active,
 .topcoat-button--large:active {
-    border:1px solid #9daca9;
-    background-color:#d2d6d6;
-    box-shadow:inset 0 1px rgba(0,0,0,0.1)
+    border: 1px solid #9daca9;
+    background-color: #d2d6d6;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1)
 }
 
 .topcoat-button--large,
 .topcoat-button--large--quiet {
-    font-size:.875rem;
-    font-weight:600;
-    line-height:1.688rem;
-    padding:0 .875rem;
+    font-size: .875rem;
+    font-weight: 600;
+    line-height: 1.688rem;
+    padding: 0 .875rem;
     margin-right: 0.5em
 }
 
