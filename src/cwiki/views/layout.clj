@@ -81,31 +81,40 @@
 
 (defn wiki-hmenu-component
   "Return the standard menu component for the application."
-  [post-map]
-  (let [edit-link (and post-map (get-edit-link-for-existing-page post-map))
-        delete-link (and post-map (get-delete-link-for-existing-page post-map))]
-    [:nav {:class "hmenu"}
-     [:p
-      (when edit-link
-        (menu-item-span edit-link))
-      (when delete-link
-        (menu-item-span delete-link))
-      (menu-item-span [:a {:href "/"} "Home"])
-      (when (and (db/db-exists?)
-                 (db/find-post-by-title "About"))
-        (menu-item-span [:a {:href "/about"} "About"]))
-      (menu-item-span [:a {:href "/search"} "Search"])]]))
+  ([post-map]
+   (wiki-hmenu-component post-map {}))
+  ([post-map options]
+   (let [allow-editing (not (:editing options))
+         edit-link (and post-map
+                        allow-editing
+                        (get-edit-link-for-existing-page post-map))
+         delete-link (and post-map
+                          allow-editing
+                          (get-delete-link-for-existing-page post-map))]
+     [:nav {:class "hmenu"}
+      [:p
+       (when edit-link
+         (menu-item-span edit-link))
+       (when delete-link
+         (menu-item-span delete-link))
+       (menu-item-span [:a {:href "/"} "Home"])
+       (when (and (db/db-exists?)
+                  (db/find-post-by-title "About"))
+         (menu-item-span [:a {:href "/about"} "About"]))
+       (menu-item-span [:a {:href "/search"} "Search"])]])))
 
 (defn wiki-header-component
-  [post-map]
-  [:header {:class "header"}
-   [:div {:class "header-wrapper"}
-    [:hgroup {:class "left-header-wrapper"}
-     [:h1 {:class "brand-title"} "CWiki"]
-     [:p {:class "brand-sub-title"}
-      "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
-                   "Wiki"]]]
-    (wiki-hmenu-component post-map)]])
+  ([post-map]
+   (wiki-header-component post-map {}))
+  ([post-map options]
+   [:header {:class "header"}
+    [:div {:class "header-wrapper"}
+     [:hgroup {:class "left-header-wrapper"}
+      [:h1 {:class "brand-title"} "CWiki"]
+      [:p {:class "brand-sub-title"}
+       "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
+                    "Wiki"]]]
+     (wiki-hmenu-component post-map options)]]))
 
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
@@ -228,7 +237,7 @@
        [:title tab-title]
        (include-css "/css/styles.css")]
       [:body {:class "page"}
-       (wiki-header-component post-map)
+       (wiki-header-component post-map {:editing true})
        [:div {:class "sidebar-and-article"}
         [:aside {:class "left-aside"}
          (limited-width-content-component sidebar-content)]
