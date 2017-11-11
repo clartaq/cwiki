@@ -70,8 +70,8 @@
   "Return a string to be displayed in the browser tab."
   [post-map]
   (if-let [junk (and post-map
-                     (:title post-map))]
-    (str "CWiki: " (:title post-map))
+                     (db/page-map->title post-map))]
+    (str "CWiki: " (db/page-map->title post-map))
     "Welcome to CWiki"))
 
 (defn- menu-item-span
@@ -80,7 +80,9 @@
   [:span {:class "menu-item"} content])
 
 (defn wiki-hmenu-component
-  "Return the standard menu component for the application."
+  "Return the standard navigation menu component for the application.
+  The options argument can make the menu context specific, as for when
+  editing or not (the only option now)."
   ([post-map]
    (wiki-hmenu-component post-map {}))
   ([post-map options]
@@ -104,6 +106,7 @@
        (menu-item-span [:a {:href "/search"} "Search"])]])))
 
 (defn wiki-header-component
+  "Return the standard wiki page header."
   ([post-map]
    (wiki-header-component post-map {}))
   ([post-map options]
@@ -129,10 +132,10 @@
 
 (defn limited-width-title-component
   [post-map]
-  (let [title (:title post-map)
-        author (:author post-map)
-        created (:date post-map)
-        modified (:modified post-map)]
+  (let [title (db/page-map->title post-map)
+        author (db/page-map->author post-map)
+        created (db/page-map->created-date post-map)
+        modified (db/page-map->modified-date post-map)]
     [:div {:class "page-title-div"}
      [:h1 {:class "page-title-header"} title]
      [:p {:class "author-line"}
@@ -163,8 +166,8 @@
 
 (defn view-wiki-page
   [post-map]
-  (let [content (:content post-map)
-        sidebar-content (:content (db/find-post-by-title "Sidebar"))]
+  (let [content (db/page-map->content post-map)
+        sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
     (html5
       [:head
        [:title (get-tab-title post-map)]
@@ -221,13 +224,13 @@
 (defn compose-create-or-edit-page
   "Will compose a page to create or edit a page in the wiki. The
   difference is based on whether or not the post-map passed as
-  argument has a nil entry for the :id key in the map -- nil causes
+  argument has a nil entry for the :post_id key in the map -- nil causes
   creation, non-nil is an edit."
   [post-map]
-  (let [id (:id post-map)
-        title (:title post-map)
-        content (:content post-map)
-        sidebar-content (:content (db/find-post-by-title "Sidebar"))
+  (let [id (db/page-map->id post-map)
+        title (db/page-map->title post-map)
+        content (db/page-map->content post-map)
+        sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))
         t-title (get-tab-title post-map)
         tab-title (if id
                     (str "Editing " t-title)
