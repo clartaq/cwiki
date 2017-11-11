@@ -53,7 +53,7 @@
 (defn get-edit-link-for-existing-page
   "Return a link to be used with a button or menu."
   [post-map]
-  (let [page-title (:title post-map)]
+  (let [page-title (db/page-map->title post-map)]
     (when (special/is-editable? page-title)
       (let [uri (u/url-encode (str "/" page-title "/edit"))
             h (hc/html (link-to uri "Edit"))]
@@ -63,7 +63,7 @@
   "Return a link to be used with a button or menu. If the page
   is special and cannot be deleted, return nil."
   [post-map]
-  (let [page-title (:title post-map)]
+  (let [page-title (db/page-map->title post-map)]
     (when (special/is-deletable? page-title)
       (let [uri (u/url-encode (str "/" page-title "/delete"))
             h (hc/html (link-to uri "Delete"))]

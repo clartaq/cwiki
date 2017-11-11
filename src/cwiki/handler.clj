@@ -30,7 +30,7 @@
           title (s/replace raw-title "//" "")
           raw-post (db/find-post-by-title title)]
      (cond
-       raw-post (let [new-body (:content raw-post)
+       raw-post (let [new-body (db/page-map->content raw-post)
                       new-page (layout/view-wiki-page raw-post)]
                   (build-response new-page request))
 

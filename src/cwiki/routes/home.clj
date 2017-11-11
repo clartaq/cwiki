@@ -38,7 +38,6 @@
                            (get params "title")
                            (get params "content"))))
            (POST "/save-new-page" request
-             (println "request:" request)
              (let [params (request :multipart-params)]
                (save-new-page (get params "title")
                               (get params "content")))))
