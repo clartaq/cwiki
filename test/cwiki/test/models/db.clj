@@ -5,6 +5,7 @@
 (deftest page-id->title-test
   (testing "page-id->title"
     (is (nil? (page-id->title 1039)))
+    (println "title->page-id:" (title->page-id "Front Page"))
     (is (= "Front Page" (page-id->title 1)))))
 
 (deftest page-id->content-test
@@ -20,11 +21,11 @@
 (deftest find-post-by-title-test
   (testing "find-post-by-title"
     (is (nil? (find-post-by-title "l;kjasfd9084325lkjal;kjasdfohi")))
-    (is (= "Front Page" (:title (find-post-by-title "Front Page"))))))
+    (is (= "Front Page" (:page_title (find-post-by-title "Front Page"))))))
 
 (defn insert-test-data
   [title content]
-  (let [new-id (:id (insert-new-page! title content))]
+  (let [new-id (:page_id (insert-new-page! title content))]
     new-id))
 
 (deftest delete-page-by-id-test

@@ -195,14 +195,60 @@
       (str st "\n")
       (recur (rest t) (str st "\n- [[" (first t) "]]")))))
 
+(defn process-name-set
+  "Process a sorted set of names into a Markdown-formatted
+  unordered list and return it. If the set of names is empty,
+  return an empty string."
+  [names]
+  (if (zero? (count names))
+    ""
+    (loop [t names
+           st ""]
+      (if (empty? t)
+        (str st "\n")
+        (recur (rest t) (str st "\n- " (first t)))))))
+
 (defn compose-all-pages-page
   "Return a page listing all of the pages in the wiki."
   []
   (let [all-pages-query (db/get-all-page-names)
         processed-titles (process-title-set all-pages-query)
-        content (s/join ["All Pages Content:\n"
+        content (s/join ["Pages:\n"
                          processed-titles])
         post-map (db/create-new-post-map "All Pages" content)]
+    (view-wiki-page post-map)))
+
+(defn compose-all-users-page
+  "Return a page listing all of the users known to the wiki."
+  []
+  (let [all-users-query (db/get-all-users)
+        processed-names (process-name-set all-users-query)
+        content (s/join ["Users:\n"
+                         processed-names])
+        post-map (db/create-new-post-map "All Users" content)]
+    (view-wiki-page post-map)))
+
+(defn compose-all-namespaces-page
+  "Return a page listing of all of the namespaces in the wiki."
+  []
+  (let [all-namespaces-query (db/get-all-namespaces)
+        processed-names (process-name-set all-namespaces-query)
+        content (s/join ["Namespaces:\n"
+                         processed-names])
+        post-map (db/create-new-post-map "All Namespaces" content)]
+    (view-wiki-page post-map)))
+
+(defn compose-all-tags-page
+  "Return a page listing all of the tags in the wiki."
+  []
+  (let [all-tags-query (db/get-all-tags)
+        processed-names (process-name-set all-tags-query)
+        page-start (if (zero? (count processed-names))
+                     "Tags: None"
+                     "Tags:")
+        content (s/join [page-start
+                         processed-names])
+        post-map (db/create-new-post-map "All Tags" content)]
     (view-wiki-page post-map)))
 
 (defn compose-404-page
