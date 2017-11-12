@@ -42,7 +42,9 @@
                     {:title "To Do" :file-name "todo.md"}
                     {:title "CWiki Name" :file-name "CWiki_Name.md"}])
 
-(def valid-roles [:cwiki :admin :editor :writer])
+(def valid-roles [:cwiki :admin :editor :writer :reader])
+
+(def initial-namespaces (atom ["cwiki" "default" "help"]))
 
 (def initial-user
   {:user_name              "CWiki"
@@ -55,32 +57,6 @@
    :user_email_expires     nil
    :user_touched           (c/to-sql-time (t/now))
    :user_registration      (c/to-sql-time (t/now))})
-
-(defn- create-db
-  "Create the database tables for the application."
-  []
-  (try (jdbc/db-do-commands sqlite-db
-                            [(jdbc/create-table-ddl :users
-                                                    [[:user_id :integer :primary :key]
-                                                     [:user_name :text]
-                                                     [:user_role :text]
-                                                     [:user_password :text]
-                                                     [:user_new_password :text]
-                                                     [:user_new_password_time :datetime]
-                                                     [:user_email :text]
-                                                     [:user_email_token :int]
-                                                     [:user_email_expires :datetime]
-                                                     [:user_touched :datetime]
-                                                     [:user_registration :datetime]])
-                             (jdbc/create-table-ddl :pages
-                                                    [[:page_id :integer :primary :key]
-                                                     [:page_created :datetime]
-                                                     [:page_modified :datetime]
-                                                     [:page_author :text]
-                                                     [:page_title :text]
-                                                     [:page_content :text]])])
-       (catch Exception e (println e)))
-  (jdbc/insert! sqlite-db :users initial-user))
 
 (defn user-name->user-id
   ([name]
@@ -178,9 +154,69 @@
         post-map (create-new-post-map title content)]
     (jdbc/insert! sqlite-db :pages post-map)))
 
+(defn- add-initial-user!
+  []
+  (jdbc/insert! sqlite-db :users initial-user))
+
 (defn- add-initial-pages!
   []
   (mapv add-page-from-file! initial-pages))
+
+(defn- add-initial-namespaces!
+  []
+  (println "adding namespaces")
+  (mapv (fn[%] (jdbc/insert! sqlite-db :namespaces {:namespace_name %})) @initial-namespaces)
+  (println "done"))
+
+(defn- add-initial-roles!
+  []
+  (println "adding roles")
+  (mapv (fn[%] (jdbc/insert! sqlite-db :roles {:role_name %})) valid-roles)
+  (println "done"))
+
+(defn- create-tables
+  "Create the database tables for the application."
+  []
+  (println "creating tables")
+  (try (jdbc/db-do-commands sqlite-db
+                            [(jdbc/create-table-ddl :users
+                                                    [[:user_id :integer :primary :key]
+                                                     [:user_name :text]
+                                                     [:user_role :text]
+                                                     [:user_password :text]
+                                                     [:user_new_password :text]
+                                                     [:user_new_password_time :datetime]
+                                                     [:user_email :text]
+                                                     [:user_email_token :int]
+                                                     [:user_email_expires :datetime]
+                                                     [:user_touched :datetime]
+                                                     [:user_registration :datetime]])
+                             (jdbc/create-table-ddl :pages
+                                                    [[:page_id :integer :primary :key]
+                                                     [:page_created :datetime]
+                                                     [:page_modified :datetime]
+                                                     [:page_author :text]
+                                                     [:page_title :text]
+                                                     [:page_content :text]])
+                             (jdbc/create-table-ddl :namespaces
+                                                    [[:namespace_id :integer :primary :key]
+                                                     [:namespace_name :text]])
+                             (jdbc/create-table-ddl :roles
+                                                    [[:role_id :integer :primary :key]
+                                                     [:role_name :text]])
+                             (jdbc/create-table-ddl :tags
+                                                    [[:tag_id :integer :primary :key]
+                                                     [:tag_name :text]])])
+       (catch Exception e (println e)))
+  (println "done"))
+
+(defn- create-db
+  []
+  (create-tables)
+  (add-initial-pages!)
+  (add-initial-user!)
+  (add-initial-roles!)
+  (add-initial-namespaces!))
 
 (defn db-exists?
   "Return true if the wiki database already exists."
@@ -194,6 +230,5 @@
   (when-not (db-exists?)
     (println "Creating initial database.")
     (io/make-parents db-file-name)
-    (create-db)
-    (add-initial-pages!)))
+    (create-db)))
 
