@@ -46,6 +46,8 @@
 
 (def initial-namespaces (atom ["cwiki" "default" "help"]))
 
+(def initial-tags ["help" "wiki" "cwiki" "linking"])
+
 (def initial-user
   {:user_name              "CWiki"
    :user_role              :cwiki
@@ -125,6 +127,30 @@
      (into (special/get-all-special-page-names)
            (mapv #(:page_title %) title-array)))))
 
+(defn get-all-users
+  "Return a sorted set of all of the user names known to the wiki."
+  ([]
+   (get-all-users sqlite-db))
+  ([db-name]
+   (when-let [user-array (jdbc/query db-name ["select user_name from users"])]
+     (into (sorted-set) (mapv #(:user_name %) user-array)))))
+
+(defn get-all-namespaces
+  "Return a sorted set of all of the namespaces in the wiki."
+  ([]
+   (get-all-namespaces sqlite-db))
+  ([db-name]
+   (when-let [namespace-array (jdbc/query db-name ["select namespace_name from namespaces"])]
+     (into (sorted-set) (mapv #(:namespace_name %) namespace-array)))))
+
+(defn get-all-tags
+  "Return a sorted set of all of the tags in the wiki."
+  ([]
+   (get-all-tags sqlite-db))
+  ([db-name]
+   (when-let [tag-array (jdbc/query db-name ["select tag_name from tags"])]
+     (into (sorted-set) (mapv #(:tag_name %) tag-array)))))
+
 (defn update-page-title-and-content!
   [id title content]
   (jdbc/update! sqlite-db :pages {:page_title    title
@@ -167,6 +193,11 @@
   (println "adding namespaces")
   (mapv (fn[%] (jdbc/insert! sqlite-db :namespaces {:namespace_name %})) @initial-namespaces)
   (println "done"))
+
+(defn- add-initial-tags!
+  []
+  (println "adding tags")
+  (mapv (fn[%] (jdbc/insert! sqlite-db :tags {:tag_name %})) initial-tags))
 
 (defn- add-initial-roles!
   []
@@ -216,7 +247,8 @@
   (add-initial-pages!)
   (add-initial-user!)
   (add-initial-roles!)
-  (add-initial-namespaces!))
+  (add-initial-namespaces!)
+  (add-initial-tags!))
 
 (defn db-exists?
   "Return true if the wiki database already exists."

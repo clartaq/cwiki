@@ -37,6 +37,15 @@
        (= title "All Pages") (let [new-body (layout/compose-all-pages-page)]
                                (build-response new-body request))
 
+       (= title "All Users") (let [new-body (layout/compose-all-users-page)]
+                              (build-response new-body request))
+
+       (= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page)]
+                                   (build-response new-body request))
+
+       (= title "All Tags") (let [new-body (layout/compose-all-tags-page)]
+                             (build-response new-body request))
+
        (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
                                           new-body (layout/compose-create-or-edit-page
                                                      (db/find-post-by-title title-only))]

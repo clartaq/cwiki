@@ -3,6 +3,9 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 ###### Useful Links ######
 
 * [[All Pages]]
+* [[All Users]]
+* [[All Namespaces]]
+* [[All Tags]]
 * [[Special Pages]]
 * [[Orphans]]
 * [[To Do]]
