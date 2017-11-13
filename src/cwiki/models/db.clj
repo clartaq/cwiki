@@ -18,11 +18,13 @@
   ([title]
    (create-new-post-map title ""))
   ([title content]
+   (create-new-post-map title content 1))
+  ([title content author-id]
    (let [pm {:page_created  (c/to-sql-time (t/now))
              :page_modified (c/to-sql-time (t/now))
-             :page_author        "CWiki"
-             :page_title         title
-             :page_content       content}]
+             :page_author   author-id
+             :page_title    title
+             :page_content  content}]
      pm)))
 
 (def initial-pages [{:title "Front Page" :file-name "Front_Page.md"}
@@ -77,8 +79,8 @@
   ([id] (page-id->title id sqlite-db))
   ([id db-name]
    (:page_title (first (jdbc/query
-                    db-name
-                    ["select page_title from pages where page_id=?" id])))))
+                         db-name
+                         ["select page_title from pages where page_id=?" id])))))
 
 (defn title->page-id
   ([title] (title->page-id title sqlite-db))
@@ -90,8 +92,8 @@
   ([id] (page-id->content id sqlite-db))
   ([id db-name]
    (:page_content (first (jdbc/query
-                      db-name
-                      ["select page_content from pages where page_id=?" id])))))
+                           db-name
+                           ["select page_content from pages where page_id=?" id])))))
 
 (defn page-map->id
   [m]
@@ -107,7 +109,11 @@
 
 (defn page-map->author
   [m]
-  (:page_author m))
+  (let [author-id (:page_author m)
+        result (jdbc/query sqlite-db ["select user_name from users where user_id=?" author-id])
+        name (:user_name (first result))]
+    name))
+  ;(:page_author m))
 
 (defn page-map->created-date
   [m]
@@ -171,38 +177,50 @@
   (jdbc/delete! sqlite-db :pages ["page_id=?" page-id]))
 
 (defn- add-page-from-file!
-  [m]
-  (println "add-page-from-file!: m:" m)
+  [m id]
+  (println "add-page-from-file!: m:" m ", id:" id)
   (let [resource-prefix "resources/private/md/"
         title (:title m)
         content (slurp (io/reader
                          (str resource-prefix (:file-name m))))
-        post-map (create-new-post-map title content)]
+        post-map (create-new-post-map title content id)]
     (jdbc/insert! sqlite-db :pages post-map)))
 
 (defn- add-initial-user!
   []
-  (jdbc/insert! sqlite-db :users initial-user))
+  (println "Adding initial user.")
+  (jdbc/insert! sqlite-db :users initial-user)
+  (println "Done."))
+
+(defn get-initial-user-id
+  "Get the user id for the initial user (CWiki). Probably always 1."
+  []
+  (println "Getting initial user id.")
+  (let [initial-id (jdbc/query sqlite-db ["select user_id from users where user_name=?" "CWiki"])
+        id (:user_id (first initial-id))]
+    (println "Returning id:" id)
+    id))
 
 (defn- add-initial-pages!
-  []
-  (mapv add-page-from-file! initial-pages))
+  [user-id]
+  (mapv #(add-page-from-file! % user-id) initial-pages))
+  ;(mapv add-page-from-file! initial-pages user-id))
 
 (defn- add-initial-namespaces!
   []
   (println "adding namespaces")
-  (mapv (fn[%] (jdbc/insert! sqlite-db :namespaces {:namespace_name %})) @initial-namespaces)
+  (mapv (fn [%] (jdbc/insert! sqlite-db :namespaces {:namespace_name %})) @initial-namespaces)
   (println "done"))
 
 (defn- add-initial-tags!
   []
   (println "adding tags")
-  (mapv (fn[%] (jdbc/insert! sqlite-db :tags {:tag_name %})) initial-tags))
+  (mapv (fn [%] (jdbc/insert! sqlite-db :tags {:tag_name %})) initial-tags))
 
 (defn- add-initial-roles!
   []
   (println "adding roles")
-  (mapv (fn[%] (jdbc/insert! sqlite-db :roles {:role_name %})) valid-roles)
+  (mapv (fn [%] (jdbc/insert! sqlite-db :roles {:role_name %})) valid-roles)
   (println "done"))
 
 (defn- create-tables
@@ -226,7 +244,7 @@
                                                     [[:page_id :integer :primary :key]
                                                      [:page_created :datetime]
                                                      [:page_modified :datetime]
-                                                     [:page_author :text]
+                                                     [:page_author :integer]
                                                      [:page_title :text]
                                                      [:page_content :text]])
                              (jdbc/create-table-ddl :namespaces
@@ -237,15 +255,19 @@
                                                      [:role_name :text]])
                              (jdbc/create-table-ddl :tags
                                                     [[:tag_id :integer :primary :key]
-                                                     [:tag_name :text]])])
+                                                     [:tag_name :text]])
+                             (jdbc/create-table-ddl :user_x_pages
+                                                    [[:x_ref_id :integer :primary :key]
+                                                     [:user_id :integer]
+                                                     [:page_id :integer]])])
        (catch Exception e (println e)))
   (println "done"))
 
 (defn- create-db
   []
   (create-tables)
-  (add-initial-pages!)
   (add-initial-user!)
+  (add-initial-pages! (get-initial-user-id))
   (add-initial-roles!)
   (add-initial-namespaces!)
   (add-initial-tags!))
