@@ -2,6 +2,8 @@
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :dependencies [[org.clojure/clojure "1.8.0"]
+                 [buddy/buddy-auth "2.1.0"]
+                 [buddy/buddy-hashers "1.3.0"]
                  [com.cemerick/url "0.1.1"]
                  [clj-time "0.14.1"]
                  [com.vladsch.flexmark/flexmark "0.28.6"]
@@ -11,6 +13,7 @@
                  [hiccup "1.0.5"]
                  [org.clojure/java.jdbc "0.7.3"]
                  [org.xerial/sqlite-jdbc "3.20.1"]
+                 [ring/ring-defaults "0.3.1"]
                  [ring-server "0.5.0"]]
 
   :plugins [[lein-ring "0.12.1"]]

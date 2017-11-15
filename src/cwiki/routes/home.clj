@@ -26,11 +26,23 @@
 (defn home []
   (layout/view-wiki-page (read-front-page)))
 
+(defn login []
+  (layout/view-login-page))
+
+(defn login-authenticate []
+  (layout/view-login-authenticate-page))
+
+(defn logout []
+  (layout/view-logout-page))
+
 (defn about []
   (layout/view-wiki-page (read-about-page)))
 
 (defroutes home-routes
            (GET "/" [] (home))
+           (GET "/login" [] (login))
+           (POST "/login" [] (login-authenticate))
+           (GET "/logout" [] (logout))
            (GET "/about" [] (about))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]

@@ -2,6 +2,17 @@
   (:require [clojure.test :refer :all]
             [cwiki.models.db :refer :all]))
 
+(deftest find-user-by-name-test
+  (testing "find-user-by-name"
+    (is (nil? (find-user-by-name "blofeld")))
+    (is (not (nil? (find-user-by-name "guest"))))))
+
+(deftest lookup-user-test
+  (testing "lookup-user"
+    (is (nil? (lookup-user "guest" "xyxyxyxyx")))
+    (is (nil? (lookup-user "glofeld" "xyxyxyx")))
+    (is (not (nil? (lookup-user "guest" "guest"))))))
+
 (deftest page-id->title-test
   (testing "page-id->title"
     (is (nil? (page-id->title 1039)))

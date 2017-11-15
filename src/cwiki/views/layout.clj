@@ -321,3 +321,57 @@
                              :onclick "window.history.back();"}]])]]]
        (footer-component)])))
 
+;(defn login []
+;  (layout/view-login-page))
+
+(defn view-login-page
+  []
+  (html5
+    [:head
+     [:title (get-tab-title nil)]
+     (include-css "/css/styles.css")]
+    [:body {:class "page"}
+     (no-nav-header-component)
+     (centered-content-component
+       [:div
+        [:h1 {:class "info-warning"} "This is your Login Page"]
+        [:p "Go ahead and log in."]
+        (link-to {:class "btn btn-primary"} "/" "Take me Home")])
+     (footer-component)]))
+
+;(defn login-authenticate []
+;  (layout/view-login-authenticate-page))
+
+(defn view-login-authenticate-page
+  []
+  (html5
+    [:head
+     [:title (get-tab-title nil)]
+     (include-css "/css/styles.css")]
+    [:body {:class "page"}
+     (no-nav-header-component)
+     (centered-content-component
+       [:div
+        [:h1 {:class "info-warning"} "This is your Login-Authenticate Page"]
+        [:p "You are so authentic."]
+        (link-to {:class "btn btn-primary"} "/" "Take me Home")])
+     (footer-component)]))
+
+;(defn logout []
+;  (layout/view-logout-page))
+
+(defn view-logout-page
+  []
+  (html5
+    [:head
+     [:title (get-tab-title nil)]
+     (include-css "/css/styles.css")]
+    [:body {:class "page"}
+     (no-nav-header-component)
+     (centered-content-component
+       [:div
+        [:h1 {:class "info-warning"} "This is your Logout page"]
+        [:p "You are logged out dude"]
+        (link-to {:class "btn btn-primary"} "/" "Take me Home")])
+     (footer-component)]))
+

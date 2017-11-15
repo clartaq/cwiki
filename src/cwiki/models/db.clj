@@ -28,14 +28,17 @@
              :page_content  content}]
      pm)))
 
-(def initial-pages [{:title "About" :file-name "About.md"}
+; Need "Front Page" to be first in list since some tests depend on it
+; being in that position. Kinda fragile.
+
+(def initial-pages [{:title "Front Page" :file-name "Front_Page.md"}
+                    {:title "About" :file-name "About.md"}
                     {:title "About CWiki" :file-name "About_CWiki.md"}
                     {:title "About Roles" :file-name "About_Roles.md"}
                     {:title "About the Sidebar" :file-name "About_the_Sidebar.md"}
                     {:title "CWiki FAQ" :file-name "CWiki_FAQ.md"}
                     {:title "CWiki Name" :file-name "CWiki_Name.md"}
                     {:title "Features" :file-name "Features.md"}
-                    {:title "Front Page" :file-name "Front_Page.md"}
                     {:title "Links Primer" :file-name "Links_Primer.md"}
                     {:title "Other Wiki Software" :file-name "Other_Wiki_Software.md"}
                     {:title "Pages Primer" :file-name "Pages_Primer.md"}
@@ -80,6 +83,26 @@
    (:user_id (first (jdbc/query
                       db-name
                       ["select user_id from users where user_name=?" name])))))
+
+(defn find-user-by-name
+  "Look up the user in the database and return the map of user attributes
+  for a matching entry. If no match, return nil."
+  ([name]
+   (find-user-by-name name sqlite-db))
+  ([name db-name]
+   (let [user-map (first (jdbc/query
+                           db-name
+                           ["select * from users where user_name=?" name]))]
+     user-map)))
+
+(defn lookup-user
+  "Look up a user an verify that the password is a match. If the user
+  cannot be found or the password doesn't match, return nil."
+  [username password]
+  (when-let [user (find-user-by-name username)]
+    (let [pw (get user :user_password)]
+      (when (hashers/check password pw)
+        (dissoc user :user_password)))))
 
 (defn find-post-by-title
   ([title] (find-post-by-title title sqlite-db))

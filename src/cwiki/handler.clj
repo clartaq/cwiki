@@ -1,15 +1,21 @@
 (ns cwiki.handler
-  (:require [cemerick.url :as u]
+  (:require [buddy.auth.backends.session :refer [session-backend]]
+            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
+            [cemerick.url :as u]
+            [clojure.string :as s]
             [compojure.core :refer [defroutes routes]]
-            [ring.util.response :refer [status]]
-            [hiccup.middleware :refer [wrap-base-url]]
             [compojure.handler :as handler]
+            [compojure.response :as response]
             [compojure.route :as route]
+            [cwiki.models.db :as db]
             [cwiki.views.layout :as layout]
             [cwiki.routes.home :refer [home-routes]]
-            [compojure.response :as response]
-            [clojure.string :as s]
-            [cwiki.models.db :as db]))
+            [hiccup.middleware :refer [wrap-base-url]]
+            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
+            [ring.util.response :refer [status]]
+            ))
+
+;(def backend (session-backend))
 
 (defn init []
   (println "CWiki is starting"))
@@ -29,36 +35,36 @@
     (let [raw-title (u/url-decode (:uri request))
           title (s/replace raw-title "//" "")
           raw-post (db/find-post-by-title title)]
-     (cond
-       raw-post (let [new-body (db/page-map->content raw-post)
-                      new-page (layout/view-wiki-page raw-post)]
-                  (build-response new-page request))
+      (cond
+        raw-post (let [new-body (db/page-map->content raw-post)
+                       new-page (layout/view-wiki-page raw-post)]
+                   (build-response new-page request))
 
-       (= title "All Pages") (let [new-body (layout/compose-all-pages-page)]
+        (= title "All Pages") (let [new-body (layout/compose-all-pages-page)]
+                                (build-response new-body request))
+
+        (= title "All Users") (let [new-body (layout/compose-all-users-page)]
+                                (build-response new-body request))
+
+        (= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page)]
+                                     (build-response new-body request))
+
+        (= title "All Tags") (let [new-body (layout/compose-all-tags-page)]
                                (build-response new-body request))
 
-       (= title "All Users") (let [new-body (layout/compose-all-users-page)]
-                              (build-response new-body request))
-
-       (= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page)]
-                                   (build-response new-body request))
-
-       (= title "All Tags") (let [new-body (layout/compose-all-tags-page)]
-                             (build-response new-body request))
-
-       (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
-                                          new-body (layout/compose-create-or-edit-page
-                                                     (db/find-post-by-title title-only))]
-                                      (build-response new-body request))
-       (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
-                                            new-body (layout/view-wiki-page
-                                                       (db/find-post-by-title "Front Page"))]
-                                        (db/delete-page-by-id (db/title->page-id title-only))
-                                        (build-response new-body request))
-       :else (let [title-only (s/replace title "/create" "")
-                   new-body (layout/compose-create-or-edit-page
-                              (db/create-new-post-map title-only))]
-               (build-response new-body request))))))
+        (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
+                                           new-body (layout/compose-create-or-edit-page
+                                                      (db/find-post-by-title title-only))]
+                                       (build-response new-body request))
+        (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
+                                             new-body (layout/view-wiki-page
+                                                        (db/find-post-by-title "Front Page"))]
+                                         (db/delete-page-by-id (db/title->page-id title-only))
+                                         (build-response new-body request))
+        :else (let [title-only (s/replace title "/create" "")
+                    new-body (layout/compose-create-or-edit-page
+                               (db/create-new-post-map title-only))]
+                (build-response new-body request))))))
 
 (defroutes app-routes
            (route/resources "/")
@@ -68,4 +74,5 @@
 (def app
   (-> (routes home-routes app-routes)
       (handler/site)
+      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
       (wrap-base-url)))
