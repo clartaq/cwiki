@@ -1,5 +1,6 @@
 (ns cwiki.models.db
-  (require [clojure.java.jdbc :as jdbc]
+  (require [buddy.hashers :as hashers]
+           [clojure.java.jdbc :as jdbc]
            [clojure.java.io :as io]
            [clj-time.core :as t]
            [clj-time.coerce :as c]
@@ -27,22 +28,23 @@
              :page_content  content}]
      pm)))
 
-(def initial-pages [{:title "Front Page" :file-name "Front_Page.md"}
-                    {:title "About" :file-name "About.md"}
+(def initial-pages [{:title "About" :file-name "About.md"}
                     {:title "About CWiki" :file-name "About_CWiki.md"}
+                    {:title "About Roles" :file-name "About_Roles.md"}
                     {:title "About the Sidebar" :file-name "About_the_Sidebar.md"}
                     {:title "CWiki FAQ" :file-name "CWiki_FAQ.md"}
-                    {:title "Technical Notes" :file-name "Technical_Notes.md"}
+                    {:title "CWiki Name" :file-name "CWiki_Name.md"}
                     {:title "Features" :file-name "Features.md"}
-                    {:title "Preferences" :file-name "Preferences.md"}
-                    {:title "Other Wiki Software" :file-name "Other_Wiki_Software.md"}
-                    {:title "Special Pages" :file-name "Special_Pages.md"}
-                    {:title "Pages Primer" :file-name "Pages_Primer.md"}
+                    {:title "Front Page" :file-name "Front_Page.md"}
                     {:title "Links Primer" :file-name "Links_Primer.md"}
-                    {:title "Text Formatting" :file-name "Text_Formatting.md"}
+                    {:title "Other Wiki Software" :file-name "Other_Wiki_Software.md"}
+                    {:title "Pages Primer" :file-name "Pages_Primer.md"}
+                    {:title "Preferences" :file-name "Preferences.md"}
                     {:title "Sidebar" :file-name "Sidebar.md"}
-                    {:title "To Do" :file-name "todo.md"}
-                    {:title "CWiki Name" :file-name "CWiki_Name.md"}])
+                    {:title "Special Pages" :file-name "Special_Pages.md"}
+                    {:title "Text Formatting" :file-name "Text_Formatting.md"}
+                    {:title "Technical Notes" :file-name "Technical_Notes.md"}
+                    {:title "To Do" :file-name "todo.md"}])
 
 (def valid-roles [:cwiki :admin :editor :writer :reader])
 
@@ -50,17 +52,26 @@
 
 (def initial-tags ["help" "wiki" "cwiki" "linking"])
 
-(def initial-user
-  {:user_name              "CWiki"
-   :user_role              :cwiki
-   :user_password          "BlahBlahBlah"
-   :user_new_password      nil
-   :user_new_password_time nil
-   :user_email             nil
-   :user_email_token       0
-   :user_email_expires     nil
-   :user_touched           (c/to-sql-time (t/now))
-   :user_registration      (c/to-sql-time (t/now))})
+(def initial-users [{:user_name              "CWiki"
+                     :user_role              :cwiki
+                     :user_password          (hashers/derive "BlahBlahBlah")
+                     :user_new_password      nil
+                     :user_new_password_time nil
+                     :user_email             nil
+                     :user_email_token       0
+                     :user_email_expires     nil
+                     :user_touched           (c/to-sql-time (t/now))
+                     :user_registration      (c/to-sql-time (t/now))}
+                    {:user_name              "guest"
+                     :user_role              :reader
+                     :user_password          (hashers/derive "guest")
+                     :user_new_password      nil
+                     :user_new_password_time nil
+                     :user_email             nil
+                     :user_email_token       0
+                     :user_email_expires     nil
+                     :user_touched           (c/to-sql-time (t/now))
+                     :user_registration      (c/to-sql-time (t/now))}])
 
 (defn user-name->user-id
   ([name]
@@ -113,7 +124,6 @@
         result (jdbc/query sqlite-db ["select user_name from users where user_id=?" author-id])
         name (:user_name (first result))]
     name))
-  ;(:page_author m))
 
 (defn page-map->created-date
   [m]
@@ -186,10 +196,10 @@
         post-map (create-new-post-map title content id)]
     (jdbc/insert! sqlite-db :pages post-map)))
 
-(defn- add-initial-user!
+(defn- add-initial-users!
   []
-  (println "Adding initial user.")
-  (jdbc/insert! sqlite-db :users initial-user)
+  (println "Adding initial users.")
+  (mapv #(jdbc/insert! sqlite-db :users %) initial-users)
   (println "Done."))
 
 (defn get-initial-user-id
@@ -204,7 +214,6 @@
 (defn- add-initial-pages!
   [user-id]
   (mapv #(add-page-from-file! % user-id) initial-pages))
-  ;(mapv add-page-from-file! initial-pages user-id))
 
 (defn- add-initial-namespaces!
   []
@@ -266,7 +275,7 @@
 (defn- create-db
   []
   (create-tables)
-  (add-initial-user!)
+  (add-initial-users!)
   (add-initial-pages! (get-initial-user-id))
   (add-initial-roles!)
   (add-initial-namespaces!)
