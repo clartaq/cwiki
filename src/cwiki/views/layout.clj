@@ -119,6 +119,17 @@
                     "Wiki"]]]
      (wiki-hmenu-component post-map options)]]))
 
+(defn no-nav-header-component
+  "Return the wiki page header without the nav menu items."
+  []
+  [:header {:class "header"}
+   [:div {:class "header-wrapper"}
+    [:hgroup {:class "left-header-wrapper"}
+     [:h1 {:class "brand-title"} "CWiki"]
+     [:p {:class "brand-sub-title"}
+      "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
+                   "Wiki"]]]]])
+
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
 
@@ -259,7 +270,7 @@
      [:title (get-tab-title nil)]
      (include-css "/css/styles.css")]
     [:body {:class "page"}
-     (wiki-header-component nil)
+     (no-nav-header-component)
      (centered-content-component
        [:div
         [:h1 {:class "info-warning"} "Page Not Found"]
