@@ -65,6 +65,36 @@
                      :user_email_expires     nil
                      :user_touched           (c/to-sql-time (t/now))
                      :user_registration      (c/to-sql-time (t/now))}
+                    {:user_name              "admin"
+                     :user_role              :admin
+                     :user_password          (hashers/derive "admin")
+                     :user_new_password      nil
+                     :user_new_password_time nil
+                     :user_email             nil
+                     :user_email_token       0
+                     :user_email_expires     nil
+                     :user_touched           (c/to-sql-time (t/now))
+                     :user_registration      (c/to-sql-time (t/now))}
+                    {:user_name              "editor"
+                     :user_role              :editor
+                     :user_password          (hashers/derive "editor")
+                     :user_new_password      nil
+                     :user_new_password_time nil
+                     :user_email             nil
+                     :user_email_token       0
+                     :user_email_expires     nil
+                     :user_touched           (c/to-sql-time (t/now))
+                     :user_registration      (c/to-sql-time (t/now))}
+                    {:user_name              "writer"
+                     :user_role              :writer
+                     :user_password          (hashers/derive "writer")
+                     :user_new_password      nil
+                     :user_new_password_time nil
+                     :user_email             nil
+                     :user_email_token       0
+                     :user_email_expires     nil
+                     :user_touched           (c/to-sql-time (t/now))
+                     :user_registration      (c/to-sql-time (t/now))}
                     {:user_name              "guest"
                      :user_role              :reader
                      :user_password          (hashers/derive "guest")
@@ -94,6 +124,21 @@
                            db-name
                            ["select * from users where user_name=?" name]))]
      user-map)))
+
+(defn get-user-by-username-and-password [username password]
+  (prn username password)
+  (let [result (find-user-by-name username)
+        pw-hash (:user_password result)]
+    (println "result:" result)
+    (println "pw-hash:" pw-hash)
+    (when (and (= (:user-name result))
+               (hashers/check password pw-hash))
+      result)))
+
+  ;(reduce (fn [_ user]
+  ;          (if (and (= (:user_name user) username)
+  ;                   (hashers/check password (:password-hash user)))
+  ;            (reduced user))) (find-user-by-name username)))
 
 (defn lookup-user
   "Look up a user an verify that the password is a match. If the user
