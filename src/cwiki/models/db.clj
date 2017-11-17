@@ -7,6 +7,21 @@
            [cwiki.util.special :as special])
   (:import (java.io File)))
 
+;; Things to deal with the current user.
+
+(def current-user (atom nil))
+
+(defn get-current-user
+  []
+  @current-user)
+
+(defn set-current-user
+  [m]
+  (println "Setting current-user to:" m)
+  (reset! current-user m))
+
+;; Things that deal with the database file and connection.
+
 (def db-file-name "resources/public/db/database.db")
 
 (def sqlite-db
