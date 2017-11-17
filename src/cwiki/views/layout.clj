@@ -7,7 +7,7 @@
                                           get-delete-link-for-existing-page]]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to hidden-field submit-button text-area
-                                 text-field]]
+                                 text-field password-field]]
             [hiccup.element :refer [link-to]]
             [clj-time.core :as t]
             [compojure.response :as response]
@@ -309,7 +309,7 @@
                      [:post "save-new-page"])
                    (when id
                      (hiccup.form/hidden-field :page-id id))
-                   (text-field "title" title)
+                   (text-field {:autofocus "autofocus"} "title" title)
                    (text-area "content" content)
                    [:br]
                    [:div {:class "button-bar-container"}
@@ -318,11 +318,9 @@
                     [:input {:type    "button" :name "cancel-button"
                              :value   "Cancel"
                              :class   "topcoat-button--large"
-                             :onclick "window.history.back();"}]])]]]
+                             :onclick "window.history.back();"}]])]
+         ]]
        (footer-component)])))
-
-;(defn login []
-;  (layout/view-login-page))
 
 (defn view-login-page
   []
@@ -332,15 +330,24 @@
      (include-css "/css/styles.css")]
     [:body {:class "page"}
      (no-nav-header-component)
-     (centered-content-component
+     [:div {:class "sidebar-and-article"}
+      [:aside {:class "left-aside"} ""]
+      [:article {:class "page-content"}
        [:div
-        [:h1 {:class "info-warning"} "This is your Login Page"]
-        [:p "Go ahead and log in."]
-        (link-to {:class "btn btn-primary"} "/" "Take me Home")])
+        (form-to {:enctype "multipart/form-data"}
+                 [:post "login"]
+                 [:h1 "Sign In"]
+                 [:h5 "User Name"]
+                 [:p (text-field {:autofocus "autofocus"
+                                  :placeholder "User Name"} "user-name")]
+                 [:h5 "Password"]
+                 [:p (password-field "password")]
+                 [:div {:class "button-bar-container"}
+                  (submit-button {:id    "Save Button"
+                                  :class "topcoat-button--large"} "Sign In")
+                  ])]
+       ]]
      (footer-component)]))
-
-;(defn login-authenticate []
-;  (layout/view-login-authenticate-page))
 
 (defn view-login-authenticate-page
   []
@@ -356,9 +363,6 @@
         [:p "You are so authentic."]
         (link-to {:class "btn btn-primary"} "/" "Take me Home")])
      (footer-component)]))
-
-;(defn logout []
-;  (layout/view-logout-page))
 
 (defn view-logout-page
   []

@@ -1,7 +1,8 @@
 (ns cwiki.routes.home
   (:require [compojure.core :refer :all]
             [cwiki.views.layout :as layout]
-            [cwiki.models.db :as db]))
+            [cwiki.models.db :as db]
+            [ring.util.response :refer [response redirect]]))
 
 (defn read-front-page
   "Read the complete post for the front page."
@@ -35,14 +36,36 @@
 (defn logout []
   (layout/view-logout-page))
 
+(defn post-login [{{username "user-name" password "password"} :multipart-params
+                   session :session :as req}]
+  (println "post-login: username:" username ", password: " password "\n"
+           "session:" session)
+
+  (if-let [user (db/get-user-by-username-and-password username password)]
+
+    ; If authenticated
+    (do
+      (println "user:" user)
+      (let [new-session (assoc (redirect "/")
+      :session (assoc session :identity (:user_id user)))]
+        (println "session:" new-session)
+        new-session))
+
+    ; Otherwise
+    (redirect "/login")))
+
+(defn post-logout [{session :session}]
+  (assoc (redirect "/login")
+    :session (dissoc session :identity)))
+
 (defn about []
   (layout/view-wiki-page (read-about-page)))
 
 (defroutes home-routes
            (GET "/" [] (home))
            (GET "/login" [] (login))
-           (POST "/login" [] (login-authenticate))
-           (GET "/logout" [] (logout))
+           (POST "/login" [] post-login)
+           (POST "/logout" [] post-logout)
            (GET "/about" [] (about))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
