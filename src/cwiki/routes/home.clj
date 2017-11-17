@@ -46,6 +46,7 @@
     ; If authenticated
     (do
       (println "user:" user)
+      (db/set-current-user user)
       (let [new-session (assoc (redirect "/")
       :session (assoc session :identity (:user_id user)))]
         (println "session:" new-session)
@@ -53,6 +54,10 @@
 
     ; Otherwise
     (redirect "/login")))
+
+(defn get-logout
+  [x]
+  (layout/view-logout-page))
 
 (defn post-logout [{session :session}]
   (assoc (redirect "/login")
@@ -65,6 +70,7 @@
            (GET "/" [] (home))
            (GET "/login" [] (login))
            (POST "/login" [] post-login)
+           (GET "/logout" [] get-logout)
            (POST "/logout" [] post-logout)
            (GET "/about" [] (about))
            (POST "/save-edits" request
