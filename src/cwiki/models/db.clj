@@ -129,6 +129,15 @@
                       db-name
                       ["select user_id from users where user_name=?" name])))))
 
+(defn user-id->user-name
+  "Given a user id, return a human-readable user name."
+  ([id]
+   (user-id->user-name id sqlite-db))
+  ([id db-name]
+   (:user_name (first (jdbc/query
+                        db-name
+                        ["select user_name from users where user_id=?" id])))))
+
 (defn find-user-by-name
   "Look up the user in the database and return the map of user attributes
   for a matching entry. If no match, return nil."
