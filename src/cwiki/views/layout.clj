@@ -338,7 +338,7 @@
                  [:post "login"]
                  [:h1 "Sign In"]
                  [:h5 "User Name"]
-                 [:p (text-field {:autofocus "autofocus"
+                 [:p (text-field {:autofocus   "autofocus"
                                   :placeholder "User Name"} "user-name")]
                  [:h5 "Password"]
                  [:p (password-field "password")]
@@ -349,33 +349,29 @@
        ]]
      (footer-component)]))
 
-(defn view-login-authenticate-page
-  []
-  (html5
-    [:head
-     [:title (get-tab-title nil)]
-     (include-css "/css/styles.css")]
-    [:body {:class "page"}
-     (no-nav-header-component)
-     (centered-content-component
-       [:div
-        [:h1 {:class "info-warning"} "This is your Login-Authenticate Page"]
-        [:p "You are so authentic."]
-        (link-to {:class "btn btn-primary"} "/" "Take me Home")])
-     (footer-component)]))
-
 (defn view-logout-page
-  []
-  (html5
-    [:head
-     [:title (get-tab-title nil)]
-     (include-css "/css/styles.css")]
-    [:body {:class "page"}
-     (no-nav-header-component)
-     (centered-content-component
-       [:div
-        [:h1 {:class "info-warning"} "This is your Logout page"]
-        [:p "You are logged out dude"]
-        (link-to {:class "btn btn-primary"} "/" "Take me Home")])
-     (footer-component)]))
+  [{session :session}]
+  (let [user-name (db/user-id->user-name (:identity session))]
+    (html5
+      [:head
+       [:title (get-tab-title nil)]
+       (include-css "/css/styles.css")]
+      [:body {:class "page"}
+       (no-nav-header-component)
+       [:div {:class "sidebar-and-article"}
+        [:aside {:class "left-aside"} ""]
+        [:article {:class "page-content"}
+         [:div
+          (form-to {:enctype "multipart/form-data"}
+                   [:post "logout"]
+                   [:h1 (str "Sign Out " user-name)]
+                   [:p "Are you sure?"]
+                   [:div {:class "button-bar-container"}
+                    (submit-button {:id    "sign-out-button"
+                                    :class "topcoat-button--large"} "Sign Out")
+                    [:input {:type    "button" :name "cancel-button"
+                             :value   "Cancel"
+                             :class   "topcoat-button--large"
+                             :onclick "window.history.back();"}]])]]]
+       (footer-component)])))
 
