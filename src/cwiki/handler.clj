@@ -10,6 +10,7 @@
             [cwiki.models.db :as db]
             [cwiki.views.layout :as layout]
             [cwiki.routes.home :refer [home-routes]]
+            [cwiki.routes.login :refer [login-routes]]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.util.response :refer [status]]))
@@ -71,7 +72,7 @@
            (route/not-found (layout/compose-404-page)))
 
 (def app
-  (-> (routes home-routes app-routes)
+  (-> (routes home-routes login-routes app-routes)
       (handler/site)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
       (wrap-base-url)
