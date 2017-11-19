@@ -46,7 +46,7 @@
 (def parser (.build (Parser/builder options)))
 (def renderer (.build (HtmlRenderer/builder options)))
 
-(defn convert-markdown-to-html
+(defn- convert-markdown-to-html
   "Convert the markdown formatted input string to html
   and return it."
   [mkdn]
@@ -60,26 +60,36 @@
                         (f/formatter "dd MMM yyyy, hh:mm:ss aa")
                         (t/default-time-zone)))
 
-(defn get-formatted-time
+(defn- get-formatted-time
   "Return a string containing the input time (represented as a long)
   nicely formatted in the current time zone."
   [time-as-long]
   (f/unparse custom-formatter (c/from-long time-as-long)))
 
-(defn get-tab-title
+(defn- get-tab-title
   "Return a string to be displayed in the browser tab."
   [post-map]
   (if-let [junk (and post-map
                      (db/page-map->title post-map))]
     (str "CWiki: " (db/page-map->title post-map))
-    "Welcome to CWiki"))
+    "CWiki"))
+
+(defn- standard-head
+  "Return the standard html head section for the wiki html pages."
+  [post-map]
+  [:head
+   [:title (get-tab-title post-map)]
+   (include-css "/css/styles.css")
+   (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
+   (include-js "/js/mathjax-config.js")
+   (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")])
 
 (defn- menu-item-span
   "Return a span with CSS class 'menu-item' around the given content."
   [content]
   [:span {:class "menu-item"} content])
 
-(defn wiki-hmenu-component
+(defn- wiki-hmenu-component
   "Return the standard navigation menu component for the application.
   The options argument can make the menu context specific, as for when
   editing or not (the only option now)."
@@ -110,7 +120,7 @@
        (menu-item-span [:a {:href "/logout"} "Sign Off"])
        (menu-item-span [:a {:href "/search"} "Search"])]])))
 
-(defn wiki-header-component
+(defn- wiki-header-component
   "Return the standard wiki page header."
   ([post-map req]
    (wiki-header-component post-map req {}))
@@ -124,7 +134,7 @@
                     "Wiki"]]]
      (wiki-hmenu-component post-map req options)]]))
 
-(defn no-nav-header-component
+(defn- no-nav-header-component
   "Return the wiki page header without the nav menu items."
   []
   [:header {:class "header"}
@@ -138,7 +148,7 @@
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
 
-(defn centered-content-component
+(defn- centered-content-component
   "Put the content in a centered element and return it."
   [& content]
   [:div {:class "centered-content"}
@@ -146,7 +156,7 @@
      (first content)
      [:p error-span "There is not centered content for this page."])])
 
-(defn limited-width-title-component
+(defn- limited-width-title-component
   [post-map]
   (let [title (db/page-map->title post-map)
         author (db/page-map->author post-map)
@@ -162,7 +172,7 @@
       [:span {:class "date-header"} "Last Modified: "]
       [:span {:class "date-text"} (get-formatted-time modified)]]]))
 
-(defn limited-width-content-component
+(defn- limited-width-content-component
   "Center the content in a centered element and return it."
   [& content]
   [:div
@@ -171,7 +181,7 @@
        (convert-markdown-to-html txt-with-links))
      [:p error-span "There is not centered content for this page."])])
 
-(defn footer-component
+(defn- footer-component
   "Return the standard footer for the program pages. If
   needed, retrieve the program name and version from the server."
   []
@@ -180,28 +190,78 @@
     [:p "Copyright \u00A9 2017, David D. Clark"]
     [:p program-name-and-version]]])
 
-(defn view-wiki-page
+(defn- sidebar-aside
+  [req]
+  (let [sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
+    [:aside {:class "left-aside"}
+     (limited-width-content-component sidebar-content req)]))
+
+(defn- sidebar-and-article
+  "Return a sidebar and article div with the given content."
+  [sidebar article]
+  [:div {:class "sidebar-and-article"}
+   sidebar
+   [:article {:class "page-content"}
+    [:div article]]])
+
+(defn compose-create-or-edit-page
+  "Will compose a page to create or edit a page in the wiki. The
+  difference is based on whether or not the post-map passed as
+  argument has a nil entry for the :post_id key in the map -- nil causes
+  creation, non-nil is an edit."
   [post-map req]
-  (let [content (db/page-map->content post-map)
-        sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
+  (let [id (db/page-map->id post-map)
+        title (db/page-map->title post-map)
+        content (db/page-map->content post-map)
+        t-title (get-tab-title post-map)
+        tab-title (if id
+                    (str "Editing " t-title)
+                    (str "Creating " t-title))]
     (html5
-      [:head
-       [:title (get-tab-title post-map)]
-       (include-css "/css/styles.css")
-       (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
-       (include-js "/js/mathjax-config.js")
-       (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]
+      (standard-head post-map)
       [:body {:class "page"}
-       (wiki-header-component post-map req)
-       [:div {:class "sidebar-and-article"}
-        [:aside {:class "left-aside"}
-         (limited-width-content-component sidebar-content req)]
-        [:article {:class "page-content"}
-         (limited-width-title-component post-map)
-         (limited-width-content-component content)]]
+       (wiki-header-component post-map req {:editing true})
+       (sidebar-and-article
+         (sidebar-aside req)
+         [:div
+          (form-to {:enctype "multipart/form-data"}
+                   (if id
+                     [:post "save-edits"]
+                     [:post "save-new-page"])
+                   (when id
+                     (hiccup.form/hidden-field :page-id id))
+                   (text-field {:autofocus "autofocus"} "title" title)
+                   (text-area "content" content)
+                   [:br]
+                   [:div {:class "button-bar-container"}
+                    (submit-button {:id    "Save Button"
+                                    :class "topcoat-button--large"} "Save Changes")
+                    [:input {:type    "button" :name "cancel-button"
+                             :value   "Cancel"
+                             :class   "topcoat-button--large"
+                             :onclick "window.history.back();"}]])])
        (footer-component)])))
 
-(defn process-title-set
+(defn view-wiki-page
+  "Return a 'regular' wiki page view."
+  [post-map req]
+  (let [content (db/page-map->content post-map)]
+    (html5
+      (standard-head post-map)
+      [:body {:class "page"}
+       (wiki-header-component post-map req)
+       (sidebar-and-article
+         (sidebar-aside req)
+         [:div (limited-width-title-component post-map)
+          (limited-width-content-component content)])
+       (footer-component)])))
+
+;;
+;; Pages and utilities that show all there are of something, like
+;; page names or users.
+;;
+
+(defn- process-title-set
   "Process a sorted set of page titles into a Markdown-formatted
   unordered list and return it"
   [titles]
@@ -211,7 +271,7 @@
       (str st "\n")
       (recur (rest t) (str st "\n- [[" (first t) "]]")))))
 
-(defn process-name-set
+(defn- process-name-set
   "Process a sorted set of names into a Markdown-formatted
   unordered list and return it. If the set of names is empty,
   return an empty string."
@@ -267,81 +327,40 @@
         post-map (db/create-new-post-map "All Tags" content)]
     (view-wiki-page post-map req)))
 
+;;
+;; Pages that show no sidebar information.
+;;
+
+(defn- no-content-aside
+  "Return an aside section with no content."
+  []
+  [:aside {:class "left-aside"} ""])
+
 (defn compose-404-page
   "Build and return a 'Not Found' page."
   []
   (html5
-    [:head
-     [:title (get-tab-title nil)]
-     (include-css "/css/styles.css")]
+    (standard-head nil)
     [:body {:class "page"}
      (no-nav-header-component)
-     [:div {:class "sidebar-and-article"}
-      [:aside {:class "left-aside"} ""]
-      [:article {:class "page-content"}
+     (sidebar-and-article
+       (no-content-aside)
        (centered-content-component
          [:div
           [:h1 {:class "info-warning"} "Page Not Found"]
           [:p "The requested page does not exist."]
-          (link-to {:class "btn btn-primary"} "/" "Take me Home")])]]
+          (link-to {:class "btn btn-primary"} "/" "Take me Home")]))
      (footer-component)]))
-
-(defn compose-create-or-edit-page
-  "Will compose a page to create or edit a page in the wiki. The
-  difference is based on whether or not the post-map passed as
-  argument has a nil entry for the :post_id key in the map -- nil causes
-  creation, non-nil is an edit."
-  [post-map req]
-  (let [id (db/page-map->id post-map)
-        title (db/page-map->title post-map)
-        content (db/page-map->content post-map)
-        sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))
-        t-title (get-tab-title post-map)
-        tab-title (if id
-                    (str "Editing " t-title)
-                    (str "Creating " t-title))]
-    (html5
-      [:head
-       [:title tab-title]
-       (include-css "/css/styles.css")]
-      [:body {:class "page"}
-       (wiki-header-component post-map req {:editing true})
-       [:div {:class "sidebar-and-article"}
-        [:aside {:class "left-aside"}
-         (limited-width-content-component sidebar-content req)]
-        [:article {:class "page-content"}
-         [:div
-          (form-to {:enctype "multipart/form-data"}
-                   (if id
-                     [:post "save-edits"]
-                     [:post "save-new-page"])
-                   (when id
-                     (hiccup.form/hidden-field :page-id id))
-                   (text-field {:autofocus "autofocus"} "title" title)
-                   (text-area "content" content)
-                   [:br]
-                   [:div {:class "button-bar-container"}
-                    (submit-button {:id    "Save Button"
-                                    :class "topcoat-button--large"} "Save Changes")
-                    [:input {:type    "button" :name "cancel-button"
-                             :value   "Cancel"
-                             :class   "topcoat-button--large"
-                             :onclick "window.history.back();"}]])]
-         ]]
-       (footer-component)])))
 
 (defn view-login-page
   "Display a login page and gather the user name and password to log in."
   []
   (html5
-    [:head
-     [:title (get-tab-title nil)]
-     (include-css "/css/styles.css")]
+    (standard-head nil)
     [:body {:class "page"}
      (no-nav-header-component)
-     [:div {:class "sidebar-and-article"}
-      [:aside {:class "left-aside"} ""]
-      [:article {:class "page-content"}
+     (sidebar-and-article
+       (no-content-aside)
        [:div
         (form-to {:enctype "multipart/form-data"}
                  [:post "login"]
@@ -353,7 +372,7 @@
                  [:p (password-field "password")]
                  [:div {:class "button-bar-container"}
                   (submit-button {:id    "login-button"
-                                  :class "topcoat-button--large"} "Sign In")])]]]
+                                  :class "topcoat-button--large"} "Sign In")])])
      (footer-component)]))
 
 (defn no-user-to-logout-page
@@ -361,14 +380,11 @@
   Should never happen in production. Only used during development."
   []
   (html5
-    [:head
-     [:title (get-tab-title nil)]
-     (include-css "/css/styles.css")]
+    (standard-head nil)
     [:body {:class "page"}
      (no-nav-header-component)
-     [:div {:class "sidebar-and-article"}
-      [:aside {:class "left-aside"} ""]
-      [:article {:class "page-content"}
+     (sidebar-and-article
+       (no-content-aside)
        [:div
         [:h1 "That's a Problem"]
         [:p "There is no user to sign off."]
@@ -376,21 +392,18 @@
          [:input {:type    "button" :name "cancel-button"
                   :value   "Cancel"
                   :class   "topcoat-button--large"
-                  :onclick "window.history.back();"}]]]]]
+                  :onclick "window.history.back();"}]]])
      (footer-component)]))
 
 (defn post-logout-page
   "Ask the user if they really want to log out."
   [user-name]
   (html5
-    [:head
-     [:title (get-tab-title nil)]
-     (include-css "/css/styles.css")]
+    (standard-head nil)
     [:body {:class "page"}
      (no-nav-header-component)
-     [:div {:class "sidebar-and-article"}
-      [:aside {:class "left-aside"} ""]
-      [:article {:class "page-content"}
+     (sidebar-and-article
+       (no-content-aside)
        [:div
         (form-to {:enctype "multipart/form-data"}
                  [:post "logout"]
@@ -402,7 +415,7 @@
                   [:input {:type    "button" :name "cancel-button"
                            :value   "Cancel"
                            :class   "topcoat-button--large"
-                           :onclick "window.history.back();"}]])]]]
+                           :onclick "window.history.back();"}]])])
      (footer-component)]))
 
 (defn view-logout-page
