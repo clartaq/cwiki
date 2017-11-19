@@ -103,7 +103,8 @@
        (when (and (db/db-exists?)
                   (db/find-post-by-title "About"))
          (menu-item-span [:a {:href "/about"} "About"]))
-       (menu-item-span [:a {:href "/search"} "Search"])]])))
+       (menu-item-span [:a {:href "/search"} "Search"])
+       (menu-item-span [:a {:href "/logout"} "Sign Off"])]])))
 
 (defn wiki-header-component
   "Return the standard wiki page header."
@@ -271,11 +272,14 @@
      (include-css "/css/styles.css")]
     [:body {:class "page"}
      (no-nav-header-component)
-     (centered-content-component
-       [:div
-        [:h1 {:class "info-warning"} "Page Not Found"]
-        [:p "The requested page does not exist."]
-        (link-to {:class "btn btn-primary"} "/" "Take me Home")])
+     [:div {:class "sidebar-and-article"}
+      [:aside {:class "left-aside"} ""]
+      [:article {:class "page-content"}
+       (centered-content-component
+         [:div
+          [:h1 {:class "info-warning"} "Page Not Found"]
+          [:p "The requested page does not exist."]
+          (link-to {:class "btn btn-primary"} "/" "Take me Home")])]]
      (footer-component)]))
 
 (defn compose-create-or-edit-page
@@ -323,6 +327,7 @@
        (footer-component)])))
 
 (defn view-login-page
+  "Display a login page and gather the user name and password to log in."
   []
   (html5
     [:head
@@ -343,35 +348,62 @@
                  [:h5 "Password"]
                  [:p (password-field "password")]
                  [:div {:class "button-bar-container"}
-                  (submit-button {:id    "Save Button"
-                                  :class "topcoat-button--large"} "Sign In")
-                  ])]
-       ]]
+                  (submit-button {:id    "login-button"
+                                  :class "topcoat-button--large"} "Sign In")])]]]
+     (footer-component)]))
+
+(defn no-user-to-logout-page
+  "Display a page stating that there is no logged in user to sign out.
+  Should never happen in production. Only used during development."
+  []
+  (html5
+    [:head
+     [:title (get-tab-title nil)]
+     (include-css "/css/styles.css")]
+    [:body {:class "page"}
+     (no-nav-header-component)
+     [:div {:class "sidebar-and-article"}
+      [:aside {:class "left-aside"} ""]
+      [:article {:class "page-content"}
+       [:div
+        [:h1 "That's a Problem"]
+        [:p "There is no user to sign off."]
+        [:div {:class "button-bar-container"}
+         [:input {:type    "button" :name "cancel-button"
+                  :value   "Cancel"
+                  :class   "topcoat-button--large"
+                  :onclick "window.history.back();"}]]]]]
+     (footer-component)]))
+
+(defn post-logout-page
+  "Ask the user if they really want to log out."
+  [user-name]
+  (html5
+    [:head
+     [:title (get-tab-title nil)]
+     (include-css "/css/styles.css")]
+    [:body {:class "page"}
+     (no-nav-header-component)
+     [:div {:class "sidebar-and-article"}
+      [:aside {:class "left-aside"} ""]
+      [:article {:class "page-content"}
+       [:div
+        (form-to {:enctype "multipart/form-data"}
+                 [:post "logout"]
+                 [:h1 (str "Sign Out " user-name)]
+                 [:p "Are you sure?"]
+                 [:div {:class "button-bar-container"}
+                  (submit-button {:id    "sign-out-button"
+                                  :class "topcoat-button--large"} "Sign Out")
+                  [:input {:type    "button" :name "cancel-button"
+                           :value   "Cancel"
+                           :class   "topcoat-button--large"
+                           :onclick "window.history.back();"}]])]]]
      (footer-component)]))
 
 (defn view-logout-page
   [{session :session}]
-  (let [user-name (db/user-id->user-name (:identity session))]
-    (html5
-      [:head
-       [:title (get-tab-title nil)]
-       (include-css "/css/styles.css")]
-      [:body {:class "page"}
-       (no-nav-header-component)
-       [:div {:class "sidebar-and-article"}
-        [:aside {:class "left-aside"} ""]
-        [:article {:class "page-content"}
-         [:div
-          (form-to {:enctype "multipart/form-data"}
-                   [:post "logout"]
-                   [:h1 (str "Sign Out " user-name)]
-                   [:p "Are you sure?"]
-                   [:div {:class "button-bar-container"}
-                    (submit-button {:id    "sign-out-button"
-                                    :class "topcoat-button--large"} "Sign Out")
-                    [:input {:type    "button" :name "cancel-button"
-                             :value   "Cancel"
-                             :class   "topcoat-button--large"
-                             :onclick "window.history.back();"}]])]]]
-       (footer-component)])))
+  (if-let [user-name (db/user-id->user-name (:identity session))]
+    (post-logout-page user-name)
+    (no-user-to-logout-page)))
 
