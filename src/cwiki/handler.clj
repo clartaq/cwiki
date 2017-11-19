@@ -1,5 +1,5 @@
 (ns cwiki.handler
-  (:require [buddy.auth.backends.session :refer [session-backend]]
+  (:require [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
             [cemerick.url :as u]
             [clojure.string :as s]
@@ -12,10 +12,9 @@
             [cwiki.routes.home :refer [home-routes]]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [ring.util.response :refer [status]]
-            ))
+            [ring.util.response :refer [status]]))
 
-;(def backend (session-backend))
+(def backend (backends/session))
 
 (defn init []
   (println "CWiki is starting"))
@@ -75,4 +74,5 @@
   (-> (routes home-routes app-routes)
       (handler/site)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-      (wrap-base-url)))
+      (wrap-base-url)
+      (wrap-authentication backend)))
