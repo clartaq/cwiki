@@ -9,27 +9,35 @@
             [ring.util.response :refer [redirect]]))
 
 (defn get-login []
+  "Gather user credentials for login."
   (layout/view-login-page))
 
-(defn post-login [{{username "user-name" password "password"} :multipart-params
-                   session                                    :session :as req}]
+(defn post-login
+  "Check that the user name and password match credentials in the database.
+  If so, add the identity to the current session, otherwise redirect back
+  to the login page."
+  [{{username "user-name" password "password"} :multipart-params
+    session                                    :session :as req}]
   (if-let [user (db/get-user-by-username-and-password username password)]
 
     ; If authenticated
     (do
-      (db/set-current-user user)
-      (let [new-session (assoc (redirect "/")
-                          :session (assoc session :identity (:user_id user)))]
+      (let [identity (dissoc user :user_password)
+            new-session (assoc (redirect "/")
+                          :session (assoc session :identity identity))]
         new-session))
 
     ; Otherwise
     (redirect "/login")))
 
 (defn get-logout
+  "Ask the user to verify that they want to log out."
   [req]
   (layout/view-logout-page req))
 
-(defn post-logout [{session :session}]
+(defn post-logout
+  "Log out the current user."
+  [{session :session}]
   (assoc (redirect "/login")
     :session (dissoc session :identity)))
 

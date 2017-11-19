@@ -83,10 +83,12 @@
   "Return the standard navigation menu component for the application.
   The options argument can make the menu context specific, as for when
   editing or not (the only option now)."
-  ([post-map]
-   (wiki-hmenu-component post-map {}))
-  ([post-map options]
+  ([post-map req]
+   (wiki-hmenu-component post-map req {}))
+  ([post-map req options]
    (let [allow-editing (not (:editing options))
+         role (get-in req [:session :identity :user_role])
+         is-admin (= ":admin" (get-in req [:session :identity :user_role]))
          edit-link (and post-map
                         allow-editing
                         (get-edit-link-for-existing-page post-map))
@@ -103,14 +105,16 @@
        (when (and (db/db-exists?)
                   (db/find-post-by-title "About"))
          (menu-item-span [:a {:href "/about"} "About"]))
-       (menu-item-span [:a {:href "/search"} "Search"])
-       (menu-item-span [:a {:href "/logout"} "Sign Off"])]])))
+       (when is-admin
+         (menu-item-span [:a {:href "/admin"} "Admin"]))
+       (menu-item-span [:a {:href "/logout"} "Sign Off"])
+       (menu-item-span [:a {:href "/search"} "Search"])]])))
 
 (defn wiki-header-component
   "Return the standard wiki page header."
-  ([post-map]
-   (wiki-header-component post-map {}))
-  ([post-map options]
+  ([post-map req]
+   (wiki-header-component post-map req {}))
+  ([post-map req options]
    [:header {:class "header"}
     [:div {:class "header-wrapper"}
      [:hgroup {:class "left-header-wrapper"}
@@ -118,7 +122,7 @@
       [:p {:class "brand-sub-title"}
        "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
                     "Wiki"]]]
-     (wiki-hmenu-component post-map options)]]))
+     (wiki-hmenu-component post-map req options)]]))
 
 (defn no-nav-header-component
   "Return the wiki page header without the nav menu items."
@@ -177,7 +181,7 @@
     [:p program-name-and-version]]])
 
 (defn view-wiki-page
-  [post-map]
+  [post-map req]
   (let [content (db/page-map->content post-map)
         sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
     (html5
@@ -188,10 +192,10 @@
        (include-js "/js/mathjax-config.js")
        (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]
       [:body {:class "page"}
-       (wiki-header-component post-map)
+       (wiki-header-component post-map req)
        [:div {:class "sidebar-and-article"}
         [:aside {:class "left-aside"}
-         (limited-width-content-component sidebar-content)]
+         (limited-width-content-component sidebar-content req)]
         [:article {:class "page-content"}
          (limited-width-title-component post-map)
          (limited-width-content-component content)]]
@@ -222,37 +226,37 @@
 
 (defn compose-all-pages-page
   "Return a page listing all of the pages in the wiki."
-  []
+  [req]
   (let [all-pages-query (db/get-all-page-names)
         processed-titles (process-title-set all-pages-query)
         content (s/join ["Pages:\n"
                          processed-titles])
         post-map (db/create-new-post-map "All Pages" content)]
-    (view-wiki-page post-map)))
+    (view-wiki-page post-map req)))
 
 (defn compose-all-users-page
   "Return a page listing all of the users known to the wiki."
-  []
+  [req]
   (let [all-users-query (db/get-all-users)
         processed-names (process-name-set all-users-query)
         content (s/join ["Users:\n"
                          processed-names])
         post-map (db/create-new-post-map "All Users" content)]
-    (view-wiki-page post-map)))
+    (view-wiki-page post-map req)))
 
 (defn compose-all-namespaces-page
   "Return a page listing of all of the namespaces in the wiki."
-  []
+  [req]
   (let [all-namespaces-query (db/get-all-namespaces)
         processed-names (process-name-set all-namespaces-query)
         content (s/join ["Namespaces:\n"
                          processed-names])
         post-map (db/create-new-post-map "All Namespaces" content)]
-    (view-wiki-page post-map)))
+    (view-wiki-page post-map req)))
 
 (defn compose-all-tags-page
   "Return a page listing all of the tags in the wiki."
-  []
+  [req]
   (let [all-tags-query (db/get-all-tags)
         processed-names (process-name-set all-tags-query)
         page-start (if (zero? (count processed-names))
@@ -261,7 +265,7 @@
         content (s/join [page-start
                          processed-names])
         post-map (db/create-new-post-map "All Tags" content)]
-    (view-wiki-page post-map)))
+    (view-wiki-page post-map req)))
 
 (defn compose-404-page
   "Build and return a 'Not Found' page."
@@ -287,7 +291,7 @@
   difference is based on whether or not the post-map passed as
   argument has a nil entry for the :post_id key in the map -- nil causes
   creation, non-nil is an edit."
-  [post-map]
+  [post-map req]
   (let [id (db/page-map->id post-map)
         title (db/page-map->title post-map)
         content (db/page-map->content post-map)
@@ -301,10 +305,10 @@
        [:title tab-title]
        (include-css "/css/styles.css")]
       [:body {:class "page"}
-       (wiki-header-component post-map {:editing true})
+       (wiki-header-component post-map req {:editing true})
        [:div {:class "sidebar-and-article"}
         [:aside {:class "left-aside"}
-         (limited-width-content-component sidebar-content)]
+         (limited-width-content-component sidebar-content req)]
         [:article {:class "page-content"}
          [:div
           (form-to {:enctype "multipart/form-data"}
@@ -403,7 +407,7 @@
 
 (defn view-logout-page
   [{session :session}]
-  (if-let [user-name (db/user-id->user-name (:identity session))]
+  (if-let [user-name (:user_name (:identity session))]
     (post-logout-page user-name)
     (no-user-to-logout-page)))
 
