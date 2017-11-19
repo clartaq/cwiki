@@ -30,12 +30,6 @@
 (defn login []
   (layout/view-login-page))
 
-(defn login-authenticate []
-  (layout/view-login-authenticate-page))
-
-(defn logout []
-  (layout/view-logout-page))
-
 (defn post-login [{{username "user-name" password "password"} :multipart-params
                    session :session :as req}]
   (println "post-login: username:" username ", password: " password "\n"
@@ -56,8 +50,8 @@
     (redirect "/login")))
 
 (defn get-logout
-  [x]
-  (layout/view-logout-page))
+  [req]
+  (layout/view-logout-page req))
 
 (defn post-logout [{session :session}]
   (assoc (redirect "/login")
