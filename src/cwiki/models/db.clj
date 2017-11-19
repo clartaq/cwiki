@@ -7,19 +7,6 @@
            [cwiki.util.special :as special])
   (:import (java.io File)))
 
-;; Things to deal with the current user.
-
-(def current-user (atom nil))
-
-(defn get-current-user
-  []
-  @current-user)
-
-(defn set-current-user
-  [m]
-  (println "Setting current-user to:" m)
-  (reset! current-user m))
-
 ;; Things that deal with the database file and connection.
 
 (def db-file-name "resources/public/db/database.db")
@@ -153,16 +140,9 @@
   (prn username password)
   (let [result (find-user-by-name username)
         pw-hash (:user_password result)]
-    (println "result:" result)
-    (println "pw-hash:" pw-hash)
     (when (and (= (:user-name result))
                (hashers/check password pw-hash))
       result)))
-
-  ;(reduce (fn [_ user]
-  ;          (if (and (= (:user_name user) username)
-  ;                   (hashers/check password (:password-hash user)))
-  ;            (reduced user))) (find-user-by-name username)))
 
 (defn lookup-user
   "Look up a user an verify that the password is a match. If the user

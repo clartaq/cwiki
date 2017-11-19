@@ -37,33 +37,33 @@
           raw-post (db/find-post-by-title title)]
       (cond
         raw-post (let [new-body (db/page-map->content raw-post)
-                       new-page (layout/view-wiki-page raw-post)]
+                       new-page (layout/view-wiki-page raw-post request)]
                    (build-response new-page request))
 
-        (= title "All Pages") (let [new-body (layout/compose-all-pages-page)]
+        (= title "All Pages") (let [new-body (layout/compose-all-pages-page request)]
                                 (build-response new-body request))
 
-        (= title "All Users") (let [new-body (layout/compose-all-users-page)]
+        (= title "All Users") (let [new-body (layout/compose-all-users-page request)]
                                 (build-response new-body request))
 
-        (= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page)]
+        (= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page request)]
                                      (build-response new-body request))
 
-        (= title "All Tags") (let [new-body (layout/compose-all-tags-page)]
+        (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
                                (build-response new-body request))
 
         (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
                                            new-body (layout/compose-create-or-edit-page
-                                                      (db/find-post-by-title title-only))]
+                                                      (db/find-post-by-title title-only) request)]
                                        (build-response new-body request))
         (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
                                              new-body (layout/view-wiki-page
-                                                        (db/find-post-by-title "Front Page"))]
+                                                        (db/find-post-by-title "Front Page") request)]
                                          (db/delete-page-by-id (db/title->page-id title-only))
                                          (build-response new-body request))
         :else (let [title-only (s/replace title "/create" "")
                     new-body (layout/compose-create-or-edit-page
-                               (db/create-new-post-map title-only))]
+                               (db/create-new-post-map title-only) request)]
                 (build-response new-body request))))))
 
 (defroutes app-routes
