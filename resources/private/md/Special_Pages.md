@@ -84,3 +84,8 @@ There are some orphan pages intentionally placed in the wiki when it is first us
 - **Deletable**: False
 - **Generated**: True
 
+## Admin Pages ##
+
+These are pages that can only be opened by a user with "admin" or administration privileges.
+
+See [[Admin Pages]] for more information.
