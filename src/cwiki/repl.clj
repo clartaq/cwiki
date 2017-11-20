@@ -1,7 +1,6 @@
 (ns cwiki.repl
   (:use cwiki.handler
         cwiki.models.db
-     ;   cwiki.components.registration
         ring.server.standalone
         [ring.middleware file-info file]))
 
