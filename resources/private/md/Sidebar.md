@@ -6,6 +6,7 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 * [[All Users]]
 * [[All Namespaces]]
 * [[All Tags]]
+* [[Preferences]]
 * [[Special Pages]]
 * [[Orphans]]
 * [[To Do]]
