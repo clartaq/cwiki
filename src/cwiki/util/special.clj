@@ -12,7 +12,7 @@
    {:name "About" :editable? true :deletable? true :generated? nil}
    {:name "Orphans" :editable? nil :deletable? nil :generated? true}
    {:name "Preferences" :editable? true :deletable? nil :generated? nil}
-   {:name "Admin" :editable? nil :deletable? nil :generated? nil}
+   {:name "Admin Pages" :editable? nil :deletable? nil :generated? nil}
    {:name "Compress" :editable? nil :deletable? nil :generated? true}
    {:name "Backup" :editable? nil :deletable? nil :generated? true}
    {:name "Restore" :editable? nil :deletable? nil :generated? true}
