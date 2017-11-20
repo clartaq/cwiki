@@ -15,7 +15,7 @@
             [cwiki.routes.login :refer [login-routes]]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [ring.util.response :refer [status]]))
+            [ring.util.response :refer [redirect status]]))
 
 (def backend (backends/session))
 
@@ -26,86 +26,67 @@
   (println "CWiki is shutting down"))
 
 (defn- build-response
-  [body req]
-  (-> (response/render body req)
-      (status 200)
-      (assoc :body body)))
-
-(defn page-finder-route
-  [body]
-  (fn [request]
-    (let [raw-title (u/url-decode (:uri request))
-          title (s/replace raw-title "/" "")
-          raw-post (db/find-post-by-title title)]
-      (cond
-        raw-post (let [new-body (db/page-map->content raw-post)
-                       new-page (layout/view-wiki-page raw-post request)]
-                   (build-response new-page request))
-
-        (= title "All Pages") (let [new-body (layout/compose-all-pages-page request)]
-                                (build-response new-body request))
-
-        (= title "All Users") (let [new-body (layout/compose-all-users-page request)]
-                                (build-response new-body request))
-
-        (= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page request)]
-                                     (build-response new-body request))
-
-        (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
-                               (build-response new-body request))
-
-        (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
-                                           new-body (layout/compose-create-or-edit-page
-                                                      (db/find-post-by-title title-only) request)]
-                                       (build-response new-body request))
-        (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
-                                             new-body (layout/view-wiki-page
-                                                        (db/find-post-by-title "Front Page") request)]
-                                         (db/delete-page-by-id (db/title->page-id title-only))
-                                         (build-response new-body request))
-        :else (let [title-only (s/replace title "/create" "")
-                    new-body (layout/compose-create-or-edit-page
-                               (db/create-new-post-map title-only) request)]
-                (build-response new-body request))))))
+  ([body req]
+   (build-response body req 200))
+  ([body req stat]
+   (-> (response/render body req)
+       (status stat)
+       (assoc :body body))))
 
 (defn is-authenticated-user?
   [request]
-  (println "is-authenticated-user?")
-  (println "request:" request)
-  (println "identity:" (get-in request [:session :identity]))
-  (if (get-in request [:session :identity])
-    true
-    (error "Only authenticated users allowed")))
+  (get-in request [:session :identity]))
 
 (defn is-admin-user?
   [request]
-  (println "is-admin-user?")
-  (println "role:" (get-in request [:session :identity :user_role]))
   (= ":admin" (get-in request [:session :identity :user_role])))
 
 (defn is-cwiki-user?
   [request]
   (= ":cwiki" (get-in request [:session :identity :user_role])))
 
-(defn any-access
+(defn respond-to-page-request
   [request]
-  (println "any-access")
-  true)
+  (let [raw-title (u/url-decode (:uri request))
+        title (s/replace-first raw-title "/" "")
+        raw-post (db/find-post-by-title title)]
+    (cond
+      raw-post (let [new-body (db/page-map->content raw-post)
+                     new-page (layout/view-wiki-page raw-post request)]
+                 (build-response new-page request))
 
-(defn my-unauthorized-handler
-  [request metadata]
-  (-> (response/render "Unauthorized request" request)
-      (assoc :status 403)))
+      (= title "All Pages") (let [new-body (layout/compose-all-pages-page request)]
+                              (build-response new-body request))
 
-(def rules [{:pattern #"^/admin/.*"
-             :handler {:or [is-admin-user? is-cwiki-user?]} ;admin-access operator-access]}
-             :redirect "/notauthorized"}
-            {:pattern #"^/login$"
-             :handler any-access
-             :on-error (fn [req _] (response/render "Problem with any-access" req))}
-            {:pattern #"^/.*"
-             :handler is-authenticated-user? ;authenticated-access
-             :on-error (fn [req _] (response/render "Not authenticated ;)" req ))}])
+      (= title "All Users") (let [new-body (layout/compose-all-users-page request)]
+                              (build-response new-body request))
+
+      (= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page request)]
+                                   (build-response new-body request))
+
+      (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
+                             (build-response new-body request))
+
+      (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
+                                         new-body (layout/compose-create-or-edit-page
+                                                    (db/find-post-by-title title-only) request)]
+                                     (build-response new-body request))
+      (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
+                                           new-body (layout/view-wiki-page
+                                                      (db/find-post-by-title "Front Page") request)]
+                                       (db/delete-page-by-id (db/title->page-id title-only))
+                                       (build-response new-body request))
+      :else (let [title-only (s/replace title "/create" "")
+                  new-body (layout/compose-create-or-edit-page
+                             (db/create-new-post-map title-only) request)]
+              (build-response new-body request)))))
+
+(defn page-finder-route
+  [body]
+  (fn [request]
+    (if (is-authenticated-user? request)
+      (respond-to-page-request request)
+      (redirect "/login"))))
 
 (defroutes app-routes
            (route/resources "/")
@@ -123,13 +104,4 @@
       (handler/site)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
       (wrap-base-url)))
-
-;(def options {:rules rules :on-error my-unauthorized-handler}) ;on-error})
-;(def app (wrap-access-rules combined-routes options))
-;;; Wrap the handler with access rules (and run with jetty as example)
-;(defn -main
-;  [& args]
-;  (let [options {:rules rules :on-error on-error}
-;        app     (wrap-access-rules your-app-handler options)]
-;    (run-jetty app {:port 3000})))
 

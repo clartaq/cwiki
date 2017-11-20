@@ -4,6 +4,10 @@
             [cwiki.models.db :as db]
             [ring.util.response :refer [response redirect]]))
 
+(defn is-authenticated-user?
+  [request]
+  (get-in request [:session :identity]))
+
 (defn read-front-page
   "Read the complete post for the front page."
   []
@@ -25,10 +29,14 @@
   (layout/view-wiki-page (db/find-post-by-title title) req))
 
 (defn home [req]
-  (layout/view-wiki-page (read-front-page) req))
+  (if (is-authenticated-user? req)
+    (layout/view-wiki-page (read-front-page) req)
+    (redirect "/login")))
 
 (defn about [req]
-  (layout/view-wiki-page (read-about-page) req))
+  (if (is-authenticated-user? req)
+    (layout/view-wiki-page (read-about-page) req)
+    (redirect "/login")))
 
 (defroutes home-routes
            (GET "/" request (home request))
