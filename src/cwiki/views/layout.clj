@@ -22,7 +22,7 @@
            (java.util ArrayList)
            (com.vladsch.flexmark.util KeepType)))
 
-(def program-name-and-version "CWiki v0.0.3-SNAPSHOT")
+(def program-name-and-version "CWiki v0.0.3")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.
