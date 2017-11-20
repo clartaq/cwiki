@@ -97,7 +97,6 @@
    (wiki-hmenu-component post-map req {}))
   ([post-map req options]
    (let [allow-editing (not (:editing options))
-         role (get-in req [:session :identity :user_role])
          is-admin (= ":admin" (get-in req [:session :identity :user_role]))
          edit-link (and post-map
                         allow-editing
@@ -365,6 +364,7 @@
         (form-to {:enctype "multipart/form-data"}
                  [:post "login"]
                  [:h1 "Sign In"]
+                 [:p "You must be logged in to use this wiki."]
                  [:h5 "User Name"]
                  [:p (text-field {:autofocus   "autofocus"
                                   :placeholder "User Name"} "user-name")]
@@ -424,3 +424,19 @@
     (post-logout-page user-name)
     (no-user-to-logout-page)))
 
+(defn compose-not-yet-view [name]
+  (html5
+    (standard-head nil)
+    [:body {:class "page"}
+     (no-nav-header-component)
+     (sidebar-and-article
+       (no-content-aside)
+       [:div
+        [:h1 "That's Not Ready"]
+        [:p "There is no \"" name "\"route yet."]
+        [:div {:class "button-bar-container"}
+         [:input {:type    "button" :name "cancel-button"
+                  :value   "Cancel"
+                  :class   "topcoat-button--large"
+                  :onclick "window.history.back();"}]]])
+     (footer-component)]))
