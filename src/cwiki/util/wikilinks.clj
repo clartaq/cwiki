@@ -46,7 +46,7 @@
   "Return a link to be displayed in an existing page. As such, it
   may have separate display and link parts that must be handled."
   [link-parts]
-  (let [uri (u/url-encode (str "/" (:title-part link-parts)))
+  (let [uri (u/url-encode (str (:title-part link-parts)))
         h (hc/html (link-to uri (:display-part link-parts)))]
     h))
 
@@ -55,7 +55,7 @@
   [post-map]
   (let [page-title (db/page-map->title post-map)]
     (when (special/is-editable? page-title)
-      (let [uri (u/url-encode (str "/" page-title "/edit"))
+      (let [uri (u/url-encode (str page-title "/edit"))
             h (hc/html (link-to uri "Edit"))]
         h))))
 
@@ -65,7 +65,7 @@
   [post-map]
   (let [page-title (db/page-map->title post-map)]
     (when (special/is-deletable? page-title)
-      (let [uri (u/url-encode (str "/" page-title "/delete"))
+      (let [uri (u/url-encode (str page-title "/delete"))
             h (hc/html (link-to uri "Delete"))]
         h))))
 
@@ -75,7 +75,7 @@
   be handled."
   [link-parts]
   (let [page-title (:title-part link-parts)
-        uri (u/url-encode (str "/" page-title))
+        uri (u/url-encode (str page-title))
         h (hc/html (link-to {:style "color:red"}
                             uri (:display-part link-parts)))]
     h))
