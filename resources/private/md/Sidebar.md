@@ -13,10 +13,11 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 
 ###### Maintenance ######
 
-* [[Clean Database]]
-* [[Backup CWiki]]
-* [[Restore CWiki]]
-* [[Add User]]
+* [[Compress]]
+* [[Backup]]
+* [[Restore]]
+* [[New User]]
 * [[Edit User]]
 * [[Delete User]]
+* [[Reset Password]]
 
