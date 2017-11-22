@@ -2,11 +2,8 @@
   (:require [compojure.core :refer :all]
             [cwiki.views.layout :as layout]
             [cwiki.models.db :as db]
+            [cwiki.util.req-info :as ri]
             [ring.util.response :refer [response redirect]]))
-
-(defn is-authenticated-user?
-  [request]
-  (get-in request [:session :identity]))
 
 (defn read-front-page
   "Read the complete post for the front page."
@@ -25,16 +22,16 @@
 
 (defn save-new-page
   [title content req]
-  (db/insert-new-page! title content)
+  (db/insert-new-page! title content (ri/req->user-id req))
   (layout/view-wiki-page (db/find-post-by-title title) req))
 
 (defn home [req]
-  (if (is-authenticated-user? req)
+  (if (ri/is-authenticated-user? req)
     (layout/view-wiki-page (read-front-page) req)
     (redirect "/login")))
 
 (defn about [req]
-  (if (is-authenticated-user? req)
+  (if (ri/is-authenticated-user? req)
     (layout/view-wiki-page (read-about-page) req)
     (redirect "/login")))
 
