@@ -351,6 +351,24 @@
           (link-to {:class "btn btn-primary"} "/" "Take me Home")]))
      (footer-component)]))
 
+(defn compose-403-page
+  []
+  (html5
+    (standard-head nil)
+    [:body {:class "page"}
+     (no-nav-header-component)
+     (sidebar-and-article
+       (no-content-aside)
+       (centered-content-component
+         [:div
+          [:h1 {:class "info-warning"} "403 - Forbidden"]
+          [:p "You are not allowed to perform this action."]
+          [:div {:class "button-bar-container"}
+           [:input {:type    "button" :name "cancel-button"
+                    :value   "Cancel"
+                    :class   "topcoat-button--large"
+                    :onclick "window.history.back();"}]]]))]))
+
 (defn view-login-page
   "Display a login page and gather the user name and password to log in."
   []
