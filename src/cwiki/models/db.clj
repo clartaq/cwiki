@@ -23,12 +23,11 @@
   ([title content]
    (create-new-post-map title content 1))
   ([title content author-id]
-   (let [pm {:page_created  (c/to-sql-time (t/now))
-             :page_modified (c/to-sql-time (t/now))
-             :page_author   author-id
-             :page_title    title
-             :page_content  content}]
-     pm)))
+   {:page_created  (c/to-sql-time (t/now))
+    :page_modified (c/to-sql-time (t/now))
+    :page_author   author-id
+    :page_title    title
+    :page_content  content}))
 
 ; Need "Front Page" to be first in list since some tests depend on it
 ; being in that position. Kinda fragile.
@@ -117,6 +116,10 @@
                       db-name
                       ["select user_id from users where user_name=?" name])))))
 
+(defn get-cwiki-user-id
+  []
+  (user-name->user-id "CWiki"))
+
 (defn user-id->user-name
   "Given a user id, return a human-readable user name."
   ([id]
@@ -158,6 +161,13 @@
   ([title] (find-post-by-title title sqlite-db))
   ([title db-name]
    (first (jdbc/query db-name ["select * from pages where page_title=?" title]))))
+
+(defn title->user-id
+  ([title] (title->user-id title sqlite-db))
+  ([title db-name]
+   (:page_author
+     (first (jdbc/query db-name
+                        ["select page_author from pages where page_title=?" title])))))
 
 (defn page-id->title
   ([id] (page-id->title id sqlite-db))
@@ -249,11 +259,15 @@
 
 (defn insert-new-page!
   "Insert a new page into the database given a title and content.
-  Return the post map for the new page (including id and dates)."
-  [title content]
-  (let [post-map (create-new-post-map title content)]
-    (jdbc/insert! sqlite-db :pages post-map)
-    (find-post-by-title title)))
+  Return the post map for the new page (including id and dates).
+  If the arguments do not include an author id, use the CWiki
+  author id (same as CWiki user id)."
+  ([title content]
+   (insert-new-page! title content (get-cwiki-user-id)))
+  ([title content author-id]
+   (let [post-map (create-new-post-map title content author-id)]
+     (jdbc/insert! sqlite-db :pages post-map)
+     (find-post-by-title title))))
 
 (defn delete-page-by-id
   [page-id]

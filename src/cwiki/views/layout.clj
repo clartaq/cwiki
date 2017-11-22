@@ -1,6 +1,10 @@
 (ns cwiki.views.layout
-  (:require [clj-time.format :as f]
+  (:require [clj-time.core :as t]
+            [clj-time.format :as f]
             [clj-time.coerce :as c]
+            [clojure.string :as s]
+            [compojure.response :as response]
+            [cwiki.models.db :as db]
             [cwiki.util.special :refer [is-special?]]
             [cwiki.util.wikilinks :refer [replace-wikilinks
                                           get-edit-link-for-existing-page
@@ -8,19 +12,15 @@
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to hidden-field submit-button text-area
                                  text-field password-field]]
-            [hiccup.element :refer [link-to]]
-            [clj-time.core :as t]
-            [compojure.response :as response]
-            [cwiki.models.db :as db]
-            [clojure.string :as s])
+            [hiccup.element :refer [link-to]])
   (:import (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
            (com.vladsch.flexmark.html HtmlRenderer HtmlRenderer$Builder)
            (com.vladsch.flexmark.parser Parser Parser$Builder
                                         ParserEmulationProfile)
+           (com.vladsch.flexmark.util KeepType)
            (com.vladsch.flexmark.util.options MutableDataSet)
-           (java.util ArrayList)
-           (com.vladsch.flexmark.util KeepType)))
+           (java.util ArrayList)))
 
 (def program-name-and-version "CWiki v0.0.4-SNAPSHOT")
 

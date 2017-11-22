@@ -9,10 +9,12 @@
             [compojure.response :as response]
             [compojure.route :as route]
             [cwiki.models.db :as db]
-            [cwiki.views.layout :as layout]
             [cwiki.routes.admin :refer [admin-routes]]
             [cwiki.routes.home :refer [home-routes]]
             [cwiki.routes.login :refer [login-routes]]
+            [cwiki.util.authorization :as ath]
+            [cwiki.util.req-info :as ri]
+            [cwiki.views.layout :as layout]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.util.response :refer [redirect status]]))
@@ -32,18 +34,6 @@
    (-> (response/render body req)
        (status stat)
        (assoc :body body))))
-
-(defn is-authenticated-user?
-  [request]
-  (get-in request [:session :identity]))
-
-(defn is-admin-user?
-  [request]
-  (= ":admin" (get-in request [:session :identity :user_role])))
-
-(defn is-cwiki-user?
-  [request]
-  (= ":cwiki" (get-in request [:session :identity :user_role])))
 
 (defn respond-to-page-request
   [request]
@@ -67,24 +57,36 @@
       (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
                              (build-response new-body request))
 
-      (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")
-                                         new-body (layout/compose-create-or-edit-page
-                                                    (db/find-post-by-title title-only) request)]
-                                     (build-response new-body request))
-      (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")
-                                           new-body (layout/view-wiki-page
-                                                      (db/find-post-by-title "Front Page") request)]
-                                       (db/delete-page-by-id (db/title->page-id title-only))
-                                       (build-response new-body request))
-      :else (let [title-only (s/replace title "/create" "")
-                  new-body (layout/compose-create-or-edit-page
-                             (db/create-new-post-map title-only) request)]
-              (build-response new-body request)))))
+      (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")]
+                                     (if (ath/can-edit-and-delete? request title-only)
+                                       (let [new-body (layout/compose-create-or-edit-page
+                                                        (db/find-post-by-title title-only) request)]
+                                         (build-response new-body request))
+                                       ;else
+                                       (build-response (layout/compose-403-page) request 403)))
+      (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")]
+                                       (if (ath/can-edit-and-delete? request title-only)
+                                         (let [new-body (layout/view-wiki-page
+                                                          (db/find-post-by-title "Front Page") request)]
+                                           (db/delete-page-by-id (db/title->page-id title-only))
+                                           (build-response new-body request))
+                                         ;else
+                                         (build-response (layout/compose-403-page) request 403)))
+      :else (if (ath/can-create? request)
+              (let [title-only (s/replace title "/create" "")
+                    new-body (layout/compose-create-or-edit-page
+                               (db/create-new-post-map
+                                 title-only
+                                 ""
+                                 (ri/req->user-id request)) request)]
+                (build-response new-body request))
+              ;else
+              (build-response (layout/compose-403-page) request 403)))))
 
 (defn page-finder-route
   [body]
   (fn [request]
-    (if (is-authenticated-user? request)
+    (if (ri/is-authenticated-user? request)
       (respond-to-page-request request)
       (redirect "/login"))))
 
