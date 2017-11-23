@@ -7,6 +7,8 @@ At the lowest, most restricted level, there are **readers**. As the name implies
 ## Writer ##
 Users with the **writers** role can write stuff in the wiki. They can create new pages, delete pages they have written, and link to their own or existing pages. They can add as much stuff as they want. They just can't change anything that some other user has written.
 
+This makes the role a bit problematic. Even though they can create any content they want, they can't point any other part of the wiki at their content without the assistance of an editor or admin user (see below) since they can't edit the links in pages written by others to point at their new content. If you don't need to restrict someone to the role of a writer, make them an editor instead.
+
 ## Editor ##
 
 That's the role of **editors**.  In addition to all of the capabilities of writers, an editor can revise the work of others. Basically, they can do the same things a writer can do, but to anyone's pages.
