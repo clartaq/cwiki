@@ -393,12 +393,13 @@ li:first-child {
 }
 
 /* Some link styling. */
-a {
+
+a:link {
     color: #5580ff;
     text-decoration: none;
 }
 
-a:hover {
+a:focus {
     color: #5580ff;
     text-decoration: underline;
 }
@@ -409,12 +410,12 @@ a:visited {
     text-decoration: none;
 }
 
-a:active {
+a:hover {
     color: #5580ff;
     text-decoration: underline;
 }
 
-a:focus {
+a:active {
     color: #5580ff;
     text-decoration: underline;
 }
