@@ -5,7 +5,8 @@
             [clojure.string :as s]
             [compojure.response :as response]
             [cwiki.models.db :as db]
-            [cwiki.util.special :refer [is-special?]]
+            [cwiki.util.authorization :as ath]
+            [cwiki.util.req-info :as ri]
             [cwiki.util.wikilinks :refer [replace-wikilinks
                                           get-edit-link-for-existing-page
                                           get-delete-link-for-existing-page]]
@@ -97,15 +98,20 @@
    (wiki-hmenu-component post-map req {}))
   ([post-map req options]
    (let [allow-editing (not (:editing options))
-         is-admin (= ":admin" (get-in req [:session :identity :user_role]))
+         title (db/page-map->title post-map)
+         can-edit-and-delete (ath/can-edit-and-delete? req title)
          edit-link (and post-map
                         allow-editing
-                        (get-edit-link-for-existing-page post-map))
+                        can-edit-and-delete
+                        (get-edit-link-for-existing-page post-map req))
          delete-link (and post-map
                           allow-editing
-                          (get-delete-link-for-existing-page post-map))]
+                          can-edit-and-delete
+                          (get-delete-link-for-existing-page post-map req))]
      [:nav {:class "hmenu"}
       [:p
+       (when (ath/can-create? req)
+         (menu-item-span [:a {:href "/New Page/create"} "New"]))
        (when edit-link
          (menu-item-span edit-link))
        (when delete-link
@@ -114,8 +120,8 @@
        (when (and (db/db-exists?)
                   (db/find-post-by-title "About"))
          (menu-item-span [:a {:href "/about"} "About"]))
-       (when is-admin
-         (menu-item-span [:a {:href "/admin"} "Admin"]))
+       (when (ri/is-admin-user? req)
+         (menu-item-span [:a {:href "/Admin"} "Admin"]))
        (menu-item-span [:a {:href "/logout"} "Sign Off"])
        (menu-item-span [:a {:href "/search"} "Search"])]])))
 
@@ -173,10 +179,10 @@
 
 (defn- limited-width-content-component
   "Center the content in a centered element and return it."
-  [& content]
+  [req & content]
   [:div
    (if content
-     (let [txt-with-links (replace-wikilinks (first content))]
+     (let [txt-with-links (replace-wikilinks (first content) req)]
        (convert-markdown-to-html txt-with-links))
      [:p error-span "There is not centered content for this page."])])
 
@@ -193,7 +199,7 @@
   [req]
   (let [sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
     [:aside {:class "left-aside"}
-     (limited-width-content-component sidebar-content req)]))
+     (limited-width-content-component req sidebar-content)]))
 
 (defn- sidebar-and-article
   "Return a sidebar and article div with the given content."
@@ -252,7 +258,7 @@
        (sidebar-and-article
          (sidebar-aside req)
          [:div (limited-width-title-component post-map)
-          (limited-width-content-component content)])
+          (limited-width-content-component req content)])
        (footer-component)])))
 
 ;;
