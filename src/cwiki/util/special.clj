@@ -12,14 +12,14 @@
    {:name "About" :editable? true :deletable? true :generated? nil}
    {:name "Orphans" :editable? nil :deletable? nil :generated? true}
    {:name "Preferences" :editable? true :deletable? nil :generated? nil}
-   {:name "Admin Pages" :editable? nil :deletable? nil :generated? nil}
-   {:name "Compress" :editable? nil :deletable? nil :generated? true}
-   {:name "Backup" :editable? nil :deletable? nil :generated? true}
-   {:name "Restore" :editable? nil :deletable? nil :generated? true}
-   {:name "New User" :editable? nil :deletable? nil :generated? true}
-   {:name "Edit User" :editable? nil :deletable? nil :generated? true}
-   {:name "Delete User" :editable? nil :deletable? nil :generated? true}
-   {:name "Reset Password" :editable? nil :deletable? nil :generated? true}])
+   {:name "Admin" :editable? nil :deletable? nil :generated? nil :admin-only? true}
+   {:name "Compress" :editable? nil :deletable? nil :generated? true :admin-only? true}
+   {:name "Backup" :editable? nil :deletable? nil :generated? true :admin-only? true}
+   {:name "Restore" :editable? nil :deletable? nil :generated? true :admin-only? true}
+   {:name "New User" :editable? nil :deletable? nil :generated? true :admin-only? true}
+   {:name "Edit User" :editable? nil :deletable? nil :generated? true :admin-only? true}
+   {:name "Delete User" :editable? nil :deletable? nil :generated? true :admin-only? true}
+   {:name "Reset Password" :editable? nil :deletable? nil :generated? true :admin-only? true}])
 
 (defn find-first-with-name
   "Return the map for the 'special' page with the name
@@ -55,6 +55,12 @@
   [page-name]
   (if-let [m (find-first-with-name page-name)]
     (:generated? m)
+    nil))
+
+(defn is-admin-only?
+  [page-name]
+  (if-let [m (find-first-with-name page-name)]
+    (:admin-only? m)
     nil))
 
 (defn get-all-special-page-names
