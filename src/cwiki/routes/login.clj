@@ -8,8 +8,9 @@
             [cwiki.views.layout :as layout]
             [ring.util.response :refer [redirect]]))
 
-(defn get-login []
+(defn get-login
   "Gather user credentials for login."
+  [req]
   (layout/view-login-page))
 
 (defn post-login
@@ -42,7 +43,7 @@
     :session (dissoc session :identity)))
 
 (defroutes login-routes
-           (GET "/login" [] (get-login))
+           (GET "/login" [] get-login)
            (POST "/login" [] post-login)
            (GET "/logout" [] get-logout)
            (POST "/logout" [] post-logout))
