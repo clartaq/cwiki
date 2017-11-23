@@ -3,7 +3,7 @@
             [cwiki.views.layout :as layout]
             [cwiki.models.db :as db]
             [cwiki.util.req-info :as ri]
-            [ring.util.response :refer [response redirect]]))
+            [ring.util.response :refer [redirect]]))
 
 (defn read-front-page
   "Read the complete post for the front page."
