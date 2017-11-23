@@ -28,3 +28,7 @@ You may be asking yourself "If CWiki is a personal wiki, why does it allow multi
 Similar to the "Why Users?" question, it's a matter of keeping things separate when you have more than one user.
 
 It can make initially signing in a bit more of a hassle every time you do it, but you can have your browser remember you login credentials if you want.
+
+#### Why Doesn't the Content of a Page Use the Entire Width of the Browser Window? ####
+
+This is on purpose. Since CWiki is intended to contain primarily readable content, the content is restricted in width so it is easier to read. Beyond a certain line length, it becomes more difficult to read text. Therefore, CWiki restricts lines to about 70 characters.

@@ -1,6 +1,8 @@
 This is an ever-evolving list of things that need doing.
 
-* Put role-based users in place.
+* The routes to the admin pages are spelled, hyphenated, and capitalized differently in different places in the program.
+* Add validation to login page and other forms.
+* New page creation should check for an existing page of the same name before saving.
 * Make searches case-insensitive for the first letter in the page name.
 * Implement Namespaces? Would make separating out groups of pages easier, like all "Help" pages.
 * Add a tagging system. Look into hierarchical tagging systems.
@@ -13,8 +15,10 @@ This is an ever-evolving list of things that need doing.
 * Backup and restore for the database.
 * Import/Export. Export pages to Markdown, HTML, PDF (?).
 * Add the ability to generate a Table of Contents (TOC) for long pages.
-* Version tracking.
+* Version tracking?
 * ~~Be consistent in the use of the name -- either "CWiki" or "cwiki".~~
 * ~~Layout and use the Sidebar.~~
 * ~~Add extensions and CSS for tables.~~
 * ~~The edit and create pages should not have a "Delete" link in the nav bar.~~
+* ~~Put role-based users in place.~~
+
