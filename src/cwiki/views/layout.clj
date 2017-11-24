@@ -11,8 +11,9 @@
                                           get-edit-link-for-existing-page
                                           get-delete-link-for-existing-page]]
             [hiccup.page :refer [html5 include-css include-js]]
-            [hiccup.form :refer [form-to hidden-field submit-button text-area
-                                 text-field password-field]]
+            [hiccup.form :refer [drop-down email-field form-to hidden-field
+                                 password-field select-options
+                                 submit-button text-area text-field]]
             [hiccup.element :refer [link-to]])
   (:import (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
@@ -374,6 +375,63 @@
                     :value   "Cancel"
                     :class   "topcoat-button--large"
                     :onclick "window.history.back();"}]]]))]))
+
+(defn compose-user-already-exists-page
+  []
+  (html5
+    (standard-head nil)
+    [:body {:class "page"}
+     (no-nav-header-component)
+     (sidebar-and-article
+       (no-content-aside)
+       (centered-content-component
+         [:div
+          [:h1 {:class "info-warning"} "403 - Forbidden"]
+          [:p "A user with this name already exists."]
+          [:div {:class "button-bar-container"}
+           [:input {:type    "button" :name "cancel-button"
+                    :value   "Cancel"
+                    :class   "topcoat-button--large"
+                    :onclick "window.history.back();"}]]]))]))
+
+(defn view-create-user-page
+  "Display a page with a form to create a new user."
+  [req]
+  (println "view-create-user-page: req:" req)
+  (println "headers:" (:headers req))
+  (println "(type headers):" (type (:headers req)))
+  (println "(keys headers):" (keys (:headers req)))
+  (println "referer:" (get (:headers req) "referer"))
+  (html5
+    (standard-head nil)
+    [:body {:class "page"}
+     (no-nav-header-component)
+     (sidebar-and-article
+       (no-content-aside)
+       [:div
+        (form-to {:enctype "multipart/form-data"}
+                 [:post "create-user"]
+                 (hidden-field "referer" (get (:headers req) "referer"))
+                 [:h1 "Create A New User"]
+                 [:p "Enter information describing the new user."]
+                 [:h5 "User Name"]
+                 [:p (text-field {:autofocus   "autofocus"
+                                  :placeholder "User Name"} "user-name")]
+                 [:h5 "Password"]
+                 [:p (password-field "password")]
+                 [:h5 "Role"]
+                 (drop-down "user-role"
+                            ["reader" "writer" "editor" "admin"] "reader")
+                 [:h5 "Password Recovery email"]
+                 [:p (email-field {:placeholder "email"} "recovery-email")]
+                 [:div {:class "button-bar-container"}
+                  (submit-button {:id    "login-button"
+                                  :class "topcoat-button--large"} "Create")
+                  [:input {:type    "button" :name "cancel-button"
+                           :value   "Cancel"
+                           :class   "topcoat-button--large"
+                           :onclick "window.history.back();"}]])])
+     (footer-component)]))
 
 (defn view-login-page
   "Display a login page and gather the user name and password to log in."
