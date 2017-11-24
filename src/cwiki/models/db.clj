@@ -284,6 +284,23 @@
         post-map (create-new-post-map title content id)]
     (jdbc/insert! sqlite-db :pages post-map)))
 
+(defn add-user
+  ([user-name user-password user-role]
+   (add-user user-name user-password user-role nil))
+  ([user-name user-password user-role user-email]
+   (let [role-as-keyword (keyword user-role)
+         usr {:user_name              user-name
+              :user_role              role-as-keyword
+              :user_password          (hashers/derive user-password)
+              :user_new_password      nil
+              :user_new_password_time nil
+              :user_email             user-email
+              :user_email_token       0
+              :user_email_expires     nil
+              :user_touched           (c/to-sql-time (t/now))
+              :user_registration      (c/to-sql-time (t/now))}]
+     (jdbc/insert! sqlite-db :users usr))))
+
 (defn- add-initial-users!
   []
   (println "Adding initial users.")
