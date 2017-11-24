@@ -12,11 +12,11 @@
    {:name "About" :editable? true :deletable? true :generated? nil}
    {:name "Orphans" :editable? nil :deletable? nil :generated? true}
    {:name "Preferences" :editable? true :deletable? nil :generated? nil}
-   {:name "Admin" :editable? nil :deletable? nil :generated? nil :admin-only? true}
+   {:name "Admin" :editable? true :deletable? true :generated? nil :admin-only? true}
    {:name "Compress" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "Backup" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "Restore" :editable? nil :deletable? nil :generated? true :admin-only? true}
-   {:name "New User" :editable? nil :deletable? nil :generated? true :admin-only? true}
+   {:name "create-user" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "Edit User" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "Delete User" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "Reset Password" :editable? nil :deletable? nil :generated? true :admin-only? true}])
