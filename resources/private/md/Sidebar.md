@@ -14,11 +14,11 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 
 ###### Maintenance ######
 
-* [[Compress]]
-* [[Backup]]
-* [[Restore]]
+* [[compress|Compress]]
+* [[backup|Backup]]
+* [[restore|Restore]]
 * [[create-user|Create User]]
-* [[Edit User]]
-* [[Delete User]]
-* [[Reset Password]]
+* [[edit-profile|Edit User Profile]]
+* [[delete-user|Delete User]]
+* [[reset-password|Reset Password]]
 

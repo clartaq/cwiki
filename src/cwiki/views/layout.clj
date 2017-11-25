@@ -154,6 +154,9 @@
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
 
+; A span element with a bold, red "Warning:" at the beginning.
+(def warning-span [:span {:style {:color "red"}} [:strong "Warning: "]])
+
 (defn- centered-content-component
   "Put the content in a centered element and return it."
   [& content]
@@ -397,11 +400,6 @@
 (defn view-create-user-page
   "Display a page with a form to create a new user."
   [req]
-  (println "view-create-user-page: req:" req)
-  (println "headers:" (:headers req))
-  (println "(type headers):" (type (:headers req)))
-  (println "(keys headers):" (keys (:headers req)))
-  (println "referer:" (get (:headers req) "referer"))
   (html5
     (standard-head nil)
     [:body {:class "page"}
@@ -425,13 +423,47 @@
                  [:h5 "Password Recovery email"]
                  [:p (email-field {:placeholder "email"} "recovery-email")]
                  [:div {:class "button-bar-container"}
-                  (submit-button {:id    "login-button"
+                  (submit-button {:id    "create-user-button"
                                   :class "topcoat-button--large"} "Create")
                   [:input {:type    "button" :name "cancel-button"
                            :value   "Cancel"
                            :class   "topcoat-button--large"
                            :onclick "window.history.back();"}]])])
      (footer-component)]))
+
+(defn view-delete-user-page
+  [req]
+  (let [all-users (db/get-all-users)
+        current-user (ri/req->user-name req)
+        cleaned-users (disj all-users "CWiki" current-user)
+        _ (println "cleaned-users:" cleaned-users)
+        ]
+    (if (zero? (count cleaned-users))
+      (println "No available users to delete")
+      (html5
+        (standard-head nil)
+        [:body {:class "page"}
+         (no-nav-header-component)
+         (sidebar-and-article
+           (no-content-aside)
+           [:div
+            (form-to {:enctype "multipart/form-data"}
+                     [:post "delete-user"]
+                     (hidden-field "referer" (get (:headers req) "referer"))
+                     [:h1 "Delete A User"]
+                     [:p warning-span "This action cannot be undone."]
+                     [:h5 "User Name"]
+                     (drop-down "user-name" cleaned-users)
+                     [:h5 "Password"]
+                     [:p (password-field "password")]
+                     [:div {:class "button-bar-container"}
+                      (submit-button {:id    "login-button"
+                                      :class "topcoat-button--large"} "Delete")
+                      [:input {:type    "button" :name "cancel-button"
+                               :value   "Cancel"
+                               :class   "topcoat-button--large"
+                               :onclick "window.history.back();"}]])])
+         (footer-component)]))))
 
 (defn view-login-page
   "Display a login page and gather the user name and password to log in."
@@ -447,6 +479,9 @@
                  [:post "login"]
                  [:h1 "Sign In"]
                  [:p "You must be logged in to use this wiki."]
+                 [:div {:class "form-group"}
+                  [:input {:type "text" :id "user_name" :name "user_name"}]
+                  [:label {:for "user_name"} "User Name"]]
                  [:h5 "User Name"]
                  [:p (text-field {:autofocus   "autofocus"
                                   :placeholder "User Name"} "user-name")]

@@ -20,6 +20,8 @@
     padding: 0;
 }
 
+html { font-size: 1em; }
+
 /* Some typography */
 h1, h2, h3, h4, h5, h6 {
     background-color: transparent;
@@ -32,31 +34,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    font-size: 2em;
+    font-size: 2.074em;
     padding-bottom: 0.3em;
 }
 
 h2 {
-    font-size: 1.5em;
+    font-size: 1.728em;
     border-bottom: 1px solid #cccccc;
     padding-bottom: 0.3em;
 }
 
-h3 {
-    font-size: 1.25em;
-}
+h3 { font-size: 1.44em; }
 
-h4 {
-    font-size: 1em;
-}
+h4 { font-size: 1.2em; }
 
-h5 {
-    font-size: 0.875em;
-}
+h5 { font-size: 0.875em; }
 
-h6 {
-    font-size: 0.85em;
-}
+h6 { font-size: 0.85em; }
+
+small { font-size: 0.833em; }
 
 body {
     padding: 0.15em;
