@@ -1,4 +1,4 @@
-(ns cwiki.views.layout
+(ns cwiki.layouts.base
   (:require [clj-time.core :as t]
             [clj-time.format :as f]
             [clj-time.coerce :as c]

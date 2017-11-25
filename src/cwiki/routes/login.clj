@@ -5,7 +5,7 @@
 (ns cwiki.routes.login
   (:require [compojure.core :refer :all]
             [cwiki.models.db :as db]
-            [cwiki.views.layout :as layout]
+            [cwiki.layouts.base :as layout]
             [ring.util.response :refer [redirect]]))
 
 (defn get-login
