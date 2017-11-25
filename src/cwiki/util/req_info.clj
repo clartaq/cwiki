@@ -15,6 +15,11 @@
   [req]
   (get-in req [:session :identity :user_id]))
 
+(defn req->user-name
+  "Extract the name of the current user from the session."
+  [req]
+  (get-in req [:session :identity :user_name]))
+
 (defn req->user-role
   "Extract the role of the user."
   [req]
