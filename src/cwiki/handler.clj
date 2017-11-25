@@ -14,7 +14,7 @@
             [cwiki.routes.login :refer [login-routes]]
             [cwiki.util.authorization :as ath]
             [cwiki.util.req-info :as ri]
-            [cwiki.views.layout :as layout]
+            [cwiki.layouts.base :as layout]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.util.response :refer [redirect status]]))
