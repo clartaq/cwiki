@@ -76,7 +76,7 @@
     (str "CWiki: " (db/page-map->title post-map))
     "CWiki"))
 
-(defn- standard-head
+(defn standard-head
   "Return the standard html head section for the wiki html pages."
   [post-map]
   [:head
@@ -126,7 +126,7 @@
        (menu-item-span [:a {:href "/logout"} "Sign Off"])
        (menu-item-span [:a {:href "/search"} "Search"])]])))
 
-(defn- wiki-header-component
+(defn wiki-header-component
   "Return the standard wiki page header."
   ([post-map req]
    (wiki-header-component post-map req {}))
@@ -140,7 +140,7 @@
                     "Wiki"]]]
      (wiki-hmenu-component post-map req options)]]))
 
-(defn- no-nav-header-component
+(defn no-nav-header-component
   "Return the wiki page header without the nav menu items."
   []
   [:header {:class "header"}
@@ -190,7 +190,7 @@
        (convert-markdown-to-html txt-with-links))
      [:p error-span "There is not centered content for this page."])])
 
-(defn- footer-component
+(defn footer-component
   "Return the standard footer for the program pages. If
   needed, retrieve the program name and version from the server."
   []
@@ -205,7 +205,7 @@
     [:aside {:class "left-aside"}
      (limited-width-content-component req sidebar-content)]))
 
-(defn- sidebar-and-article
+(defn sidebar-and-article
   "Return a sidebar and article div with the given content."
   [sidebar article]
   [:div {:class "sidebar-and-article"}
@@ -340,7 +340,7 @@
 ;; Pages that show no sidebar information.
 ;;
 
-(defn- no-content-aside
+(defn no-content-aside
   "Return an aside section with no content."
   []
   [:aside {:class "left-aside"} ""])
@@ -430,40 +430,6 @@
                            :class   "topcoat-button--large"
                            :onclick "window.history.back();"}]])])
      (footer-component)]))
-
-(defn view-delete-user-page
-  [req]
-  (let [all-users (db/get-all-users)
-        current-user (ri/req->user-name req)
-        cleaned-users (disj all-users "CWiki" current-user)
-        _ (println "cleaned-users:" cleaned-users)
-        ]
-    (if (zero? (count cleaned-users))
-      (println "No available users to delete")
-      (html5
-        (standard-head nil)
-        [:body {:class "page"}
-         (no-nav-header-component)
-         (sidebar-and-article
-           (no-content-aside)
-           [:div
-            (form-to {:enctype "multipart/form-data"}
-                     [:post "delete-user"]
-                     (hidden-field "referer" (get (:headers req) "referer"))
-                     [:h1 "Delete A User"]
-                     [:p warning-span "This action cannot be undone."]
-                     [:h5 "User Name"]
-                     (drop-down "user-name" cleaned-users)
-                     [:h5 "Password"]
-                     [:p (password-field "password")]
-                     [:div {:class "button-bar-container"}
-                      (submit-button {:id    "login-button"
-                                      :class "topcoat-button--large"} "Delete")
-                      [:input {:type    "button" :name "cancel-button"
-                               :value   "Cancel"
-                               :class   "topcoat-button--large"
-                               :onclick "window.history.back();"}]])])
-         (footer-component)]))))
 
 (defn view-login-page
   "Display a login page and gather the user name and password to log in."
