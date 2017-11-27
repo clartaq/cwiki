@@ -93,6 +93,19 @@
                :class   "form-button"
                :onclick "window.history.back();"}]]]))
 
+(defn cannot-find-user
+  "Return a page saying that we cannot find the user now."
+  [req]
+  (base/short-message-template
+    [:div {:class "cwiki-form"}
+     [:p {:class "form-title"} "Well, That's Weird"]
+     [:p "Now that user cannot be found."]
+     [:div {:class "button-bar-container"}
+      [:input {:type    "button" :name "cancel-button"
+               :value   "Ok"
+               :class   "form-button"
+               :onclick "window.history.back();"}]]]))
+
 (defn- no-users-to-delete-page
   "Return a page that displays a message that there
   are no suitable users to delete."
@@ -133,7 +146,7 @@
                    [:div {:class "form-label-div"}
                     [:label {:class "form-label"
                              :for   "password"} "Your Password"]]
-                   (password-field {:class    "form-password"
+                   (password-field {:class    "form-password-field"
                                     :required "true"}
                                    "password")]
                   [:div {:class "button-bar-container"}
