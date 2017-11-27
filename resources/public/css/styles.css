@@ -20,7 +20,9 @@
     padding: 0;
 }
 
-html { font-size: 1em; }
+html {
+    font-size: 1em;
+}
 
 /* Some typography */
 h1, h2, h3, h4, h5, h6 {
@@ -44,15 +46,25 @@ h2 {
     padding-bottom: 0.3em;
 }
 
-h3 { font-size: 1.44em; }
+h3 {
+    font-size: 1.44em;
+}
 
-h4 { font-size: 1.2em; }
+h4 {
+    font-size: 1.2em;
+}
 
-h5 { font-size: 0.875em; }
+h5 {
+    font-size: 0.875em;
+}
 
-h6 { font-size: 0.85em; }
+h6 {
+    font-size: 0.85em;
+}
 
-small { font-size: 0.833em; }
+small {
+    font-size: 0.833em;
+}
 
 body {
     padding: 0.15em;
@@ -271,6 +283,117 @@ textarea#content {
 .date-text {
 }
 
+/* Container for horizontal button bars. */
+
+.button-bar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 2em;
+}
+
+.button-bar-item {
+    margin-right: 0.5em;
+}
+
+/* Forms */
+
+.cwiki-form {
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: dimgray;
+    margin-top: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    background-color: transparent;
+    color: dimgray;
+    margin-top: 2rem;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.form-label-div {
+}
+
+.form-dropdown {
+    width: 30%;
+    font-size: 0.9rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.3rem;
+}
+
+.form-dropdown select {
+}
+
+.form-dropdown option {
+    font-size: 0.9rem;
+}
+
+.form-password {
+    width: 30%;
+    font-size: 0.9rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.3rem;
+}
+
+/*
+  This button is derived from the topcoat-button--large from the
+  topcoat css collection at topcoat.io.
+ */
+.form-button {
+    background-color: #e5e9e8;
+    border: 1px solid #9daca9;
+    border-radius: 4px;
+    box-shadow: inset 0 1px #fff;
+    box-sizing: border-box;
+    color: #454545;
+    cursor: default;
+    display: inline-block;
+    font: inherit;
+    font-size: .875rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.688rem;
+    overflow: hidden;
+    padding: 0 .875rem;
+    position: relative;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px #fff;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+.form-button:hover {
+    background-color: #eff1f1;
+}
+
+.form-button:focus {
+    border: 1px solid #0036ff;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px #6fb5f1;
+    outline: 0;
+}
+
+.form-button:active {
+    border: 1px solid #9daca9;
+    background-color: #d2d6d6;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
+}
+
+.form-button:disabled {
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
+
 /* Tables */
 
 table {
@@ -300,8 +423,7 @@ td {
     border: 1px solid #a9c6c9;
 }
 
-tr:hover td
-{
+tr:hover td {
     background: #fcffc6;
 }
 
@@ -323,24 +445,6 @@ tr:hover td
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-
-/* Settings for the edit/create pages. */
-.button-bar-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    /* background: red;*/
-    /* margin:2em;*/
-    margin-top: 2em;
-}
-
-.button-bar-item {
-    flex: 1 0 auto;
-    /* padding-left: 0.5em;
-     padding-right: 0.5em;*/
-    margin-right: 0.5em;
-    background: green;
 }
 
 /* Some miscellaneous, simple elements. */
