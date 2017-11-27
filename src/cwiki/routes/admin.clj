@@ -13,7 +13,7 @@
 
 (defn- get-create-user
   [req]
-  (layout/view-create-user-page req))
+  (admin-layout/create-user-page req))
 
 (defn- post-create-user
   "Create a new user as long as a user with the same name does not already
@@ -23,7 +23,7 @@
      referer   "referer"} :multipart-params
     session               :session :as req}]
   (if (db/find-user-by-name username)
-    (layout/compose-user-already-exists-page)
+    (admin-layout/compose-user-already-exists-page)
     (do
       (db/add-user username password user-role recovery-email)
       (if referer

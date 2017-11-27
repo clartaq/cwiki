@@ -199,19 +199,82 @@
     [:p "Copyright \u00A9 2017, David D. Clark"]
     [:p program-name-and-version]]])
 
+(defn- no-content-aside
+  "Return an aside section with no content."
+  []
+  [:aside {:class "left-aside"} ""])
+
 (defn- sidebar-aside
+  "Return an aside with the content of the sidebar page."
   [req]
   (let [sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
     [:aside {:class "left-aside"}
      (limited-width-content-component req sidebar-content)]))
 
-(defn sidebar-and-article
+(defn- sidebar-and-article
   "Return a sidebar and article div with the given content."
   [sidebar article]
   [:div {:class "sidebar-and-article"}
    sidebar
    [:article {:class "page-content"}
     [:div article]]])
+
+;;
+;; Pages that show no sidebar information.
+;;
+
+(defn short-message-template
+  "A page template for short messages, no sidebar content, no nav."
+  [content]
+  (html5
+    (standard-head nil)
+    [:body {:class "page"}
+     (no-nav-header-component)
+     (sidebar-and-article
+       (no-content-aside)
+       content)
+     (footer-component)]))
+
+(defn compose-not-yet-view
+  "Return a page stating that the requested feature
+  is not available yet."
+  [name]
+  (short-message-template
+    [:div {:class "cwiki-form"}
+     [:p {:class "form-title"} "That's Not Ready"]
+     [:p "There is no \"" name "\"route yet."]
+     [:div {:class "button-bar-container"}
+      [:input {:type    "button" :name "cancel-button"
+               :value   "Ok"
+               :class   "form-button"
+               :onclick "window.history.back();"}]]]))
+
+(defn compose-404-page
+  "Return a 'Not Found' page."
+  []
+  (short-message-template
+    [:div {:class "cwiki-form"}
+     [:p {:class "form-title"} "Page Not Found"]
+     [:p "The requested page does not exist."]
+     [:div {:class "button-bar-container"}
+      (link-to {:class "form-button"} "/" "Take me Home")]]))
+
+(defn compose-403-page
+  "Return a page stating that the requested action is forbidden (403)."
+  []
+  (short-message-template
+    [:div {:class "cwiki-form"}
+     [:p {:class "form-title"} "403 - Forbidden"]
+     [:p "You are not allowed to perform this action."]
+     [:div {:class "button-bar-container"}
+      [:input {:type    "button" :name "cancel-button"
+               :value   "Ok"
+               :class   "form-button"
+               :onclick "window.history.back();"}]]]))
+
+;;
+;; Functions related to viewing or editing wiki pages.
+;;
 
 (defn compose-create-or-edit-page
   "Will compose a page to create or edit a page in the wiki. The
@@ -244,10 +307,10 @@
                    [:br]
                    [:div {:class "button-bar-container"}
                     (submit-button {:id    "Save Button"
-                                    :class "topcoat-button--large"} "Save Changes")
+                                    :class "form-button button-bar-item"} "Save Changes")
                     [:input {:type    "button" :name "cancel-button"
                              :value   "Cancel"
-                             :class   "topcoat-button--large"
+                             :class   "form-button button-bar-item"
                              :onclick "window.history.back();"}]])])
        (footer-component)])))
 
@@ -336,202 +399,3 @@
         post-map (db/create-new-post-map "All Tags" content)]
     (view-wiki-page post-map req)))
 
-;;
-;; Pages that show no sidebar information.
-;;
-
-(defn no-content-aside
-  "Return an aside section with no content."
-  []
-  [:aside {:class "left-aside"} ""])
-
-(defn short-message-template
-  "A page template for short messages, no sidebar content, no nav."
-  [the-form]
-  (html5
-    (standard-head nil)
-    [:body {:class "page"}
-     (no-nav-header-component)
-     (sidebar-and-article
-       (no-content-aside)
-       the-form)
-     (footer-component)]))
-
-(defn compose-404-page
-  "Build and return a 'Not Found' page."
-  []
-  (html5
-    (standard-head nil)
-    [:body {:class "page"}
-     (no-nav-header-component)
-     (sidebar-and-article
-       (no-content-aside)
-       (centered-content-component
-         [:div
-          [:h1 {:class "info-warning"} "Page Not Found"]
-          [:p "The requested page does not exist."]
-          (link-to {:class "btn btn-primary"} "/" "Take me Home")]))
-     (footer-component)]))
-
-(defn compose-403-page
-  []
-  (html5
-    (standard-head nil)
-    [:body {:class "page"}
-     (no-nav-header-component)
-     (sidebar-and-article
-       (no-content-aside)
-       (centered-content-component
-         [:div
-          [:h1 {:class "info-warning"} "403 - Forbidden"]
-          [:p "You are not allowed to perform this action."]
-          [:div {:class "button-bar-container"}
-           [:input {:type    "button" :name "cancel-button"
-                    :value   "Cancel"
-                    :class   "topcoat-button--large"
-                    :onclick "window.history.back();"}]]]))]))
-
-(defn compose-user-already-exists-page
-  []
-  (html5
-    (standard-head nil)
-    [:body {:class "page"}
-     (no-nav-header-component)
-     (sidebar-and-article
-       (no-content-aside)
-       (centered-content-component
-         [:div
-          [:h1 {:class "info-warning"} "403 - Forbidden"]
-          [:p "A user with this name already exists."]
-          [:div {:class "button-bar-container"}
-           [:input {:type    "button" :name "cancel-button"
-                    :value   "Cancel"
-                    :class   "topcoat-button--large"
-                    :onclick "window.history.back();"}]]]))]))
-
-(defn view-create-user-page
-  "Display a page with a form to create a new user."
-  [req]
-  (html5
-    (standard-head nil)
-    [:body {:class "page"}
-     (no-nav-header-component)
-     (sidebar-and-article
-       (no-content-aside)
-       [:div
-        (form-to {:enctype "multipart/form-data"}
-                 [:post "create-user"]
-                 (hidden-field "referer" (get (:headers req) "referer"))
-                 [:h1 "Create A New User"]
-                 [:p "Enter information describing the new user."]
-                 [:h5 "User Name"]
-                 [:p (text-field {:autofocus   "autofocus"
-                                  :placeholder "User Name"} "user-name")]
-                 [:h5 "Password"]
-                 [:p (password-field "password")]
-                 [:h5 "Role"]
-                 (drop-down "user-role"
-                            ["reader" "writer" "editor" "admin"] "reader")
-                 [:h5 "Password Recovery email"]
-                 [:p (email-field {:placeholder "email"} "recovery-email")]
-                 [:div {:class "button-bar-container"}
-                  (submit-button {:id    "create-user-button"
-                                  :class "topcoat-button--large"} "Create")
-                  [:input {:type    "button" :name "cancel-button"
-                           :value   "Cancel"
-                           :class   "topcoat-button--large"
-                           :onclick "window.history.back();"}]])])
-     (footer-component)]))
-
-;(defn view-login-page
-;  "Display a login page and gather the user name and password to log in."
-;  []
-;  (html5
-;    (standard-head nil)
-;    [:body {:class "page"}
-;     (no-nav-header-component)
-;     (sidebar-and-article
-;       (no-content-aside)
-;       [:div
-;        (form-to {:enctype "multipart/form-data"}
-;                 [:post "login"]
-;                 [:h1 "Sign In"]
-;                 [:p "You must be logged in to use this wiki."]
-;                 [:div {:class "form-group"}
-;                  [:input {:type "text" :id "user_name" :name "user_name"}]
-;                  [:label {:for "user_name"} "User Name"]]
-;                 [:h5 "User Name"]
-;                 [:p (text-field {:autofocus   "autofocus"
-;                                  :placeholder "User Name"} "user-name")]
-;                 [:h5 "Password"]
-;                 [:p (password-field "password")]
-;                 [:div {:class "button-bar-container"}
-;                  (submit-button {:id    "login-button"
-;                                  :class "topcoat-button--large"} "Sign In")])])
-;     (footer-component)]))
-;
-;(defn no-user-to-logout-page
-;  "Display a page stating that there is no logged in user to sign out.
-;  Should never happen in production. Only used during development."
-;  []
-;  (html5
-;    (standard-head nil)
-;    [:body {:class "page"}
-;     (no-nav-header-component)
-;     (sidebar-and-article
-;       (no-content-aside)
-;       [:div
-;        [:h1 "That's a Problem"]
-;        [:p "There is no user to sign off."]
-;        [:div {:class "button-bar-container"}
-;         [:input {:type    "button" :name "cancel-button"
-;                  :value   "Cancel"
-;                  :class   "topcoat-button--large"
-;                  :onclick "window.history.back();"}]]])
-;     (footer-component)]))
-;
-;(defn post-logout-page
-;  "Ask the user if they really want to log out."
-;  [user-name]
-;  (html5
-;    (standard-head nil)
-;    [:body {:class "page"}
-;     (no-nav-header-component)
-;     (sidebar-and-article
-;       (no-content-aside)
-;       [:div
-;        (form-to {:enctype "multipart/form-data"}
-;                 [:post "logout"]
-;                 [:h1 (str "Sign Out " user-name)]
-;                 [:p "Are you sure?"]
-;                 [:div {:class "button-bar-container"}
-;                  (submit-button {:id    "sign-out-button"
-;                                  :class "topcoat-button--large"} "Sign Out")
-;                  [:input {:type    "button" :name "cancel-button"
-;                           :value   "Cancel"
-;                           :class   "topcoat-button--large"
-;                           :onclick "window.history.back();"}]])])
-;     (footer-component)]))
-;
-;(defn view-logout-page
-;  [{session :session}]
-;  (if-let [user-name (:user_name (:identity session))]
-;    (post-logout-page user-name)
-;    (no-user-to-logout-page)))
-
-(defn compose-not-yet-view [name]
-  (html5
-    (standard-head nil)
-    [:body {:class "page"}
-     (no-nav-header-component)
-     (sidebar-and-article
-       (no-content-aside)
-       [:div
-        [:h1 "That's Not Ready"]
-        [:p "There is no \"" name "\"route yet."]
-        [:div {:class "button-bar-container"}
-         [:input {:type    "button" :name "cancel-button"
-                  :value   "Cancel"
-                  :class   "topcoat-button--large"
-                  :onclick "window.history.back();"}]]])
-     (footer-component)]))
