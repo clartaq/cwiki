@@ -1,8 +1,11 @@
 (ns cwiki.routes.admin
   (:require [compojure.core :refer :all]
-            [cwiki.models.db :as db]
+            [compojure.response :as response]
+            [cwiki.layouts.admin :as admin-layout]
             [cwiki.layouts.base :as layout]
-            [ring.util.response :refer [redirect]]))
+            [cwiki.models.db :as db]
+            [cwiki.util.req-info :as ri]
+            [ring.util.response :refer [redirect status]]))
 
 (defn- not-yet
   [name]
@@ -29,18 +32,40 @@
 
 (defn- get-delete-user
   [req]
-  (layout/view-delete-user-page req))
+  (admin-layout/view-delete-user-page req))
+
+(defn- build-response
+  ([body req]
+   (build-response body req 200))
+  ([body req stat]
+   (-> (response/render body req)
+       (status stat)
+       (assoc :body body))))
+
+;;
+;; This needs more work. Besides just deleting the user, which is easy,
+;; what happens to any pages they have authored? All of a sudden, their
+;; author field is invalid. Or you could delete any pages authored by
+;; that user, which could break all kinds of links and lose any work
+;; someone else has contributed to those pages. Maybe just mark the
+;; author as "unknown"?
 
 (defn- post-delete-user
   "Delete the user specified."
-  [{{username "user-name" referer "referer"} :multipart-params
-    session                                  :session :as req}]
-  (if-let [user-id (db/user-name->user-id username)]
-    (println "I know this user:" username ", user-id:" user-id)
-    (println "I DON'T know this user:" username))
-  (if referer
-    (redirect referer)
-    (redirect "/Front Page")))
+  [{{username "user-name"
+     password "password"
+     referer  "referer"} :multipart-params
+    session              :session :as req}]
+  (let [session-user (ri/req->user-name req)]
+    (if (not (db/get-user-by-username-and-password session-user password))
+      (build-response (admin-layout/wrong-password req) req 422)
+      (do
+        (if-let [user-id (db/user-name->user-id username)]
+          (println "I know this user:" username ", user-id:" user-id)
+          (println "I DON'T know this user:" username))
+        (if referer
+          (redirect referer)
+          (redirect "/Front Page"))))))
 
 (defroutes admin-routes
            (GET "/compress" [] (not-yet "compress"))
