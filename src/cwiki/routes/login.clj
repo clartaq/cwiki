@@ -6,12 +6,13 @@
   (:require [compojure.core :refer :all]
             [cwiki.models.db :as db]
             [cwiki.layouts.base :as layout]
+            [cwiki.layouts.login :as login-layout]
             [ring.util.response :refer [redirect]]))
 
 (defn get-login
   "Gather user credentials for login."
   [req]
-  (layout/view-login-page))
+  (login-layout/login-page))
 
 (defn post-login
   "Check that the user name and password match credentials in the database.
@@ -34,7 +35,7 @@
 (defn get-logout
   "Ask the user to verify that they want to log out."
   [req]
-  (layout/view-logout-page req))
+  (login-layout/view-logout-page req))
 
 (defn post-logout
   "Log out the current user."
