@@ -207,7 +207,9 @@
   (let [author-id (:page_author m)
         result (jdbc/query sqlite-db ["select user_name from users where user_id=?" author-id])
         name (:user_name (first result))]
-    name))
+    (if (and result name)
+      name
+      "Unknown")))
 
 (defn page-map->created-date
   [m]
@@ -300,6 +302,12 @@
               :user_touched           (c/to-sql-time (t/now))
               :user_registration      (c/to-sql-time (t/now))}]
      (jdbc/insert! sqlite-db :users usr))))
+
+(defn delete-user
+  ([user-id]
+   (delete-user user-id sqlite-db))
+  ([user-id db-name]
+   (jdbc/delete! db-name :users ["user_id=?" user-id])))
 
 (defn- add-initial-users!
   []

@@ -8,6 +8,7 @@
             [ring.util.response :refer [redirect status]]))
 
 (defn- not-yet
+  "Return a page saying a feature is not ready yet."
   [name]
   (layout/compose-not-yet-view name))
 
@@ -61,8 +62,9 @@
       (build-response (admin-layout/wrong-password-page req) req 422)
       (do
         (if-let [user-id (db/user-name->user-id username)]
-          (println "I know this user:" username ", user-id:" user-id)
-          (println "I DON'T know this user:" username))
+          (db/delete-user user-id)
+          ; should never happen
+          (build-response (admin-layout/cannot-find-user req) req 500))
         (if referer
           (redirect referer)
           (redirect "/Front Page"))))))
