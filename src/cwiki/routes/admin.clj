@@ -32,7 +32,7 @@
 
 (defn- get-delete-user
   [req]
-  (admin-layout/view-delete-user-page req))
+  (admin-layout/delete-user-page req))
 
 (defn- build-response
   ([body req]
@@ -58,7 +58,7 @@
     session              :session :as req}]
   (let [session-user (ri/req->user-name req)]
     (if (not (db/get-user-by-username-and-password session-user password))
-      (build-response (admin-layout/wrong-password req) req 422)
+      (build-response (admin-layout/wrong-password-page req) req 422)
       (do
         (if-let [user-id (db/user-name->user-id username)]
           (println "I know this user:" username ", user-id:" user-id)
