@@ -18,9 +18,10 @@
               [:post "login"]
               [:p {:class "form-title"} "Sign In"]
               [:p "You must be logged in to use this wiki."]
+              base/required-field-hint
               [:div {:class "form-group"}
                [:div {:class "form-label-div"}
-                [:label {:class "form-label"
+                [:label {:class "form-label required"
                          :for   "user_name"} "User Name"]]
                (text-field {:class       "form-text-field"
                             :required    "true"
@@ -28,7 +29,7 @@
                             :placeholder "User Name"} "user-name")]
               [:div {:class "form-group"}
                [:div {:class "form-label-div"}
-                [:label {:class "form-label"
+                [:label {:class "form-label required"
                          :for   "user-password"} "Password"]]
                (password-field {:class    "form-password-field"
                                 :required "true"} "password")]
@@ -49,7 +50,7 @@
     [:div {:class "cwiki-form"}
      (form-to {:enctype "multipart/form-data"}
               [:post "logout"]
-              [:p {:class "form-title"} (str "Sign Out " user-name)]
+              [:p {:class "form-title"} (str "Really Sign Out \"" user-name "\"")]
               [:p "Are you sure?"]
               [:div {:class "button-bar-container"}
                (submit-button {:id    "sign-out-button"
