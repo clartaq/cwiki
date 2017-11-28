@@ -163,6 +163,8 @@
 ; A span element with a bold, red "Warning:" at the beginning.
 (def warning-span [:span {:style {:color "red"}} [:strong "Warning: "]])
 
+(def required-field-hint [:p {:class "required-field-hint"} "Required fields are marked with a"])
+
 (defn- centered-content-component
   "Put the content in a centered element and return it."
   [& content]

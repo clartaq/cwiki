@@ -17,15 +17,7 @@
 (defn compose-user-already-exists-page
   "Return a page stating that the user already exists."
   []
-  (base/short-form-template
-    [:div {:class "cwiki-form"}
-     [:p {:class "form-title"} "403 - Forbidden"]
-     [:p "A user with this name already exists."]
-     [:div {:class "button-bar-container"}
-      [:input {:type    "button" :name "cancel-button"
-               :value   "Ok"
-               :class   "form-button"
-               :onclick "window.history.back();"}]]]))
+  (base/short-message "Can't Do That!" "A user with this name already exits."))
 
 (defn create-user-page
   "Return a page with a form to gather information needed
@@ -38,9 +30,10 @@
               (hidden-field "referer" (get (:headers req) "referer"))
               [:p {:class "form-title"} "Create A New User"]
               [:p "Enter information describing the new user."]
+              base/required-field-hint
               [:div {:class "form-group"}
                [:div {:class "form-label-div"}
-                [:label {:class "form-label"
+                [:label {:class "form-label required"
                          :for   "user-name"} "User Name"]]
                (text-field {:class       "form-text-field"
                             :autofocus   "autofocus"
@@ -48,14 +41,14 @@
                             :placeholder "User Name"} "user-name")]
               [:div {:class "form-group"}
                [:div {:class "form-label-div"}
-                [:label {:class "form-label"
+                [:label {:class "form-label required"
                          :for   "password"} "Password"]]
                (password-field {:class    "form-password-field"
                                 :required "true"}
                                "password")]
               [:div {:class "form-group"}
                [:div {:class "form-label-div"}
-                [:label {:class "form-label"
+                [:label {:class "form-label required"
                          :for   "user-role"} "Role"]]
                (drop-down {:class    "form-dropdown"
                            :required "true"}
@@ -186,16 +179,17 @@
                     (hidden-field "referer" (get (:headers req) "referer"))
                     [:p {:class "form-title"} "Delete A User"]
                     [:p base/warning-span "This action cannot be undone."]
+                    base/required-field-hint
                     [:div {:class "form-group"}
                      [:div {:class "form-label-div"}
-                      [:label {:class "form-label"
+                      [:label {:class "form-label required"
                                :for   "user-name"} "User to Delete"]]
                      (drop-down {:class    "form-dropdown"
                                  :required "true"}
                                 "user-name" cleaned-users)]
                     [:div {class "form-group"}
                      [:div {:class "form-label-div"}
-                      [:label {:class "form-label"
+                      [:label {:class "form-label required"
                                :for   "password"} "Your Password"]]
                      (password-field {:class    "form-password-field"
                                       :required "true"}
