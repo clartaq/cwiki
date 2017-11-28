@@ -1,3 +1,9 @@
+;;;
+;;; This namespace contains definitions for basic layouts used
+;;; in the application. It also contains the program name and
+;;; version. It controls the type of Markdown understood by the
+;;; application.
+
 (ns cwiki.layouts.base
   (:require [clj-time.core :as t]
             [clj-time.format :as f]
@@ -223,7 +229,7 @@
 ;; Pages that show no sidebar information.
 ;;
 
-(defn short-message-template
+(defn short-form-template
   "A page template for short messages, no sidebar content, no nav."
   [content]
   (html5
@@ -235,42 +241,35 @@
        content)
      (footer-component)]))
 
+(defn short-message
+  "Return a page with a title, message and 'Ok' button."
+  [title message]
+  (short-form-template
+  [:div {:class "cwiki-form"}
+   [:p {:class "form-title"} title]
+   [:p message]
+   [:div {:class "button-bar-container"}
+    [:input {:type    "button" :name "ok-button"
+             :value   "Ok"
+             :class   "form-button"
+             :onclick "window.history.back();"}]]]))
+
 (defn compose-not-yet-view
   "Return a page stating that the requested feature
   is not available yet."
   [name]
-  (short-message-template
-    [:div {:class "cwiki-form"}
-     [:p {:class "form-title"} "That's Not Ready"]
-     [:p "There is no \"" name "\"route yet."]
-     [:div {:class "button-bar-container"}
-      [:input {:type    "button" :name "cancel-button"
-               :value   "Ok"
-               :class   "form-button"
-               :onclick "window.history.back();"}]]]))
+  (short-message "That's Not Ready"
+                 (str "There is no \"" name \"" route yet.")))
 
 (defn compose-404-page
   "Return a 'Not Found' page."
   []
-  (short-message-template
-    [:div {:class "cwiki-form"}
-     [:p {:class "form-title"} "Page Not Found"]
-     [:p "The requested page does not exist."]
-     [:div {:class "button-bar-container"}
-      (link-to {:class "form-button"} "/" "Take me Home")]]))
+  (short-message "Page Not Found" "The page requested does not exist."))
 
 (defn compose-403-page
   "Return a page stating that the requested action is forbidden (403)."
   []
-  (short-message-template
-    [:div {:class "cwiki-form"}
-     [:p {:class "form-title"} "403 - Forbidden"]
-     [:p "You are not allowed to perform this action."]
-     [:div {:class "button-bar-container"}
-      [:input {:type    "button" :name "cancel-button"
-               :value   "Ok"
-               :class   "form-button"
-               :onclick "window.history.back();"}]]]))
+  (short-message "Forbidden" "You are not allowed to perform that action."))
 
 ;;
 ;; Functions related to viewing or editing wiki pages.
@@ -301,7 +300,7 @@
                      [:post "save-edits"]
                      [:post "save-new-page"])
                    (when id
-                     (hiccup.form/hidden-field :page-id id))
+                     (hidden-field :page-id id))
                    (text-field {:autofocus "autofocus"} "title" title)
                    (text-area "content" content)
                    [:br]

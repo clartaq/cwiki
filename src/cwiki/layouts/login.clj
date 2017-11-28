@@ -12,7 +12,7 @@
   "Return a login page and gather the user name
   and password to log in."
   []
-  (base/short-message-template
+  (base/short-form-template
     [:div {:class "cwiki-form"}
      (form-to {:enctype "multipart/form-data"}
               [:post "login"]
@@ -40,20 +40,12 @@
   "Return a page stating that there is no logged in user to sign out.
   Should never happen in production. Only used during development."
   []
-  (base/short-message-template
-    [:div {:class "cwiki-form"}
-     [:p {:class "form-title"} "That's a Problem"]
-     [:p "There is no user to sign off."]
-     [:div {:class "button-bar-container"}
-      [:input {:type    "button" :name "cancel-button"
-               :value   "Ok"
-               :class   "form-button"
-               :onclick "window.history.back();"}]]]))
+  (base/short-message "That's a Problem" "There is no user to sign off."))
 
 (defn post-logout-page
   "Return a page asking the user if they really want to log out."
   [user-name]
-  (base/short-message-template
+  (base/short-form-template
     [:div {:class "cwiki-form"}
      (form-to {:enctype "multipart/form-data"}
               [:post "logout"]
