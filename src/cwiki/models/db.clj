@@ -157,7 +157,6 @@
   "Look up a user and verify that the password is a match. If so,
   return the user record, otherwise return nil."
   [username password]
-  (prn username password)
   (let [result (find-user-by-name username)
         pw-hash (:user_password result)]
     (when (and (= (:user-name result))
