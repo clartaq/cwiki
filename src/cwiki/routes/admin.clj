@@ -91,7 +91,6 @@
   "Return true when the proposed name is the same as the
   existing name or only differs in case, otherwise return nil."
   [proposed-name]
-  (println "proposed-name-same-as-existing-name?: proposed-name:" proposed-name)
   (if (db/find-user-by-case-insensitive-name proposed-name)
     true
     nil))
@@ -145,48 +144,53 @@
   [{{new-name "new-user-name" new-password "new-password"
      new-role "new-role" new-email "new-email"} :multipart-params
     session                                     :session :as req}]
-  (let [changes (atom {})
-        existing-user-info (:edit-user-info session)
-        existing-user-id (:user_id existing-user-info)
-        old-name (:user_name existing-user-info)
-        old-role (s/replace-first
-                   (:user_role existing-user-info)
-                   ":" "")
-        old-email (:user_email existing-user-info)
-        old-password (:user_password existing-user-info)
-        original-referer (:original-referer existing-user-info)]
-    (println "existing-user-info:")
-    (println (pp/pp-map existing-user-info))
+  (if (proposed-name-same-as-existing-name? new-name)
+    (build-response (admin-layout/compose-user-already-exists-page) 409)
+    (let [changes (atom {})
+          existing-user-info (:edit-user-info session)
+          existing-user-id (:user_id existing-user-info)
+          old-name (:user_name existing-user-info)
+          old-role (s/replace-first
+                     (:user_role existing-user-info)
+                     ":" "")
+          old-email (:user_email existing-user-info)
+          old-password (:user_password existing-user-info)
+          original-referer (:original-referer existing-user-info)]
+      (println "existing-user-info:")
+      (println (pp/pp-map existing-user-info))
 
-    ; Run the functions to check the new settings against the rules.
-    (when-let [new-user-name (get-new-name old-name new-name)]
-      (swap! changes conj {:user_name new-name}))
-    (when-let [new-user-role (get-new-role old-role new-role)]
-      (swap! changes conj {:user_role new-user-role}))
-    (when-let [new-user-email (get-new-email old-email new-email)]
-      (swap! changes conj {:user_email new-user-email}))
-    (when-let [new-user-password (get-new-password old-password new-password)]
-      (swap! changes conj {:user_password new-user-password}))
-    (when (not (empty? @changes))
-      (swap! changes conj {:user_touched (c/to-sql-time (t/now))}))
-    (println "changes:")
-    (println (pp/pp-map @changes))
-    (when (not (empty? @changes))
-      (let [cleaned-existing (dissoc existing-user-info :original-referer)
-            merged-changes (merge cleaned-existing @changes)]
-        (println "merged changes:")
-        (println (pp/pp-map merged-changes))
-        (println "update result:" (db/update-user existing-user-id
-                                                  merged-changes))))
-    (let [redir (if original-referer
-                  original-referer
-                  "/Front Page")
-          _ (println "redir:" redir)
-          cleaned-session (dissoc session :edit-user-info)
-          _ (println (pp/pp-map cleaned-session))
-          new-session (assoc (redirect redir)
-                        :session cleaned-session)]
-      new-session)))
+      ; Run the functions to check the new settings against the rules.
+      (when-let [new-user-name (get-new-name old-name new-name)]
+        (swap! changes conj {:user_name new-name}))
+      (when-let [new-user-role (get-new-role old-role new-role)]
+        (swap! changes conj {:user_role new-user-role}))
+      (when-let [new-user-email (get-new-email old-email new-email)]
+        (swap! changes conj {:user_email new-user-email}))
+      (when-let [new-user-password (get-new-password old-password new-password)]
+        (swap! changes conj {:user_password new-user-password}))
+      (when (not (empty? @changes))
+        (swap! changes conj {:user_touched (c/to-sql-time (t/now))}))
+      (println "changes:")
+      (println (pp/pp-map @changes))
+      (when (not (empty? @changes))
+        (let [cleaned-existing (dissoc existing-user-info :original-referer)
+              merged-changes (merge cleaned-existing @changes)]
+          (println "merged changes:")
+          (println (pp/pp-map merged-changes))
+          (println "update result:" (db/update-user existing-user-id
+                                                    merged-changes))))
+      (let [redir (if original-referer
+                    original-referer
+                    "/Front Page")
+            _ (println "redir:" redir)
+            cleaned-session (dissoc session :edit-user-info)
+            _ (println (pp/pp-map cleaned-session))
+            new-session (assoc (redirect redir)
+                          :session cleaned-session)]
+        (println "(type new-session):" (type new-session))
+        (println "new-session:")
+        (println (pp/pp-map new-session))
+        new-session))))
 
 ;;
 ;; Functions relating to deleting a user.
