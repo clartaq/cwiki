@@ -141,6 +141,18 @@
                            ["select * from users where user_name=?" name]))]
      user-map)))
 
+(defn find-user-by-case-insensitive-name
+  "Look up the user in the database using a case-insensitive search for the
+  username. Return the matching entry, if any. Otherwise, return nil."
+  ([name]
+   (find-user-by-case-insensitive-name name sqlite-db))
+  ([name db-name]
+   (let [user-map (first (jdbc/query
+                           db-name
+                           [(str "select * from users where user_name like '"
+                                 name "'")]))]
+     user-map)))
+
 (defn get-user-by-username-and-password [username password]
   (prn username password)
   (let [result (find-user-by-name username)
