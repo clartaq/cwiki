@@ -17,6 +17,7 @@
    {:name "backup" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "restore" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "create-user" :editable? nil :deletable? nil :generated? true :admin-only? true}
+   {:name "select-profile" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "edit-profile" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "delete-user" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "reset-password" :editable? nil :deletable? nil :generated? true :admin-only? true}])

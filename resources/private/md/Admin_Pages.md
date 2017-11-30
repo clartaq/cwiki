@@ -5,7 +5,7 @@ There are several administration tasks that can only be accomplished by a user w
 * **Database Backup**: The [[backup|Backup]] page will let you make a copy of the database and store it somewhere safe.
 * **Restore A Saved Database**: If the database gets screwed up or erased somehow, you can use the [[restore|Restore]] page to re-create it from a previously saved backup.
 * **Create a New User**: If you decide you want to allow another person(s) to access the wiki, you can create a [[create-user|Create User]]. You will be able to assign their user name, password, and an email address for password recovery.
-* **Edit the Profile of an Existing User**: If someone wants to change something about their account, like their password, you can do that on the [[edit-profile|Edit User Profile]] page.
+* **Edit the Profile of an Existing User**: If someone wants to change something about their account, like their password, you can do that on the [[select-profile|Edit User Profile]] page.
 * **Delete a User**: If a user no longer needs access to the wiki, you can delete their account on the [[delete-user|Delete User]] page.
 
    Deleting a user has some repercussions you need to think about. Any work they have created will no longer be attributed to them, for example. Perhaps a better thing to do would be to simply change their password or role such that they can no longer add or modify information, but things they created are still attributed correctly.

@@ -1,5 +1,8 @@
 This is an ever-evolving list of things that need doing.
 
+* Get rid of autocomplete on user names on login, create user, and edit user pages.
+* Consolidate some of the nav stuff in the page header into a "More" drop-down menu.
+*  For users with the "reader" role, links to non-existent pages should be disabled rather than showing a normal, clickable link that then throws an error message.
 * The routes to the admin pages are spelled, hyphenated, and capitalized differently in different places in the program.
 * Add validation to login page and other forms.
 * New page creation should check for an existing page of the same name before saving.

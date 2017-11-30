@@ -18,7 +18,7 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 * [[backup|Backup]]
 * [[restore|Restore]]
 * [[create-user|Create User]]
-* [[edit-profile|Edit User Profile]]
+* [[select-profile|Edit User Profile]]
 * [[delete-user|Delete User]]
 * [[reset-password|Reset Password]]
 
