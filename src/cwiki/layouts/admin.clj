@@ -3,7 +3,9 @@
 ;;;
 
 (ns cwiki.layouts.admin
-  (:require [cwiki.layouts.base :as base]
+  (:require [clojure.string :as s]
+            [cwiki.layouts.base :as base]
+            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.models.db :as db]
             [hiccup.form :refer [drop-down email-field form-to hidden-field
@@ -18,6 +20,35 @@
   "Return a page stating that the user already exists."
   []
   (base/short-message "Can't Do That!" "A user with this name already exits."))
+
+(defn get-user-to-create
+  "Return a login page and gather the user name
+  and password to log in."
+  []
+  (base/short-form-template
+    [:div {:class "cwiki-form"}
+     (form-to {:enctype "multipart/form-data"}
+              [:post "login"]
+              [:p {:class "form-title"} "Create User"]
+              [:p "You must be logged in to use this wiki."]
+              base/required-field-hint
+              [:div {:class "form-group"}
+               [:div {:class "form-label-div"}
+                [:label {:class "form-label required"
+                         :for   "user_name"} "User Name"]]
+               (text-field {:class       "form-text-field"
+                            :required    "true"
+                            :autofocus   "autofocus"
+                            :placeholder "User Name"} "user-name")]
+              [:div {:class "form-group"}
+               [:div {:class "form-label-div"}
+                [:label {:class "form-label required"
+                         :for   "user-password"} "Password"]]
+               (password-field {:class    "form-password-field"
+                                :required "true"} "password")]
+              [:div {:class "button-bar-container"}
+               (submit-button {:id    "login-button"
+                               :class "form-button"} "Sign In")])]))
 
 (defn create-user-page
   "Return a page with a form to gather information needed
@@ -78,61 +109,87 @@
   [req]
   (base/short-message "Nothing to Do" "There are no suitable users to edit."))
 
-(defn edit-user-page
+(defn select-user-to-edit-page
+  "Return a form to obtain the name of the user to be edited."
   [req]
+  (println "select-user-to-edit-page")
   (let [all-users (db/get-all-users)
-        current-user (ri/req->user-name req)
-        cleaned-users (disj all-users "CWiki" current-user)]
+        cleaned-users (disj all-users "CWiki")]
     (if (zero? (count cleaned-users))
       (no-users-to-edit-page req)
       (base/short-form-template
         [:div {:class "cwiki-form"}
          (form-to {:enctype "multipart/form-data"}
-                  [:post "edit-profile"]
+                  [:post "select-profile"]
                   (hidden-field "referer" (get (:headers req) "referer"))
-                  [:p {:class "form-title"} "Edit An Existing User"]
-                  [:p "Identify the existing user and modify their profile."]
+                  [:p {:class "form-title"} "Edit Profile"]
+                  base/required-field-hint
                   [:div {:class "form-group"}
-                    [:div {:class "form-label-div"}
-                     [:label {:class "form-label"
-                              :required "true"
-                              :for   "user-name"} "Existing User"]]
-                    (drop-down {:class    "form-dropdown"
-                                :required "true"}
-                               "user-name" cleaned-users)]
+                   [:div {:class "form-label-div"}
+                    [:label {:class "form-label required"
+                             :for   "user-name"} "User Profile to Edit"]]
+                   (drop-down {:class    "form-dropdown"
+                               :required "true"}
+                              "user-name" cleaned-users)]
+                  [:div {class "form-group"}
+                   [:div {:class "form-label-div"}
+                    [:label {:class "form-label required"
+                             :for   "password"} "Your Password"]]
+                   (password-field {:class    "form-password-field"
+                                    :required "true"}
+                                   "password")]
+                  [:div {:class "button-bar-container"}
+                   (submit-button {:id    "select-user-button"
+                                   :class "form-button button-bar-item"}
+                                  "Select")
+                   [:input {:type    "button" :name "cancel-button"
+                            :value   "Cancel"
+                            :class   "form-button button-bar-item"
+                            :onclick "window.history.back();"}]])]))))
+
+(defn edit-user-page
+  [req]
+  (println "edit-user-page")
+  (let [user-info (get-in req [:session :edit-user-info])
+        user-name (:user_name user-info)
+        user-role (s/replace-first (:user_role user-info) ":" "")
+        user-email (:user_email user-info)
+        original-referer (:original-referer user-info)]
+    (if (nil? user-info)
+      (no-users-to-edit-page req)
+      (base/short-form-template
+        [:div {:class "cwiki-form"}
+         (form-to {:enctype "multipart/form-data"}
+                  [:post "edit-profile"]
+                  [:p {:class "form-title"} "Edit the Profile of An Existing User"]
+                  [:p (str "Make any modifications needed to "
+                           user-name "'s profile.")]
                   [:div {:class "form-group"}
                    [:div {:class "form-label-div"}
                     [:label {:class "form-label"
-                             :for   "new-user-name"} "New User Name"]]
-                   (text-field {:class       "form-text-field"
-                                :autofocus   "autofocus"
-                                :placeholder "New User Name"} "new-user-name")]
+                             :for   "new-user-name"} "User Name"]]
+                   (text-field {:class     "form-text-field"
+                                :autofocus "autofocus"
+                                :value     user-name} "new-user-name")]
                   [:div {:class "form-group"}
                    [:div {:class "form-label-div"}
                     [:label {:class "form-label"
                              :for   "password"} "Password"]]
                    (password-field {:class "form-password-field"}
-                                   "password")]
+                                   "new-password")]
                   [:div {:class "form-group"}
                    [:div {:class "form-label-div"}
                     [:label {:class "form-label"
-                             :for   "user-role"} "Role"]]
+                             :for   "new-role"} "Role"]]
                    (drop-down {:class "form-dropdown"}
-                              "user-role"
-                              ["reader" "writer" "editor" "admin"] "reader")]
+                              "new-role"
+                              ["reader" "writer" "editor" "admin"] user-role)]
                   [:div {:class "form-group"}
                    [:div {:class "form-label-div"}
                     [:label {:class "form-label"
                              :for   "recovery-email"} "Password Recovery email"]]
-                   (email-field {:class       "form-email-field"
-                                 :placeholder "email"} "recovery-email")]
-                  [:div {:class "form-group"}
-                   [:div {:class "form-label-div"}
-                    [:label {:class "form-label"
-                             :for   "admin-password"} "Your Password"]]
-                   (password-field {:class    "form-password-field"
-                                    :required "true"}
-                                   "admin-password")]
+                   (email-field {:class "form-email-field"
+                                 :value user-email} "new-email")]
                   [:div {:class "button-bar-container"}
                    (submit-button {:id    "change-user-button"
                                    :class "form-button button-bar-item"} "Change")
@@ -142,63 +199,63 @@
                             :onclick "window.history.back();"}]])]))))
 
 
-  ;;
-  ;; Functions related to deleting a user.
-  ;;
+;;
+;; Functions related to deleting a user.
+;;
 
-  (defn wrong-password-page
-    "Compose and return a short page stating that the password
-    checked does not match that of the current user."
-    [req]
-    (base/short-message "Wrong Password"
-                        "The password given does not match that of the current user."))
+(defn wrong-password-page
+  "Compose and return a short page stating that the password
+  checked does not match that of the current user."
+  [req]
+  (base/short-message "Wrong Password"
+                      "The password given does not match that of the current user."))
 
-  (defn cannot-find-user
-    "Return a page saying that we cannot find the user now."
-    [req]
-    (base/short-message "Well, That's Weird!" "Now that user cannot be found."))
+(defn cannot-find-user
+  "Return a page saying that we cannot find the user now."
+  [req]
+  (base/short-message "Well, That's Weird!" "Now that user cannot be found."))
 
-  (defn- no-users-to-delete-page
-    "Return a page that displays a message that there
-    are no suitable users to delete."
-    [req]
-    (base/short-message "Nothing to Do" "There are no suitable users to delete."))
+(defn- no-users-to-delete-page
+  "Return a page that displays a message that there
+  are no suitable users to delete."
+  [req]
+  (base/short-message "Nothing to Do" "There are no suitable users to delete."))
 
-  (defn delete-user-page
-    "Return a form to obtain information about a user to be deleted."
-    [req]
-    (let [all-users (db/get-all-users)
-          current-user (ri/req->user-name req)
-          cleaned-users (disj all-users "CWiki" current-user)]
-      (if (zero? (count cleaned-users))
-        (no-users-to-delete-page req)
-        (base/short-form-template
-          [:div {:class "cwiki-form"}
-           (form-to {:enctype "multipart/form-data"}
-                    [:post "delete-user"]
-                    (hidden-field "referer" (get (:headers req) "referer"))
-                    [:p {:class "form-title"} "Delete A User"]
-                    [:p base/warning-span "This action cannot be undone."]
-                    base/required-field-hint
-                    [:div {:class "form-group"}
-                     [:div {:class "form-label-div"}
-                      [:label {:class "form-label required"
-                               :for   "user-name"} "User to Delete"]]
-                     (drop-down {:class    "form-dropdown"
-                                 :required "true"}
-                                "user-name" cleaned-users)]
-                    [:div {class "form-group"}
-                     [:div {:class "form-label-div"}
-                      [:label {:class "form-label required"
-                               :for   "password"} "Your Password"]]
-                     (password-field {:class    "form-password-field"
-                                      :required "true"}
-                                     "password")]
-                    [:div {:class "button-bar-container"}
-                     (submit-button {:id    "login-button"
-                                     :class "form-button button-bar-item"}
-                                    "Delete")
-                     [:input {:type    "button" :name "cancel-button"
-                              :value   "Cancel"
-                              :class   "form-button button-bar-item"
-                              :onclick "window.history.back();"}]])]))))
+(defn delete-user-page
+  "Return a form to obtain information about a user to be deleted."
+  [req]
+  (let [all-users (db/get-all-users)
+        current-user (ri/req->user-name req)
+        cleaned-users (disj all-users "CWiki" current-user)]
+    (if (zero? (count cleaned-users))
+      (no-users-to-delete-page req)
+      (base/short-form-template
+        [:div {:class "cwiki-form"}
+         (form-to {:enctype "multipart/form-data"}
+                  [:post "delete-user"]
+                  (hidden-field "referer" (get (:headers req) "referer"))
+                  [:p {:class "form-title"} "Delete A User"]
+                  [:p base/warning-span "This action cannot be undone."]
+                  base/required-field-hint
+                  [:div {:class "form-group"}
+                   [:div {:class "form-label-div"}
+                    [:label {:class "form-label required"
+                             :for   "user-name"} "User to Delete"]]
+                   (drop-down {:class    "form-dropdown"
+                               :required "true"}
+                              "user-name" cleaned-users)]
+                  [:div {class "form-group"}
+                   [:div {:class "form-label-div"}
+                    [:label {:class "form-label required"
+                             :for   "password"} "Your Password"]]
+                   (password-field {:class    "form-password-field"
+                                    :required "true"}
+                                   "password")]
+                  [:div {:class "button-bar-container"}
+                   (submit-button {:id    "login-button"
+                                   :class "form-button button-bar-item"}
+                                  "Delete")
+                   [:input {:type    "button" :name "cancel-button"
+                            :value   "Cancel"
+                            :class   "form-button button-bar-item"
+                            :onclick "window.history.back();"}]])]))))
