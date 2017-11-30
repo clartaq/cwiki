@@ -163,12 +163,20 @@
 
 (defn lookup-user
   "Look up a user an verify that the password is a match. If the user
-  cannot be found or the password doesn't match, return nil."
+  cannot be found or the password doesn't match, return nil. Otherwise,
+  return a copy of the user record with the password digest dissociated
+  from it."
   [username password]
   (when-let [user (find-user-by-name username)]
     (let [pw (get user :user_password)]
       (when (hashers/check password pw)
         (dissoc user :user_password)))))
+
+(defn update-user
+  "Update the database entry for the user with the given id to the
+  information included in the map."
+  [user_id user-map]
+  (jdbc/update! sqlite-db :users user-map ["user_id=?" user_id]))
 
 (defn find-post-by-title
   ([title] (find-post-by-title title sqlite-db))
