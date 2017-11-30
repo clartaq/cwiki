@@ -153,7 +153,10 @@
                                  name "'")]))]
      user-map)))
 
-(defn get-user-by-username-and-password [username password]
+(defn get-user-by-username-and-password
+  "Look up a user and verify that the password is a match. If so,
+  return the user record, otherwise return nil."
+  [username password]
   (prn username password)
   (let [result (find-user-by-name username)
         pw-hash (:user_password result)]
