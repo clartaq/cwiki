@@ -170,13 +170,19 @@
                              :for   "new-user-name"} "User Name"]]
                    (text-field {:class     "form-text-field"
                                 :autofocus "autofocus"
-                                :value     user-name} "new-user-name")]
+                                :value     user-name} "new-user-name")
+                   [:div {:class "form-restrictions"}
+                    "The user name cannot be empty. Any new user name
+                    cannot match an existing user name. The comparison is
+                    case-insensitive."]]
                   [:div {:class "form-group"}
                    [:div {:class "form-label-div"}
                     [:label {:class "form-label"
                              :for   "password"} "Password"]]
                    (password-field {:class "form-password-field"}
-                                   "new-password")]
+                                   "new-password")
+                   [:div {:class "form-restrictions"}
+                    "To leave the password as is, leave the field blank."]]
                   [:div {:class "form-group"}
                    [:div {:class "form-label-div"}
                     [:label {:class "form-label"
@@ -189,7 +195,10 @@
                     [:label {:class "form-label"
                              :for   "recovery-email"} "Password Recovery email"]]
                    (email-field {:class "form-email-field"
-                                 :value user-email} "new-email")]
+                                 :value user-email} "new-email")
+                   [:div {:class "form-restrictions"}
+                    "To erase the email field, erase delete all of the text
+                     in the field and leave it blank."]]
                   [:div {:class "button-bar-container"}
                    (submit-button {:id    "change-user-button"
                                    :class "form-button button-bar-item"} "Change")
