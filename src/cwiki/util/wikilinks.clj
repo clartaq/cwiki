@@ -88,8 +88,16 @@
   be handled."
   [link-parts req]
   (let [page-title (:title-part link-parts)
+        is-reader-user (ri/is-reader-user? req)
+        ok-to-link (not is-reader-user)
+        class-to-use (if ok-to-link
+                       "any-old-class"
+                       "not-active")
+        style-to-use (if ok-to-link
+                       ""
+                       "pointer-events:none;cursor:default;color:lightgray;")
         uri (u/url-encode (str page-title))
-        h (hc/html (link-to {:style "color:red"}
+        h (hc/html (link-to {:style style-to-use}
                             uri (:display-part link-parts)))]
     h))
 
