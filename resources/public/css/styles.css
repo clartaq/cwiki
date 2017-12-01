@@ -406,6 +406,12 @@ textarea#content {
     pointer-events: none;
 }
 
+.form-restrictions {
+    width: 30%;
+    font-size: 0.75rem;
+    line-height: 1.0rem;
+}
+
 .required-field-hint {
     font-size: 0.75rem;
 }
