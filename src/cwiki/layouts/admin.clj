@@ -109,6 +109,10 @@
   [req]
   (base/short-message "Nothing to Do" "There are no suitable users to edit."))
 
+(defn must-not-be-empty-page
+  []
+  (base/short-message "Can't Do That!" "The user name cannot be empty."))
+
 (defn select-user-to-edit-page
   "Return a form to obtain the name of the user to be edited."
   [req]
@@ -164,12 +168,14 @@
                   [:p {:class "form-title"} "Edit the Profile of An Existing User"]
                   [:p (str "Make any modifications needed to "
                            user-name "'s profile.")]
+                  base/required-field-hint
                   [:div {:class "form-group"}
                    [:div {:class "form-label-div"}
-                    [:label {:class "form-label"
+                    [:label {:class "form-label required"
                              :for   "new-user-name"} "User Name"]]
                    (text-field {:class     "form-text-field"
                                 :autofocus "autofocus"
+                                :required "true"
                                 :value     user-name} "new-user-name")
                    [:div {:class "form-restrictions"}
                     "The user name cannot be empty. Any new user name
