@@ -36,6 +36,11 @@
   [req]
   (= ":admin" (req->user-role req)))
 
+(defn is-reader-user?
+  "Return true if the user has the role of reader, false otherwise."
+  [req]
+  (= ":reader" (req->user-role req)))
+
 (defn is-cwiki-user?
   "Return true if CWiki is the logged in user, false otherwise."
   [req]
