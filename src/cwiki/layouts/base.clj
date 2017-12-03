@@ -118,9 +118,8 @@
                           (get-delete-link-for-existing-page post-map req))]
      [:nav {:class "hmenu"}
       [:p
-       ; Remove until I understand the bug.
-;       (when (ath/can-create? req)
-;         (menu-item-span [:a {:href "/New Page/create"} "New"]))
+       (when (ath/can-create? req)
+         (menu-item-span [:a {:href "/New Page"} "New"]))
        (when edit-link
          (menu-item-span edit-link))
        (when delete-link
@@ -285,7 +284,6 @@
   argument has a nil entry for the :post_id key in the map -- nil causes
   creation, non-nil is an edit."
   [post-map req]
-  (println "Enter compose-create-or-edit-page")
   (let [id (db/page-map->id post-map)
         title (db/page-map->title post-map)
         content (db/page-map->content post-map)
@@ -293,7 +291,6 @@
         tab-title (if id
                     (str "Editing " t-title)
                     (str "Creating " t-title))]
-    (println "post-map:\n" (pp/pp-map post-map))
     (html5
       (standard-head post-map)
       [:body {:class "page"}
