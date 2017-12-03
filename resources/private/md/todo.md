@@ -1,10 +1,8 @@
 This is an ever-evolving list of things that need doing.
 
-* Get rid of autocomplete on user names on login, create user, and edit user pages.
+* Somewhere along the way, I introduced a huge bug in the routing created when you try to create a new page from the "New" item in the nav bar.
+* Import/Export of pages to files. Would let me do actual editing in CWiki and save the pages back to a file for use in setting up the "Initial Pages".
 * Consolidate some of the nav stuff in the page header into a "More" drop-down menu.
-*  For users with the "reader" role, links to non-existent pages should be disabled rather than showing a normal, clickable link that then throws an error message.
-* The routes to the admin pages are spelled, hyphenated, and capitalized differently in different places in the program.
-* Add validation to login page and other forms.
 * New page creation should check for an existing page of the same name before saving.
 * Make searches case-insensitive for the first letter in the page name.
 * Implement Namespaces? Would make separating out groups of pages easier, like all "Help" pages.
@@ -16,7 +14,7 @@ This is an ever-evolving list of things that need doing.
 * Rationalize the CSS
 * At some point, we are going to have to stop creating the initial database from a bunch of Markdown files and just add a pre-built database to the repository. Need to get the tools within CWiki into better shape.
 * Backup and restore for the database.
-* Import/Export. Export pages to Markdown, HTML, PDF (?).
+* Make page lookup from links case-insensitive for the first letter in words.
 * Add the ability to generate a Table of Contents (TOC) for long pages.
 * Version tracking?
 * ~~Be consistent in the use of the name -- either "CWiki" or "cwiki".~~
@@ -24,4 +22,7 @@ This is an ever-evolving list of things that need doing.
 * ~~Add extensions and CSS for tables.~~
 * ~~The edit and create pages should not have a "Delete" link in the nav bar.~~
 * ~~Put role-based users in place.~~
+*  ~~The routes to the admin pages are spelled, hyphenated, and capitalized differently in different places in the program.~~
+*  ~~For users with the "reader" role, links to non-existent pages should be disabled rather than showing a normal, clickable link that then throws an error message.~~
+* ~~Add validation to login page and other forms.~~
 

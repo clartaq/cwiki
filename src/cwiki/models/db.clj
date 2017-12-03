@@ -34,11 +34,14 @@
 
 (def initial-pages [{:title "Front Page" :file-name "Front_Page.md"}
                     {:title "About" :file-name "About.md"}
+                    {:title "About Admin Pages" :file-name "About_Admin_Pages.md"}
+                    {:title "About Backup and Restore" :file-name "About_Backup_and_Restore.md"}
+                    {:title "About Compressing the Database" :file-name "About_Compressing_the_Database.md"}
                     {:title "About CWiki" :file-name "About_CWiki.md"}
+                    {:title "About Images" :file-name "About_Images.md"}
                     {:title "About Roles" :file-name "About_Roles.md"}
                     {:title "About the Sidebar" :file-name "About_the_Sidebar.md"}
                     {:title "Admin" :file-name "Admin.md"}
-                    {:title "Admin Pages" :file-name "Admin_Pages.md"}
                     {:title "CWiki FAQ" :file-name "CWiki_FAQ.md"}
                     {:title "CWiki Name" :file-name "CWiki_Name.md"}
                     {:title "Features" :file-name "Features.md"}
