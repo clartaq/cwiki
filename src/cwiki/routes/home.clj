@@ -22,6 +22,7 @@
 
 (defn save-new-page
   [title content req]
+  (println "Enter save-new-page")
   (db/insert-new-page! title content (ri/req->user-id req))
   (layout/view-wiki-page (db/find-post-by-title title) req))
 
@@ -40,10 +41,12 @@
            (GET "/about" request (about request))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
+               (println "saw post to route /save-edits")
                (save-edits (get params "page-id")
                            (get params "title")
                            (get params "content") request)))
            (POST "/save-new-page" request
              (let [params (request :multipart-params)]
+               (println "saw post to route /save-new-page")
                (save-new-page (get params "title")
                               (get params "content") request))))
