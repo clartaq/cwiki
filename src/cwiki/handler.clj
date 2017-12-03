@@ -17,7 +17,8 @@
             [cwiki.layouts.base :as layout]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [ring.util.response :refer [redirect status]]))
+            [ring.util.response :refer [redirect status]]
+            [cwiki.util.pp :as pp]))
 
 (def backend (backends/session))
 
@@ -56,17 +57,6 @@
 
       (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
                              (build-response new-body request))
-
-      ;(or (= title "Admin")
-      ;    (= title "Compress")
-      ;    (= title "Backup")
-      ;    (= title "Restore")
-      ;    (= title "Create User")
-      ;    (= title "Edit User")
-      ;    (= title "Delete User")
-      ;    (= title "Reset Password")) (build-response
-      ;                                  (layout/compose-not-yet-view "any")
-      ;                                  request)
 
       (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")]
                                      (if (ath/can-edit-and-delete? request title-only)
