@@ -255,13 +255,19 @@
      (into (special/get-all-special-page-names)
            (mapv #(:page_title %) title-array)))))
 
+(defn- case-insensitive-comparator
+  "Case-insensitive string comparator."
+  [^String s1 ^String s2]
+  (.compareToIgnoreCase s1 s2))
+
 (defn get-all-users
   "Return a sorted set of all of the user names known to the wiki."
   ([]
    (get-all-users sqlite-db))
   ([db-name]
    (when-let [user-array (jdbc/query db-name ["select user_name from users"])]
-     (into (sorted-set) (mapv #(:user_name %) user-array)))))
+     (into (sorted-set-by case-insensitive-comparator)
+           (mapv #(:user_name %) user-array)))))
 
 (defn get-all-namespaces
   "Return a sorted set of all of the namespaces in the wiki."
@@ -269,7 +275,8 @@
    (get-all-namespaces sqlite-db))
   ([db-name]
    (when-let [namespace-array (jdbc/query db-name ["select namespace_name from namespaces"])]
-     (into (sorted-set) (mapv #(:namespace_name %) namespace-array)))))
+     (into (sorted-set-by case-insensitive-comparator)
+           (mapv #(:namespace_name %) namespace-array)))))
 
 (defn get-all-tags
   "Return a sorted set of all of the tags in the wiki."
@@ -277,7 +284,8 @@
    (get-all-tags sqlite-db))
   ([db-name]
    (when-let [tag-array (jdbc/query db-name ["select tag_name from tags"])]
-     (into (sorted-set) (mapv #(:tag_name %) tag-array)))))
+     (into (sorted-set-by case-insensitive-comparator)
+           (mapv #(:tag_name %) tag-array)))))
 
 (defn update-page-title-and-content!
   [id title content]
