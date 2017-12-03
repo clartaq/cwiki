@@ -64,8 +64,14 @@
     (:admin-only? m)
     nil))
 
+(defn- case-insensitive-comparator
+  "Case-insensitive string comparator."
+  [^String s1 ^String s2]
+  (.compareToIgnoreCase s1 s2))
+
 (defn get-all-special-page-names
   "Return a sorted set of all of the special page titles in the wiki."
   []
-  (into (sorted-set) (mapv #(:name %) special-pages)))
+  (into (sorted-set-by case-insensitive-comparator)
+        (mapv #(:name %) special-pages)))
 
