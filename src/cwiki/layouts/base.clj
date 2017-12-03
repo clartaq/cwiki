@@ -12,6 +12,7 @@
             [compojure.response :as response]
             [cwiki.models.db :as db]
             [cwiki.util.authorization :as ath]
+            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.util.wikilinks :refer [replace-wikilinks
                                           get-edit-link-for-existing-page
@@ -117,8 +118,9 @@
                           (get-delete-link-for-existing-page post-map req))]
      [:nav {:class "hmenu"}
       [:p
-       (when (ath/can-create? req)
-         (menu-item-span [:a {:href "/New Page/create"} "New"]))
+       ; Remove until I understand the bug.
+;       (when (ath/can-create? req)
+;         (menu-item-span [:a {:href "/New Page/create"} "New"]))
        (when edit-link
          (menu-item-span edit-link))
        (when delete-link
@@ -283,6 +285,7 @@
   argument has a nil entry for the :post_id key in the map -- nil causes
   creation, non-nil is an edit."
   [post-map req]
+  (println "Enter compose-create-or-edit-page")
   (let [id (db/page-map->id post-map)
         title (db/page-map->title post-map)
         content (db/page-map->content post-map)
@@ -290,6 +293,7 @@
         tab-title (if id
                     (str "Editing " t-title)
                     (str "Creating " t-title))]
+    (println "post-map:\n" (pp/pp-map post-map))
     (html5
       (standard-head post-map)
       [:body {:class "page"}
@@ -308,7 +312,8 @@
                    [:br]
                    [:div {:class "button-bar-container"}
                     (submit-button {:id    "Save Button"
-                                    :class "form-button button-bar-item"} "Save Changes")
+                                    :class "form-button button-bar-item"}
+                                   "Save Changes")
                     [:input {:type    "button" :name "cancel-button"
                              :value   "Cancel"
                              :class   "form-button button-bar-item"
