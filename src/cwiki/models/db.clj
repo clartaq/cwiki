@@ -5,7 +5,8 @@
            [clj-time.core :as t]
            [clj-time.coerce :as c]
            [cwiki.util.special :as special])
-  (:import (java.io File)))
+  (:import (java.io File)
+           (java.util UUID)))
 
 ;; Things that deal with the database file and connection.
 
@@ -63,7 +64,7 @@
 
 (def initial-users [{:user_name              "CWiki"
                      :user_role              :cwiki
-                     :user_password          (hashers/derive "BlahBlahBlah")
+                     :user_password          (hashers/derive (str (UUID/randomUUID)))
                      :user_new_password      nil
                      :user_new_password_time nil
                      :user_email             nil
