@@ -1,9 +1,7 @@
 This is an ever-evolving list of things that need doing.
 
-* Somewhere along the way, I introduced a huge bug in the routing created when you try to create a new page from the "New" item in the nav bar.
 * Import/Export of pages to files. Would let me do actual editing in CWiki and save the pages back to a file for use in setting up the "Initial Pages".
 * Consolidate some of the nav stuff in the page header into a "More" drop-down menu.
-* New page creation should check for an existing page of the same name before saving.
 * Make searches case-insensitive for the first letter in the page name.
 * Implement Namespaces? Would make separating out groups of pages easier, like all "Help" pages.
 * Add a tagging system. Look into hierarchical tagging systems.
@@ -25,4 +23,6 @@ This is an ever-evolving list of things that need doing.
 *  ~~The routes to the admin pages are spelled, hyphenated, and capitalized differently in different places in the program.~~
 *  ~~For users with the "reader" role, links to non-existent pages should be disabled rather than showing a normal, clickable link that then throws an error message.~~
 * ~~Add validation to login page and other forms.~~
+* ~~New page creation should check for an existing page of the same name before saving.~~
+* ~~Somewhere along the way, I introduced a huge bug in the routing created when you try to create a new page from the "New" item in the nav bar.~~
 

@@ -22,11 +22,19 @@
     (db/update-page-title-and-content! actual-id new-title new-content)
     (layout/view-wiki-page (db/find-post-by-title new-title) req)))
 
-(defn save-new-page
-  "Save a new page to the database."
+(defn- save-and-view-page
+  "Do the actual saving then retrieve and view the page."
   [title content req]
   (db/insert-new-page! title content (ri/req->user-id req))
   (layout/view-wiki-page (db/find-post-by-title title) req))
+
+(defn save-new-page
+  "Save a new page to the database."
+  [title content req]
+  (if (db/find-post-by-title title)
+    (layout/short-message "Can't Do That"
+                          "A post with that title already exists.")
+    (save-and-view-page title content req)))
 
 (defn home
   "Handle a request to view the 'Home' page if there is an
