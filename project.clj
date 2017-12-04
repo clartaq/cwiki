@@ -1,6 +1,6 @@
 (defproject cwiki "0.0.6-SNAPSHOT"
   :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+  :url "https://bitbucket.org/David_Clark/cwiki"
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [buddy/buddy-auth "2.1.0"]
                  [buddy/buddy-hashers "1.3.0"]
