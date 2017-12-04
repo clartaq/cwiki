@@ -32,3 +32,13 @@ It can make initially signing in a bit more of a hassle every time you do it, bu
 #### Why Doesn't the Content of a Page Use the Entire Width of the Browser Window? ####
 
 This is on purpose. Since CWiki is intended to contain primarily readable content, the content is restricted in width so it is easier to read. Beyond a certain line length, it becomes more difficult to read text. Therefore, CWiki restricts lines to about 70 characters.
+
+#### What Version of Markdown Does CWiki Use? ####
+
+Well, it doesn't use any of the "standard" versions. That was one of the reasons for creating it in the first place. It is closest to "[Github Flavored Markdown](https://github.github.com/gfm/)" or GFM. GFM is itself based on [CommonMark](http://spec.commonmark.org/0.28/), an attempt to standardize the Markdown syntax.
+
+The "authoritative" guide for the syntax used by CWiki is probably the [[Text Formatting]] page.
+
+#### Does CWiki Support Automatic Generation of Tables of Contents? ####
+
+Not exactly. But there is a method that will work with just about any Markdown editor. See [[How to Make a Table of Contents]] for an example.

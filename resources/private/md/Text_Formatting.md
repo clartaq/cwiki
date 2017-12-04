@@ -108,3 +108,7 @@ Less | Pretty | Markdown
 --- | --- | ---
 *Still* | `renders` | **nicely**
 1 | 2 | 3
+
+## Tables of Contents ##
+
+CWiki does not include any extensions to produce Tables of Contents since they can be created easily in almost any Markdown editor. See [[How to Make a Table of Contents]] for an example.

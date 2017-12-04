@@ -10,9 +10,11 @@ You can create a page by one of three methods.
 
 When you are editing a page and want to link to a page that doesn't exist yet, just enter the link to the non-existent page. When you are done editing the current page, the link to the page you want to create will appear in red, like this: [[page I want to link to]]. Then you can just click on the red link. The editor will open up letting you put whatever content you want on the newly created page.
 
-### Click the "New" Link in the Navigation Bar (BROKEN!!!) ###
+### Click the "New" Link in the Navigation Bar ###
 
 At the top of the wiki window in your browser, there are a series of navigation links, including one that says "New". When you click that link, a new page will be created. Just change the title and enter the content you want. Finally, click the "Save Changes" button below the editor. The new page will be saved.
+
+This method is probably the quickest way to get started writing something, but you will still need to link the page into some other part of the wiki. Otherwise you will have an "Orphan": a page that is not referred to by any other part of the wiki.
 
 ### Edit the Browser Address Bar (Not Recommended) ###
 
@@ -20,7 +22,7 @@ If you look at the address bar in your browser, it should show something like `h
 
 ## Page Content ##
 
-A "page" consists of a couple of things.
+A "page" in the wiki consists of a couple of things.
 
 ### The Title ###
 

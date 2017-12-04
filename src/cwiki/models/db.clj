@@ -46,6 +46,7 @@
                     {:title "CWiki FAQ" :file-name "CWiki_FAQ.md"}
                     {:title "CWiki Name" :file-name "CWiki_Name.md"}
                     {:title "Features" :file-name "Features.md"}
+                    {:title "How to Make a Table of Contents" :file-name "How_to_Make_a_Table_of_Contents.md"}
                     {:title "Links Primer" :file-name "Links_Primer.md"}
                     {:title "Other Wiki Software" :file-name "Other_Wiki_Software.md"}
                     {:title "Pages Primer" :file-name "Pages_Primer.md"}
