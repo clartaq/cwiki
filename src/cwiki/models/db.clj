@@ -186,9 +186,13 @@
   (jdbc/update! sqlite-db :users user-map ["user_id=?" user_id]))
 
 (defn find-post-by-title
+  "Look up a post in the database with the given title. Return the page
+  map for the post if found; nil otherwise. The lookup is case-insensitive."
   ([title] (find-post-by-title title sqlite-db))
   ([title db-name]
-   (first (jdbc/query db-name ["select * from pages where page_title=?" title]))))
+   (first (jdbc/query
+            db-name
+            [(str "select * from pages where page_title like '" title "'")]))))
 
 (defn title->user-id
   ([title] (title->user-id title sqlite-db))

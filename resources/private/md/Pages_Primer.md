@@ -28,7 +28,7 @@ A "page" in the wiki consists of a couple of things.
 
 A page must have a title and content. (In the future it may have tags too.)
 
-The title must be unique within the wiki. The comparison for uniqueness is case-sensitive, so the titles "Title" and "title" are considered different. Using titles that differ only by letter case can be confusing, so stick to one system and use it. I try to use the same capitalization that would be used in a book title.
+The title must be unique within the wiki. The comparison for uniqueness is case-insensitive, so the titles "Title" and "title" are considered the same. Using titles that differ only by letter case can be confusing and is not allowed.
 
 ### The Content ###
 
