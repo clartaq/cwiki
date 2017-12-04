@@ -1,7 +1,7 @@
 (ns cwiki.handler
   (:require [buddy.auth.accessrules :refer [error success wrap-access-rules]]
             [buddy.auth.backends :as backends]
-            [buddy.auth.middleware :refer [wrap-authentication wrap-authorization]]
+            [buddy.auth.middleware :refer [wrap-authentication]]
             [cemerick.url :as u]
             [clojure.string :as s]
             [compojure.core :refer [defroutes routes]]
@@ -96,14 +96,9 @@
            (page-finder-route (layout/compose-404-page))
            (route/not-found (layout/compose-404-page)))
 
-(defn wrap-auth [handler]
-  (-> handler
-      (wrap-authentication backend)
-      (wrap-authorization backend)))
-
 (def app
   (-> (routes admin-routes home-routes login-routes app-routes)
-      (wrap-auth)
+      (wrap-authentication backend)
       (handler/site)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
       (wrap-base-url)))
