@@ -20,11 +20,11 @@
   (-> #'app
     ; Makes static assets in $PROJECT_DIR/resources/public/ available.
     (wrap-file "resources")
-    ; Content-Type, Content-Length, and Last Modified headers for files in body
+    ; Content-Type, Content-Length, and Last Modified headers for files in body.
     (wrap-file-info)))
 
 (defn start-server
-  "used for starting the server in development mode from REPL"
+  "Used for starting the server in development mode from REPL."
   [& [port]]
   (let [port (if port (Integer/parseInt port) 1350)]
     (reset! server

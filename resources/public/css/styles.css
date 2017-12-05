@@ -15,6 +15,23 @@
 ** footer.
 */
 
+/*
+   Loading the MathJax fonts if they are stored on the server.
+
+@font-face {
+    font-family: "STIX2Text";
+url("/public/fonts/STIX2Text-Regular.woff2") format("woff2"),
+url("/public/fonts/STIX2Text-Italic.woff2") format("woff2"),
+url("/public/fonts/STIX2Text-Bold.woff2") format("woff2"),
+url("/public/fonts/STIX2Text-BoldItalic.woff2") format("woff2"),
+}
+
+@font-face {
+    font-family: "STIX2Math";
+url("/public/fonts/STIX2Math.woff2") format("woff2"),
+}
+*/
+
 * {
     margin: 0;
     padding: 0;
@@ -417,7 +434,7 @@ textarea#content {
 }
 
 .required:after, .required-field-hint:after {
-    content:" *";
+    content: " *";
     color: red;
 }
 

@@ -1,19 +1,16 @@
 This is an ever-evolving list of things that need doing.
 
+* Show a page to create an administrator account upon first use after installation.
 * Import/Export of pages to files. Would let me do actual editing in CWiki and save the pages back to a file for use in setting up the "Initial Pages".
 * Consolidate some of the nav stuff in the page header into a "More" drop-down menu.
-* Make searches case-insensitive for the first letter in the page name.
 * Implement Namespaces? Would make separating out groups of pages easier, like all "Help" pages.
 * Add a tagging system. Look into hierarchical tagging systems.
 * Implement within-wiki search.
-* Any maintenance tasks to perform? Database compression for example.
-* How to handle images. Should they go in a the database? (Almost certainly yes.)
+* Any maintenance tasks like database compression, backup and restore, for example.
 * Beautify and style the edit/create pages.
 * Rationalize the CSS
-* At some point, we are going to have to stop creating the initial database from a bunch of Markdown files and just add a pre-built database to the repository. Need to get the tools within CWiki into better shape.
-* Backup and restore for the database.
+* At some point, we are going to have to stop creating the initial database from a bunch of Markdown files and just add a pre-built database to the repository. Need to get the tools * Backup and restore for the database.
 * Make page lookup from links case-insensitive for the first letter in words.
-* Add the ability to generate a Table of Contents (TOC) for long pages.
 * Version tracking?
 * ~~Be consistent in the use of the name -- either "CWiki" or "cwiki".~~
 * ~~Layout and use the Sidebar.~~
@@ -25,4 +22,6 @@ This is an ever-evolving list of things that need doing.
 * ~~Add validation to login page and other forms.~~
 * ~~New page creation should check for an existing page of the same name before saving.~~
 * ~~Somewhere along the way, I introduced a huge bug in the routing created when you try to create a new page from the "New" item in the nav bar.~~
+* ~~Add the ability to generate a Table of Contents (TOC) for long pages.~~
+* ~~How to handle images. Should they go in a the database? (Almost certainly yes.)~~
 

@@ -1,6 +1,5 @@
 (ns cwiki.handler
-  (:require [buddy.auth.accessrules :refer [error success wrap-access-rules]]
-            [buddy.auth.backends :as backends]
+  (:require [buddy.auth.backends :as backends]
             [buddy.auth.middleware :refer [wrap-authentication]]
             [cemerick.url :as u]
             [clojure.string :as s]
@@ -17,8 +16,7 @@
             [cwiki.layouts.base :as layout]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [ring.util.response :refer [redirect status]]
-            [cwiki.util.pp :as pp]))
+            [ring.util.response :refer [redirect status]]))
 
 (def backend (backends/session))
 
