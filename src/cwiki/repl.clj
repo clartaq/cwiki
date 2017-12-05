@@ -1,8 +1,14 @@
+;;;
+;;; Some repl convenience functions. The application should be
+;;; launched from here.
+;;;
+
 (ns cwiki.repl
-  (:use cwiki.handler
-        cwiki.models.db
-        ring.server.standalone
-        [ring.middleware file-info file]))
+  (:require [cwiki.handler :refer [app init destroy]]
+            [cwiki.models.db :as db]
+            [ring.middleware.file :refer [wrap-file]]
+            [ring.middleware.file-info :refer [wrap-file-info]]
+            [ring.server.standalone :refer [serve]]))
 
 (defonce server (atom nil))
 
@@ -20,7 +26,7 @@
 (defn start-server
   "used for starting the server in development mode from REPL"
   [& [port]]
-  (let [port (if port (Integer/parseInt port) 8050)]
+  (let [port (if port (Integer/parseInt port) 1350)]
     (reset! server
             (serve (get-handler)
                    {:port port
@@ -34,7 +40,7 @@
   "Used to initialize the database, if needed, and start the
   server in development mode from the REPL."
   [& [port]]
-  (init-db!)
+  (db/init-db!)
   (start-server port))
 
 (defn stop-server []
