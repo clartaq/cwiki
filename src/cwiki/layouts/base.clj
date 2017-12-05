@@ -89,8 +89,7 @@
   [:head
    [:title (get-tab-title post-map)]
    (include-css "/css/styles.css")
-   (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
-   (include-js "/js/mathjax-config.js")
+   (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
    (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")])
 
 (defn- menu-item-span
