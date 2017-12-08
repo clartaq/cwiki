@@ -1,6 +1,6 @@
 These are some features of CWiki.
 
-* The program is open source and available on [BitBucket](https://bitbucket.org/product) at xxx.
+* The program is open source and available on [BitBucket](https://bitbucket.org/product) at this [link](https://bitbucket.org/David_Clark/cwiki).
 * The program is written in the [Clojure](https://clojure.org/) programming language. Clojure is a modern [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) dialect that is hosted on the [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) (JVM).
 * The program achieves cross-platform functionality by the use of Clojure, the JVM and using a web server running on your local machine.
 * All of the data in the program is stored in a single database file. CWiki uses the [SQLite](https://www.sqlite.org/) database engine to store and maintain your data.
@@ -20,3 +20,13 @@ This is made possible by using the online  [MathJax](https://www.mathjax.org/) e
     (jdbc/insert! sqlite-db :posts post-map)
     (find-post-by-title title)))
 ```
+
+* Tables can be created with a simple syntax due to an extension to the Markdown language.
+
+| Fruit |  Color | Description | Price ($/lb) |
+|-------|:------:|:-----------|-------------:|
+| Apple  |   Red  |    Crisp    |         0.99 |
+| Pear   |  Green |    Sweet    |         1.49 |
+| Plum   | Purple |     Tart    |         1.99 |
+| Orange | Orange | Tangy |      1.29
+

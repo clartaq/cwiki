@@ -10,7 +10,22 @@ You can do inline formatting like:
 * You can also mark some things as deleted with ~~strikethrough~~.
 * And do various combinations of the above like <u>***underlined bold italics***</u>.
 
-You can make headers. Here are the different types supported.
+The way you do it is all explained below.
+
+You can make headers by inserting one or more number signs ("#") (or pound signs or hashes) before and after the heading. The more number signs, the lower level the header. A total of six levels are supported.
+
+Here are the different types supported and how to make them.
+
+```
+# Header 1 #
+## Header 2 ##
+### Header 3 ###
+#### Header 4 ####
+##### Header 5 #####
+###### Header 6 ######
+```
+
+The above produces:
 
 # Header 1 #
 ## Header 2 ##
@@ -19,22 +34,68 @@ You can make headers. Here are the different types supported.
 ##### Header 5 #####
 ###### Header 6 ######
 
-Here is a horizontal rule.
+Note that not all Markdown editors require the heading text to be followed by the same number of number signs. However, others do. When importing or exporting text from CWiki, it's probably a good idea to match the number signs. As far as I know, all Markdown editors will work with that markup.
 
-----------
+Here is a horizontal rule produced by at least three hyphens in a row: `---`.
+
+---
 
 
-Here is an unordered list:
+An unordered, or "bullet" list can be created by preceding each line in the list with an asterisk or dash.
+
+```
+- a list item
+- another list item
+- list item with formatting like **bold**, *italic*.
+```
+produces:
 
 - a list item
 - another list item
 - list item with formatting like **bold**, *italic*.
 
-Here is a numbered list:
+Note that the words within a list item may themselves have additional formatting applied. Lists can also have multiple levels, achieved by indenting the levels:
 
+```
+- top level
+	- second level
+		- third level
+			- and so on.
+```
+- top level
+	- second level
+		- third level
+			- and so on.
+
+You can produce numbered lists by preceding the list items with a number and period. This:
+
+```
 1. The first item.
+	1. The first sub-item.
+	2. And another.
 1. The second item.
 1. And the third.
+```
+Produces:
+
+1. The first item.
+	1. The first sub-item.
+	2. And another.
+1. The second item.
+1. And the third.
+
+Block quotes are produced by preceding each line with a "greater than" sign, ">". For example, this:
+
+```
+> This is what a block quote looks like.
+> It can go on and on, just like the
+> person you are quoting. You don't
+> have to use it for quotes though. You
+> can use it just as another way to make
+> a particular piece of text stand out.
+```
+
+produces this output:
 
 > This is what a block quote looks like.
 > It can go on and on, just like the

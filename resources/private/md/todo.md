@@ -1,5 +1,7 @@
 This is an ever-evolving list of things that need doing.
 
+* Creation of wikilinks needs to understand in-line code spans so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
+* The first line in the second level of a list has some poor formatting -- too close to the line above.
 * Import/Export of pages to files. Would let me do actual editing in CWiki and save the pages back to a file for use in setting up the "Initial Pages".
 * Consolidate some of the nav stuff in the page header into a "More" drop-down menu.
 * Implement Namespaces? Would make separating out groups of pages easier, like all "Help" pages.
