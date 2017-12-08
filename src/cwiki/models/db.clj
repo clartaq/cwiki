@@ -1,9 +1,10 @@
 (ns cwiki.models.db
   (require [buddy.hashers :as hashers]
-           [clojure.java.jdbc :as jdbc]
            [clojure.java.io :as io]
-           [clj-time.core :as t]
+           [clojure.java.jdbc :as jdbc]
+           [clojure.string :as s]
            [clj-time.coerce :as c]
+           [clj-time.core :as t]
            [cwiki.util.special :as special])
   (:import (java.io File)
            (java.util UUID)))
@@ -83,26 +84,6 @@
                      :user_email_expires     nil
                      :user_touched           (c/to-sql-time (t/now))
                      :user_registration      (c/to-sql-time (t/now))}
-                    {:user_name              "editor"
-                     :user_role              :editor
-                     :user_password          (hashers/derive "editor")
-                     :user_new_password      nil
-                     :user_new_password_time nil
-                     :user_email             nil
-                     :user_email_token       0
-                     :user_email_expires     nil
-                     :user_touched           (c/to-sql-time (t/now))
-                     :user_registration      (c/to-sql-time (t/now))}
-                    {:user_name              "writer"
-                     :user_role              :writer
-                     :user_password          (hashers/derive "writer")
-                     :user_new_password      nil
-                     :user_new_password_time nil
-                     :user_email             nil
-                     :user_email_token       0
-                     :user_email_expires     nil
-                     :user_touched           (c/to-sql-time (t/now))
-                     :user_registration      (c/to-sql-time (t/now))}
                     {:user_name              "guest"
                      :user_role              :reader
                      :user_password          (hashers/derive "guest")
@@ -121,6 +102,21 @@
    (:user_id (first (jdbc/query
                       db-name
                       ["select user_id from users where user_name=?" name])))))
+
+(defn user-name->user-role
+  "Return the user role (a keyword) assigned to the named user. If the
+  user does not exist, return nil."
+  ([name]
+   (user-name->user-role name sqlite-db))
+  ([name db-name]
+   (let [string-role (:user_role
+                       (first
+                         (jdbc/query
+                           db-name
+                           ["select user_role from users where user_name=?" name])))]
+     (when string-role
+       (let [colon-stripped (s/replace-first string-role ":" "")]
+         (keyword colon-stripped))))))
 
 (defn get-cwiki-user-id
   []
@@ -348,20 +344,29 @@
   ([user-id db-name]
    (jdbc/delete! db-name :users ["user_id=?" user-id])))
 
+(defn has-admin-logged-in?
+  "Return true if the admin has ever logged in; nil otherwise."
+  []
+  (let [result (jdbc/query
+                 sqlite-db
+                 ["select admin_has_logged_in from admin where admin_id=?" 1])]
+    (:admin_has_logged_in (first result))))
+
+(defn set-admin-has-logged-in
+  [b]
+  (jdbc/update! sqlite-db :admin {:admin_has_logged_in b}
+                ["admin_id=?" 1]))
+
+(defn- init-admin-table
+  []
+  (jdbc/insert! sqlite-db :admin {:admin_id            1
+                                  :admin_has_logged_in nil}))
+
 (defn- add-initial-users!
   []
   (println "Adding initial users.")
   (mapv #(jdbc/insert! sqlite-db :users %) initial-users)
   (println "Done."))
-
-(defn get-initial-user-id
-  "Get the user id for the initial user (CWiki). Probably always 1."
-  []
-  (println "Getting initial user id.")
-  (let [initial-id (jdbc/query sqlite-db ["select user_id from users where user_name=?" "CWiki"])
-        id (:user_id (first initial-id))]
-    (println "Returning id:" id)
-    id))
 
 (defn- add-initial-pages!
   [user-id]
@@ -401,6 +406,9 @@
                                                      [:user_email_expires :datetime]
                                                      [:user_touched :datetime]
                                                      [:user_registration :datetime]])
+                             (jdbc/create-table-ddl :admin
+                                                    [[:admin_id :integer :primary :key]
+                                                     [:admin_has_logged_in :boolean]])
                              (jdbc/create-table-ddl :pages
                                                     [[:page_id :integer :primary :key]
                                                      [:page_created :datetime]
@@ -427,8 +435,9 @@
 (defn- create-db
   []
   (create-tables)
+  (init-admin-table)
   (add-initial-users!)
-  (add-initial-pages! (get-initial-user-id))
+  (add-initial-pages! (get-cwiki-user-id))
   (add-initial-roles!)
   (add-initial-namespaces!)
   (add-initial-tags!))
