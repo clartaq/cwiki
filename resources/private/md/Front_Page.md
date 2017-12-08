@@ -1,8 +1,10 @@
-This is the [[Front Page]] of your new [wiki](https://en.wikipedia.org/wiki/Wiki). This particular wiki goes by the name of [[About CWiki|CWiki]].
+This is the **Front Page** of your new [wiki](https://en.wikipedia.org/wiki/Wiki). This particular wiki goes by the name of [[About CWiki|CWiki]].
 
 As the article linked above describes, a wiki is a program that allows you to organize (or not) bits of information that you want to record somewhere. A wiki differs from a note taking application in that it allows you to link it's various parts together. For example, scattered throughout this page are links to both external web sites and pages maintained in a database on your local computer.
 
-The syntax used to write pages is a slight variant of [Markdown](https://daringfireball.net/projects/markdown/). The syntax accepted by this wiki includes an extension to allow [wikilinks](https://en.wikipedia.org/wiki/Help:Link), that is, links to other pages within the wiki, in a Markdown file. (See the [[Links Primer]] for details.)
+The syntax used to write pages is a slight variant of [Markdown](https://daringfireball.net/projects/markdown/). The syntax accepted by this wiki includes an extension to allow  [[Wikilinks|wikilinks]], that is, links to other pages within the wiki, in a Markdown file. (See the [[Links Primer]] for details.)
+
+If this is your first time here and you're an admin (administrative) user, you can read about the types of administrative maintenance tasks you can do [[About Admin Pages|here]].
 
 ## Features ##
 

@@ -56,7 +56,7 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 
 - Written in Python.
 - Has code execution features.
-- [More](http://www.giuspen.com/cherrytree/#features)
+- [More](http://www.giuspen.com/cherrytree/#features) from the program web page.
 
 ### Pros ###
 
@@ -96,7 +96,8 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 
 - Written in PHP.
 - Very robust.
-- 
+- Supports version control of pages.
+
 ### Pros ###
 
 - Incredible amounts of documentation.
@@ -110,14 +111,22 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 
 ## XWiki ##
 
-XWiki is a wiki designed for enterprise use.
+[XWiki](http://www.xwiki.org/xwiki/bin/view/Main/WebHome) is a wiki designed for enterprise use.
 
 ### Features ###
 
 - Written in Java
+- Supports version control of pages.
+- Includes a wiki, blog, file manager, forums, extensions, ...
 
 ### Pros ###
 
+- Lots of features relevant to enterprise users.
+- Lots of export formats.
+
 ### Cons ###
 
-Each of these has pluses and minuses. Obvious, or I wouldn't have written CWiki.
+- Huge installation.
+- Complicated administration in my opinion.
+
+Each of these has pluses and minuses. Obviously, or I wouldn't have written CWiki.

@@ -56,7 +56,8 @@
                     {:title "Special Pages" :file-name "Special_Pages.md"}
                     {:title "Text Formatting" :file-name "Text_Formatting.md"}
                     {:title "Technical Notes" :file-name "Technical_Notes.md"}
-                    {:title "To Do" :file-name "todo.md"}])
+                    {:title "To Do" :file-name "todo.md"}
+                    {:title "Wikilinks" :file-name "Wikilinks.md"}])
 
 (def valid-roles [:cwiki :admin :editor :writer :reader])
 
