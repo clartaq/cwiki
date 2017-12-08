@@ -42,7 +42,25 @@
   [req]
   (if (ri/is-authenticated-user? req)
     (layout/view-wiki-page (read-front-page) req)
-    (redirect "/login")))
+    (if-not (db/has-admin-logged-in?)
+      (do
+        (db/set-admin-has-logged-in true)
+        (layout/inform-admin-of-first-use
+          "Hello Admin!"
+          [:div
+           [:p "It looks like this is the first time
+                anyone has logged onto this wiki."]
+           [:p "Since you seem to be the first, you are
+                the 'admin' (administrative) user. That means
+                you have special privileges in terms of the
+                functionality available to you."]
+           [:p "On the login page that follows, log in
+                with the user name 'admin' and the password
+                'admin' (without quotes). Then read up on
+                what the admin can do."]
+           [:p "For privacy, you may want to at least change the user
+                name and password from the default values."]]))
+      (redirect "/login"))))
 
 (defn about
   "Handle a request for the 'About' route if there is

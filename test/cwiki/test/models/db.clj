@@ -13,6 +13,12 @@
     (is (nil? (lookup-user "glofeld" "xyxyxyx")))
     (is (not (nil? (lookup-user "guest" "guest"))))))
 
+(deftest user-name->user-role-test
+  (testing "user-name->user-role"
+    (is (= :cwiki (user-name->user-role "CWiki")))
+    (is (= :reader (user-name->user-role "guest")))
+    (is (nil? (user-name->user-role "non-existent-user")))))
+
 (deftest page-id->title-test
   (testing "page-id->title"
     (is (nil? (page-id->title 1039)))
