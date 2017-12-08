@@ -31,7 +31,7 @@
            (com.vladsch.flexmark.util.options MutableDataSet)
            (java.util ArrayList)))
 
-(def program-name-and-version "CWiki v0.0.6-SNAPSHOT")
+(def program-name-and-version "CWiki v0.0.6")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.
