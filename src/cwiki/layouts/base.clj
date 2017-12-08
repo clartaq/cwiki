@@ -257,6 +257,20 @@
              :class   "form-button"
              :onclick "window.history.back();"}]]]))
 
+(defn inform-admin-of-first-use
+  "Return a page with a title, message and 'Ok' button.
+  The button press will take the user to the login page."
+  [title message]
+  (short-form-template
+    [:div {:class "cwiki-form"}
+     [:p {:class "form-title"} title]
+     [:div message]
+     [:div {:class "button-bar-container"}
+      [:input {:type    "button" :name "ok-button"
+               :value   "Ok"
+               :class   "form-button"
+               :onclick "window.location.href='/login'"}]]]))
+
 (defn compose-not-yet-view
   "Return a page stating that the requested feature
   is not available yet."
