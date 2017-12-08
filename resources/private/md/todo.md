@@ -1,6 +1,5 @@
 This is an ever-evolving list of things that need doing.
 
-* Show a page to create an administrator account upon first use after installation.
 * Import/Export of pages to files. Would let me do actual editing in CWiki and save the pages back to a file for use in setting up the "Initial Pages".
 * Consolidate some of the nav stuff in the page header into a "More" drop-down menu.
 * Implement Namespaces? Would make separating out groups of pages easier, like all "Help" pages.
@@ -24,4 +23,5 @@ This is an ever-evolving list of things that need doing.
 * ~~Somewhere along the way, I introduced a huge bug in the routing created when you try to create a new page from the "New" item in the nav bar.~~
 * ~~Add the ability to generate a Table of Contents (TOC) for long pages.~~
 * ~~How to handle images. Should they go in a the database? (Almost certainly yes.)~~
+* ~~Show a page to create an administrator account upon first use after installation.~~
 
