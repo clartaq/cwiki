@@ -43,6 +43,7 @@
                     {:title "About Images" :file-name "About_Images.md"}
                     {:title "About Roles" :file-name "About_Roles.md"}
                     {:title "About the Sidebar" :file-name "About_the_Sidebar.md"}
+                    {:title "About TeX" :file-name "About_TeX.md"}
                     {:title "Admin" :file-name "Admin.md"}
                     {:title "CWiki FAQ" :file-name "CWiki_FAQ.md"}
                     {:title "CWiki Name" :file-name "CWiki_Name.md"}
