@@ -1,5 +1,6 @@
 This is an ever-evolving list of things that need doing.
 
+* When the initial admin user changes their profile then attempts to sign out, the signout page shows the user name before modifications, presumably because it is still in the session record.
 * Creation of wikilinks needs to understand in-line code spans so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
 * The first line in the second level of a list has some poor formatting -- too close to the line above.
 * Import/Export of pages to files. Would let me do actual editing in CWiki and save the pages back to a file for use in setting up the "Initial Pages".
