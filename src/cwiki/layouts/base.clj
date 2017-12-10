@@ -248,14 +248,14 @@
   "Return a page with a title, message and 'Ok' button."
   [title message]
   (short-form-template
-  [:div {:class "cwiki-form"}
-   [:p {:class "form-title"} title]
-   [:p message]
-   [:div {:class "button-bar-container"}
-    [:input {:type    "button" :name "ok-button"
-             :value   "Ok"
-             :class   "form-button"
-             :onclick "window.history.back();"}]]]))
+    [:div {:class "cwiki-form"}
+     [:p {:class "form-title"} title]
+     [:p message]
+     [:div {:class "button-bar-container"}
+      [:input {:type    "button" :name "ok-button"
+               :value   "Ok"
+               :class   "form-button"
+               :onclick "window.history.back();"}]]]))
 
 (defn inform-admin-of-first-use
   "Return a page with a title, message and 'Ok' button.
@@ -276,7 +276,7 @@
   is not available yet."
   [name]
   (short-message "That's Not Ready"
-                 (str "There is no \"" name \"" route yet.")))
+                 (str "There is no \"" name \" " route yet.")))
 
 (defn compose-404-page
   "Return a 'Not Found' page."
@@ -318,9 +318,17 @@
                      [:post "save-new-page"])
                    (when id
                      (hidden-field :page-id id))
-                   (text-field {:autofocus "autofocus"} "title" title)
-                   (text-area "content" content)
-                   [:br]
+                   [:div {:class "form-group"}
+                    [:div {:class "form-label-div"}
+                     [:label {:class "form-label required"
+                              :for   "title"} "Page Title"]]
+                    (text-field {:class     "form-text-field"
+                                 :autofocus "autofocus"} "title" title)]
+                   [:div {:class "form-group"}
+                    [:div {:class "form-label-div"}
+                     [:label {:class "form-label"
+                              :for   "content"} "Page Content"]]
+                    (text-area {:class "form-text-area"} "content" content)]
                    [:div {:class "button-bar-container"}
                     (submit-button {:id    "Save Button"
                                     :class "form-button button-bar-item"}

@@ -346,6 +346,12 @@ textarea#content {
     padding-bottom: 0.3rem;
 }
 
+.form-text-area {
+    font-size: 0.9rem;
+    padding-top: 0.2rem;
+    padding-bottom: 0.3rem;
+}
+
 .form-email-field {
     font-size: 0.9rem;
     padding-top: 0.2rem;
@@ -533,7 +539,7 @@ li:last-child {
 }
 
 li:first-child {
-    margin-top: -0.8em;
+/*    margin-top: -0.8em;*/
 }
 
 /* Some link styling. */
