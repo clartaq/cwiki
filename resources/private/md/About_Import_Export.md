@@ -1,0 +1,3 @@
+There are no explicit commands to import or export page content. Since you can open a page to edit most pages ([[About Roles|if you are allowed]], you can export it by using "Select All" (`Ctrl-A`) and "Copy" (`Ctrl-C`) any existing page. Then you can paste what you have copied into any other program.
+
+Import is just as easy. [[Pages Primer|Create a new page]] (click "New" up in the window header) and paste your content into the edit window.
