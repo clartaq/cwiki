@@ -17,7 +17,10 @@
      (form-to {:enctype "multipart/form-data"}
               [:post "login"]
               [:p {:class "form-title"} "Sign In"]
-              [:p "You must be logged in to use this wiki."]
+              [:div
+               [:p "You must be logged in to use this wiki."]
+               [:p "You can always log in with user name \"guest\" and
+               password \"guest\" just to look around."]]
               base/required-field-hint
               [:div {:class "form-group"}
                [:div {:class "form-label-div"}
