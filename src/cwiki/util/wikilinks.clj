@@ -118,6 +118,30 @@
     (let [rt (s/replace txt wikilink html)]
       rt)))
 
+;Try:
+;
+;String array[] = str.split("(?<!\\\\),");
+;
+; Basically this is saying split on a comma, except where that comma is
+; preceded by two backslashes. This is called a
+; negative lookbehind zero-width assertion.
+
+;string RemoveBetween(string s, char begin, char end)
+;{
+; Regex regex = new Regex(string.Format("\\{0}.*?\\{1}", begin, end));
+; return regex.Replace(s, string.Empty);
+; }
+;
+;string s = "Give [Me Some] Purple (And More) \\Elephants/ and .hats^";
+;s = RemoveBetween(s, '(', ')');
+;                        s = RemoveBetween(s, '[', ']');
+;                                               s = RemoveBetween(s, '\\', '/');
+;                                               s = RemoveBetween(s, '.', '^');
+
+(defn remove-quoted-code
+  "Return a copy of the input where quoted code sections have been removed."
+  [s])
+
 (defn replace-wikilinks
   "Replace all wikilinks in the input text with html-style
   links and return the text with the replacements."

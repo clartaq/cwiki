@@ -41,6 +41,7 @@
                     {:title "About Compressing the Database" :file-name "About_Compressing_the_Database.md"}
                     {:title "About CWiki" :file-name "About_CWiki.md"}
                     {:title "About Images" :file-name "About_Images.md"}
+                    {:title "About Import/Export" :file-name "About_Import_Export.md"}
                     {:title "About Roles" :file-name "About_Roles.md"}
                     {:title "About the Sidebar" :file-name "About_the_Sidebar.md"}
                     {:title "About TeX" :file-name "About_TeX.md"}

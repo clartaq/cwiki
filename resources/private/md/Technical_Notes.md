@@ -127,3 +127,11 @@ At the moment though,  images can be embedded by links to online resources or to
 This was a no-brainer. MathJax is just terrific. But where to retrieve it from? The most performant option is probably from a CDN. But that's a pretty large initial download. Another option would be to load it directly on the server. But does that mean I have to keep an additional ~15-20MB of files in the repository?
 
 At this point, I'll just use it from the CDN until, and if, it becomes a problem.
+
+### Handling Quoted Wikilinks ###
+
+In order to show examples of wikilinks in documentation, you should quote them. A user should be able to quote them using the backqoute ("\`"), triple backquotes  ("\`\`\`"), `<code></code>` tags or `<pre></pre>` tags.
+
+However, the strategy I have been using has just been to find the wikilink markers, "\[\[" and "\]\]", use the contents between the markers to build a link, and replace the contents with the link.
+
+Doing it that way causes examples of wikilinks embedded in a quoted section to be replaced anyway. Need to handle it differently. Probably need to actually parse the string rather than using a find and replace type approach.
