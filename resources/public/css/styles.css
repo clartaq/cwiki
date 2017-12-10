@@ -630,6 +630,31 @@ pre code {
     padding: 0
 }
 
+/* Styles for building a two-column list page. */
+
+div.two-column-list {
+    max-width: 70ch;
+    columns: 2;
+    column-gap: 2em;
+    column-rule: 1px solid #cccccc;
+}
+
+div.two-column-list li {
+    display:inline-block;
+    margin-left: 0;
+    width: 34ch;
+}
+
+div.one-column-list {
+    max-width: 70ch;
+}
+
+div.one-column-list li {
+    display:inline-block;
+    margin-left: 0;
+    width: 50ch;
+}
+
 /* Styles for displaying the content of a map. */
 .mp-list {
     list-style: none;
