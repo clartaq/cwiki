@@ -353,6 +353,25 @@
           (limited-width-content-component req content)])
        (footer-component)])))
 
+(defn view-list-page
+  "Return a one or two column layout of list items. Number
+  of columns depends on number of items."
+  [post-map query-results req]
+  (let [content (db/page-map->content post-map)
+        class-to-use (if (> (count query-results) 10)
+                       "two-column-list"
+                       "one-column-list")]
+    (html5
+      (standard-head post-map)
+      [:body {:class "page"}
+       (wiki-header-component post-map req)
+       (sidebar-and-article
+         (sidebar-aside req)
+         [:div (limited-width-title-component post-map)
+          [:div {:class class-to-use}
+           (limited-width-content-component req content)]])
+       (footer-component)])))
+
 ;;
 ;; Pages and utilities that show all there are of something, like
 ;; page names or users.
@@ -384,43 +403,32 @@
 (defn compose-all-pages-page
   "Return a page listing all of the pages in the wiki."
   [req]
-  (let [all-pages-query (db/get-all-page-names)
-        processed-titles (process-title-set all-pages-query)
-        content (s/join ["Pages:\n"
-                         processed-titles])
+  (let [query-results (db/get-all-page-names)
+        content (process-title-set query-results)
         post-map (db/create-new-post-map "All Pages" content)]
-    (view-wiki-page post-map req)))
+    (view-list-page post-map query-results req)))
 
 (defn compose-all-users-page
   "Return a page listing all of the users known to the wiki."
   [req]
-  (let [all-users-query (db/get-all-users)
-        processed-names (process-name-set all-users-query)
-        content (s/join ["Users:\n"
-                         processed-names])
+  (let [query-results (db/get-all-users)
+        content (process-name-set query-results)
         post-map (db/create-new-post-map "All Users" content)]
-    (view-wiki-page post-map req)))
+    (view-list-page post-map query-results req)))
 
 (defn compose-all-namespaces-page
   "Return a page listing of all of the namespaces in the wiki."
   [req]
-  (let [all-namespaces-query (db/get-all-namespaces)
-        processed-names (process-name-set all-namespaces-query)
-        content (s/join ["Namespaces:\n"
-                         processed-names])
+  (let [query-results (db/get-all-namespaces)
+        content (process-name-set query-results)
         post-map (db/create-new-post-map "All Namespaces" content)]
-    (view-wiki-page post-map req)))
+    (view-list-page post-map query-results req)))
 
 (defn compose-all-tags-page
   "Return a page listing all of the tags in the wiki."
   [req]
-  (let [all-tags-query (db/get-all-tags)
-        processed-names (process-name-set all-tags-query)
-        page-start (if (zero? (count processed-names))
-                     "Tags: None"
-                     "Tags:")
-        content (s/join [page-start
-                         processed-names])
+  (let [query-results (db/get-all-tags)
+        content (process-name-set query-results)
         post-map (db/create-new-post-map "All Tags" content)]
-    (view-wiki-page post-map req)))
+    (view-list-page post-map query-results req)))
 
