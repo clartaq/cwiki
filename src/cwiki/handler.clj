@@ -56,6 +56,9 @@
       (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
                              (build-response new-body request))
 
+      (= title "Orphans") (let [new-body (layout/compose-not-yet-view "Orphans")]
+                            (build-response new-body request))
+
       (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")]
                                      (if (ath/can-edit-and-delete? request title-only)
                                        (let [new-body (layout/compose-create-or-edit-page
