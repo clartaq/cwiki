@@ -26,10 +26,11 @@
                [:div {:class "form-label-div"}
                 [:label {:class "form-label required"
                          :for   "user_name"} "User Name"]]
-               (text-field {:class       "form-text-field"
-                            :required    "true"
-                            :autofocus   "autofocus"
-                            :placeholder "User Name"} "user-name")]
+               (text-field {:class        "form-text-field"
+                            :required     "true"
+                            :autofocus    "autofocus"
+                            :autocomplete "off"
+                            :placeholder  "User Name"} "user-name")]
               [:div {:class "form-group"}
                [:div {:class "form-label-div"}
                 [:label {:class "form-label required"
