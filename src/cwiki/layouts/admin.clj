@@ -5,7 +5,7 @@
 (ns cwiki.layouts.admin
   (:require [clojure.string :as s]
             [cwiki.layouts.base :as base]
-            [cwiki.util.pp :as pp]
+            ;[cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.models.db :as db]
             [hiccup.form :refer [drop-down email-field form-to hidden-field
@@ -20,35 +20,6 @@
   "Return a page stating that the user already exists."
   []
   (base/short-message "Can't Do That!" "A user with this name already exits."))
-
-(defn get-user-to-create
-  "Return a login page and gather the user name
-  and password to log in."
-  []
-  (base/short-form-template
-    [:div {:class "cwiki-form"}
-     (form-to {:enctype "multipart/form-data"}
-              [:post "login"]
-              [:p {:class "form-title"} "Create User"]
-              [:p "You must be logged in to use this wiki."]
-              base/required-field-hint
-              [:div {:class "form-group"}
-               [:div {:class "form-label-div"}
-                [:label {:class "form-label required"
-                         :for   "user_name"} "User Name"]]
-               (text-field {:class       "form-text-field"
-                            :required    "true"
-                            :autofocus   "autofocus"
-                            :placeholder "User Name"} "user-name")]
-              [:div {:class "form-group"}
-               [:div {:class "form-label-div"}
-                [:label {:class "form-label required"
-                         :for   "user-password"} "Password"]]
-               (password-field {:class    "form-password-field"
-                                :required "true"} "password")]
-              [:div {:class "button-bar-container"}
-               (submit-button {:id    "login-button"
-                               :class "form-button"} "Sign In")])]))
 
 (defn create-user-page
   "Return a page with a form to gather information needed
@@ -116,7 +87,6 @@
 (defn select-user-to-edit-page
   "Return a form to obtain the name of the user to be edited."
   [req]
-  (println "select-user-to-edit-page")
   (let [all-users (db/get-all-users)
         cleaned-users (disj all-users "CWiki")]
     (if (zero? (count cleaned-users))
@@ -153,7 +123,6 @@
 
 (defn edit-user-page
   [req]
-  (println "edit-user-page")
   (let [user-info (get-in req [:session :edit-user-info])
         user-name (:user_name user-info)
         user-role (s/replace-first (:user_role user-info) ":" "")
