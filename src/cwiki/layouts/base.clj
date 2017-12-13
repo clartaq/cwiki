@@ -257,6 +257,21 @@
                :class   "form-button"
                :onclick "window.history.back();"}]]]))
 
+(defn short-message-return-to-referer
+  "Return a page with a title, message and 'Ok' button. After the
+  user clicks the button, go to the page given by referer argument."
+  [title message referer]
+  (short-form-template
+    [:div {:class "cwiki-form"}
+     [:p {:class "form-title"} title]
+     [:p message]
+     [:div {:class "button-bar-container"}
+      [:input {:type    "button"
+               :name    "ok-button"
+               :value   "Ok"
+               :class   "form-button"
+               :onclick (str "window.location.replace('" referer "');")}]]]))
+
 (defn inform-admin-of-first-use
   "Return a page with a title, message and 'Ok' button.
   The button press will take the user to the login page."

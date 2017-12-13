@@ -5,7 +5,6 @@
 (ns cwiki.layouts.admin
   (:require [clojure.string :as s]
             [cwiki.layouts.base :as base]
-            ;[cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.models.db :as db]
             [hiccup.form :refer [drop-down email-field form-to hidden-field
@@ -21,13 +20,20 @@
   []
   (base/short-message "Can't Do That!" "A user with this name already exits."))
 
+(defn confirm-creation-page
+  [user-name referer]
+  (base/short-message-return-to-referer
+    "Creation Complete"
+    (str "User \"" user-name "\" has been created") referer))
+
 (defn create-user-page
   "Return a page with a form to gather information needed
   to create a new user."
   [req]
   (base/short-form-template
     [:div {:class "cwiki-form"}
-     (form-to {:enctype "multipart/form-data"}
+     (form-to {:enctype      "multipart/form-data"
+               :autocomplete "off"}
               [:post "create-user"]
               (hidden-field "referer" (get (:headers req) "referer"))
               [:p {:class "form-title"} "Create A New User"]
@@ -81,8 +87,20 @@
   (base/short-message "Nothing to Do" "There are no suitable users to edit."))
 
 (defn must-not-be-empty-page
+  "Return a page informing the user that the field cannot be empty."
   []
   (base/short-message "Can't Do That!" "The user name cannot be empty."))
+
+(defn confirm-edits-page
+  "Return a page that confirms the edits have been completed and then
+  go to the page given."
+  [new-name old-name referer]
+  (base/short-message-return-to-referer
+    "Changes Complete"
+    (if (not= new-name old-name)
+      (str "User \"" old-name "\" has been changed to \"" new-name "\"")
+      (str "User \"" new-name "\" has been changed"))
+      referer))
 
 (defn select-user-to-edit-page
   "Return a form to obtain the name of the user to be edited."
@@ -93,7 +111,8 @@
       (no-users-to-edit-page req)
       (base/short-form-template
         [:div {:class "cwiki-form"}
-         (form-to {:enctype "multipart/form-data"}
+         (form-to {:enctype      "multipart/form-data"
+                   :autocomplete "off"}
                   [:post "select-profile"]
                   (hidden-field "referer" (get (:headers req) "referer"))
                   [:p {:class "form-title"} "Edit Profile"]
@@ -122,17 +141,18 @@
                             :onclick "window.history.back();"}]])]))))
 
 (defn edit-user-page
+  "Handle editing the profile of an existing user."
   [req]
   (let [user-info (get-in req [:session :edit-user-info])
         user-name (:user_name user-info)
         user-role (s/replace-first (:user_role user-info) ":" "")
-        user-email (:user_email user-info)
-        original-referer (:original-referer user-info)]
+        user-email (:user_email user-info)]
     (if (nil? user-info)
       (no-users-to-edit-page req)
       (base/short-form-template
         [:div {:class "cwiki-form"}
-         (form-to {:enctype "multipart/form-data"}
+         (form-to {:enctype      "multipart/form-data"
+                   :autocomplete "off"}
                   [:post "edit-profile"]
                   [:p {:class "form-title"} "Edit the Profile of An Existing User"]
                   [:p (str "Make any modifications needed to "
@@ -144,7 +164,7 @@
                              :for   "new-user-name"} "User Name"]]
                    (text-field {:class     "form-text-field"
                                 :autofocus "autofocus"
-                                :required "true"
+                                :required  "true"
                                 :value     user-name} "new-user-name")
                    [:div {:class "form-restrictions"}
                     "The user name cannot be empty. Any new user name
@@ -182,7 +202,6 @@
                             :class   "form-button button-bar-item"
                             :onclick "window.history.back();"}]])]))))
 
-
 ;;
 ;; Functions related to deleting a user.
 ;;
@@ -205,6 +224,12 @@
   [req]
   (base/short-message "Nothing to Do" "There are no suitable users to delete."))
 
+(defn confirm-deletion-page
+  [user-name referer]
+  (base/short-message-return-to-referer
+    "Deletion Complete"
+    (str "User \"" user-name "\" has been deleted") referer))
+
 (defn delete-user-page
   "Return a form to obtain information about a user to be deleted."
   [req]
@@ -215,7 +240,8 @@
       (no-users-to-delete-page req)
       (base/short-form-template
         [:div {:class "cwiki-form"}
-         (form-to {:enctype "multipart/form-data"}
+         (form-to {:enctype      "multipart/form-data"
+                   :autocomplete "off"}
                   [:post "delete-user"]
                   (hidden-field "referer" (get (:headers req) "referer"))
                   [:p {:class "form-title"} "Delete A User"]

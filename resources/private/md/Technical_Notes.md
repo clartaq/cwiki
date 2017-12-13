@@ -146,6 +146,13 @@ At this point, I'll just use it from the CDN until, and if, it becomes a problem
 
 In order to show examples of wikilinks in documentation, you should quote them. A user should be able to quote them using the backqoute ("\`"), triple backquotes  ("\`\`\`"), `<code></code>` tags or `<pre></pre>` tags.
 
-However, the strategy I have been using has just been to find the wikilink markers, "\[\[" and "\]\]", use the contents between the markers to build a link, and replace the contents with the link.
+However, the strategy I have been using has just been using regular expressions to find the wikilink markers, "\[\[" and "\]\]", use the contents between the markers to build a link, and replace the contents with the link.
 
-Doing it that way causes examples of wikilinks embedded in a quoted section to be replaced anyway. Need to handle it differently. Probably need to actually parse the string rather than using a find and replace type approach.
+Doing it that way causes examples of wikilinks embedded in a quoted section to be replaced anyway. Need to handle it differently.
+
+It seems like there are 4 possible approaches.
+
+1. Do nothing and warn users "don't do that". Least desirable.
+2. Try to refine the regular expression-based approach I'm using now. Regular expressions are not a good way (even a possible way?) to handle embedded HTML.
+3. Write a small parser to handle pages looking for quoted blocks. I think this would require me to re-work the dataflow from several passes over the text to one that does the translation in a single pass.
+4. Since I'm using flexmark-java as my Markdown to HTML processor, look into the Wikilinks extension. I'm not sure how to handle special formatting for special cases like graying admin pages and making links to non-existent pages red. I'm not sure how extensible it is if I want to add things like namespaces either.
