@@ -6,7 +6,6 @@
             [cwiki.layouts.admin :as admin-layout]
             [cwiki.layouts.base :as layout]
             [cwiki.models.db :as db]
-            ;[cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
             [clojure.string :as s]
@@ -40,14 +39,14 @@
   exist."
   [{{username  "user-name" password "password"
      user-role "user-role" recovery-email "recovery-email"
-     referer   "referer"} :multipart-params}]
+     referer   "referer"} :multipart-params :as req}]
   (if (db/find-user-by-name username)
     (admin-layout/compose-user-already-exists-page)
     (do
       (db/add-user username password user-role recovery-email)
-      (if referer
-        (redirect referer)
-        (redirect "/Front Page")))))
+      (build-response
+        (admin-layout/confirm-creation-page username referer)
+        req 201))))
 
 ;;
 ;; Functions related to letting an admin edit a user profile.
@@ -170,13 +169,13 @@
                 (when same-as-logged-in-user
                   (swap! new-session
                          assoc :identity (dissoc merged-changes :user_password)))))
-            (let [redir (if original-referer
-                          original-referer
-                          "/Front Page")
-                  _ (println "redir" redir)
-                  newer-session (assoc (redirect redir)
-                                  :session @new-session)]
-              newer-session)))))))                          ; ))
+            (-> (build-response
+                  (admin-layout/confirm-edits-page
+                    new-name
+                    old-name
+                    original-referer)
+                  req 200)
+                (assoc :session @new-session))))))))
 
 ;;
 ;; Functions relating to deleting a user.
@@ -197,12 +196,13 @@
       (build-response (admin-layout/wrong-password-page req) req 422)
       (do
         (if-let [user-id (db/user-name->user-id username)]
-          (db/delete-user user-id)
+          (do
+            (db/delete-user user-id)
+            (build-response
+              (admin-layout/confirm-deletion-page username referer)
+              req 200))
           ; should never happen
-          (build-response (admin-layout/cannot-find-user req) req 500))
-        (if referer
-          (redirect referer)
-          (redirect "/Front Page"))))))
+          (build-response (admin-layout/cannot-find-user req) req 500))))))
 
 (defroutes admin-routes
            (GET "/compress" [] (not-yet "compress"))
