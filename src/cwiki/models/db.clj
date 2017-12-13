@@ -317,9 +317,9 @@
 (defn- add-page-from-file!
   [m id]
   (println "add-page-from-file!: m:" m ", id:" id)
-  (let [resource-prefix "resources/private/md/"
+  (let [resource-prefix "private/md/"
         title (:title m)
-        content (slurp (io/reader
+        content (slurp (io/resource
                          (str resource-prefix (:file-name m))))
         post-map (create-new-post-map title content id)]
     (jdbc/insert! sqlite-db :pages post-map)))
