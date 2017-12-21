@@ -49,32 +49,32 @@
   (testing "link-parts->html-link"
     (println "about to do first test")
     (is (= (link-parts->html-link {:title-part "Front Page"
-                                   :display-part "Front Page"})
-           "<a class=\"present-button-style\" href=\"%2FFront%20Page\">Front Page</a>"))
+                                   :display-part "Front Page"} nil)
+           "<a href=\"Front%20Page\" style=\"any-old-style\">Front Page</a>"))
     (println "about to do second test")
     (is (= (link-parts->html-link {:title-part "Other Wiki Software"
-                                   :display-part "Other Wiki Software"})
-           "<a class=\"present-button-style\" href=\"%2FOther%20Wiki%20Software\">Other Wiki Software</a>"))
+                                   :display-part "Other Wiki Software"} nil)
+           "<a href=\"Other%20Wiki%20Software\" style=\"any-old-style\">Other Wiki Software</a>"))
     (println "about to do third test")
     (is (= (link-parts->html-link {:title-part "Some Random Page"
-                                   :display-part "Some Random Page"})
-           "<a class=\"absent-button-style\" href=\"%2FSome%20Random%20Page\">Some Random Page</a>"))
+                                   :display-part "Some Random Page"} nil)
+           "<a href=\"Some%20Random%20Page\" style=\"color:red\">Some Random Page</a>"))
     (is (= (link-parts->html-link {:title-part "Some Random Title"
-                                   :display-part "Some Random Display"})
-           "<a class=\"absent-button-style\" href=\"%2FSome%20Random%20Title\">Some Random Display</a>"))
+                                   :display-part "Some Random Display"} nil)
+           "<a href=\"Some%20Random%20Title\" style=\"color:red\">Some Random Display</a>"))
     (is (= (link-parts->html-link {:title-part "Front Page"
-                                   :display-part "Root Page"})
-           "<a class=\"present-button-style\" href=\"%2FFront%20Page\">Root Page</a>"))))
+                                   :display-part "Root Page"} nil)
+           "<a href=\"Front%20Page\" style=\"any-old-style\">Root Page</a>"))))
 
 (deftest replace-wikilinks-test
   (testing "replace-wikilinks"
-    (is (= "" (replace-wikilinks "")))
-    (is (= "No links here" (replace-wikilinks "No links here")))
-    (is (= "<a class=\"absent-button-style\" href=\"%2Fonly%20a%20link\">only a link</a>"
-           (replace-wikilinks "[[only a link]]")))
-    (is (= "The <a class=\"present-button-style\" href=\"%2FFront%20Page\">Front Page</a> and a <a class=\"absent-button-style\" href=\"%2Fnon-existent\">non-existent</a> post"
-           (replace-wikilinks "The [[Front Page]] and a [[non-existent]] post")))
-    (is (= "The <a class=\"present-button-style\" href=\"%2FFront%20Page\">Root Page</a> and a <a class=\"absent-button-style\" href=\"%2Fnon-existent\">non-existent</a> post"
-           (replace-wikilinks "The [[Front Page|Root Page]] and a [[non-existent]] post")))))
+    (is (= "" (replace-wikilinks "" nil)))
+    (is (= "No links here" (replace-wikilinks "No links here" nil)))
+    (is (= "<a href=\"only%20a%20link\" style=\"color:red\">only a link</a>"
+           (replace-wikilinks "[[only a link]]" nil)))
+    (is (= "The <a href=\"Front%20Page\" style=\"any-old-style\">Front Page</a> and a <a href=\"non-existent\" style=\"color:red\">non-existent</a> post"
+           (replace-wikilinks "The [[Front Page]] and a [[non-existent]] post" nil)))
+    (is (= "The <a href=\"Front%20Page\" style=\"any-old-style\">Root Page</a> and a <a href=\"non-existent\" style=\"color:red\">non-existent</a> post"
+           (replace-wikilinks "The [[Front Page|Root Page]] and a [[non-existent]] post" nil)))))
 
 

@@ -6,9 +6,8 @@
 (deftest test-app
   (testing "main route"
     (let [response (app (request :get "/"))]
-      (is (= (:status response) 200))
-      (is (.contains (:body response) "Welcome to cwiki"))))
+      (is (= (:status response) 302))))
 
   (testing "not-found route"
     (let [response (app (request :get "/invalid"))]
-      (is (= (:status response) 404)))))
+      (is (= (:status response) 302)))))

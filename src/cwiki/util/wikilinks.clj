@@ -35,7 +35,7 @@
   (let [splits (s/split clean-link #"\|")]
     {:title-part (first splits) :display-part (second splits)}))
 
-(defn- get-wikilink-parts
+(defn get-wikilink-parts
   "Return a map of the various parts in the wikilink."
   [wikilink]
   (let [clean-link (strip-link-brackets wikilink)]
@@ -71,11 +71,11 @@
         is-admin-user (ri/is-admin-user? req)
         ok-to-link (or is-admin-user
                        (not is-admin-only))
-        class-to-use (if ok-to-link
-                       "any-old-class"
-                       "not-active")
+        ;class-to-use (if ok-to-link
+        ;               "any-old-class"
+        ;               "not-active")
         style-to-use (if ok-to-link
-                       ""
+                       "any-old-style"
                        "pointer-events:none;cursor:default;color:lightgray;")
         uri (u/url-encode title)
         h (hc/html (link-to {:style style-to-use}
@@ -98,7 +98,7 @@
                             uri (:display-part link-parts)))]
     h))
 
-(defn- link-parts->html-link
+(defn link-parts->html-link
   "Given a map containing a (possibly identical) page title for
   a link and some text to be displayed for the link,
   return the html for a link."
