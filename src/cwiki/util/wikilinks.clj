@@ -11,6 +11,13 @@
 ; wikilinks.
 (def pattern #"\[\[.+?\]\]")
 
+; The style used for "normal" links.
+(def ok-to-link-style "ok-to-link-style")
+; The style used for links to non-existent pages. Triggers page creation.
+(def non-existent-link-style "color:red")
+; This is the style used for disabled links in wikilinks.clj
+(def disabled-link-style "pointer-events:none;cursor:default;color:lightgray;")
+
 (defn find-wikilinks
   "Return a collection of all of the wikilinks in the text."
   [txt]
@@ -71,12 +78,9 @@
         is-admin-user (ri/is-admin-user? req)
         ok-to-link (or is-admin-user
                        (not is-admin-only))
-        ;class-to-use (if ok-to-link
-        ;               "any-old-class"
-        ;               "not-active")
         style-to-use (if ok-to-link
-                       "any-old-style"
-                       "pointer-events:none;cursor:default;color:lightgray;")
+                       ok-to-link-style
+                       disabled-link-style)
         uri (u/url-encode title)
         h (hc/html (link-to {:style style-to-use}
                             uri (:display-part link-parts)))]
@@ -91,8 +95,8 @@
         is-reader-user (ri/is-reader-user? req)
         ok-to-link (not is-reader-user)
         style-to-use (if ok-to-link
-                       "color:red"
-                       "pointer-events:none;cursor:default;color:lightgray;")
+                       non-existent-link-style
+                       disabled-link-style)
         uri (u/url-encode (str page-title))
         h (hc/html (link-to {:style style-to-use}
                             uri (:display-part link-parts)))]
