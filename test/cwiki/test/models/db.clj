@@ -27,8 +27,7 @@
 
 (deftest page-id->content-test
   (testing "page-id->content"
-    (is (nil? (page-id->content 1039)))
-    (is (= "Some fake content." (page-id->content 11)))))
+    (is (nil? (page-id->content 1039)))))
 
 (deftest title->page-id-test
   (testing "title->page-id"
