@@ -71,6 +71,9 @@
         is-admin-user (ri/is-admin-user? req)
         ok-to-link (or is-admin-user
                        (not is-admin-only))
+        ;class-to-use (if ok-to-link
+        ;               "any-old-class"
+        ;               "not-active")
         style-to-use (if ok-to-link
                        "any-old-style"
                        "pointer-events:none;cursor:default;color:lightgray;")
@@ -114,4 +117,14 @@
         html (link-parts->html-link link-parts req)]
     (let [rt (s/replace txt wikilink html)]
       rt)))
+
+(defn replace-wikilinks
+  "Replace all wikilinks in the input text with html-style
+  links and return the text with the replacements."
+  [md-txt req]
+  (let [link-coll (find-wikilinks md-txt)]
+    (loop [lc link-coll txt md-txt]
+      (if (empty? lc)
+        txt
+        (recur (rest lc) (do-one-substitution (first lc) txt req))))))
 
