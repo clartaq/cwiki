@@ -19,6 +19,7 @@
     <orderEntry type="library" name="Leiningen: buddy/buddy-hashers:1.3.0" level="project" />
     <orderEntry type="library" name="Leiningen: buddy/buddy-sign:2.2.0" level="project" />
     <orderEntry type="library" name="Leiningen: cheshire:5.8.0" level="project" />
+    <orderEntry type="library" name="Leiningen: circleci/clj-yaml:0.5.6" level="project" />
     <orderEntry type="library" name="Leiningen: clj-stacktrace:0.2.8" level="project" />
     <orderEntry type="library" name="Leiningen: clj-time:0.14.2" level="project" />
     <orderEntry type="library" name="Leiningen: clojure-complete:0.2.4" level="project" />
@@ -72,9 +73,12 @@
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-io:7.6.13.v20130916" level="project" />
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-server:7.6.13.v20130916" level="project" />
     <orderEntry type="library" name="Leiningen: org.eclipse.jetty/jetty-util:7.6.13.v20130916" level="project" />
+    <orderEntry type="library" name="Leiningen: org.flatland/ordered:1.5.5" level="project" />
+    <orderEntry type="library" name="Leiningen: org.flatland/useful:0.9.0" level="project" />
     <orderEntry type="library" name="Leiningen: org.json/json:20090211" level="project" />
     <orderEntry type="library" name="Leiningen: org.mozilla/rhino:1.7R4" level="project" />
     <orderEntry type="library" name="Leiningen: org.xerial/sqlite-jdbc:3.21.0.1" level="project" />
+    <orderEntry type="library" name="Leiningen: org.yaml/snakeyaml:1.13" level="project" />
     <orderEntry type="library" name="Leiningen: pathetic:0.5.0" level="project" />
     <orderEntry type="library" name="Leiningen: ring-mock:0.1.5" level="project" />
     <orderEntry type="library" name="Leiningen: ring-refresh:0.1.2" level="project" />
