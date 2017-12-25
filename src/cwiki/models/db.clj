@@ -5,6 +5,10 @@
            [clojure.string :as s]
            [clj-time.coerce :as c]
            [clj-time.core :as t]
+           [clj-time.format :as f]
+           [clj-time.local :as l]
+           [cwiki.util.files :as files]
+           [cwiki.util.pp :as pp]
            [cwiki.util.special :as special])
   (:import (java.io File)
            (java.util UUID)))
@@ -18,6 +22,10 @@
    :subprotocol "sqlite"
    :subname     db-file-name
    })
+
+;; Things related to time formatting.
+
+(def markdown-pad-format (f/formatter-local "MM/dd/yyy h:mm:ss a"))
 
 (defn create-new-post-map
   ([title]
@@ -314,6 +322,36 @@
   [page-id]
   (jdbc/delete! sqlite-db :pages ["page_id=?" page-id]))
 
+(defn- add-page-with-meta-from-file!
+  [file-name]
+  (println "add-page-with-meta-from-file!: file-name:" file-name)
+  ;(println "formatters:\n") (f/show-formatters)
+  (let [resource-prefix "private/md/"
+        m (files/load-markdown-resource (str resource-prefix file-name))
+        _ (println "m:\n" (pp/pp-map m))
+        meta (:meta m)
+        author-id (user-name->user-id (:author meta))
+        title (:title meta)]
+    (when (and author-id title)
+      (let [
+            content (:body m)
+            creation-date-str (or (:date meta)
+                                  (:created meta))
+            creation-date (if creation-date-str
+                            (c/to-sql-time (f/parse markdown-pad-format creation-date-str))
+                            (c/to-sql-time (t/now)))
+            update-date-str (or (:updated meta)
+                                (:changed meta)
+                                (:modified meta))
+            update-date (if update-date-str
+                          (c/to-sql-time (f/parse markdown-pad-format update-date-str))
+                          creation-date)
+            pm (create-new-post-map title content author-id)
+            pmd (assoc pm :page_created creation-date)
+            pmm (assoc pmd :page_modified update-date)]
+        (println "pmm:\n" (pp/pp-map pmm))
+        (jdbc/insert! sqlite-db :pages pmm)))))
+
 (defn- add-page-from-file!
   [m id]
   (println "add-page-from-file!: m:" m ", id:" id)
@@ -373,6 +411,7 @@
 
 (defn- add-initial-pages!
   [user-id]
+  (add-page-with-meta-from-file! "About_Front_Matter.md")
   (mapv #(add-page-from-file! % user-id) initial-pages))
 
 (defn- add-initial-namespaces!

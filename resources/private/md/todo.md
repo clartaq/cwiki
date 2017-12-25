@@ -1,6 +1,5 @@
 This is an ever-evolving list of things that need doing.
 
-* When running from an uberjar, the program only works when run from the development directory. It needs to be able to reference the resources in the jar rather than the file system.
 * Creation of wikilinks needs to understand in-line code spans, `<code></code>`, and `<pre></pre>` so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
 * Consolidate some of the nav stuff in the page header into a "More" drop-down menu.
 * Implement Namespaces? Would make separating out groups of pages easier, like all "Help" pages.
@@ -28,4 +27,5 @@ This is an ever-evolving list of things that need doing.
 * ~~The first line in the second level of a list has some poor formatting -- too close to the line above.~~
 * ~~When the initial admin user changes their profile then attempts to sign out, the signout page shows the user name before modifications, presumably because it is still in the session record.~~
 * ~~Need some sort of confirmation after adding a user, editing a user, or deleting a user.~~
+* ~~When running from an uberjar, the program only works when run from the development directory. It needs to be able to reference the resources in the jar rather than the file system.~~
 
