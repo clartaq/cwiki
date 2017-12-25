@@ -178,12 +178,19 @@
   [post-map]
   (let [title (db/page-map->title post-map)
         author (db/page-map->author post-map)
+        tags (db/page-map->tags post-map)
+        tag-str (if tags
+                  tags
+                  "None")
         created (db/page-map->created-date post-map)
         modified (db/page-map->modified-date post-map)]
     [:div {:class "page-title-div"}
      [:h1 {:class "page-title-header"} title]
      [:p {:class "author-line"}
       [:span {:class "author-header"} "Author: "] author]
+     [:p {:class "tag-line"}
+      [:span {:class "tag-header"} "Tags: "]
+      [:span {:class "tag-text"} tag-str]]
      [:p {:class "date-line"}
       [:span {:class "date-header"} "Created: "]
       [:span {:class "date-text"} (get-formatted-time created) ", "]
