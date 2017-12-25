@@ -300,6 +300,19 @@ textarea#content {
 .date-text {
 }
 
+.tag-line {
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 0.8em;
+}
+
+.tag-header {
+    font-weight: bold;
+}
+
+.tag-text {
+}
+
 /* Container for horizontal button bars. */
 
 .button-bar-container {

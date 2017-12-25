@@ -249,6 +249,10 @@
       name
       "Unknown")))
 
+(defn page-map->tags
+  [m]
+  (:page_tags m))
+
 (defn page-map->created-date
   [m]
   (:page_created m))
@@ -322,6 +326,14 @@
   [page-id]
   (jdbc/delete! sqlite-db :pages ["page_id=?" page-id]))
 
+(defn- get-tags-from-meta
+  [meta]
+  (let [tags (:tags meta)]
+    (when tags
+      (if (seq tags)
+        (s/join ", " tags)
+        tags))))
+
 (defn- add-page-with-meta-from-file!
   [file-name]
   (println "add-page-with-meta-from-file!: file-name:" file-name)
@@ -346,11 +358,13 @@
             update-date (if update-date-str
                           (c/to-sql-time (f/parse markdown-pad-format update-date-str))
                           creation-date)
+            tags (get-tags-from-meta meta)
             pm (create-new-post-map title content author-id)
             pmd (assoc pm :page_created creation-date)
-            pmm (assoc pmd :page_modified update-date)]
-        (println "pmm:\n" (pp/pp-map pmm))
-        (jdbc/insert! sqlite-db :pages pmm)))))
+            pmm (assoc pmd :page_modified update-date)
+            pmmt (assoc pmm :page_tags tags)]
+        (println "pmm:\n" (pp/pp-map pmmt))
+        (jdbc/insert! sqlite-db :pages pmmt)))))
 
 (defn- add-page-from-file!
   [m id]
@@ -455,6 +469,7 @@
                                                     [[:page_id :integer :primary :key]
                                                      [:page_created :datetime]
                                                      [:page_modified :datetime]
+                                                     [:page_tags :text]
                                                      [:page_author :integer]
                                                      [:page_title :text]
                                                      [:page_content :text]])
