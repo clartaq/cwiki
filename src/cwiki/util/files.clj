@@ -59,7 +59,6 @@
 
 (defn yaml->map
   [s]
-  (println "s:" s)
   (yaml/parse-string s))
 
 (defn load-markdown-resource
@@ -68,8 +67,6 @@
   Markdown file. :meta contains the meta-information, possibly from the
   YAML front matter."
   [filename & args]
-  (println "filename:" filename)
-  (println "args:" args)
   (let [result (atom {:meta {}
                       :body nil})
         url (io/resource filename)
@@ -82,13 +79,10 @@
                          (BufferedReader.)
                          (line-seq)
                          (vec))]
-        (println "(type contents):" (type contents))
         (when contents
           (let [parts (split-front-matter-from-body contents)]
-            (print "parts:" (pp/pp-map parts))
             (when (not-empty (:front parts))
               (let [meta (yaml->map (st/join "\n" (:front parts)))]
-                (println "meta:" (pp/pp-map meta))
                 (reset! result (assoc @result :meta meta))))
             (reset! result (assoc @result :body (st/join "\n" (:body parts))))))))
     @result))
