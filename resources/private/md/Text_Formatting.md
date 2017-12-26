@@ -1,3 +1,15 @@
+---
+title: Text Formatting
+author: CWiki
+date: 10/24/2017 8:57:33 AM 
+updated: 12/26/2017 1:52:22 PM    
+tags:
+  - formatting
+  - Markdown
+  - MathJax
+  - TeX
+---
+
 Markdown provides a wealth of ways to easily format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
 
 This page provides a quick description of some of the ways you can format text in CWiki. It also shows how to use some of the extensions like syntax highlighting in code listings, mathematics, and tables. Remember, you can always just edit this page to see how something was done.
@@ -172,7 +184,7 @@ that produces this:
 | Apple  |   Red  |    Crisp    |         0.99 |
 | Pear   |  Green |    Sweet    |         1.49 |
 | Plum   | Purple |     Tart    |         1.99 |
-| Orange | Orange | Tangy |      1.29
+| Orange | Orange | Tangy |      1.29 |
 
 There must be at least 3 dashes separating each header cell. The outer pipes (|) are optional, and you don't need to make the raw Markdown line up prettily. So, if you are using a proportional font to layout the table, you don't have to worry about trying to get everything to line up perfectly from line to line. You can also use inline Markdown to format items within the table cells.
 

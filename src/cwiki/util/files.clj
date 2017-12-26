@@ -69,11 +69,9 @@
   [filename & args]
   (let [result (atom {:meta {}
                       :body nil})
-        url (io/resource filename)
-        _ (println "url:" url)]
+        url (io/resource filename)]
     (when (not (nil? url))
-      (let [
-            contents (-> url
+      (let [contents (-> url
                          (io/input-stream)
                          (InputStreamReader.)
                          (BufferedReader.)
@@ -86,13 +84,3 @@
                 (reset! result (assoc @result :meta meta))))
             (reset! result (assoc @result :body (st/join "\n" (:body parts))))))))
     @result))
-
-;(defn- add-page-from-file!
-;  [m id]
-;  (println "add-page-from-file!: m:" m ", id:" id)
-;  (let [resource-prefix "private/md/"
-;        title (:title m)
-;        content (slurp (io/resource
-;                         (str resource-prefix (:file-name m))))
-;        post-map (create-new-post-map title content id)]
-;    (jdbc/insert! sqlite-db :pages post-map)))
