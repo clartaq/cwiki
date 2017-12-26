@@ -1,3 +1,13 @@
+---
+title: Other Wiki Software
+author: CWiki
+date: 10/10/2017 1:20:24 PM 
+updated: 12/26/2017 1:49:20 PM   
+tags:
+  - alternatives
+  - wiki software
+---
+
 Here are some other wikis that I find interesting. Some of these are quite mature and very polished. Each has an opinionated approach to information management that works very smoothly when used as intended. Of course, each is missing something that I want. Otherwise, I would not have found it necessary to write CWiki.
 
 These wiki programs are all open source and under active development as this is written (Autumn 2017). I encourage you to visit the home page of each of these projects and see what you think.
@@ -128,5 +138,26 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 
 - Huge installation.
 - Complicated administration in my opinion.
+
+## Boostnote ##
+
+[Boostnote](https://boostnote.io/#community) bills itself as a "...note-taking app for developers..." and is quite nice.
+
+###  Features ###
+
+- Markdown, math, code listings.
+- Very active development, large community.
+
+### Pros ###
+
+- Uses the [Katex](https://github.com/Khan/KaTeX) parser/renderer for mathematics, which can be hosted locally easily.
+- Supports different UI themes.
+
+### Cons ###
+
+- Written in JavaScript using the huge [Electron](https://electronjs.org/) ecosystem.
+- Has some problems with $\rm\TeX$, like not being able to render $\rm\TeX$ correctly. (It uses the Katex parser/renderer.)
+- Not really a wiki. It's a note-taking app. No support for within-wiki linking that I can find.
+
 
 Each of these has pluses and minuses. Obviously, or I wouldn't have written CWiki.

@@ -6,9 +6,7 @@
            [clj-time.coerce :as c]
            [clj-time.core :as t]
            [clj-time.format :as f]
-           [clj-time.local :as l]
            [cwiki.util.files :as files]
-           [cwiki.util.pp :as pp]
            [cwiki.util.special :as special])
   (:import (java.io File)
            (java.util UUID)))
@@ -42,7 +40,13 @@
 ; Need "Front Page" to be first in list since some tests depend on it
 ; being in that position. Kinda fragile.
 
-(def initial-pages [{:title "Front Page" :file-name "Front_Page.md"}
+(def initial-pages-with-front-matter
+  ["Front_Page.md"
+   "About_Front_Matter.md"
+   "Other_Wiki_Software.md"
+   "Text_Formatting.md"])
+
+(def initial-pages [;{:title "Front Page" :file-name "Front_Page.md"}
                     {:title "About" :file-name "About.md"}
                     {:title "About Admin Pages" :file-name "About_Admin_Pages.md"}
                     {:title "About Backup and Restore" :file-name "About_Backup_and_Restore.md"}
@@ -59,12 +63,12 @@
                     {:title "Features" :file-name "Features.md"}
                     {:title "How to Make a Table of Contents" :file-name "How_to_Make_a_Table_of_Contents.md"}
                     {:title "Links Primer" :file-name "Links_Primer.md"}
-                    {:title "Other Wiki Software" :file-name "Other_Wiki_Software.md"}
+                    ;{:title "Other Wiki Software" :file-name "Other_Wiki_Software.md"}
                     {:title "Pages Primer" :file-name "Pages_Primer.md"}
                     {:title "Preferences" :file-name "Preferences.md"}
                     {:title "Sidebar" :file-name "Sidebar.md"}
                     {:title "Special Pages" :file-name "Special_Pages.md"}
-                    {:title "Text Formatting" :file-name "Text_Formatting.md"}
+                    ;{:title "Text Formatting" :file-name "Text_Formatting.md"}
                     {:title "Technical Notes" :file-name "Technical_Notes.md"}
                     {:title "To Do" :file-name "todo.md"}
                     {:title "Wikilinks" :file-name "Wikilinks.md"}])
@@ -334,19 +338,42 @@
         (s/join ", " tags)
         tags))))
 
+(defn- get-tag-vector-from-meta
+  "Return a vector of tags contained the the meta data."
+  [meta]
+  (reduce conj [] (:tags meta)))
+
+(defn get-row-id
+  "Return the row id returned as the result of a single insert operation.
+  It's buried in an odd map, hence this function."
+  [result]
+  (first (vals (first result))))
+
+(defn update-tag-tables
+  "Update the tag tables with tags and associate them with the
+  page-id."
+  [tags page-id]
+  (let [row-ids (reduce
+                  #(conj %1
+                         (get-row-id
+                           (jdbc/insert!
+                             sqlite-db :tags {:tag_name %2})))
+                  [] tags)]
+    ; add to cross-reference table
+    (println "row-ids (tag ids):" row-ids ", page-id:" page-id)
+    ))
+
 (defn- add-page-with-meta-from-file!
+  "Add a page to the database based on the information in a Markdown file
+  containing YAML front matter."
   [file-name]
-  (println "add-page-with-meta-from-file!: file-name:" file-name)
-  ;(println "formatters:\n") (f/show-formatters)
   (let [resource-prefix "private/md/"
         m (files/load-markdown-resource (str resource-prefix file-name))
-        _ (println "m:\n" (pp/pp-map m))
         meta (:meta m)
         author-id (user-name->user-id (:author meta))
         title (:title meta)]
     (when (and author-id title)
-      (let [
-            content (:body m)
+      (let [content (:body m)
             creation-date-str (or (:date meta)
                                   (:created meta))
             creation-date (if creation-date-str
@@ -359,12 +386,12 @@
                           (c/to-sql-time (f/parse markdown-pad-format update-date-str))
                           creation-date)
             tags (get-tags-from-meta meta)
-            pm (create-new-post-map title content author-id)
-            pmd (assoc pm :page_created creation-date)
-            pmm (assoc pmd :page_modified update-date)
-            pmmt (assoc pmm :page_tags tags)]
-        (println "pmm:\n" (pp/pp-map pmmt))
-        (jdbc/insert! sqlite-db :pages pmmt)))))
+            pm (merge (create-new-post-map title content author-id)
+                      {:page_created creation-date}
+                      {:page_modified update-date}
+                      {:page_tags tags})
+            page-id (get-row-id (jdbc/insert! sqlite-db :pages pm))]
+        (update-tag-tables (get-tag-vector-from-meta meta) page-id)))))
 
 (defn- add-page-from-file!
   [m id]
@@ -423,9 +450,12 @@
   (mapv #(jdbc/insert! sqlite-db :users %) initial-users)
   (println "Done."))
 
+; Need "Front Page" to be first in list since some tests depend on it
+; being in that position. Kinda fragile.
+
 (defn- add-initial-pages!
   [user-id]
-  (add-page-with-meta-from-file! "About_Front_Matter.md")
+  (mapv #(add-page-with-meta-from-file! %) initial-pages-with-front-matter)
   (mapv #(add-page-from-file! % user-id) initial-pages))
 
 (defn- add-initial-namespaces!
@@ -449,43 +479,48 @@
   "Create the database tables for the application."
   []
   (println "creating tables")
-  (try (jdbc/db-do-commands sqlite-db
-                            [(jdbc/create-table-ddl :users
-                                                    [[:user_id :integer :primary :key]
-                                                     [:user_name :text]
-                                                     [:user_role :text]
-                                                     [:user_password :text]
-                                                     [:user_new_password :text]
-                                                     [:user_new_password_time :datetime]
-                                                     [:user_email :text]
-                                                     [:user_email_token :int]
-                                                     [:user_email_expires :datetime]
-                                                     [:user_touched :datetime]
-                                                     [:user_registration :datetime]])
-                             (jdbc/create-table-ddl :admin
-                                                    [[:admin_id :integer :primary :key]
-                                                     [:admin_has_logged_in :boolean]])
-                             (jdbc/create-table-ddl :pages
-                                                    [[:page_id :integer :primary :key]
-                                                     [:page_created :datetime]
-                                                     [:page_modified :datetime]
-                                                     [:page_tags :text]
-                                                     [:page_author :integer]
-                                                     [:page_title :text]
-                                                     [:page_content :text]])
-                             (jdbc/create-table-ddl :namespaces
-                                                    [[:namespace_id :integer :primary :key]
-                                                     [:namespace_name :text]])
-                             (jdbc/create-table-ddl :roles
-                                                    [[:role_id :integer :primary :key]
-                                                     [:role_name :text]])
-                             (jdbc/create-table-ddl :tags
-                                                    [[:tag_id :integer :primary :key]
-                                                     [:tag_name :text]])
-                             (jdbc/create-table-ddl :user_x_pages
-                                                    [[:x_ref_id :integer :primary :key]
-                                                     [:user_id :integer]
-                                                     [:page_id :integer]])])
+  (try (jdbc/db-do-commands
+         sqlite-db
+         [(jdbc/create-table-ddl :users
+                                 [[:user_id :integer :primary :key]
+                                  [:user_name :text]
+                                  [:user_role :text]
+                                  [:user_password :text]
+                                  [:user_new_password :text]
+                                  [:user_new_password_time :datetime]
+                                  [:user_email :text]
+                                  [:user_email_token :int]
+                                  [:user_email_expires :datetime]
+                                  [:user_touched :datetime]
+                                  [:user_registration :datetime]])
+          (jdbc/create-table-ddl :admin
+                                 [[:admin_id :integer :primary :key]
+                                  [:admin_has_logged_in :boolean]])
+          (jdbc/create-table-ddl :pages
+                                 [[:page_id :integer :primary :key]
+                                  [:page_created :datetime]
+                                  [:page_modified :datetime]
+                                  [:page_tags :text]
+                                  [:page_author :integer]
+                                  [:page_title :text]
+                                  [:page_content :text]])
+          (jdbc/create-table-ddl :namespaces
+                                 [[:namespace_id :integer :primary :key]
+                                  [:namespace_name :text]])
+          (jdbc/create-table-ddl :roles
+                                 [[:role_id :integer :primary :key]
+                                  [:role_name :text]])
+          (jdbc/create-table-ddl :tags
+                                 [[:tag_id :integer :primary :key]
+                                  [:tag_name :text "NOT NULL"]])
+          (jdbc/create-table-ddl :tags_x_pages
+                                 [[:x_ref_id :integer :primary :key]
+                                  [:tag_id :integer]
+                                  [:page_id :integer]])
+          (jdbc/create-table-ddl :user_x_pages
+                                 [[:x_ref_id :integer :primary :key]
+                                  [:user_id :integer]
+                                  [:page_id :integer]])])
        (catch Exception e (println e)))
   (println "done"))
 

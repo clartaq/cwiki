@@ -1,3 +1,13 @@
+---
+title: Technical Notes
+author: CWiki
+date: 10/01/2017 5:45:07 PM 
+updated: 12/26/2017 10:34:46 AM   
+tags:
+  - dev
+  - motivation
+  - how it works
+---
 These are some technical notes about CWiki. If you are only interested in using the wiki, you can ignore this stuff. If you want to know how CWiki works or why it works the way it does or how to build and modify your own version, the information here might be useful.
 
 ## Motivation ##
@@ -33,11 +43,12 @@ Almost no software is written without dependencies these days -- programs are ju
 * Developed and tested with Clojure 1.8. (May move to 1.9 once I understand the "spec" stuff.)
 * [Buddy](https://github.com/funcool/buddy) is used for authentication.
 * [clj-time](https://github.com/clj-time/clj-time) is used for formatting and handling time-related things.
-* [url](https://github.com/cemerick/url) is used for manipulating URLs.
+* [clj-yaml](https://github.com/circleci/clj-yaml) (the maintained fork) is used to parse YAML front matter when pages are imported from files.
 * [Compojure](https://github.com/weavejester/compojure) is used for routing.
 * [Hiccup](https://github.com/weavejester/hiccup) is used for "lispy" creation of HTML.
 * [Ring](https://github.com/ring-clojure/ring) is the web applications library.
 * [sqlite-jdbc](https://bitbucket.org/xerial/sqlite-jdbc/overview) is used for "lispy" access to the sqlite (see bellow) database program.
+* [url](https://github.com/cemerick/url) is used for manipulating URLs.
 
 ### Everything Else ###
 
@@ -49,6 +60,8 @@ SQLite is reputed not to scale well to truly huge databases. I don't know where 
 
 #### Editor ####
 
+Right now, the editor is just an HTML text field. I want to change to [Writing](https://github.com/josephernest/Writing/) once I can figure out how to embed it in my pages with my CSS.
+
 #### CSS ####
 
 At this point, the CSS used is just plain ol' [CSS3](https://www.w3schools.com/css/css3_intro.asp). I strongly considered using [SCSS](http://sass-lang.com/), but did not want the additional dependency on [Ruby](https://www.ruby-lang.org/en/) to build the project. This may change in the future.
@@ -56,6 +69,8 @@ At this point, the CSS used is just plain ol' [CSS3](https://www.w3schools.com/c
 You can use the CSS file to re-style CWiki to your liking.
 
 ## Tests ##
+
+Tests have not been written systematically. I tend to write them when I'm having difficulty with something. There are a few scattered around now. They will grow.
 
 ## Security ##
 
@@ -156,3 +171,5 @@ It seems like there are 4 possible approaches.
 2. Try to refine the regular expression-based approach I'm using now. Regular expressions are not a good way (even a possible way?) to handle embedded HTML.
 3. Write a small parser to handle pages looking for quoted blocks. I think this would require me to re-work the dataflow from several passes over the text to one that does the translation in a single pass.
 4. Since I'm using flexmark-java as my Markdown to HTML processor, look into the Wikilinks extension. I'm not sure how to handle special formatting for special cases like graying admin pages and making links to non-existent pages red. I'm not sure how extensible it is if I want to add things like namespaces either.
+
+I filed an issue with the flexmark developers and they pointed me to this example:
