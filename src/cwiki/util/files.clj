@@ -1,20 +1,19 @@
 (ns cwiki.util.files
   (:require [clj-yaml.core :as yaml]
             [clojure.java.io :as io]
-            [clojure.string :as st]
-            [cwiki.util.pp :as pp])
+            [clojure.string :as st])
   (:import (java.io BufferedReader InputStreamReader)))
 
-(defn drop-chars-while
-  "Remove characters from the beginning of the input string
-  that satisfy the predicate and return them as a string."
-  [pred coll]
-  (let [funkshun (fn [pred coll]
-                   (let [s (seq coll)]
-                     (if (and s (pred (first s)))
-                       (recur pred (rest s))
-                       s)))]
-    (st/join (funkshun pred coll))))
+;(defn drop-chars-while
+;  "Remove characters from the beginning of the input string
+;  that satisfy the predicate and return them as a string."
+;  [pred coll]
+;  (let [funkshun (fn [pred coll]
+;                   (let [s (seq coll)]
+;                     (if (and s (pred (first s)))
+;                       (recur pred (rest s))
+;                       s)))]
+;    (st/join (funkshun pred coll))))
 
 (defn take-chars-while
   "Take characters from the beginning of the input string that
@@ -66,7 +65,7 @@
   two top-level keys and subsidiary maps: :body contains the body of the
   Markdown file. :meta contains the meta-information, possibly from the
   YAML front matter."
-  [filename & args]
+  [filename]
   (let [result (atom {:meta {}
                       :body nil})
         url (io/resource filename)]

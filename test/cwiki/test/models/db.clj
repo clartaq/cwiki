@@ -22,7 +22,6 @@
 (deftest page-id->title-test
   (testing "page-id->title"
     (is (nil? (page-id->title 1039)))
-    (println "title->page-id:" (title->page-id "Front Page"))
     (is (= "Front Page" (page-id->title 1)))))
 
 (deftest page-id->content-test

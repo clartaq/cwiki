@@ -2,9 +2,9 @@
 title: Technical Notes
 author: CWiki
 date: 10/01/2017 5:45:07 PM 
-updated: 12/26/2017 10:34:46 AM   
+updated: 12/30/2017 2:12:11 PM     
 tags:
-  - dev
+  - technical note
   - motivation
   - how it works
 ---
@@ -173,3 +173,142 @@ It seems like there are 4 possible approaches.
 4. Since I'm using flexmark-java as my Markdown to HTML processor, look into the Wikilinks extension. I'm not sure how to handle special formatting for special cases like graying admin pages and making links to non-existent pages red. I'm not sure how extensible it is if I want to add things like namespaces either.
 
 I filed an issue with the flexmark developers and they pointed me to this example:
+
+
+### Enforcing Foreign Key Constraints with SQLite and clojure.java.jdbc ###
+
+I'm working on a wiki program and using SQLite as the database. I want to create a many-to-many relationship between wiki pages and tags describing those pages. I'm using  `clojure.java.jdbc` to handle the database operations. I would like to enforce foreign key constraints in the page-to-tags cross-reference table. I looked at the information about foreign keys on the SQLite site (https://www.sqlite.org/foreignkeys.html) and believe something like this is what I want;
+
+<!-- language: clojure -->
+
+    (def the-db-name "the.db")
+    (def the-db {:classname   "org.sqlite.JDBC"
+                 :subprotocol "sqlite"
+                 :subname     the-db-name})
+    
+    (defn create-some-tables
+      "Create some tables and a cross-reference table with foreign key constraints."
+      []
+      (try (jdbc/db-do-commands
+             the-db false
+             ["PRAGMA foreign_keys = ON;"
+              (jdbc/create-table-ddl :pages
+                                     [[:page_id :integer :primary :key]
+                                      ;...
+                                      [:page_content :text]])
+              (jdbc/create-table-ddl :tags
+                                     [[:tag_id :integer :primary :key]
+                                      [:tag_name :text "NOT NULL"]])
+              (jdbc/create-table-ddl :tags_x_pages
+                                     [[:x_ref_id :integer :primary :key]
+                                      [:tag_id :integer]
+                                      [:page_id :integer]
+                                      ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
+                                      ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
+    
+           (catch Exception e (println e))))
+
+But attempting to turn the pragma on has no effect.
+
+Just trying to turn the pragma on and check for effect:
+
+<!-- language: clojure -->
+
+    (println "Check before:" (jdbc/query the-db ["PRAGMA foreign_keys;"]))
+    ; Transactions on or off makes no difference.
+    (println "Result of execute!:" (jdbc/execute! the-db
+                                                  ["PRAGMA foreign_keys = ON;"]))
+    (println "Check after:" (jdbc/query the-db ["PRAGMA foreign_keys;"]))
+    
+    ;=> Check before: ({:foreign_keys 0})
+    ;=> Result of execute!: [0]
+    ;=> Check after: ({:foreign_keys 0})
+
+The results indicate that the library (org.xerial/sqlite-jdbc "3.21.0.1") was compiled to support foreign keys since there were no errors, but trying to set the pragma has no effect.
+
+I found [this](https://dev.clojure.org/jira/browse/JDBC-38) in the JIRA for the clojure JDBC back in 2012. The described changes have been implemented since then, but the code still has no effect.
+
+Finally found [this answer](https://stackoverflow.com/questions/13348843/in-clojure-what-happens-when-you-call-sql-with-connection-within-another-sql-wi) to a Stackoverflow question that pointed to [this post](https://code-know-how.blogspot.ru/2011/10/how-to-enable-foreign-keys-in-sqlite3.html) back in 2011. That allowed me to cobble together something that did seem to set the pragma. The code below depends on creating a specially configured `Connection`.
+
+
+<!-- language: clojure -->
+
+    (ns example
+      (:require [clojure.java.jdbc :as jdbc])
+      (:import (java.sql Connection DriverManager)
+               (org.sqlite SQLiteConfig)))
+    
+    (def the-db-name "the.db")
+    (def the-db {:classname   "org.sqlite.JDBC"
+                 :subprotocol "sqlite"
+                 :subname     the-db-name})
+    
+    (defn ^Connection get-connection
+      "Return a connection to a SQLite database that
+      enforces foreign key constraints."
+      [db]
+      (Class/forName (:classname db))
+      (let [config (SQLiteConfig.)]
+        (.enforceForeignKeys config true)
+        (let [connection (DriverManager/getConnection
+                           (str "jdbc:sqlite:" (:subname db))
+                           (.toProperties config))]
+          connection)))
+    
+    (defn exec-foreign-keys-pragma-statement
+      [db]
+      (let [con ^Connection (get-connection db)
+            statement (.createStatement con)]
+        (println "exec-foreign-keys-pragma-statement:"
+                 (.execute statement "PRAGMA foreign_keys;"))))
+
+Based on the above, I rewrote the table creation code above as:
+
+
+<!-- language: clojure -->
+
+    (defn create-some-tables
+      "Create some tables and a cross-reference table with foreign key constraints."
+      []
+      (when-let [conn (get-connection the-db)]
+        (try
+          (jdbc/with-db-connection
+            [conn the-db]
+            ; Creating the tables with the foreign key constraints works.
+            (try (jdbc/db-do-commands
+                   the-db false
+                   [(jdbc/create-table-ddl :pages
+                                           [[:page_id :integer :primary :key]
+                                            [:page_content :text]])
+                    (jdbc/create-table-ddl :tags
+                                           [[:tag_id :integer :primary :key]
+                                            [:tag_name :text "NOT NULL"]])
+                    (jdbc/create-table-ddl :tags_x_pages
+                                           [[:x_ref_id :integer :primary :key]
+                                            [:tag_id :integer]
+                                            [:page_id :integer]
+                                            ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
+                                            ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
+    
+                 ; This still doesn't work.
+                 (println "After table creation:"
+                          (jdbc/query the-db "PRAGMA foreign_keys;"))
+    
+                 (catch Exception e (println e))))
+    
+          ; This returns the expected results.
+          (when-let [statement (.createStatement conn)]
+            (try
+              (println "After creating some tables: PRAGMA foreign_keys =>"
+                       (.execute statement "PRAGMA foreign_keys;"))
+              (catch Exception e (println e))
+              (finally (when statement
+                         (.close statement)))))
+          (catch Exception e (println e))
+          (finally (when conn
+                     (.close conn))))))
+
+The tables are created as expected. Some of the `clojure.java.jdbc` functions still don't seem to work as desired though. (See the `jdbc/query` call in the middle of the listing.) Getting things to always work as expected seems very "manual" having to fall back on java interop. And it seems like every interaction with the database requires using the specially configured `Connection` returned by the `get-connection` function.
+
+Is there a better way to enforce foreign key constraints in SQLite in Clojure?
+ 

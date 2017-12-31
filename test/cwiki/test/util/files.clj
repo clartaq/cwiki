@@ -1,8 +1,7 @@
 (ns cwiki.test.util.files
   (:require [clojure.test :refer :all]
             [cwiki.util.files :refer :all]
-            [clojure.string :as s]
-            [cwiki.util.pp :as pp]))
+            [clojure.string :as s]))
 
 (deftest drop-lines-while-test
   (testing "drop-lines-while function"
@@ -81,7 +80,6 @@
     (is (nil? (yaml->map "")))
     (let [res (yaml->map (s/join "\n" ["author: boogledy"
                                        "date: 21 July 2025"]))]
-      (println "res:\n" (pp/pp-map res))
       (is (= res {:author "boogledy"
                   :date   "21 July 2025"})))
 
@@ -89,7 +87,6 @@
                                        "date: 2017-08-15 14:03:02"
                                        "tags: blogging"
                                        ]))]
-      (println "res:\n" (pp/pp-map res))
       (is (= (:title res) "First Light"))
       (is (= (not (nil? (:date res)))))
       (is (= (:tags res) "blogging"))
@@ -100,7 +97,6 @@
                                          "- blogging"
                                          "- caddy"
                                          "date: 2016-08-19 18:02:38"]))]
-        (println "res:\n" (pp/pp-map res))
         (is (= (:title res) "Serving HTTPS with Caddy Server"))
         (is (= (count (:tags res)) 3))
         (is (not (nil? (:date res))))))))
@@ -120,8 +116,6 @@
                 "private/test_data/post-with-front-matter.md")
           tags (into (sorted-set) (:tags (:meta res)))]
       (is (= "\nThis is part of a post with front matter." (:body res)))
-      (println "(:meta res):" (pp/pp-map (:meta res)))
-      (println "tags:" tags)
       (is (not (nil? (:meta res))))
       (is (= 3 (count tags)))
       (is (= "Serving WordPress over HTTPS with Caddy Server"
