@@ -8,7 +8,7 @@ This is an ever-evolving list of things that need doing.
 * Any maintenance tasks like database compression, backup and restore, for example.
 * Beautify and style the edit/create pages.
 * Rationalize the CSS
-* At some point, we are going to have to stop creating the initial database from a bunch of Markdown files and just add a pre-built database to the repository. Need to get the tools * Backup and restore for the database.
+* At some point, we are going to have to stop creating the initial database from a bunch of Markdown files and just add a pre-built database to the repository. Need to get the tools
 * Make page lookup from links case-insensitive for the first letter in words.
 * Version tracking?
 * ~~Be consistent in the use of the name -- either "CWiki" or "cwiki".~~

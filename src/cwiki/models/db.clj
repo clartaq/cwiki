@@ -7,9 +7,192 @@
            [clj-time.core :as t]
            [clj-time.format :as f]
            [cwiki.util.files :as files]
+           [cwiki.util.pp :as pp]
            [cwiki.util.special :as special])
   (:import (java.io File)
-           (java.util UUID)))
+           (java.util UUID)
+           (org.sqlite SQLiteConfig)
+           (java.sql DriverManager Connection)))
+
+;;
+;; Dealing with foreign key constraints in SQLite with Clojure.
+;;
+
+; From Stackoverflow https://stackoverflow.com/questions/13348843/in-clojure-what-happens-when-you-call-sql-with-connection-within-another-sql-wi
+;
+; I would in general recommend using clojure.java.jdbc instead of
+; clojure.contrib.sql because the latter is not supposed to work with clojure
+; newer than 1.2.0. In clojure.java.jdbc with-connection uses binding to add
+; the connection to a map of connections in the db var for any wrapped calls,
+; so the second one will overwrite the first one.
+
+; from: jdbc.clj
+;
+;(defn with-connection*
+;  "Evaluates func in the context of a new connection to a database then
+;  closes the connection."
+;  [db-spec func]
+;  (with-open [^java.sql.Connection con (get-connection db-spec)]
+;    (binding [*db* (assoc *db* :connection con :level 0 :rollback (atom false))]
+;      (func))))
+;
+
+; From https://dev.clojure.org/jira/browse/JDBC-38 in 2012
+;(defn do-raw  [& commands]
+;  (with-open [^java.sql.Statement stmt (let [^java.sql.Connection con (sql/connection)] (.createStatement con))]
+;    (doseq [^String cmd commands]
+;      (.addBatch stmt cmd))
+;    (let [result (.executeBatch stmt)]
+;      (if (and (= 1 (count result)) (= -2 (first result)))
+;        (list (.getUpdateCount stmt))
+;        (seq result)))))
+
+; See https://dev.clojure.org/jira/browse/JDBC-38
+;(jdbc/with-query-results res ["PRAGMA foreign_keys;"]
+;                        (doall res)))
+
+; From https://code-know-how.blogspot.ru/2011/10/how-to-enable-foreign-keys-in-sqlite3.html
+; Recently I have created a database in SQLite with tables that has foreign
+; keys ON DELETE CASCADE actions. To my surprise when I deleted the parent
+; key each row of the child table associated with the parent key are not
+; deleted. The answer is that by default in SQLite  foreign key support
+; is turned off for compatibility. To enable foreign keys using Xerial
+; SQLite JDBC Driver We have to enforce foreign key support every time
+; we make a query.
+;
+; import org.sqlite.SQLiteConfig; ADDED BASED ON COMMENT IN POST.
+;public static final String DB_URL = "jdbc:sqlite:database.db";
+;public static final String DRIVER = "org.sqlite.JDBC";
+;
+;public static Connection getConnection() throws ClassNotFoundException {
+;    Class.forName(DRIVER);
+;    Connection connection = null;
+;    try {
+;        SQLiteConfig config = new SQLiteConfig();
+;        config.enforceForeignKeys(true);
+;        connection = DriverManager.getConnection(DB_URL,config.toProperties());
+;    } catch (SQLException ex) {}
+;    return connection;
+;}
+
+; Slightly paraphrased from https://dev.clojure.org/jira/browse/JDBC-38 in 2012
+;(defn do-raw [db & commands]
+;  (with-open [^java.sql.Statement stmt
+;              (let [^java.sql.Connection con (jdbc/db-connection db)] ;(sql/connection)]
+;                (.createStatement con))]
+;    (doseq [^String cmd commands]
+;      (.addBatch stmt cmd))
+;    (let [result (.executeBatch stmt)]
+;      (if (and (= 1 (count result)) (= -2 (first result)))
+;        (list (.getUpdateCount stmt))
+;        (seq result)))))
+
+;(exec-foreign-keys-pragma-statement sqlite-db)
+;(with-db-connection [db-con db-spec]
+;                    (let [;; fetch some rows using this connection
+;                          rows (jdbc/query db-con ["SELECT * FROM table WHERE id = ?" 42])]
+;                      ;; insert a copy of the first row using the same connection
+;                      (jdbc/insert! db-con :table (dissoc (first rows) :id)))
+
+;(println "jdbc/query:" (jdbc/query sqlite-db ["PRAGMA foreign_keys;"]))
+;(let [res (jdbc/query sqlite-db ["PRAGMA foreign_keys;"])]
+;  (println "res:" res)
+;  (println "(count res):" (count res))
+;  (println "(first res):" (first res)))
+; (println "with-db-connection:" (jdbc/with-db-connection sqlite-db
+;  (jdbc/db-do-commands sqlite-db false "PRAGMA foreign_keys = 1;")))
+;
+; This doesn't work
+;(do-raw sqlite-db (jdbc/execute! sqlite-db "PRAGMA foreign_keys = ON;"))
+;(println "jdbc/execute!:" (jdbc/execute! sqlite-db "PRAGMA foreign_keys = ON;"))
+;(jdbc/db-do-commands sqlite-db false "PRAGMA foreign_keys = ON;")
+;(println "jdbc/query check:" (jdbc/query sqlite-db ["PRAGMA foreign_keys;"]))
+;(println "jdbc/execute:" (jdbc/execute! sqlite-db
+;                                        ["PRAGMA foreign_keys = ON;"]
+;                                        {:transaction? false}))
+;(jdbc/db-do-commands sqlite-db false [(jdbc/query sqlite-db "PRAGMA foreign_keys;")
+;(jdbc/execute! sqlite-db ["PRAGMA foreight_keys = ON;"])
+;(jdbc/query sqlite-db "PRAGMA foreign_keys;")])
+;(println "jdbc/query check:" (jdbc/query sqlite-db ["PRAGMA foreign_keys;"]))
+;(println "(jdbc/db-connection sqlite-db):" (jdbc/db-connection sqlite-db))
+;(println "PRAGMA foreign_keys;" (jdbc/db-do-commands sqlite-db false "PRAGMA foreign_keys;"))
+
+; This returns the expected results.
+;
+;(defn exec-foreign-keys-pragma-statement
+;  [db]
+;  (let [con ^Connection (get-connection db)
+;        statement (.createStatement con)]
+;    (println "exec-foreign-keys-pragma-statement:"
+;             (.execute statement "PRAGMA foreign_keys;"))))
+;
+; The way someone did it in Java that I used to create the version below.
+;
+;import org.sqlite.SQLiteConfig;
+;public static final String DB_URL = "jdbc:sqlite:database.db";
+;public static final String DRIVER = "org.sqlite.JDBC";
+
+;public static Connection getConnection() throws ClassNotFoundException {
+;    Class.forName(DRIVER);
+;    Connection connection = null;
+;    try {
+;        SQLiteConfig config = new SQLiteConfig();
+;        config.enforceForeignKeys(true);
+;        connection = DriverManager.getConnection(DB_URL,config.toProperties());
+;    } catch (SQLException ex) {}
+;    return connection;
+;}
+
+; Here's some example code that I used to get things working with an
+; experiment and presented in a Stackoverflow question.
+;
+;(def the-db-name "the.db")
+;(def the-db {:classname   "org.sqlite.JDBC"
+;             :subprotocol "sqlite"
+;             :subname     the-db-name})
+;
+;(defn create-some-tables
+;  "Create some tables and a cross-reference table with foreign key constraints."
+;  []
+;  (when-let [conn (get-connection the-db)]
+;    (try
+;      (jdbc/with-db-connection
+;        [conn the-db]
+;        (println "the-db:" the-db)
+;        (try (jdbc/db-do-commands
+;               the-db false
+;               [(jdbc/create-table-ddl :pages
+;                                       [[:page_id :integer :primary :key]
+;                                        [:page_content :text]])
+;                (jdbc/create-table-ddl :tags
+;                                       [[:tag_id :integer :primary :key]
+;                                        [:tag_name :text "NOT NULL"]])
+;                (jdbc/create-table-ddl :tags_x_pages
+;                                       [[:x_ref_id :integer :primary :key]
+;                                        [:tag_id :integer]
+;                                        [:page_id :integer]
+;                                        ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
+;                                        ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
+;
+;             ; This still doesn't work.
+;             (println "After table creation:"
+;                      (jdbc/query the-db "PRAGMA foreign_keys;"))
+;
+;             (catch Exception e (println e))))
+;
+;      ; This returns the expected results.
+;      (when-let [statement (.createStatement conn)]
+;        (try
+;          (println "After creating some tables: PRAGMA foreign_keys =>"
+;                   (.execute statement "PRAGMA foreign_keys;"))
+;          (catch Exception e (println e))
+;          (finally (when statement
+;                     (.close statement)))))
+;      (catch Exception e (println e))
+;      (finally (when conn
+;                 (.close conn))))))
+;
+
 
 ;; Things that deal with the database file and connection.
 
@@ -20,6 +203,18 @@
    :subprotocol "sqlite"
    :subname     db-file-name
    })
+
+(defn ^Connection get-connection
+  "Return a connection to a SQLite database that
+  enforces foreign key constraints."
+  [db]
+  (Class/forName (:classname db))
+  (let [config (SQLiteConfig.)]
+    (.enforceForeignKeys config true)
+    (let [connection (DriverManager/getConnection
+                       (str "jdbc:sqlite:" (:subname db))
+                       (.toProperties config))]
+      connection)))
 
 ;; Things related to time formatting.
 
@@ -44,7 +239,8 @@
   ["Front_Page.md"
    "About_Front_Matter.md"
    "Other_Wiki_Software.md"
-   "Text_Formatting.md"])
+   "Text_Formatting.md"
+   "Technical_Notes.md"])
 
 (def initial-pages [;{:title "Front Page" :file-name "Front_Page.md"}
                     {:title "About" :file-name "About.md"}
@@ -69,7 +265,7 @@
                     {:title "Sidebar" :file-name "Sidebar.md"}
                     {:title "Special Pages" :file-name "Special_Pages.md"}
                     ;{:title "Text Formatting" :file-name "Text_Formatting.md"}
-                    {:title "Technical Notes" :file-name "Technical_Notes.md"}
+                    ;{:title "Technical Notes" :file-name "Technical_Notes.md"}
                     {:title "To Do" :file-name "todo.md"}
                     {:title "Wikilinks" :file-name "Wikilinks.md"}])
 
@@ -343,13 +539,13 @@
   [meta]
   (reduce conj [] (:tags meta)))
 
-(defn get-row-id
+(defn- get-row-id
   "Return the row id returned as the result of a single insert operation.
   It's buried in an odd map, hence this function."
   [result]
   (first (vals (first result))))
 
-(defn update-tag-tables
+(defn- update-tag-tables
   "Update the tag tables with tags and associate them with the
   page-id."
   [tags page-id]
@@ -361,7 +557,8 @@
                   [] tags)]
     ; add to cross-reference table
     (println "row-ids (tag ids):" row-ids ", page-id:" page-id)
-    ))
+    (mapv #(jdbc/insert! sqlite-db :tags_x_pages {:tag_id %
+                                                  :page_id page-id}) row-ids)))
 
 (defn- add-page-with-meta-from-file!
   "Add a page to the database based on the information in a Markdown file
@@ -377,13 +574,15 @@
             creation-date-str (or (:date meta)
                                   (:created meta))
             creation-date (if creation-date-str
-                            (c/to-sql-time (f/parse markdown-pad-format creation-date-str))
+                            (c/to-sql-time (f/parse markdown-pad-format
+                                                    creation-date-str))
                             (c/to-sql-time (t/now)))
             update-date-str (or (:updated meta)
                                 (:changed meta)
                                 (:modified meta))
             update-date (if update-date-str
-                          (c/to-sql-time (f/parse markdown-pad-format update-date-str))
+                          (c/to-sql-time (f/parse markdown-pad-format
+                                                  update-date-str))
                           creation-date)
             tags (get-tags-from-meta meta)
             pm (merge (create-new-post-map title content author-id)
@@ -450,9 +649,6 @@
   (mapv #(jdbc/insert! sqlite-db :users %) initial-users)
   (println "Done."))
 
-; Need "Front Page" to be first in list since some tests depend on it
-; being in that position. Kinda fragile.
-
 (defn- add-initial-pages!
   [user-id]
   (mapv #(add-page-with-meta-from-file! %) initial-pages-with-front-matter)
@@ -461,13 +657,15 @@
 (defn- add-initial-namespaces!
   []
   (println "adding namespaces")
-  (mapv (fn [%] (jdbc/insert! sqlite-db :namespaces {:namespace_name %})) @initial-namespaces)
+  (mapv (fn [%] (jdbc/insert! sqlite-db :namespaces {:namespace_name %}))
+        @initial-namespaces)
   (println "done"))
 
 (defn- add-initial-tags!
   []
   (println "adding tags")
-  (mapv (fn [%] (jdbc/insert! sqlite-db :tags {:tag_name %})) initial-tags))
+  (mapv (fn [%] (jdbc/insert! sqlite-db :tags {:tag_name %})) initial-tags)
+  (println "done"))
 
 (defn- add-initial-roles!
   []
@@ -479,52 +677,64 @@
   "Create the database tables for the application."
   []
   (println "creating tables")
-  (try (jdbc/db-do-commands
-         sqlite-db
-         [(jdbc/create-table-ddl :users
-                                 [[:user_id :integer :primary :key]
-                                  [:user_name :text]
-                                  [:user_role :text]
-                                  [:user_password :text]
-                                  [:user_new_password :text]
-                                  [:user_new_password_time :datetime]
-                                  [:user_email :text]
-                                  [:user_email_token :int]
-                                  [:user_email_expires :datetime]
-                                  [:user_touched :datetime]
-                                  [:user_registration :datetime]])
-          (jdbc/create-table-ddl :admin
-                                 [[:admin_id :integer :primary :key]
-                                  [:admin_has_logged_in :boolean]])
-          (jdbc/create-table-ddl :pages
-                                 [[:page_id :integer :primary :key]
-                                  [:page_created :datetime]
-                                  [:page_modified :datetime]
-                                  [:page_tags :text]
-                                  [:page_author :integer]
-                                  [:page_title :text]
-                                  [:page_content :text]])
-          (jdbc/create-table-ddl :namespaces
-                                 [[:namespace_id :integer :primary :key]
-                                  [:namespace_name :text]])
-          (jdbc/create-table-ddl :roles
-                                 [[:role_id :integer :primary :key]
-                                  [:role_name :text]])
-          (jdbc/create-table-ddl :tags
-                                 [[:tag_id :integer :primary :key]
-                                  [:tag_name :text "NOT NULL"]])
-          (jdbc/create-table-ddl :tags_x_pages
-                                 [[:x_ref_id :integer :primary :key]
-                                  [:tag_id :integer]
-                                  [:page_id :integer]])
-          (jdbc/create-table-ddl :user_x_pages
-                                 [[:x_ref_id :integer :primary :key]
-                                  [:user_id :integer]
-                                  [:page_id :integer]])])
-       (catch Exception e (println e)))
+  (when-let [conn (get-connection sqlite-db)]
+    (try
+      (jdbc/with-db-connection
+        [conn sqlite-db]
+        (try (jdbc/db-do-commands
+               sqlite-db false
+               [(jdbc/create-table-ddl :users
+                                       [[:user_id :integer :primary :key]
+                                        [:user_name :text]
+                                        [:user_role :text]
+                                        [:user_password :text]
+                                        [:user_new_password :text]
+                                        [:user_new_password_time :datetime]
+                                        [:user_email :text]
+                                        [:user_email_token :int]
+                                        [:user_email_expires :datetime]
+                                        [:user_touched :datetime]
+                                        [:user_registration :datetime]])
+                (jdbc/create-table-ddl :admin
+                                       [[:admin_id :integer :primary :key]
+                                        [:admin_has_logged_in :boolean]])
+                (jdbc/create-table-ddl :pages
+                                       [[:page_id :integer :primary :key]
+                                        [:page_created :datetime]
+                                        [:page_modified :datetime]
+                                        [:page_tags :text]
+                                        [:page_author :integer]
+                                        [:page_title :text]
+                                        [:page_content :text]])
+                (jdbc/create-table-ddl :namespaces
+                                       [[:namespace_id :integer :primary :key]
+                                        [:namespace_name :text]])
+                (jdbc/create-table-ddl :roles
+                                       [[:role_id :integer :primary :key]
+                                        [:role_name :text]])
+                (jdbc/create-table-ddl :tags
+                                       [[:tag_id :integer :primary :key]
+                                        [:tag_name :text "NOT NULL"]])
+                (jdbc/create-table-ddl :tags_x_pages
+                                       [[:x_ref_id :integer :primary :key]
+                                        [:tag_id :integer]
+                                        [:page_id :integer]
+                                        ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
+                                        ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])
+                (jdbc/create-table-ddl :user_x_pages
+                                       [[:x_ref_id :integer :primary :key]
+                                        [:user_id :integer]
+                                        [:page_id :integer]
+                                        ])])
+             (catch Exception e (println e))))
+      (catch Exception e (println e))
+      (finally (when conn
+                 (.close conn)))))
   (println "done"))
 
 (defn- create-db
+  "Create the database tables and initialize them with content for
+  first-time use."
   []
   (create-tables)
   (init-admin-table)

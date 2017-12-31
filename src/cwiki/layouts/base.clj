@@ -349,6 +349,11 @@
                    [:div {:class "form-group"}
                     [:div {:class "form-label-div"}
                      [:label {:class "form-label"
+                              :for "tags"} "Tags"]]
+                    [:input {:type "submit" :id "new-tag-button"}]]
+                   [:div {:class "form-group"}
+                    [:div {:class "form-label-div"}
+                     [:label {:class "form-label"
                               :for   "content"} "Page Content"]]
                     (text-area {:class "form-text-area"} "content" content)]
                    [:div {:class "button-bar-container"}
