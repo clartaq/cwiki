@@ -7,12 +7,12 @@
                  [com.cemerick/url "0.1.1"]
                  [circleci/clj-yaml "0.5.6"]
                  [clj-time "0.14.2"]
-                 [com.vladsch.flexmark/flexmark "0.28.16"]
-                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.28.16"]
-                 [com.vladsch.flexmark/flexmark-ext-tables "0.28.16"]
+                 [com.vladsch.flexmark/flexmark "0.28.24"]
+                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.28.24"]
+                 [com.vladsch.flexmark/flexmark-ext-tables "0.28.24"]
                  [compojure "1.6.0"]
                  [hiccup "1.0.5"]
-                 [org.clojure/java.jdbc "0.7.3"]
+                 [org.clojure/java.jdbc "0.7.5"]
                  [org.xerial/sqlite-jdbc "3.21.0.1"]
                  [ring/ring-defaults "0.3.1"]
                  [ring-server "0.5.0"]]
@@ -29,6 +29,6 @@
               :stacktraces?  false
               :auto-reload?  false}}
    :dev
-            {:dependencies [[ring-mock "0.1.5"] [ring/ring-devel "1.6.3"]]}}
+            {:dependencies [[ring/ring-mock "0.3.2"] [ring/ring-devel "1.6.3"]]}}
 
   :main cwiki.main)
