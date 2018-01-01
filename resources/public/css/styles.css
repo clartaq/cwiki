@@ -328,12 +328,15 @@ textarea#content {
 
 input#new-tag-button {
     /*//http://paulabrown.net/search-button-png-210.png);*/
-    height: 24px; /*// height of image*/
- /*   width: 24px; /*// width of image*/
+    /*height: 89px; /*//* height of image*/
+    /*max-height: 89px;*/
+ /*   width: 24px; /*//* width of image*/
+   /* max-width: 89px;*/
+    width: 29%;
     padding: 0;
     border: none; /*// get rid of grey border*/
     color: transparent; /*// hide the text (without indenting it to hell)*/
-    background: transparent url(/public/img/add-circular-button-outline-with-plus-sign.svg) no-repeat;
+    background: transparent url(/public/img/shrunken-a9c6c9-add-circular-button.svg) no-repeat;
     outline: none;
     display: block; /*// Ensure block element to apply this to inline-elements*/
 }
