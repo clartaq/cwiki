@@ -7,7 +7,7 @@
            [clj-time.core :as t]
            [clj-time.format :as f]
            [cwiki.util.files :as files]
-           [cwiki.util.pp :as pp]
+          ; [cwiki.util.pp :as pp]
            [cwiki.util.special :as special])
   (:import (java.io File)
            (java.util UUID)
@@ -239,6 +239,7 @@
   ["Front_Page.md"
    "About_Front_Matter.md"
    "Other_Wiki_Software.md"
+   "Path_to_Release.md"
    "Text_Formatting.md"
    "Technical_Notes.md"])
 
