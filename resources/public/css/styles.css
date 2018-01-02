@@ -128,12 +128,6 @@ body {
     justify-content: space-around;
 }
 
-/* Some color */
-/*.brand-box {
-    background-color: #505e9f;
-    padding: 4px;
-}*/
-
 .brand-title {
     font-size: 1.5em;
     font-weight: bold;
@@ -141,7 +135,6 @@ body {
     color: #cfe7ed;
     margin: 0;
     padding-bottom: 0;
-    /*padding-bottom: 0.6em;*/
 }
 
 .brand-sub-title {
@@ -178,6 +171,74 @@ body {
     margin: 0;
     padding: 0 0.5em;
     color: #cfe7ed;
+}
+
+/* Styles for the "More" dropdown. */
+
+
+
+/* Styles for the search box. */
+
+.search-container {
+    margin-top: -0.6em;
+    margin-left: -0.5em;
+}
+
+#searchbox {
+
+}
+
+#search-text {
+    font-size: 0.8em;
+    color: dimgray;
+    border: 1px solid #9daca9;
+    border-radius: 4px;
+    box-shadow: inset 0 1px #fff;
+    box-sizing: border-box;
+    padding: 3px;
+}
+
+#search-submit {
+    /* font-size: 0.8em; visual size looks too large because
+       of background color. Reduce size to make it look the
+       save as the rest of the nav line. Purely subjective.
+     */
+    font-size: 0.75em;
+    font-weight: bold;
+    color: #a0e0ff;
+    background-color: #fafafa;
+    border: 1px solid #9daca9;
+    border-radius: 4px;
+    box-shadow: inset 0 1px #fff;
+    box-sizing: border-box;
+    padding: 3px;
+    margin-left: 3px;
+}
+
+#search-submit:hover {
+    color: dimgray;
+    background-color: #eff1f1;
+}
+
+#search-submit:focus {
+    color: #E5ECF4;
+    border: 1px solid #0036ff;
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px #6fb5f1;
+    outline: 0;
+}
+
+#search-submit:active {
+    color: #E5ECF4;
+    border: 1px solid #9daca9;
+    background-color: #d2d6d6;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
+}
+
+#search-submit:disabled {
+    color: #E5ECF4;
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
 }
 
 /* The sidebar and article is itself a flexbox, but also an element
@@ -327,6 +388,7 @@ textarea#content {
 }
 
 input#new-tag-button {
+    /* For placing svg images on buttons. */
     /*//http://paulabrown.net/search-button-png-210.png);*/
     /*height: 89px; /*//* height of image*/
     /*max-height: 89px;*/
