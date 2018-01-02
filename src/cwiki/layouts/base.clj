@@ -93,6 +93,18 @@
    (include-js "/js/mathjax-config.js")
    (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")])
 
+;<form id="searchbox" action="">
+;<input id="search" type="text" placeholder="Type here">
+;<input id="submit" type="submit" value="Search">
+;</form>
+
+(defn- searchbox
+  []
+  [:div {:class "search-container"}
+   [:form {:id "searchbox" :action ""}
+    [:input {:type "text" :id "search-text" :placeholder "Enter search terms here..."}]
+     [:input {:type "submit" :id "search-submit" :value "Search"}]]])
+
 (defn- menu-item-span
   "Return a span with CSS class 'menu-item' around the given content."
   [content]
@@ -131,7 +143,8 @@
        (when (ri/is-admin-user? req)
          (menu-item-span [:a {:href "/Admin"} "Admin"]))
        (menu-item-span [:a {:href "/logout"} "Sign Off"])
-       (menu-item-span [:a {:href "/search"} "Search"])]])))
+       (menu-item-span [:a {:href "/more"} "More  \u25be"])
+       (menu-item-span (searchbox))]])))
 
 (defn wiki-header-component
   "Return the standard wiki page header."
