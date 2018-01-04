@@ -241,7 +241,8 @@
    "Other_Wiki_Software.md"
    "Path_to_Release.md"
    "Text_Formatting.md"
-   "Technical_Notes.md"])
+   "Technical_Notes.md"
+   "todo.md"])
 
 (def initial-pages [;{:title "Front Page" :file-name "Front_Page.md"}
                     {:title "About" :file-name "About.md"}
@@ -267,7 +268,7 @@
                     {:title "Special Pages" :file-name "Special_Pages.md"}
                     ;{:title "Text Formatting" :file-name "Text_Formatting.md"}
                     ;{:title "Technical Notes" :file-name "Technical_Notes.md"}
-                    {:title "To Do" :file-name "todo.md"}
+                    ;{:title "To Do" :file-name "todo.md"}
                     {:title "Wikilinks" :file-name "Wikilinks.md"}])
 
 (def valid-roles [:cwiki :admin :editor :writer :reader])
