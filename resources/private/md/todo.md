@@ -1,7 +1,17 @@
+---
+title: To Do
+author: CWiki
+date: 24/10/2017 9:17:04 AM  
+updated: 1/4/2018 11:33:00 AM        
+tags:
+  - technical note
+  - releases
+  - cwiki
+---
 This is an ever-evolving list of things that need doing.
 
 * Creation of wikilinks needs to understand in-line code spans, `<code></code>`, and `<pre></pre>` so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
-* Consolidate some of the nav stuff in the page header into a "More" drop-down menu.
+* Create a function that will update the existing database new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
 * Implement Namespaces? Would make separating out groups of pages easier, like all "Help" pages.
 * Add a tagging system. Look into hierarchical tagging systems.
 * Implement within-wiki search.
@@ -28,4 +38,5 @@ This is an ever-evolving list of things that need doing.
 * ~~When the initial admin user changes their profile then attempts to sign out, the signout page shows the user name before modifications, presumably because it is still in the session record.~~
 * ~~Need some sort of confirmation after adding a user, editing a user, or deleting a user.~~
 * ~~When running from an uberjar, the program only works when run from the development directory. It needs to be able to reference the resources in the jar rather than the file system.~~
+* ~~Consolidate some of the nav stuff in the page header into a "More" drop-down menu.~~
 

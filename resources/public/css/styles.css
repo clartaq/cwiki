@@ -106,16 +106,19 @@ body {
 
 /* The pieces of the page header. */
 
-.header {
+.page-header {
     margin: 0;
-    padding: 0 0.5em;
+    padding: 0 1em;
     flex: 0 0 auto;
     background-color: dimgray;
 }
 
 .header-wrapper {
     margin: 0;
-    padding: 1em 0.5em 0;
+    padding-top: 0.5em;
+    padding-right: 0;
+    padding-left: 0em;
+    padding-bottom: 0;
     line-height: 0;
     display: flex;
     flex-direction: row;
@@ -158,7 +161,10 @@ body {
 
 .hmenu {
     margin: 0;
-    padding: 0.5em;
+    padding-top: 1.5em;
+    padding-right: 0;
+    padding-left: 0;
+    padding-bottom: 0;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -169,19 +175,58 @@ body {
     font-size: 0.8em;
     font-weight: bold;
     margin: 0;
-    padding: 0 0.5em;
+    margin-top: 0em;
+    padding-top: 0;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    padding-bottom: 0;
     color: #cfe7ed;
 }
 
 /* Styles for the "More" dropdown. */
 
+.menu-item ul {
+    list-style: none;
+    padding: 0;
+    margin-left: -2em;
+}
+.menu-item > ul > li {
+    display: inline-block;
+    position: relative;
+    /* border: 1px solid lightgreen;*/
+    /* for demo */
+}
+.menu-item a {
+    /* font-weight: 800;*/
+    /*padding: 5px 10px;*/
+    /*display: block;*/
+}
+.menu-item > ul > li.subNav ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    white-space: nowrap;
+    background: dimgray;
+}
+.menu-item ul li.subNav:hover ul {
+    margin-left: -2em;
+    display: block;
+}
 
+.menu-item ul li.subNav ul li {
+    margin-left: 0;
+    padding-left: 2em;
+    padding-right: 2em;
+    line-height: 1.7em;
+}
 
 /* Styles for the search box. */
 
 .search-container {
-    margin-top: -0.6em;
-    margin-left: -0.5em;
+    margin-top: -0.8em;
+    margin-left: 2em;
+   /* margin-left: -0.5em;*/
 }
 
 #searchbox {
