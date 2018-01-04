@@ -9,10 +9,9 @@
             [clj-time.format :as f]
             [clj-time.coerce :as c]
             [clojure.string :as s]
-            [compojure.response :as response]
             [cwiki.models.db :as db]
             [cwiki.util.authorization :as ath]
-            [cwiki.util.pp :as pp]
+           ; [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.util.wikilinks :refer [replace-wikilinks
                                           get-edit-link-for-existing-page
@@ -93,17 +92,27 @@
    (include-js "/js/mathjax-config.js")
    (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")])
 
-;<form id="searchbox" action="">
-;<input id="search" type="text" placeholder="Type here">
-;<input id="submit" type="submit" value="Search">
-;</form>
+(defn- drop-menu
+  "Return the drop-down menu for use in the page header."
+  [req]
+  [:div {:class "menu-item"}
+   [:ul
+    [:li {:class "subNav"}
+     [:a "More  ▾"]
+     [:ul
+      [:li [:a {:href "/about"} "About"]]
+      (when (ri/is-admin-user? req)
+        [:li [:a {:href "/Admin"} "Admin"]])
+      [:li [:a {:href "/logout"} "Sign Off"]]]]]]
+  )
 
 (defn- searchbox
+  "Return the search box element for use in the page header."
   []
   [:div {:class "search-container"}
    [:form {:id "searchbox" :action ""}
     [:input {:type "text" :id "search-text" :placeholder "Enter search terms here..."}]
-     [:input {:type "submit" :id "search-submit" :value "Search"}]]])
+    [:input {:type "submit" :id "search-submit" :value "Search"}]]])
 
 (defn- menu-item-span
   "Return a span with CSS class 'menu-item' around the given content."
@@ -129,29 +138,22 @@
                           can-edit-and-delete
                           (get-delete-link-for-existing-page post-map req))]
      [:nav {:class "hmenu"}
-      [:p
-       (when (ath/can-create? req)
-         (menu-item-span [:a {:href "/New Page"} "New"]))
-       (when edit-link
-         (menu-item-span edit-link))
-       (when delete-link
-         (menu-item-span delete-link))
-       (menu-item-span [:a {:href "/"} "Home"])
-       (when (and (db/db-exists?)
-                  (db/find-post-by-title "About"))
-         (menu-item-span [:a {:href "/about"} "About"]))
-       (when (ri/is-admin-user? req)
-         (menu-item-span [:a {:href "/Admin"} "Admin"]))
-       (menu-item-span [:a {:href "/logout"} "Sign Off"])
-       (menu-item-span [:a {:href "/more"} "More  \u25be"])
-       (menu-item-span (searchbox))]])))
+      (when (ath/can-create? req)
+        (menu-item-span [:a {:href "/New Page"} "New"]))
+      (when edit-link
+        (menu-item-span edit-link))
+      (when delete-link
+        (menu-item-span delete-link))
+      (menu-item-span [:a {:href "/"} "Home"])
+      (drop-menu req)
+      (searchbox)])))
 
 (defn wiki-header-component
   "Return the standard wiki page header."
   ([post-map req]
    (wiki-header-component post-map req {}))
   ([post-map req options]
-   [:header {:class "header"}
+   [:header {:class "page-header"}
     [:div {:class "header-wrapper"}
      [:hgroup {:class "left-header-wrapper"}
       [:h1 {:class "brand-title"} "CWiki"]
@@ -163,7 +165,7 @@
 (defn no-nav-header-component
   "Return the wiki page header without the nav menu items."
   []
-  [:header {:class "header"}
+  [:header {:class "page-header"}
    [:div {:class "header-wrapper"}
     [:hgroup {:class "left-header-wrapper"}
      [:h1 {:class "brand-title"} "CWiki"]
@@ -178,14 +180,6 @@
 (def warning-span [:span {:style {:color "red"}} [:strong "Warning: "]])
 
 (def required-field-hint [:p {:class "required-field-hint"} "Required fields are marked with a"])
-
-(defn- centered-content-component
-  "Put the content in a centered element and return it."
-  [& content]
-  [:div {:class "centered-content"}
-   (if content
-     (first content)
-     [:p error-span "There is not centered content for this page."])])
 
 (defn- limited-width-title-component
   [post-map]
@@ -362,7 +356,7 @@
                    [:div {:class "form-group"}
                     [:div {:class "form-label-div"}
                      [:label {:class "form-label"
-                              :for "tags"} "Tags"]]
+                              :for   "tags"} "Tags"]]
                     [:input {:type "submit" :id "new-tag-button"}]]
                    [:div {:class "form-group"}
                     [:div {:class "form-label-div"}
