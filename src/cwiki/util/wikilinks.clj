@@ -1,7 +1,8 @@
 (ns cwiki.util.wikilinks
   (:require [cemerick.url :as u]
             [clojure.string :as s]
-            [cwiki.models.db :as db]
+            [cwiki.models.wiki-db :as db]
+            ;[cwiki.models.db :as db]
             [cwiki.util.special :as special]
             [hiccup.core :as hc]
             [hiccup.element :refer [link-to]]

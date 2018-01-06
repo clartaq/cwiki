@@ -35,6 +35,7 @@
     <orderEntry type="library" name="Leiningen: com.google.javascript/closure-compiler:r2180" level="project" />
     <orderEntry type="library" name="Leiningen: com.google.protobuf/protobuf-java:2.4.1" level="project" />
     <orderEntry type="library" name="Leiningen: com.googlecode.jarjar/jarjar:1.1" level="project" />
+    <orderEntry type="library" name="Leiningen: com.h2database/h2:1.4.196" level="project" />
     <orderEntry type="library" name="Leiningen: com.lambdaworks/scrypt:1.4.0" level="project" />
     <orderEntry type="library" name="Leiningen: com.vladsch.flexmark/flexmark-ext-gfm-strikethrough:0.28.24" level="project" />
     <orderEntry type="library" name="Leiningen: com.vladsch.flexmark/flexmark-ext-tables:0.28.24" level="project" />

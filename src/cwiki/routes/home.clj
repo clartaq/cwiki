@@ -1,7 +1,8 @@
 (ns cwiki.routes.home
   (:require [compojure.core :refer :all]
             [cwiki.layouts.base :as layout]
-            [cwiki.models.db :as db]
+            [cwiki.models.wiki-db :as db]
+            ;[cwiki.models.db :as db]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect]]))
 
