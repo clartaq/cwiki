@@ -90,10 +90,10 @@
 ;;
 
 (def fake-admin-user-session
-  {:session {:identity {:user_role ":admin"}}})
+  {:session {:identity {:user_role "admin"}}})
 
 (def fake-reader-user-session
-  {:session {:identity {:user_role ":reader"}}})
+  {:session {:identity {:user_role "reader"}}})
 
 (deftest replace-links-for-admin-test
   (testing "wikilink replacement for admin pages."
