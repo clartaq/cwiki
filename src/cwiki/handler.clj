@@ -8,7 +8,6 @@
             [compojure.response :as response]
             [compojure.route :as route]
             [cwiki.models.wiki-db :as db]
-            ;[cwiki.models.db :as db]
             [cwiki.routes.admin :refer [admin-routes]]
             [cwiki.routes.home :refer [home-routes]]
             [cwiki.routes.login :refer [login-routes]]

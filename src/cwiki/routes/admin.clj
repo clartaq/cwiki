@@ -6,7 +6,6 @@
             [cwiki.layouts.admin :as admin-layout]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
-            ;[cwiki.models.db :as db]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
             [clojure.string :as s]
