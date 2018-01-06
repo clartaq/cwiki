@@ -15,7 +15,6 @@
                  [compojure "1.6.0"]
                  [hiccup "1.0.5"]
                  [org.clojure/java.jdbc "0.7.5"]
-                 [org.xerial/sqlite-jdbc "3.21.0.1"]
                  [ring/ring-defaults "0.3.1"]
                  [ring-server "0.5.0"]]
 
