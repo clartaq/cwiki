@@ -4,8 +4,9 @@
 
 (ns cwiki.routes.login
   (:require [compojure.core :refer :all]
-            [cwiki.models.db :as db]
-            [cwiki.layouts.base :as layout]
+            [cwiki.models.wiki-db :as db]
+            ;[cwiki.models.db :as db]
+            ;[cwiki.layouts.base :as layout]
             [cwiki.layouts.login :as login-layout]
             [ring.util.response :refer [redirect]]))
 

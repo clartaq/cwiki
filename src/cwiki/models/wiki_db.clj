@@ -1,4 +1,4 @@
-(ns cwiki.models.db
+(ns cwiki.models.wiki-db
   (require [buddy.hashers :as hashers]
            [clojure.java.io :as io]
            [clojure.java.jdbc :as jdbc]
@@ -6,215 +6,30 @@
            [clj-time.coerce :as c]
            [clj-time.core :as t]
            [clj-time.format :as f]
+    ;  [cwiki.repl :as repl]
+    ;[cwiki.main :as main]
            [cwiki.util.files :as files]
-          ; [cwiki.util.pp :as pp]
+           [cwiki.util.pp :as pp]
            [cwiki.util.special :as special])
   (:import (java.io File)
            (java.util UUID)
-           (org.sqlite SQLiteConfig)
-           (java.sql DriverManager Connection)))
-
-;;
-;; Dealing with foreign key constraints in SQLite with Clojure.
-;;
-
-; From Stackoverflow https://stackoverflow.com/questions/13348843/in-clojure-what-happens-when-you-call-sql-with-connection-within-another-sql-wi
-;
-; I would in general recommend using clojure.java.jdbc instead of
-; clojure.contrib.sql because the latter is not supposed to work with clojure
-; newer than 1.2.0. In clojure.java.jdbc with-connection uses binding to add
-; the connection to a map of connections in the db var for any wrapped calls,
-; so the second one will overwrite the first one.
-
-; from: jdbc.clj
-;
-;(defn with-connection*
-;  "Evaluates func in the context of a new connection to a database then
-;  closes the connection."
-;  [db-spec func]
-;  (with-open [^java.sql.Connection con (get-connection db-spec)]
-;    (binding [*db* (assoc *db* :connection con :level 0 :rollback (atom false))]
-;      (func))))
-;
-
-; From https://dev.clojure.org/jira/browse/JDBC-38 in 2012
-;(defn do-raw  [& commands]
-;  (with-open [^java.sql.Statement stmt (let [^java.sql.Connection con (sql/connection)] (.createStatement con))]
-;    (doseq [^String cmd commands]
-;      (.addBatch stmt cmd))
-;    (let [result (.executeBatch stmt)]
-;      (if (and (= 1 (count result)) (= -2 (first result)))
-;        (list (.getUpdateCount stmt))
-;        (seq result)))))
-
-; See https://dev.clojure.org/jira/browse/JDBC-38
-;(jdbc/with-query-results res ["PRAGMA foreign_keys;"]
-;                        (doall res)))
-
-; From https://code-know-how.blogspot.ru/2011/10/how-to-enable-foreign-keys-in-sqlite3.html
-; Recently I have created a database in SQLite with tables that has foreign
-; keys ON DELETE CASCADE actions. To my surprise when I deleted the parent
-; key each row of the child table associated with the parent key are not
-; deleted. The answer is that by default in SQLite  foreign key support
-; is turned off for compatibility. To enable foreign keys using Xerial
-; SQLite JDBC Driver We have to enforce foreign key support every time
-; we make a query.
-;
-; import org.sqlite.SQLiteConfig; ADDED BASED ON COMMENT IN POST.
-;public static final String DB_URL = "jdbc:sqlite:database.db";
-;public static final String DRIVER = "org.sqlite.JDBC";
-;
-;public static Connection getConnection() throws ClassNotFoundException {
-;    Class.forName(DRIVER);
-;    Connection connection = null;
-;    try {
-;        SQLiteConfig config = new SQLiteConfig();
-;        config.enforceForeignKeys(true);
-;        connection = DriverManager.getConnection(DB_URL,config.toProperties());
-;    } catch (SQLException ex) {}
-;    return connection;
-;}
-
-; Slightly paraphrased from https://dev.clojure.org/jira/browse/JDBC-38 in 2012
-;(defn do-raw [db & commands]
-;  (with-open [^java.sql.Statement stmt
-;              (let [^java.sql.Connection con (jdbc/db-connection db)] ;(sql/connection)]
-;                (.createStatement con))]
-;    (doseq [^String cmd commands]
-;      (.addBatch stmt cmd))
-;    (let [result (.executeBatch stmt)]
-;      (if (and (= 1 (count result)) (= -2 (first result)))
-;        (list (.getUpdateCount stmt))
-;        (seq result)))))
-
-;(exec-foreign-keys-pragma-statement h2-db)
-;(with-db-connection [db-con db-spec]
-;                    (let [;; fetch some rows using this connection
-;                          rows (jdbc/query db-con ["SELECT * FROM table WHERE id = ?" 42])]
-;                      ;; insert a copy of the first row using the same connection
-;                      (jdbc/insert! db-con :table (dissoc (first rows) :id)))
-
-;(println "jdbc/query:" (jdbc/query h2-db ["PRAGMA foreign_keys;"]))
-;(let [res (jdbc/query h2-db ["PRAGMA foreign_keys;"])]
-;  (println "res:" res)
-;  (println "(count res):" (count res))
-;  (println "(first res):" (first res)))
-; (println "with-db-connection:" (jdbc/with-db-connection h2-db
-;  (jdbc/db-do-commands h2-db false "PRAGMA foreign_keys = 1;")))
-;
-; This doesn't work
-;(do-raw h2-db (jdbc/execute! h2-db "PRAGMA foreign_keys = ON;"))
-;(println "jdbc/execute!:" (jdbc/execute! h2-db "PRAGMA foreign_keys = ON;"))
-;(jdbc/db-do-commands h2-db false "PRAGMA foreign_keys = ON;")
-;(println "jdbc/query check:" (jdbc/query h2-db ["PRAGMA foreign_keys;"]))
-;(println "jdbc/execute:" (jdbc/execute! h2-db
-;                                        ["PRAGMA foreign_keys = ON;"]
-;                                        {:transaction? false}))
-;(jdbc/db-do-commands h2-db false [(jdbc/query h2-db "PRAGMA foreign_keys;")
-;(jdbc/execute! h2-db ["PRAGMA foreight_keys = ON;"])
-;(jdbc/query h2-db "PRAGMA foreign_keys;")])
-;(println "jdbc/query check:" (jdbc/query h2-db ["PRAGMA foreign_keys;"]))
-;(println "(jdbc/db-connection h2-db):" (jdbc/db-connection h2-db))
-;(println "PRAGMA foreign_keys;" (jdbc/db-do-commands h2-db false "PRAGMA foreign_keys;"))
-
-; This returns the expected results.
-;
-;(defn exec-foreign-keys-pragma-statement
-;  [db]
-;  (let [con ^Connection (get-connection db)
-;        statement (.createStatement con)]
-;    (println "exec-foreign-keys-pragma-statement:"
-;             (.execute statement "PRAGMA foreign_keys;"))))
-;
-; The way someone did it in Java that I used to create the version below.
-;
-;import org.sqlite.SQLiteConfig;
-;public static final String DB_URL = "jdbc:sqlite:database.db";
-;public static final String DRIVER = "org.sqlite.JDBC";
-
-;public static Connection getConnection() throws ClassNotFoundException {
-;    Class.forName(DRIVER);
-;    Connection connection = null;
-;    try {
-;        SQLiteConfig config = new SQLiteConfig();
-;        config.enforceForeignKeys(true);
-;        connection = DriverManager.getConnection(DB_URL,config.toProperties());
-;    } catch (SQLException ex) {}
-;    return connection;
-;}
-
-; Here's some example code that I used to get things working with an
-; experiment and presented in a Stackoverflow question.
-;
-;(def the-db-name "the.db")
-;(def the-db {:classname   "org.sqlite.JDBC"
-;             :subprotocol "sqlite"
-;             :subname     the-db-name})
-;
-;(defn create-some-tables
-;  "Create some tables and a cross-reference table with foreign key constraints."
-;  []
-;  (when-let [conn (get-connection the-db)]
-;    (try
-;      (jdbc/with-db-connection
-;        [conn the-db]
-;        (println "the-db:" the-db)
-;        (try (jdbc/db-do-commands
-;               the-db false
-;               [(jdbc/create-table-ddl :pages
-;                                       [[:page_id :integer :primary :key]
-;                                        [:page_content :text]])
-;                (jdbc/create-table-ddl :tags
-;                                       [[:tag_id :integer :primary :key]
-;                                        [:tag_name :text "NOT NULL"]])
-;                (jdbc/create-table-ddl :tags_x_pages
-;                                       [[:x_ref_id :integer :primary :key]
-;                                        [:tag_id :integer]
-;                                        [:page_id :integer]
-;                                        ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
-;                                        ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
-;
-;             ; This still doesn't work.
-;             (println "After table creation:"
-;                      (jdbc/query the-db "PRAGMA foreign_keys;"))
-;
-;             (catch Exception e (println e))))
-;
-;      ; This returns the expected results.
-;      (when-let [statement (.createStatement conn)]
-;        (try
-;          (println "After creating some tables: PRAGMA foreign_keys =>"
-;                   (.execute statement "PRAGMA foreign_keys;"))
-;          (catch Exception e (println e))
-;          (finally (when statement
-;                     (.close statement)))))
-;      (catch Exception e (println e))
-;      (finally (when conn
-;                 (.close conn))))))
-;
-
+           (org.h2.jdbc JdbcClob)))
 
 ;; Things that deal with the database file and connection.
 
-(def db-file-name "resources/public/db/database.db")
+; The kerfuffle here is to get the directory from which the program
+; is running and create an absolute path as required for the H2 database.
+(def db-file-name (str (-> (File. ".")
+                           .getAbsolutePath
+                           (files/remove-from-end "."))
+                       "resources/public/db/database.db"))
 
-(def sqlite-db
-  {:classname   "org.sqlite.JDBC"
-   :subprotocol "sqlite"
+(def h2-db
+  {:classname   "org.h2.Driver"
+   :subprotocol "h2:file"
    :subname     db-file-name
+   :make-pool?  true
    })
-
-(defn ^Connection get-connection
-  "Return a connection to a SQLite database that
-  enforces foreign key constraints."
-  [db]
-  (Class/forName (:classname db))
-  (let [config (SQLiteConfig.)]
-    (.enforceForeignKeys config true)
-    (let [connection (DriverManager/getConnection
-                       (str "jdbc:sqlite:" (:subname db))
-                       (.toProperties config))]
-      connection)))
 
 ;; Things related to time formatting.
 
@@ -271,14 +86,14 @@
                     ;{:title "To Do" :file-name "todo.md"}
                     {:title "Wikilinks" :file-name "Wikilinks.md"}])
 
-(def valid-roles [:cwiki :admin :editor :writer :reader])
+(def valid-roles ["cwiki" "admin" "editor" "writer" "reader"])
 
 (def initial-namespaces (atom ["cwiki" "default" "help"]))
 
 (def initial-tags ["help" "wiki" "cwiki" "linking"])
 
 (def initial-users [{:user_name              "CWiki"
-                     :user_role              :cwiki
+                     :user_role              "cwiki"        ;:cwiki
                      :user_password          (hashers/derive (str (UUID/randomUUID)))
                      :user_new_password      nil
                      :user_new_password_time nil
@@ -288,7 +103,7 @@
                      :user_touched           (c/to-sql-time (t/now))
                      :user_registration      (c/to-sql-time (t/now))}
                     {:user_name              "admin"
-                     :user_role              :admin
+                     :user_role              "admin"        ;:admin
                      :user_password          (hashers/derive "admin")
                      :user_new_password      nil
                      :user_new_password_time nil
@@ -298,7 +113,7 @@
                      :user_touched           (c/to-sql-time (t/now))
                      :user_registration      (c/to-sql-time (t/now))}
                     {:user_name              "guest"
-                     :user_role              :reader
+                     :user_role              "reader"       ;:reader
                      :user_password          (hashers/derive "guest")
                      :user_new_password      nil
                      :user_new_password_time nil
@@ -310,7 +125,7 @@
 
 (defn user-name->user-id
   ([name]
-   (user-name->user-id name sqlite-db))
+   (user-name->user-id name h2-db))
   ([name db-name]
    (:user_id (first (jdbc/query
                       db-name
@@ -320,7 +135,7 @@
   "Return the user role (a keyword) assigned to the named user. If the
   user does not exist, return nil."
   ([name]
-   (user-name->user-role name sqlite-db))
+   (user-name->user-role name h2-db))
   ([name db-name]
    (let [string-role (:user_role
                        (first
@@ -338,7 +153,7 @@
 (defn user-id->user-name
   "Given a user id, return a human-readable user name."
   ([id]
-   (user-id->user-name id sqlite-db))
+   (user-id->user-name id h2-db))
   ([id db-name]
    (:user_name (first (jdbc/query
                         db-name
@@ -348,7 +163,7 @@
   "Look up the user in the database and return the map of user attributes
   for a matching entry. If no match, return nil."
   ([name]
-   (find-user-by-name name sqlite-db))
+   (find-user-by-name name h2-db))
   ([name db-name]
    (let [user-map (first (jdbc/query
                            db-name
@@ -359,7 +174,7 @@
   "Look up the user in the database using a case-insensitive search for the
   username. Return the matching entry, if any. Otherwise, return nil."
   ([name]
-   (find-user-by-case-insensitive-name name sqlite-db))
+   (find-user-by-case-insensitive-name name h2-db))
   ([name db-name]
    (let [user-map (first (jdbc/query
                            db-name
@@ -392,43 +207,69 @@
   "Update the database entry for the user with the given id to the
   information included in the map."
   [user_id user-map]
-  (jdbc/update! sqlite-db :users user-map ["user_id=?" user_id]))
+  (jdbc/update! h2-db :users user-map ["user_id=?" user_id]))
+
+(defn- clob->string
+  "Return a string created by translating and H2 Clob."
+  [clob]
+  (with-open [rdr (.getCharacterStream clob)]
+    (let [lseq (line-seq rdr)
+          butlast-line (butlast lseq)
+          butlast-line-mapped (map #(str % "\n") butlast-line)
+          last-line (last lseq)
+          all-lines-with-newline (concat butlast-line-mapped last-line)]
+      (apply str all-lines-with-newline))))
+
+(defn- to-map-helper
+  "Return a post map created from the result set."
+  [rs]
+  (let [frs (first rs)
+        raw-content (:page_content frs)]
+    (if raw-content
+      (assoc frs :page_content (clob->string raw-content))
+      frs)))
 
 (defn find-post-by-title
   "Look up a post in the database with the given title. Return the page
   map for the post if found; nil otherwise. The lookup is case-insensitive."
-  ([title] (find-post-by-title title sqlite-db))
+  ([title] (find-post-by-title title h2-db))
   ([title db-name]
-   (first (jdbc/query
-            db-name
-            [(str "select * from pages where page_title like '" title "'")]))))
+   (let [sql-str (str "select * from pages where page_title like '" title "'")
+         res (jdbc/query db-name sql-str {:result-set-fn to-map-helper})]
+     res)))
 
 (defn title->user-id
-  ([title] (title->user-id title sqlite-db))
+  ([title] (title->user-id title h2-db))
   ([title db-name]
    (:page_author
      (first (jdbc/query db-name
                         ["select page_author from pages where page_title=?" title])))))
 
 (defn page-id->title
-  ([id] (page-id->title id sqlite-db))
+  ([id] (page-id->title id h2-db))
   ([id db-name]
-   (:page_title (first (jdbc/query
-                         db-name
-                         ["select page_title from pages where page_id=?" id])))))
+   (let [sql-str (str "select page_title from pages where page_id=" id)]
+     (:page_title (first (jdbc/query db-name sql-str))))))
 
 (defn title->page-id
-  ([title] (title->page-id title sqlite-db))
+  ([title] (title->page-id title h2-db))
   ([title db-name]
-   (:page_id (first (jdbc/query db-name
-                                ["select page_id from pages where page_title=?" title])))))
+   (:page_id (first (jdbc/query
+                      db-name
+                      ["select page_id from pages where page_title=?" title])))))
+
+(defn- to-content-helper
+  [rs]
+  (let [raw-content (:page_content (first rs))]
+    (when raw-content
+      (clob->string raw-content))))
 
 (defn page-id->content
-  ([id] (page-id->content id sqlite-db))
+  ([id] (page-id->content id h2-db))
   ([id db-name]
-   (:page_content (first (jdbc/query
-                           db-name
-                           ["select page_content from pages where page_id=?" id])))))
+   (let [sql-str (str "select page_content from pages where page_id=" id)
+         res (jdbc/query db-name sql-str {:result-set-fn to-content-helper})]
+     res)))
 
 (defn page-map->id
   [m]
@@ -445,7 +286,7 @@
 (defn page-map->author
   [m]
   (let [author-id (:page_author m)
-        result (jdbc/query sqlite-db ["select user_name from users where user_id=?" author-id])
+        result (jdbc/query h2-db ["select user_name from users where user_id=?" author-id])
         name (:user_name (first result))]
     (if (and result name)
       name
@@ -467,7 +308,7 @@
   "Return a sorted set of all of the page titles in the wiki,
   including all of the 'special' pages."
   ([]
-   (get-all-page-names sqlite-db))
+   (get-all-page-names h2-db))
   ([db-name]
    (when-let [title-array (jdbc/query db-name ["select page_title from pages"])]
      (into (special/get-all-special-page-names)
@@ -481,7 +322,7 @@
 (defn get-all-users
   "Return a sorted set of all of the user names known to the wiki."
   ([]
-   (get-all-users sqlite-db))
+   (get-all-users h2-db))
   ([db-name]
    (when-let [user-array (jdbc/query db-name ["select user_name from users"])]
      (into (sorted-set-by case-insensitive-comparator)
@@ -490,7 +331,7 @@
 (defn get-all-namespaces
   "Return a sorted set of all of the namespaces in the wiki."
   ([]
-   (get-all-namespaces sqlite-db))
+   (get-all-namespaces h2-db))
   ([db-name]
    (when-let [namespace-array (jdbc/query db-name ["select namespace_name from namespaces"])]
      (into (sorted-set-by case-insensitive-comparator)
@@ -499,7 +340,7 @@
 (defn get-all-tags
   "Return a sorted set of all of the tags in the wiki."
   ([]
-   (get-all-tags sqlite-db))
+   (get-all-tags h2-db))
   ([db-name]
    (when-let [tag-array (jdbc/query db-name ["select tag_name from tags"])]
      (into (sorted-set-by case-insensitive-comparator)
@@ -507,9 +348,9 @@
 
 (defn update-page-title-and-content!
   [id title content]
-  (jdbc/update! sqlite-db :pages {:page_title    title
-                                  :page_content  content
-                                  :page_modified (c/to-sql-time (t/now))}
+  (jdbc/update! h2-db :pages {:page_title    title
+                              :page_content  content
+                              :page_modified (c/to-sql-time (t/now))}
                 ["page_id=?" id]))
 
 (defn insert-new-page!
@@ -521,12 +362,12 @@
    (insert-new-page! title content (get-cwiki-user-id)))
   ([title content author-id]
    (let [post-map (create-new-post-map title content author-id)]
-     (jdbc/insert! sqlite-db :pages post-map)
+     (jdbc/insert! h2-db :pages post-map)
      (find-post-by-title title))))
 
 (defn delete-page-by-id
   [page-id]
-  (jdbc/delete! sqlite-db :pages ["page_id=?" page-id]))
+  (jdbc/delete! h2-db :pages ["page_id=?" page-id]))
 
 (defn- get-tags-from-meta
   [meta]
@@ -555,12 +396,12 @@
                   #(conj %1
                          (get-row-id
                            (jdbc/insert!
-                             sqlite-db :tags {:tag_name %2})))
+                             h2-db :tags {:tag_name %2})))
                   [] tags)]
     ; add to cross-reference table
     (println "row-ids (tag ids):" row-ids ", page-id:" page-id)
-    (mapv #(jdbc/insert! sqlite-db :tags_x_pages {:tag_id %
-                                                  :page_id page-id}) row-ids)))
+    (mapv #(jdbc/insert! h2-db :tags_x_pages {:tag_id  %
+                                              :page_id page-id}) row-ids)))
 
 (defn- add-page-with-meta-from-file!
   "Add a page to the database based on the information in a Markdown file
@@ -591,7 +432,7 @@
                       {:page_created creation-date}
                       {:page_modified update-date}
                       {:page_tags tags})
-            page-id (get-row-id (jdbc/insert! sqlite-db :pages pm))]
+            page-id (get-row-id (jdbc/insert! h2-db :pages pm))]
         (update-tag-tables (get-tag-vector-from-meta meta) page-id)))))
 
 (defn- add-page-from-file!
@@ -602,15 +443,15 @@
         content (slurp (io/resource
                          (str resource-prefix (:file-name m))))
         post-map (create-new-post-map title content id)]
-    (jdbc/insert! sqlite-db :pages post-map)))
+    (jdbc/insert! h2-db :pages post-map)))
 
 (defn add-user
   ([user-name user-password user-role]
    (add-user user-name user-password user-role nil))
   ([user-name user-password user-role user-email]
-   (let [role-as-keyword (keyword user-role)
+   (let [role user-role ;role-as-keyword (keyword user-role)
          usr {:user_name              user-name
-              :user_role              role-as-keyword
+              :user_role              role ;role-as-keyword
               :user_password          (hashers/derive user-password)
               :user_new_password      nil
               :user_new_password_time nil
@@ -619,11 +460,11 @@
               :user_email_expires     nil
               :user_touched           (c/to-sql-time (t/now))
               :user_registration      (c/to-sql-time (t/now))}]
-     (jdbc/insert! sqlite-db :users usr))))
+     (jdbc/insert! h2-db :users usr))))
 
 (defn delete-user
   ([user-id]
-   (delete-user user-id sqlite-db))
+   (delete-user user-id h2-db))
   ([user-id db-name]
    (jdbc/delete! db-name :users ["user_id=?" user-id])))
 
@@ -631,24 +472,24 @@
   "Return true if the admin has ever logged in; nil otherwise."
   []
   (let [result (jdbc/query
-                 sqlite-db
+                 h2-db
                  ["select admin_has_logged_in from admin where admin_id=?" 1])]
     (:admin_has_logged_in (first result))))
 
 (defn set-admin-has-logged-in
   [b]
-  (jdbc/update! sqlite-db :admin {:admin_has_logged_in b}
+  (jdbc/update! h2-db :admin {:admin_has_logged_in b}
                 ["admin_id=?" 1]))
 
 (defn- init-admin-table
   []
-  (jdbc/insert! sqlite-db :admin {:admin_id            1
-                                  :admin_has_logged_in nil}))
+  (jdbc/insert! h2-db :admin {:admin_id            1
+                              :admin_has_logged_in nil}))
 
 (defn- add-initial-users!
   []
   (println "Adding initial users.")
-  (mapv #(jdbc/insert! sqlite-db :users %) initial-users)
+  (mapv #(jdbc/insert! h2-db :users %) initial-users)
   (println "Done."))
 
 (defn- add-initial-pages!
@@ -659,85 +500,80 @@
 (defn- add-initial-namespaces!
   []
   (println "adding namespaces")
-  (mapv (fn [%] (jdbc/insert! sqlite-db :namespaces {:namespace_name %}))
+  (mapv (fn [%] (jdbc/insert! h2-db :namespaces {:namespace_name %}))
         @initial-namespaces)
   (println "done"))
 
 (defn- add-initial-tags!
   []
   (println "adding tags")
-  (mapv (fn [%] (jdbc/insert! sqlite-db :tags {:tag_name %})) initial-tags)
+  (mapv (fn [%] (jdbc/insert! h2-db :tags {:tag_name %})) initial-tags)
   (println "done"))
 
 (defn- add-initial-roles!
   []
   (println "adding roles")
-  (mapv (fn [%] (jdbc/insert! sqlite-db :roles {:role_name %})) valid-roles)
+  (mapv (fn [%] (jdbc/insert! h2-db :roles {:role_name %})) valid-roles)
   (println "done"))
 
 (defn- create-tables
   "Create the database tables for the application."
   []
   (println "creating tables")
-  (when-let [conn (get-connection sqlite-db)]
-    (try
-      (jdbc/with-db-connection
-        [conn sqlite-db]
-        (try (jdbc/db-do-commands
-               sqlite-db false
-               [(jdbc/create-table-ddl :users
-                                       [[:user_id :integer :primary :key]
-                                        [:user_name :text]
-                                        [:user_role :text]
-                                        [:user_password :text]
-                                        [:user_new_password :text]
-                                        [:user_new_password_time :datetime]
-                                        [:user_email :text]
-                                        [:user_email_token :int]
-                                        [:user_email_expires :datetime]
-                                        [:user_touched :datetime]
-                                        [:user_registration :datetime]])
-                (jdbc/create-table-ddl :admin
-                                       [[:admin_id :integer :primary :key]
-                                        [:admin_has_logged_in :boolean]])
-                (jdbc/create-table-ddl :pages
-                                       [[:page_id :integer :primary :key]
-                                        [:page_created :datetime]
-                                        [:page_modified :datetime]
-                                        [:page_tags :text]
-                                        [:page_author :integer]
-                                        [:page_title :text]
-                                        [:page_content :text]])
-                (jdbc/create-table-ddl :namespaces
-                                       [[:namespace_id :integer :primary :key]
-                                        [:namespace_name :text]])
-                (jdbc/create-table-ddl :roles
-                                       [[:role_id :integer :primary :key]
-                                        [:role_name :text]])
-                (jdbc/create-table-ddl :tags
-                                       [[:tag_id :integer :primary :key]
-                                        [:tag_name :text "NOT NULL"]])
-                (jdbc/create-table-ddl :tags_x_pages
-                                       [[:x_ref_id :integer :primary :key]
-                                        [:tag_id :integer]
-                                        [:page_id :integer]
-                                        ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
-                                        ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])
-                (jdbc/create-table-ddl :user_x_pages
-                                       [[:x_ref_id :integer :primary :key]
-                                        [:user_id :integer]
-                                        [:page_id :integer]
-                                        ])])
-             (catch Exception e (println e))))
-      (catch Exception e (println e))
-      (finally (when conn
-                 (.close conn)))))
+  (try (jdbc/db-do-commands
+         h2-db false
+         [(jdbc/create-table-ddl :users
+                                 [[:user_id :integer :auto_increment :primary :key]
+                                  [:user_name :varchar]
+                                  [:user_role :varchar]
+                                  [:user_password :varchar]
+                                  [:user_new_password :varchar]
+                                  [:user_new_password_time :datetime]
+                                  [:user_email :varchar]
+                                  [:user_email_token :int]
+                                  [:user_email_expires :datetime]
+                                  [:user_touched :datetime]
+                                  [:user_registration :datetime]])
+          (jdbc/create-table-ddl :admin
+                                 [[:admin_id :integer :auto_increment :primary :key]
+                                  [:admin_has_logged_in :boolean]])
+          (jdbc/create-table-ddl :pages
+                                 [[:page_id :integer :auto_increment :primary :key]
+                                  [:page_created :datetime]
+                                  [:page_modified :datetime]
+                                  [:page_tags :varchar]
+                                  [:page_author :integer]
+                                  [:page_title :varchar]
+                                  [:page_content :text]])
+          (jdbc/create-table-ddl :namespaces
+                                 [[:namespace_id :integer :auto_increment :primary :key]
+                                  [:namespace_name :varchar]])
+          (jdbc/create-table-ddl :roles
+                                 [[:role_id :integer :auto_increment :primary :key]
+                                  [:role_name :varchar]])
+          (jdbc/create-table-ddl :tags
+                                 [[:tag_id :integer :auto_increment :primary :key]
+                                  [:tag_name :varchar "NOT NULL"]])
+          (jdbc/create-table-ddl :tags_x_pages
+                                 [[:x_ref_id :integer :auto_increment :primary :key]
+                                  [:tag_id :integer]
+                                  [:page_id :integer]
+                                  ;["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
+                                  ;["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]
+                                  ])
+          (jdbc/create-table-ddl :user_x_pages
+                                 [[:x_ref_id :integer :auto_increment :primary :key]
+                                  [:user_id :integer]
+                                  [:page_id :integer]
+                                  ])])
+       (catch Exception e (println e)))
   (println "done"))
 
 (defn- create-db
   "Create the database tables and initialize them with content for
   first-time use."
   []
+  (println "h2-db:" (pp/pp-map h2-db))
   (create-tables)
   (init-admin-table)
   (add-initial-users!)

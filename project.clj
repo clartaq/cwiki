@@ -5,6 +5,8 @@
                  [buddy/buddy-auth "2.1.0"]
                  [buddy/buddy-hashers "1.3.0"]
                  [com.cemerick/url "0.1.1"]
+                 ;; https://mvnrepository.com/artifact/com.h2database/h2
+                 [com.h2database/h2 "1.4.196"]
                  [circleci/clj-yaml "0.5.6"]
                  [clj-time "0.14.2"]
                  [com.vladsch.flexmark/flexmark "0.28.24"]
