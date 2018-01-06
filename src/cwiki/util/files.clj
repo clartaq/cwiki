@@ -4,6 +4,15 @@
             [clojure.string :as st])
   (:import (java.io BufferedReader InputStreamReader)))
 
+(defn remove-from-end
+  "Remove any instance of 'end' from the end of string s
+  and return the result."
+  [s end]
+  (if (.endsWith s end)
+    (.substring s 0 (- (count s)
+                       (count end)))
+    s))
+
 ;(defn drop-chars-while
 ;  "Remove characters from the beginning of the input string
 ;  that satisfy the predicate and return them as a string."

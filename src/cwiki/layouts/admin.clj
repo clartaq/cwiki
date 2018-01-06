@@ -6,7 +6,8 @@
   (:require [clojure.string :as s]
             [cwiki.layouts.base :as base]
             [cwiki.util.req-info :as ri]
-            [cwiki.models.db :as db]
+            [cwiki.models.wiki-db :as db]
+            ;[cwiki.models.db :as db]
             [hiccup.form :refer [drop-down email-field form-to hidden-field
                                  password-field
                                  submit-button text-field]]))
