@@ -93,7 +93,7 @@
 (def initial-tags ["help" "wiki" "cwiki" "linking"])
 
 (def initial-users [{:user_name              "CWiki"
-                     :user_role              "cwiki"        ;:cwiki
+                     :user_role              "cwiki"
                      :user_password          (hashers/derive (str (UUID/randomUUID)))
                      :user_new_password      nil
                      :user_new_password_time nil
@@ -103,7 +103,7 @@
                      :user_touched           (c/to-sql-time (t/now))
                      :user_registration      (c/to-sql-time (t/now))}
                     {:user_name              "admin"
-                     :user_role              "admin"        ;:admin
+                     :user_role              "admin"
                      :user_password          (hashers/derive "admin")
                      :user_new_password      nil
                      :user_new_password_time nil
@@ -113,7 +113,7 @@
                      :user_touched           (c/to-sql-time (t/now))
                      :user_registration      (c/to-sql-time (t/now))}
                     {:user_name              "guest"
-                     :user_role              "reader"       ;:reader
+                     :user_role              "reader"
                      :user_password          (hashers/derive "guest")
                      :user_new_password      nil
                      :user_new_password_time nil
@@ -449,9 +449,9 @@
   ([user-name user-password user-role]
    (add-user user-name user-password user-role nil))
   ([user-name user-password user-role user-email]
-   (let [role user-role ;role-as-keyword (keyword user-role)
+   (let [role user-role
          usr {:user_name              user-name
-              :user_role              role ;role-as-keyword
+              :user_role              role
               :user_password          (hashers/derive user-password)
               :user_new_password      nil
               :user_new_password_time nil
@@ -529,7 +529,7 @@
                                   [:user_password :varchar]
                                   [:user_new_password :varchar]
                                   [:user_new_password_time :datetime]
-                                  [:user_email :varchar]
+                                  [:user_email "VARCHAR(254)"]
                                   [:user_email_token :int]
                                   [:user_email_expires :datetime]
                                   [:user_touched :datetime]
