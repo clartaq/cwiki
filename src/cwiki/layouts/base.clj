@@ -11,7 +11,7 @@
             [clojure.string :as s]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.authorization :as ath]
-           ; [cwiki.util.pp :as pp]
+    ; [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.util.wikilinks :refer [replace-wikilinks
                                           get-edit-link-for-existing-page
@@ -77,8 +77,8 @@
 (defn- get-tab-title
   "Return a string to be displayed in the browser tab."
   [post-map]
-  (if-let [junk (and post-map
-                     (db/page-map->title post-map))]
+  (if (and post-map
+           (db/page-map->title post-map))
     (str "CWiki: " (db/page-map->title post-map))
     "CWiki"))
 
@@ -219,7 +219,7 @@
   []
   [:footer {:class "footer"}
    [:div {:class "footer-wrapper"}
-    [:p "Copyright \u00A9 2017, David D. Clark"]
+    [:p "Copyright \u00A9 2017-2018, David D. Clark"]
     [:p program-name-and-version]]])
 
 (defn- no-content-aside
