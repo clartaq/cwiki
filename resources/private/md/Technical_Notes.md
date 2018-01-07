@@ -2,7 +2,7 @@
 title: Technical Notes
 author: CWiki
 date: 10/01/2017 5:45:07 PM 
-updated: 12/30/2017 2:12:11 PM     
+updated: 1/7/2018 10:31:40 AM        
 tags:
   - technical note
   - motivation
@@ -10,23 +10,10 @@ tags:
 ---
 These are some technical notes about CWiki. If you are only interested in using the wiki, you can ignore this stuff. If you want to know how CWiki works or why it works the way it does or how to build and modify your own version, the information here might be useful.
 
-## Motivation ##
+## Links to Related Pages ##
 
-You might rightly ask "Why does the world need another wiki program?" Well, CWiki probably isn't vital to the survival of civilization as we know it. But I was motivated by a few things.
-
-First, I've always been fascinated by wiki software (and blog software, and editors, and news aggregators). I've been using wikis in one form or another for years, decades actually. I wanted to see what it would be like to write my own just for me. No schedule, nobody else's set of features and requirements, just whatever I wanted.
-
-**Written in Clojure**. I know the implementation language isn't too important, but I like [Clojure](https://clojure.org/). No Javascript. Even though it is very popular right now, it is ugly. I don't like it at all.
-
-**Markdown with Extensions**. I like Markdown too. But this is a wiki. It has to support wiki links as well and HTML links.
-
-**Syntax-Highlighted Code Listings**. I put a lot of code listings in some of the things I write. Has to look nice and be easy to do.
-
-**Mathematics**. I want to be able to write content containing mathematics. Markdown does not support it natively. I wanted to be able to use [$\rm\TeX$](https://en.wikibooks.org/wiki/LaTeX/Mathematics).
-
-**Runs in a Browser**. Since Markdown generates HTML and a lot of the links will point to external web sites, might as well use the browser as the UI for the program too.
-
-CWiki was written as a learning experience and to develop a tool I would want to use.
+* [[The Motivation for Writing CWiki]] talks about why the program was written in the first place.
+* [[Limits]] discusses some of the limitations of the program.
 
 ## Software Dependencies ##
 
@@ -47,16 +34,16 @@ Almost no software is written without dependencies these days -- programs are ju
 * [Compojure](https://github.com/weavejester/compojure) is used for routing.
 * [Hiccup](https://github.com/weavejester/hiccup) is used for "lispy" creation of HTML.
 * [Ring](https://github.com/ring-clojure/ring) is the web applications library.
-* [sqlite-jdbc](https://bitbucket.org/xerial/sqlite-jdbc/overview) is used for "lispy" access to the sqlite (see bellow) database program.
+* [H2](http://h2database.com/html/main.html) is used for database functions.
 * [url](https://github.com/cemerick/url) is used for manipulating URLs.
 
 ### Everything Else ###
 
 #### Database ####
 
-[SQLite](https://sqlite.org/) is used for the database functions of the wiki. It is perhaps not as "heavy duty" as some other possibilities. However, it has the tremendous benefit that it requires no administration by the user.
+CWiki uses the [H2](http://h2database.com/html/main.html) database for the database functions of the wiki. It is perhaps not as "heavy duty" as some other possibilities. However, it has the tremendous benefit that it requires no administration by the user.
 
-SQLite is reputed not to scale well to truly huge databases. I don't know where that crossover occurs for something like this wiki. (I know that [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) can use SQLite as it's database.) If it looks like it will become an issue for a moderately sized wiki, the database may change in the future.
+Earlier in development, the program used [SQLite](https://sqlite.org/). However, it proved too cumbersome (and slow) for continued use in this project.
 
 #### Editor ####
 

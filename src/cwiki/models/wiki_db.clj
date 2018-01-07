@@ -6,8 +6,6 @@
            [clj-time.coerce :as c]
            [clj-time.core :as t]
            [clj-time.format :as f]
-    ;  [cwiki.repl :as repl]
-    ;[cwiki.main :as main]
            [cwiki.util.files :as files]
            [cwiki.util.pp :as pp]
            [cwiki.util.special :as special])
@@ -53,6 +51,8 @@
 (def initial-pages-with-front-matter
   ["Front_Page.md"
    "About_Front_Matter.md"
+   "Limits.md"
+   "Motivation.md"
    "Other_Wiki_Software.md"
    "Path_to_Release.md"
    "Text_Formatting.md"

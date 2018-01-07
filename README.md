@@ -5,7 +5,7 @@ This is a simple personal wiki application. You use your browser to view and edi
 ## Features
 
 * Written in Clojure
-* Uses the SQLite database to store your information locally without requiring any administration on your part.
+* Uses the [H2](http://h2database.com/html/main.html) database to store your information locally without requiring any administration on your part.
 * Uses [Markdown](https://daringfireball.net/projects/markdown/syntax) to write and markup pages in the wiki.
 * Uses [MathJax](https://www.mathjax.org/) to produce nicely formatted mathematics. (Requires an active link to the internet at the moment.)
 
@@ -33,4 +33,4 @@ Your version number may be different.
 
 This software is licensed under the BSD Simplified 2-Clause License. See the `LICENSE.txt` file.
 
-Copyright © 2017 David D. Clark
+Copyright © 2017-2018 David D. Clark
