@@ -5,7 +5,7 @@
 
 (ns cwiki.repl
   (:require [cwiki.handler :refer [app init destroy]]
-            [cwiki.models.db :as db]
+            [cwiki.models.wiki-db :as db]
             [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.file-info :refer [wrap-file-info]]
             [ring.server.standalone :refer [serve]]))
