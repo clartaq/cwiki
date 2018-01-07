@@ -2,7 +2,7 @@
 title: Text Formatting
 author: CWiki
 date: 10/24/2017 8:57:33 AM 
-updated: 12/26/2017 1:52:22 PM    
+updated: 1/7/2018 10:46:26 AM     
 tags:
   - formatting
   - Markdown
@@ -203,7 +203,7 @@ Less | Pretty | Markdown
 
 ## Mathematics ##
 
-You can also enter mathematics using the familiar  [[About Tex|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
+You can also enter mathematics using the familiar  [[About TeX|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
 
 The markup to show an equation on a line by itself uses double dollar signs, `$$`, to start and end a block of $\rm\TeX$ like this.
 
