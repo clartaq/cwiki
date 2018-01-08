@@ -2,13 +2,17 @@
 title: Limits
 author: CWiki
 date: 1/7/2018 10:00:07 AM  
-updated: 1/7/2018 10:41:14 AM          
+updated: 1/8/2018 4:06:35 PM 
 tags:
   - technical note
   - limitations
 ---
 
 Like all programs, CWiki has some limitations. Here are some of them.
+
+## The Database ##
+
+The underlying database has a theoretical maximum size of 64TB. I'm not sure if anyone has actually created a real database that large. If you think it's an issue, you should probably look for a different wiki program. Maybe one of the more industrial-strength wikis mentioned in [[Other Wiki Software]].
 
 ## Field Sizes ##
 

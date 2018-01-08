@@ -1,3 +1,14 @@
+---
+title: Links Primer
+author: CWiki
+date: 10/24/2017 8:55:54 AM
+updated: 1/8/2018 5:26:50 PM 
+tags:
+  - about
+  - links
+  - help
+---
+
 This is a page that details how to create and use links in the wiki.
 
 ## HTML Links ##

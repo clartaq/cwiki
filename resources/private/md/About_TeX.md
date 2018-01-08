@@ -1,3 +1,13 @@
+---
+title: About TeX
+author: CWiki
+date: 12/09/2017 1:06:22 PM
+updated: 1/8/2018 5:14:16 PM 
+tags:
+  - about
+  - TeX
+---
+
 TeX (often displayed as $\rm\TeX$) is a typesetting system originally developed by the famous computer scientist [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth). One of his main reasons for creating such a system was to be able to produce professionally typeset mathematics. Even though this system was designed and written in the late '70s, it is still popular today.
 
 Writing mathematics in $\rm\TeX$ is a deep subject in and of itself. You are encouraged to learn as much as you want about it's intricacies. A good place to start might be the Wikipedia article [here](https://en.wikipedia.org/wiki/TeX) or the [$\rm\LaTeX$ wikibook](https://en.wikibooks.org/wiki/LaTeX) that covers $\rm\TeX$ as well.

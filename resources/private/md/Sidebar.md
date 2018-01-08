@@ -4,7 +4,7 @@ author: CWiki
 date: 06/11/2017 1:32:19 PM  
 updated: 1/8/2018 10:51:39 AM            
 tags:
-  - special page
+  - special pages
   - sidebar
 ---
 

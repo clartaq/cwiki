@@ -21,13 +21,13 @@
                            .getAbsolutePath
                            (files/remove-from-end "."))
                        "resources/public/db/database.db"))
+; Because H2 seems to append this to the name above.
+(def db-file-name-long (str db-file-name ".mv.db"))
 
-(def h2-db
-  {:classname   "org.h2.Driver"
-   :subprotocol "h2:file"
-   :subname     db-file-name
-   :make-pool?  true
-   })
+(def h2-db {:classname   "org.h2.Driver"
+            :subprotocol "h2:file"
+            :subname     db-file-name
+            :make-pool?  true})
 
 ;; Things related to time formatting.
 
@@ -50,44 +50,63 @@
 
 (def initial-pages-with-front-matter
   ["Front_Page.md"
+   "About.md"
+   "About_Admin_Pages.md"
+   "About_Backup_and_Restore.md"
+   "About_Compressing_the_Database.md"
+   "About_CWiki.md"
    "About_Front_Matter.md"
+   "About_Images.md"
+   "About_Import_Export.md"
+   "About_Roles.md"
+   "About_TeX.md"
    "About_the_Sidebar.md"
+   "Admin.md"
+   "CWiki_FAQ.md"
+   "CWiki_Name.md"
+   "Features.md"
+   "How_to_Make_a_Table_of_Contents.md"
    "Limits.md"
+   "Links_Primer.md"
    "Motivation.md"
    "Other_Wiki_Software.md"
+   "Pages_Primer.md"
    "Path_to_Release.md"
+   "Preferences.md"
    "Sidebar.md"
    "Special_Pages.md"
    "Text_Formatting.md"
    "Technical_Notes.md"
-   "todo.md"])
+   "todo.md"
+   "Wikilinks.md"])
 
 (def initial-pages [;{:title "Front Page" :file-name "Front_Page.md"}
-                    {:title "About" :file-name "About.md"}
-                    {:title "About Admin Pages" :file-name "About_Admin_Pages.md"}
-                    {:title "About Backup and Restore" :file-name "About_Backup_and_Restore.md"}
-                    {:title "About Compressing the Database" :file-name "About_Compressing_the_Database.md"}
-                    {:title "About CWiki" :file-name "About_CWiki.md"}
-                    {:title "About Images" :file-name "About_Images.md"}
-                    {:title "About Import/Export" :file-name "About_Import_Export.md"}
-                    {:title "About Roles" :file-name "About_Roles.md"}
-                    {:title "About the Sidebar" :file-name "About_the_Sidebar.md"}
-                    {:title "About TeX" :file-name "About_TeX.md"}
-                    {:title "Admin" :file-name "Admin.md"}
-                    {:title "CWiki FAQ" :file-name "CWiki_FAQ.md"}
-                    {:title "CWiki Name" :file-name "CWiki_Name.md"}
-                    {:title "Features" :file-name "Features.md"}
-                    {:title "How to Make a Table of Contents" :file-name "How_to_Make_a_Table_of_Contents.md"}
-                    {:title "Links Primer" :file-name "Links_Primer.md"}
+                    ;{:title "About" :file-name "About.md"}
+                    ;{:title "About Admin Pages" :file-name "About_Admin_Pages.md"}
+                    ;{:title "About Backup and Restore" :file-name "About_Backup_and_Restore.md"}
+                    ;{:title "About Compressing the Database" :file-name "About_Compressing_the_Database.md"}
+                    ;{:title "About CWiki" :file-name "About_CWiki.md"}
+                    ;{:title "About Images" :file-name "About_Images.md"}
+                    ;{:title "About Import/Export" :file-name "About_Import_Export.md"}
+                    ;{:title "About Roles" :file-name "About_Roles.md"}
+                    ;{:title "About the Sidebar" :file-name "About_the_Sidebar.md"}
+                    ;{:title "About TeX" :file-name "About_TeX.md"}
+                    ;{:title "Admin" :file-name "Admin.md"}
+                    ;{:title "CWiki FAQ" :file-name "CWiki_FAQ.md"}
+                    ;{:title "CWiki Name" :file-name "CWiki_Name.md"}
+                    ;{:title "Features" :file-name "Features.md"}
+                    ;{:title "How to Make a Table of Contents" :file-name "How_to_Make_a_Table_of_Contents.md"}
+                    ;{:title "Links Primer" :file-name "Links_Primer.md"}
                     ;{:title "Other Wiki Software" :file-name "Other_Wiki_Software.md"}
-                    {:title "Pages Primer" :file-name "Pages_Primer.md"}
-                    {:title "Preferences" :file-name "Preferences.md"}
-                    {:title "Sidebar" :file-name "Sidebar.md"}
+                    ;{:title "Pages Primer" :file-name "Pages_Primer.md"}
+                    ;{:title "Preferences" :file-name "Preferences.md"}
+                    ;{:title "Sidebar" :file-name "Sidebar.md"}
                     ;{:title "Special Pages" :file-name "Special_Pages.md"}
                     ;{:title "Text Formatting" :file-name "Text_Formatting.md"}
                     ;{:title "Technical Notes" :file-name "Technical_Notes.md"}
                     ;{:title "To Do" :file-name "todo.md"}
-                    {:title "Wikilinks" :file-name "Wikilinks.md"}])
+                    ;{:title "Wikilinks" :file-name "Wikilinks.md"}
+                    ])
 
 (def valid-roles ["cwiki" "admin" "editor" "writer" "reader"])
 
@@ -498,7 +517,8 @@
 (defn- add-initial-pages!
   [user-id]
   (mapv #(add-page-with-meta-from-file! %) initial-pages-with-front-matter)
-  (mapv #(add-page-from-file! % user-id) initial-pages))
+  ;(mapv #(add-page-from-file! % user-id) initial-pages)
+  )
 
 ;(defn- add-initial-namespaces!
 ;  []
@@ -591,7 +611,7 @@
 (defn db-exists?
   "Return true if the wiki database already exists."
   []
-  (.exists ^File (clojure.java.io/as-file db-file-name)))
+  (.exists ^File (clojure.java.io/as-file db-file-name-long)))
 
 (defn init-db!
   "Initialize the database. Will create the database and

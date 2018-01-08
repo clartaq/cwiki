@@ -1,3 +1,13 @@
+---
+title: Pages Primer
+author: CWiki
+date: 10/24/2017 8:48:43 AM
+updated: 1/8/2018 5:29:20 PM 
+tags:
+  - pages
+  - help
+---
+
 This "Pages Primer" is a brief introduction to creating, editing, and deleting pages in the wiki.
 
 ## Creating Pages ##

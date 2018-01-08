@@ -1,3 +1,13 @@
+---
+title: About Images
+author: CWiki
+date: 12/02/2017 10:50:59 AM
+updated: 1/8/2018 4:45:28 PM  
+tags:
+  - about
+  - images
+---
+
 Just as you can insert links to images in Markdown, you can insert links to images in CWiki. There are a couple of ways to do it.
 
 Here's an absolute link to a file in the file system on Windows,
