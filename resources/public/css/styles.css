@@ -705,9 +705,15 @@ a:active {
     text-decoration: underline;
 }
 
+/* Mark external links with the Wikipedia icon for such. */
 a[href ^= 'http']:not([href *= 'yourdomain.']) {
-    background: transparent url(../img/Icon_External_Link.svg) no-repeat center right;
+    background: transparent url(../img/external_link.svg) no-repeat center right;
     padding-right: 16px;
+}
+
+/* Smart quotes for those fonts where it is available. */
+q {
+    quotes: "“" "”";
 }
 
 .menu-item a {
@@ -733,10 +739,6 @@ code {
 
 del code {
     text-decoration: inherit
-}
-
-q {
-    quotes: "“" "”";
 }
 
 pre > code {
