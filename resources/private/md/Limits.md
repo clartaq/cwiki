@@ -14,9 +14,13 @@ Like all programs, CWiki has some limitations. Here are some of them.
 
 ### Text-Based Fields ###
 
-With a single exception, page contents, all text based fields are simple Java `String` objects. They are stored in the database as `VARCHAR` objects and converted to and from strings as they are moved in and out of the database.
+With some exceptions, noted below, all text based fields are simple Java `String` objects. They are stored in the database as `VARCHAR` objects and converted to and from strings as they are moved in and out of the database.
 
 As a result, the text-based fields have a length of approximately $(2^{31} - 1)/2$ characters or about 1,073,741,824 characters. The "approximately" is due to the fact that characters in Java are encoded in [Unicode UTF-16](https://en.wikipedia.org/wiki/UTF-16). This encoding uses one or two 16-bit code units. So some characters occupy different amounts of space. Bottom line, don't use passwords with more than a billion characters. Hah!
+
+### User Recovery email Address ###
+
+The maximum length for this field is the same as that for any email address, 254 characters.
 
 ### Page Contents ###
 
