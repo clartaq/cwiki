@@ -1,3 +1,14 @@
+---
+title: How to Make a Table of Contents
+author: CWiki
+date: 12/04/2017 1:14:29 PM
+updated: 1/8/2018 5:24:36 PM 
+tags:
+  - how-to
+  - TOC
+  - Table of Contents
+---
+
 Sometimes pages get pretty long. It can be hard to find specific parts of the page. In these cases, it would be nice to have a "Table of Contents" (TOC) for the page. There are a lot of extensions available for various Markdown editors. But if you want a method that is portable across just about any Markdown implementation, try something like the following. (Found this solution suggested in an answer to a [question on Stack Overflow.](https://stackoverflow.com/questions/11948245/markdown-to-create-pages-and-table-of-contents)).
 
 Note: Some Markdown editors allow spaces in the links. The parser used by CWiki does not. You must replace and spaces in the link text (both the link and the destination) with an underline or some other character.

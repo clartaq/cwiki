@@ -1,3 +1,13 @@
+---
+title: CWiki FAQ
+author: CWiki
+date: 10/27/2017 10:21:37 AM
+updated: 1/8/2018 4:14:50 PM 
+tags:
+  - cwiki
+  - FAQ
+---
+
 This FAQ answers some common questions about CWiki.
 
 ### Table of Contents ###

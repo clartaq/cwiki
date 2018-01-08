@@ -2,7 +2,7 @@
 title: Technical Notes
 author: CWiki
 date: 10/01/2017 5:45:07 PM 
-updated: 1/7/2018 10:31:40 AM        
+updated: 1/8/2018 3:56:49 PM 
 tags:
   - technical note
   - motivation
@@ -72,7 +72,7 @@ Authorization is home-grown and based on the roles users have been assigned. See
 
 ## How Pages Get Rendered ##
 
-The pages in CWiki are a mashup of [Markdown](https://daringfireball.net/projects/markdown/syntax), [[WikiLinks]], and [[About TeX|$\rm\TeX$]]. No single parser/HTML generator handles all of those pieces. So rendering a page happens in several stages.
+The pages in CWiki are a mashup of [Markdown](https://daringfireball.net/projects/markdown/syntax), [[Wikilinks]], and [[About TeX|$\rm\TeX$]]. No single parser/HTML generator handles all of those pieces. So rendering a page happens in several stages.
 
 1. First, all of the WikiLinks are located and translated to HTML-style links. These links point to pages within the CWiki database. If there is no such page, the link is displayed in red.
 2. The Markdown content, including the translated WikiLinks, are converted to HTML. Since Markdown parsers pass HTML through unaltered, the translated WikiLinks are left intact.
