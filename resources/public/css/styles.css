@@ -705,6 +705,11 @@ a:active {
     text-decoration: underline;
 }
 
+a[href ^= 'http']:not([href *= 'yourdomain.']) {
+    background: transparent url(../img/Icon_External_Link.svg) no-repeat center right;
+    padding-right: 16px;
+}
+
 .menu-item a {
     color: #a0e0ff;
 }
@@ -728,6 +733,10 @@ code {
 
 del code {
     text-decoration: inherit
+}
+
+q {
+    quotes: "“" "”";
 }
 
 pre > code {
