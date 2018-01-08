@@ -450,13 +450,13 @@
         post-map (db/create-new-post-map "All Users" content)]
     (view-list-page post-map query-results req)))
 
-(defn compose-all-namespaces-page
-  "Return a page listing of all of the namespaces in the wiki."
-  [req]
-  (let [query-results (db/get-all-namespaces)
-        content (process-name-set query-results)
-        post-map (db/create-new-post-map "All Namespaces" content)]
-    (view-list-page post-map query-results req)))
+;(defn compose-all-namespaces-page
+;  "Return a page listing of all of the namespaces in the wiki."
+;  [req]
+;  (let [query-results (db/get-all-namespaces)
+;        content (process-name-set query-results)
+;        post-map (db/create-new-post-map "All Namespaces" content)]
+;    (view-list-page post-map query-results req)))
 
 (defn compose-all-tags-page
   "Return a page listing all of the tags in the wiki."

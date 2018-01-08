@@ -50,8 +50,8 @@
       (= title "All Users") (let [new-body (layout/compose-all-users-page request)]
                               (build-response new-body request))
 
-      (= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page request)]
-                                   (build-response new-body request))
+      ;(= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page request)]
+      ;                             (build-response new-body request))
 
       (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
                              (build-response new-body request))

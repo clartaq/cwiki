@@ -51,10 +51,13 @@
 (def initial-pages-with-front-matter
   ["Front_Page.md"
    "About_Front_Matter.md"
+   "About_the_Sidebar.md"
    "Limits.md"
    "Motivation.md"
    "Other_Wiki_Software.md"
    "Path_to_Release.md"
+   "Sidebar.md"
+   "Special_Pages.md"
    "Text_Formatting.md"
    "Technical_Notes.md"
    "todo.md"])
@@ -80,7 +83,7 @@
                     {:title "Pages Primer" :file-name "Pages_Primer.md"}
                     {:title "Preferences" :file-name "Preferences.md"}
                     {:title "Sidebar" :file-name "Sidebar.md"}
-                    {:title "Special Pages" :file-name "Special_Pages.md"}
+                    ;{:title "Special Pages" :file-name "Special_Pages.md"}
                     ;{:title "Text Formatting" :file-name "Text_Formatting.md"}
                     ;{:title "Technical Notes" :file-name "Technical_Notes.md"}
                     ;{:title "To Do" :file-name "todo.md"}
@@ -88,7 +91,7 @@
 
 (def valid-roles ["cwiki" "admin" "editor" "writer" "reader"])
 
-(def initial-namespaces (atom ["cwiki" "default" "help"]))
+;(def initial-namespaces (atom ["cwiki" "default" "help"]))
 
 (def initial-tags ["help" "wiki" "cwiki" "linking"])
 
@@ -497,12 +500,12 @@
   (mapv #(add-page-with-meta-from-file! %) initial-pages-with-front-matter)
   (mapv #(add-page-from-file! % user-id) initial-pages))
 
-(defn- add-initial-namespaces!
-  []
-  (println "adding namespaces")
-  (mapv (fn [%] (jdbc/insert! h2-db :namespaces {:namespace_name %}))
-        @initial-namespaces)
-  (println "done"))
+;(defn- add-initial-namespaces!
+;  []
+;  (println "adding namespaces")
+;  (mapv (fn [%] (jdbc/insert! h2-db :namespaces {:namespace_name %}))
+;        @initial-namespaces)
+;  (println "done"))
 
 (defn- add-initial-tags!
   []
@@ -558,6 +561,9 @@
                                  [[:x_ref_id :integer :auto_increment :primary :key]
                                   [:tag_id :integer]
                                   [:page_id :integer]
+                                  ;["foreign key (tag_id) references public.tags(tag_id)"]
+                                  ;["foreign key (page_id) references public.pages(page_id"]
+                                  ;foreign key (TOURISTINFO_ID) references touristinfo(TOURISTINFO_ID)
                                   ;["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
                                   ;["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]
                                   ])
@@ -579,7 +585,7 @@
   (add-initial-users!)
   (add-initial-pages! (get-cwiki-user-id))
   (add-initial-roles!)
-  (add-initial-namespaces!)
+  ;(add-initial-namespaces!)
   (add-initial-tags!))
 
 (defn db-exists?
