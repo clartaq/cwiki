@@ -103,8 +103,7 @@
       [:li [:a {:href "/about"} "About"]]
       (when (ri/is-admin-user? req)
         [:li [:a {:href "/Admin"} "Admin"]])
-      [:li [:a {:href "/logout"} "Sign Off"]]]]]]
-  )
+      [:li [:a {:href "/logout"} "Sign Off"]]]]]])
 
 (defn- searchbox
   "Return the search box element for use in the page header."
@@ -449,14 +448,6 @@
         content (process-name-set query-results)
         post-map (db/create-new-post-map "All Users" content)]
     (view-list-page post-map query-results req)))
-
-;(defn compose-all-namespaces-page
-;  "Return a page listing of all of the namespaces in the wiki."
-;  [req]
-;  (let [query-results (db/get-all-namespaces)
-;        content (process-name-set query-results)
-;        post-map (db/create-new-post-map "All Namespaces" content)]
-;    (view-list-page post-map query-results req)))
 
 (defn compose-all-tags-page
   "Return a page listing all of the tags in the wiki."

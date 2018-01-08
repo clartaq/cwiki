@@ -29,7 +29,6 @@ This FAQ answers some common questions about CWiki.
 	* Syntax-highlighted programming examples.
 	* Ability to present mathematical algorithms in mathematical notation.
 
-
 #### What is CWiki NOT good for? <a name="What_is_CWiki_NOT_good_for?"></a> ###
 
 * Huge knowledge collections. The database will not scale to really large data collections. Might be possible if we switch to a DB designed for more "industrial" applications.
