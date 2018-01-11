@@ -40,8 +40,7 @@
         title (s/replace-first raw-title "/" "")
         raw-post (db/find-post-by-title title)]
     (cond
-      raw-post (let [new-body (db/page-map->content raw-post)
-                     new-page (layout/view-wiki-page raw-post request)]
+      raw-post (let [new-page (layout/view-wiki-page raw-post request)]
                  (build-response new-page request))
 
       (= title "All Pages") (let [new-body (layout/compose-all-pages-page request)]
@@ -49,9 +48,6 @@
 
       (= title "All Users") (let [new-body (layout/compose-all-users-page request)]
                               (build-response new-body request))
-
-      ;(= title "All Namespaces") (let [new-body (layout/compose-all-namespaces-page request)]
-      ;                             (build-response new-body request))
 
       (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
                              (build-response new-body request))
