@@ -102,14 +102,21 @@
                             uri (:display-part link-parts)))]
     h))
 
+(defn- as-tag?
+  "Handle the special case when a link points to a tag. Used to build
+  the All Tags page."
+  [title]
+  (s/ends-with? title "/as-tag"))
+
 (defn link-parts->html-link
   "Given a map containing a (possibly identical) page title for
   a link and some text to be displayed for the link,
   return the html for a link."
   [link-parts req]
   (let [title (:title-part link-parts)]
-    (if (or (article-is-present? title)
-            (special/is-generated? title))
+    (if (or (as-tag? title)
+            (special/is-generated? title)
+            (article-is-present? title))
       (get-view-link-for-existing-page link-parts req)
       (get-creation-link-for-new-page link-parts req))))
 
