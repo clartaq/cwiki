@@ -48,42 +48,42 @@
 ; Need "Front Page" to be first in list since some tests depend on it
 ; being in that position. Kinda fragile.
 
-(def initial-pages-with-front-matter
-  ["Front_Page.md"
-   "About.md"
-   "About_Admin_Pages.md"
-   "About_Backup_and_Restore.md"
-   "About_Compressing_the_Database.md"
-   "About_CWiki.md"
-   "About_Front_Matter.md"
-   "About_Images.md"
-   "About_Import_Export.md"
-   "About_Roles.md"
-   "About_TeX.md"
-   "About_the_Sidebar.md"
-   "Admin.md"
-   "CWiki_FAQ.md"
-   "CWiki_Name.md"
-   "Features.md"
-   "How_to_Make_a_Table_of_Contents.md"
-   "Limits.md"
-   "Links_Primer.md"
-   "Motivation.md"
-   "Other_Wiki_Software.md"
-   "Pages_Primer.md"
-   "Path_to_Release.md"
-   "Preferences.md"
-   "Sidebar.md"
-   "Special_Pages.md"
-   "Tag_Design.md"
-   "Text_Formatting.md"
-   "Technical_Notes.md"
-   "todo.md"
-   "Wikilinks.md"])
+;(def initial-pages-with-front-matter
+;  ["Front_Page.md"
+;   "About.md"
+;   "About_Admin_Pages.md"
+;   "About_Backup_and_Restore.md"
+;   "About_Compressing_the_Database.md"
+;   "About_CWiki.md"
+;   "About_Front_Matter.md"
+;   "About_Images.md"
+;   "About_Import_Export.md"
+;   "About_Roles.md"
+;   "About_TeX.md"
+;   "About_the_Sidebar.md"
+;   "Admin.md"
+;   "CWiki_FAQ.md"
+;   "CWiki_Name.md"
+;   "Features.md"
+;   "How_to_Make_a_Table_of_Contents.md"
+;   "Limits.md"
+;   "Links_Primer.md"
+;   "Motivation.md"
+;   "Other_Wiki_Software.md"
+;   "Pages_Primer.md"
+;   "Path_to_Release.md"
+;   "Preferences.md"
+;   "Sidebar.md"
+;   "Special_Pages.md"
+;   "Tag_Design.md"
+;   "Text_Formatting.md"
+;   "Technical_Notes.md"
+;   "todo.md"
+;   "Wikilinks.md"])
 
 (def valid-roles ["cwiki" "admin" "editor" "writer" "reader"])
 
-(def initial-tags ["help" "wiki" "cwiki" "linking"])
+;(def initial-tags ["help" "wiki" "cwiki" "linking"])
 
 (def initial-users [{:user_name              "CWiki"
                      :user_role              "cwiki"
@@ -562,7 +562,7 @@
 
 (defn- add-initial-pages!
   []
-  (mapv #(add-page-with-meta-from-file! %) initial-pages-with-front-matter))
+  (mapv #(add-page-with-meta-from-file! %) (files/load-initial-page-list)))
 
 (defn- add-initial-roles!
   []
