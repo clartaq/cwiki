@@ -70,6 +70,9 @@
                                            (build-response new-body request))
                                          ;else
                                          (build-response (layout/compose-403-page) request 403)))
+      (s/ends-with? title "/as-tag") (let [tag-only (s/replace title "/as-tag" "")
+                                           new-body (layout/compose-all-pages-with-tag tag-only request)]
+                                       (build-response new-body request))
       :else (if (ath/can-create? request)
               (let [title-only (s/replace title "/create" "")
                     new-body (layout/compose-create-or-edit-page

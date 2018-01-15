@@ -420,6 +420,22 @@
       (str st "\n")
       (recur (rest t) (str st "\n- [[" (first t) "]]")))))
 
+(defn- process-tag-set
+  "Process a sorted set of tag names into a Markdown-formatted
+  unordered list and return it. Individual tag names are placed
+  in links that will generate a list of all pages containing
+  the tag."
+  [tags]
+  (if (zero? (count tags))
+    ""
+    (loop [t tags
+           st ""]
+      (if (empty? t)
+        (str st "\n")
+        (let [tag (first t)
+              lnk (str "\n- [[" tag "/as-tag|" tag "]]")]
+          (recur (rest t) (str st lnk)))))))
+
 (defn- process-name-set
   "Process a sorted set of names into a Markdown-formatted
   unordered list and return it. If the set of names is empty,
@@ -453,7 +469,15 @@
   "Return a page listing all of the tags in the wiki."
   [req]
   (let [query-results (db/get-all-tags)
-        content (process-name-set query-results)
+        content (process-tag-set query-results)
         post-map (db/create-new-post-map "All Tags" content)]
+    (view-list-page post-map query-results req)))
+
+(defn compose-all-pages-with-tag
+  "Return a page listing all of the pages with the tag."
+  [tag req]
+  (let [query-results (db/get-titles-of-all-pages-with-tag tag)
+        content (process-title-set query-results)
+        post-map (db/create-new-post-map (str "All Pages with Tag \"" tag "\"") content)]
     (view-list-page post-map query-results req)))
 
