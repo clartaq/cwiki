@@ -1,7 +1,8 @@
 (ns cwiki.util.files
   (:require [clj-yaml.core :as yaml]
             [clojure.java.io :as io]
-            [clojure.string :as st])
+            [clojure.string :as st]
+            [clojure.string :as s])
   (:import (java.io BufferedReader InputStreamReader)))
 
 (defn remove-from-end
@@ -12,17 +13,6 @@
     (.substring s 0 (- (count s)
                        (count end)))
     s))
-
-;(defn drop-chars-while
-;  "Remove characters from the beginning of the input string
-;  that satisfy the predicate and return them as a string."
-;  [pred coll]
-;  (let [funkshun (fn [pred coll]
-;                   (let [s (seq coll)]
-;                     (if (and s (pred (first s)))
-;                       (recur pred (rest s))
-;                       s)))]
-;    (st/join (funkshun pred coll))))
 
 (defn take-chars-while
   "Take characters from the beginning of the input string that
@@ -92,3 +82,22 @@
                 (reset! result (assoc @result :meta meta))))
             (reset! result (assoc @result :body (st/join "\n" (:body parts))))))))
     @result))
+
+(defn- filter-predicate
+  "Return true if the line is not empty and does not start with a semi-colon"
+  [line]
+  (and (not (empty? line))
+       (not (s/starts-with? line ";"))))
+
+(defn load-initial-page-list
+  "Read the file containing the list of initial pages to load into the database
+  and return the names of the files in a seq."
+  []
+  (let [raw-lines (-> (io/resource "private/md/initial_pages.txt")
+                      (io/input-stream)
+                      (InputStreamReader.)
+                      (BufferedReader.)
+                      (line-seq)
+                      (vec))
+        filtered-lines (filterv filter-predicate raw-lines)]
+    filtered-lines))
