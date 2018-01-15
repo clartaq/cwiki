@@ -2,7 +2,7 @@
 title: CWiki FAQ
 author: CWiki
 date: 10/27/2017 10:21:37 AM
-updated: 1/8/2018 4:14:50 PM 
+updated: 1/13/2018 10:08:42 AM  
 tags:
   - cwiki
   - FAQ
@@ -35,6 +35,7 @@ This FAQ answers some common questions about CWiki.
 * Collections of images. Not really a good fit for sites containing lots and lots of images.
 * Hosting a knowledge base securely on the open Internet. CWiki probably _can_ be hosted on an Internet facing server, but security characteristics are not well-designed.
 * Languages other than English. It is not internationalized at all.
+* Writing the next Great American (or British, or Australian, or Canadian) novel. At least at present, the editing facilities are too primitive. Maybe in the future.
 
 #### Why Users? <a name="Why_Users?"></a> ####
 

@@ -2,11 +2,11 @@
 title: About the Sidebar
 author: CWiki
 date: 06/11/2017 4:39:37 PM  
-updated: 1/8/2018 10:51:39 AM            
+updated: 1/14/2018 3:34:41 PM             
 tags:
   - about
   - help
-  - special page
+  - special pages
   - sidebar
 ---
 
