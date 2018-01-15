@@ -85,7 +85,7 @@
               (build-response (layout/compose-403-page) request 403)))))
 
 (defn page-finder-route
-  [body]
+  []
   (fn [request]
     (if (ri/is-authenticated-user? request)
       (respond-to-page-request request)
@@ -93,7 +93,7 @@
 
 (defroutes app-routes
            (route/resources "/")
-           (page-finder-route (layout/compose-404-page))
+           (page-finder-route)
            (route/not-found (layout/compose-404-page)))
 
 (def app
