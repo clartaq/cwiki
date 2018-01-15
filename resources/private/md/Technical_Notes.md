@@ -2,7 +2,7 @@
 title: Technical Notes
 author: CWiki
 date: 10/01/2017 5:45:07 PM 
-updated: 1/8/2018 3:56:49 PM 
+updated: 1/13/2018 10:10:03 AM  
 tags:
   - technical note
   - motivation
@@ -14,6 +14,7 @@ These are some technical notes about CWiki. If you are only interested in using 
 
 * [[The Motivation for Writing CWiki]] talks about why the program was written in the first place.
 * [[Limits]] discusses some of the limitations of the program.
+* [[Tag Design]] reviews some of the thinking going into the design of the system of tags.
 
 ## Software Dependencies ##
 
