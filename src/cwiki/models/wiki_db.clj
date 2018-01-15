@@ -7,7 +7,7 @@
            [clj-time.core :as t]
            [clj-time.format :as f]
            [cwiki.util.files :as files]
-           [cwiki.util.pp :as pp]
+           ;[cwiki.util.pp :as pp]
            [cwiki.util.special :as special])
   (:import (java.io File)
            (java.util UUID)
@@ -321,24 +321,6 @@
      (into (sorted-set-by case-insensitive-comparator)
            (mapv #(:user_name %) user-array)))))
 
-(defn get-all-namespaces
-  "Return a sorted set of all of the namespaces in the wiki."
-  ([]
-   (get-all-namespaces h2-db))
-  ([db-name]
-   (when-let [namespace-array (jdbc/query db-name ["select namespace_name from namespaces"])]
-     (into (sorted-set-by case-insensitive-comparator)
-           (mapv #(:namespace_name %) namespace-array)))))
-
-(defn get-all-tags
-  "Return a sorted set of all of the tags in the wiki."
-  ([]
-   (get-all-tags h2-db))
-  ([db-name]
-   (when-let [tag-array (jdbc/query db-name ["select tag_name from tags"])]
-     (into (sorted-set-by case-insensitive-comparator)
-           (mapv #(:tag_name %) tag-array)))))
-
 (defn update-page-title-and-content!
   [id title content]
   (jdbc/update! h2-db :pages {:page_title    title
@@ -365,6 +347,15 @@
 ;;
 ;; The functions related to tags follow.
 ;;
+
+(defn get-all-tags
+  "Return a sorted set of all of the tags in the wiki."
+  ([]
+   (get-all-tags h2-db))
+  ([db-name]
+   (when-let [tag-array (jdbc/query db-name ["select tag_name from tags"])]
+     (into (sorted-set-by case-insensitive-comparator)
+           (mapv #(:tag_name %) tag-array)))))
 
 (defn- get-tags-from-meta
   "Return a string of tags, nicely separated with commas, from
