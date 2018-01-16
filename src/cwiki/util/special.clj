@@ -8,7 +8,6 @@
    {:name "All Users" :editable? nil :deletable? nil :generated? true}
    {:name "All Tags" :editable? nil :deletable? nil :generated? true}
    {:name "Sidebar" :editable? true :deletable? nil :generated? nil}
-   ;{:name "About" :editable? true :deletable? true :generated? nil}
    {:name "Orphans" :editable? nil :deletable? nil :generated? true}
    {:name "Preferences" :editable? true :deletable? nil :generated? nil}
    {:name "Admin" :editable? true :deletable? true :generated? nil :admin-only? true}
@@ -17,7 +16,6 @@
    {:name "restore" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "create-user" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "select-profile" :editable? nil :deletable? nil :generated? true :admin-only? true}
-   {:name "edit-profile" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "delete-user" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "reset-password" :editable? nil :deletable? nil :generated? true :admin-only? true}])
 
