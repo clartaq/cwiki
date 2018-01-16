@@ -5,17 +5,27 @@
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect]]))
 
-(defn read-front-page
+(defn- read-front-page
   "Read the complete post for the front page."
   []
   (db/find-post-by-title "Front Page"))
 
-(defn read-about-page
+(defn- read-about-page
   "Read the 'About' page from the database."
   []
   (db/find-post-by-title "About"))
 
-(defn save-edits
+(defn- do-search
+  "Search the content of the wiki pages for the search text and
+  return a new pages with links to the relevant pages."
+  [search-text req]
+  (if (ri/is-authenticated-user? req)
+    (do
+      (println "do-search: saw search-text:" search-text)
+      (layout/compose-not-yet-view "search"))
+    (redirect "/login")))
+
+(defn- save-edits
   "Save any edits to the page back to the database."
   [page-id new-title new-content req]
   (let [actual-id (Integer. ^String page-id)]
@@ -28,7 +38,7 @@
   (db/insert-new-page! title content (ri/req->user-id req))
   (layout/view-wiki-page (db/find-post-by-title title) req))
 
-(defn save-new-page
+(defn- save-new-page
   "Save a new page to the database."
   [title content req]
   (if (db/find-post-by-title title)
@@ -36,7 +46,7 @@
                           "A post with that title already exists.")
     (save-and-view-page title content req)))
 
-(defn home
+(defn- home
   "Handle a request to view the 'Home' page if there is an
   authenticated user. Otherwise, force them to log in first."
   [req]
@@ -62,7 +72,7 @@
                 name and password from the default values."]]))
       (redirect "/login"))))
 
-(defn about
+(defn- about
   "Handle a request for the 'About' route if there is
   an authenticated user for the session. Otherwise,
   force them to log in."
@@ -74,6 +84,9 @@
 (defroutes home-routes
            (GET "/" request (home request))
            (GET "/about" request (about request))
+           (POST "/search" request
+             (let [params (request :multipart-params)]
+               (do-search (get params "search-text") request)))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
                (save-edits (get params "page-id")

@@ -110,9 +110,12 @@
   "Return the search box element for use in the page header."
   []
   [:div {:class "search-container"}
-   [:form {:id "searchbox" :action ""}
-    [:input {:type "text" :id "search-text" :placeholder "Enter search terms here..."}]
-    [:input {:type "submit" :id "search-submit" :value "Search"}]]])
+   [:form {:id "searchbox" :action "/search" :method "post"
+           :enctype "multipart/form-data"}
+    [:input {:type "text" :id "search-text" :name "search-text"
+             :placeholder "Enter search terms here..."}]
+    [:input {:type "submit" :id "search-submit" :name "search-submit"
+             :value "Search"}]]])
 
 (defn- menu-item-span
   "Return a span with CSS class 'menu-item' around the given content."
