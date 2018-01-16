@@ -8,7 +8,7 @@
    {:name "All Users" :editable? nil :deletable? nil :generated? true}
    {:name "All Tags" :editable? nil :deletable? nil :generated? true}
    {:name "Sidebar" :editable? true :deletable? nil :generated? nil}
-   {:name "About" :editable? true :deletable? true :generated? nil}
+   ;{:name "About" :editable? true :deletable? true :generated? nil}
    {:name "Orphans" :editable? nil :deletable? nil :generated? true}
    {:name "Preferences" :editable? true :deletable? nil :generated? nil}
    {:name "Admin" :editable? true :deletable? true :generated? nil :admin-only? true}
