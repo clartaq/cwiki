@@ -100,7 +100,8 @@
     [:li {:class "subNav"}
      [:a "More  ▾"]
      [:ul
-      [:li [:a {:href "/about"} "About"]]
+      (when (db/find-post-by-title "About")
+        [:li [:a {:href "/about"} "About"]])
       (when (ri/is-admin-user? req)
         [:li [:a {:href "/Admin"} "Admin"]])
       [:li [:a {:href "/logout"} "Sign Off"]]]]]])
