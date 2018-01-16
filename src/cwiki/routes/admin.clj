@@ -1,20 +1,15 @@
 (ns cwiki.routes.admin
-  (:require [clj-time.coerce :as c]
+  (:require [buddy.hashers :as hashers]
+            [clj-time.coerce :as c]
             [clj-time.core :as t]
+            [clojure.string :as s]
             [compojure.core :refer :all]
             [compojure.response :as response]
             [cwiki.layouts.admin :as admin-layout]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.req-info :as ri]
-            [ring.util.response :refer [redirect status]]
-            [clojure.string :as s]
-            [buddy.hashers :as hashers]))
-
-(defn- not-yet
-  "Return a page saying a feature is not ready yet."
-  [name]
-  (layout/compose-not-yet-view name))
+            [ring.util.response :refer [redirect status]]))
 
 (defn- build-response
   "Build a response structure, possibly with a non-200 return code."
@@ -205,9 +200,9 @@
           (build-response (admin-layout/cannot-find-user req) req 500))))))
 
 (defroutes admin-routes
-           (GET "/compress" [] (not-yet "compress"))
-           (GET "/backup" [] (not-yet "backup"))
-           (GET "/restore" [] (not-yet "restore"))
+           (GET "/compress" [] (layout/compose-not-yet-view "compress"))
+           (GET "/backup" [] (layout/compose-not-yet-view "backup"))
+           (GET "/restore" [] (layout/compose-not-yet-view "restore"))
            (GET "/create-user" request (get-create-user request))
            (POST "/create-user" [] post-create-user)
            (GET "/select-profile" request (get-user-to-edit request))
@@ -216,4 +211,4 @@
            (POST "/edit-profile" [] post-edit-profile)
            (GET "/delete-user" request (get-delete-user request))
            (POST "/delete-user" [] post-delete-user)
-           (GET "/reset-password" [] (not-yet "reset-password")))
+           (GET "/reset-password" [] (layout/compose-not-yet-view "reset-password")))
