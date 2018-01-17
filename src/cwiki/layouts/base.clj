@@ -482,6 +482,7 @@
   [tag req]
   (let [query-results (db/get-titles-of-all-pages-with-tag tag)
         content (process-title-set query-results)
-        post-map (db/create-new-post-map (str "All Pages with Tag \"" tag "\"") content)]
+        post-map (db/create-new-post-map
+                   (str "All Pages with Tag \"" tag "\"") content)]
     (view-list-page post-map query-results req)))
 
