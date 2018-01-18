@@ -342,18 +342,20 @@
 
 (defn get-tag-names-for-page
   "Returns a case-insensitive sorted-set of tag name associated with the page.
-  If ther are no such tags, returns a sorted set containing the word 'None'."
+  If ther are no such tags (it's nil or and empy seq), returns a sorted set
+  containing the word 'None'."
   ([page-id]
    (get-tag-names-for-page page-id h2-db))
   ([page-id db]
-   (if-let [tag-ids (get-tag-ids-for-page page-id)]
-     (let [tag-ids-as-string (convert-seq-to-comma-separated-string tag-ids)
-           sql (str "select tag_name from tags where tag_id in ("
-                    tag-ids-as-string ");")
-           rs (jdbc/query db [sql])]
-       (reduce #(conj %1 (:tag_name %2))
-               (sorted-set-by case-insensitive-comparator) rs))
-     (into (sorted-set-by case-insensitive-comparator) ["None"]))))
+   (let [tag-ids (get-tag-ids-for-page page-id)]
+     (if (or (nil? tag-ids) (empty? tag-ids))
+       (into (sorted-set-by case-insensitive-comparator) ["None"])
+       (let [tag-ids-as-string (convert-seq-to-comma-separated-string tag-ids)
+             sql (str "select tag_name from tags where tag_id in ("
+                      tag-ids-as-string ");")
+             rs (jdbc/query db [sql])]
+         (reduce #(conj %1 (:tag_name %2))
+                 (sorted-set-by case-insensitive-comparator) rs))))))
 
 (defn- get-tags-from-meta
   "Return a string of tags, nicely separated with commas, from
@@ -491,11 +493,12 @@
                           (c/to-sql-time (f/parse markdown-pad-format
                                                   update-date-str))
                           creation-date)
-            tags (get-tags-from-meta meta)
+            ;   tags (get-tags-from-meta meta)
             pm (merge (create-new-post-map title content author-id)
                       {:page_created creation-date}
                       {:page_modified update-date}
-                      {:page_tags tags})
+                      ;{:page_tags tags}
+                      )
             page-id (get-row-id (jdbc/insert! h2-db :pages pm))]
         (update-tags-for-page (get-tag-vector-from-meta meta) page-id)))))
 
@@ -591,7 +594,7 @@
                                  [[:page_id :integer :auto_increment :primary :key]
                                   [:page_created :datetime]
                                   [:page_modified :datetime]
-                                  [:page_tags :varchar]
+                                  ;[:page_tags :varchar]
                                   [:page_author :integer]
                                   [:page_title :varchar]
                                   [:page_content :text]])
