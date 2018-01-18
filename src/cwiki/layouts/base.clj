@@ -110,11 +110,11 @@
   "Return the search box element for use in the page header."
   []
   [:div {:class "search-container"}
-   [:form {:id "searchbox" :action "/search" :method "post"
+   [:form {:id      "searchbox" :action "/search" :method "post"
            :enctype "multipart/form-data"}
-    [:input {:type "text" :id "search-text" :name "search-text"
+    [:input {:type        "text" :id "search-text" :name "search-text"
              :placeholder "Enter search terms here..."}]
-    [:input {:type "submit" :id "search-submit" :name "search-submit"
+    [:input {:type  "submit" :id "search-submit" :name "search-submit"
              :value "Search"}]]])
 
 (defn- menu-item-span
@@ -189,6 +189,8 @@
   (let [title (db/page-map->title post-map)
         author (db/page-map->author post-map)
         tags (db/page-map->tags post-map)
+        tags (db/convert-seq-to-comma-separated-string
+               (db/get-tag-names-for-page (db/page-map->id post-map)))
         tag-str (if tags
                   tags
                   "None")
