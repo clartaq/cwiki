@@ -1,8 +1,8 @@
 ---
 title: Tag Design
 author: CWiki
-date: 1/13/2018 10:21:37 AM 
-updated: 1/13/2018 5:42:51 PM 
+date: 1/13/2018 10:21:29 AM 
+updated: 1/17/2018 5:58:58 PM 
 tags:
   - technical note
   - tags
@@ -57,6 +57,59 @@ There are only a few functions that provide an interface to tag handling by the 
 ```
 
 ---
+#### get-tag-ids-for-page ####
+
+**Arguments**: The page id or the page id and the database to be used. When called without the database, the wiki database will be used.
+
+**Return Value**: A sequence of tags associated with the page.
+
+**Example Usage**: The `get-tag-names-for-page` function (see below) uses this function to obtain the tag ids associated with a page.
+
+```prettyprint lang-clj
+    (defn get-tag-names-for-page
+      "Returns a case-insensitive sorted-set of tag name associated with the page."
+      ([page-id]
+       (get-tag-names-for-page page-id h2-db))
+      ([page-id db]
+       (let [tag-ids (get-tag-ids-for-page page-id)
+             tag-ids-as-string (convert-seq-to-comma-separated-string tag-ids)
+             sql (str "select tag_name from tags where tag_id in ("
+                      tag-ids-as-string ");")
+             rs (jdbc/query db [sql])]
+         (reduce #(conj %1 (:tag_name %2))
+                 (sorted-set-by case-insensitive-comparator) rs))))
+```
+
+---
+#### get-tag-names-for-page ####
+
+**Arguments**: The page id or the page id and the database to be used. When called without the database, the wiki database will be used.
+
+**Return Value**: A case-insensitive sorted-set of strings containing the the names of the tags associated with the page.
+
+**Example Usage**: At present, this function is not used. As tagging functionality is completed, it will be used to display tags when a wiki page is displayed and when editing a wiki page.
+
+---
+#### get-titles-of-all-pages-with-tag ####
+
+**Arguments**: The tag name.
+
+**Return Value**: A case-insensitive sorted-set of all the pages that use the tag.
+
+**Example Usage**: The `compose-all-pages-with-tag` function displays the list of page names that use a tag. It is reached by clicking any of the links in the [[All Tags]] page. It uses this function to get the list of page names to display.
+
+```prettyprint lang-clj
+    (defn compose-all-pages-with-tag
+      "Return a page listing all of the pages with the tag."
+      [tag req]
+      (let [query-results (db/get-titles-of-all-pages-with-tag tag)
+            content (process-title-set query-results)
+            post-map (db/create-new-post-map
+                       (str "All Pages with Tag \"" tag "\"") content)]
+        (view-list-page post-map query-results req)))
+```
+
+---
 #### update-tags-for-page ####
 
 This is the "workhorse" of the tags database functions.
@@ -67,31 +120,16 @@ This is the "workhorse" of the tags database functions.
 
 **Example Usage**:
 
----
-#### get-tag-ids-for-page ####
-
-**Arguments**:
-
-**Return Value**:
-
-**Example Usage**:
-
----
-#### get-tag-names-for-page ####
-
-**Arguments**:
-
-**Return Value**:
-
-**Example Usage**:
-
-#### get-titles-of-all-pages-with-tag ####
-
-**Arguments**:
-
-**Return Value**:
-
-**Example Usage**:
-
 ## Tags in the User Interface ##
 
+### Displaying a Wiki Page ###
+
+**Note** This description is the way it is intended to work. It doesn't work like this yet.
+
+Near the top of the display of a wiki page there is a line that starts with "Tags:" followed by the list of tags themselves.
+
+### Editing a Wiki Page ###
+
+**Note** This description is the way it is intended to work. It doesn't work like this yet.
+
+When editing a wiki page, the editor page shows a group of inputs for tags just below the page name. These inputs are initialized with the existing values of the tags for the page. When all edits to the page are accepted, any tags in the input are retrieved and used as the argument(s) to the `update-tags-for-page` function described above.

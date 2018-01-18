@@ -7,7 +7,7 @@
            [clj-time.core :as t]
            [clj-time.format :as f]
            [cwiki.util.files :as files]
-           ;[cwiki.util.pp :as pp]
+    ;[cwiki.util.pp :as pp]
            [cwiki.util.special :as special])
   (:import (java.io File)
            (java.util UUID)
@@ -45,45 +45,7 @@
     :page_title    title
     :page_content  content}))
 
-; Need "Front Page" to be first in list since some tests depend on it
-; being in that position. Kinda fragile.
-
-;(def initial-pages-with-front-matter
-;  ["Front_Page.md"
-;   "About.md"
-;   "About_Admin_Pages.md"
-;   "About_Backup_and_Restore.md"
-;   "About_Compressing_the_Database.md"
-;   "About_CWiki.md"
-;   "About_Front_Matter.md"
-;   "About_Images.md"
-;   "About_Import_Export.md"
-;   "About_Roles.md"
-;   "About_TeX.md"
-;   "About_the_Sidebar.md"
-;   "Admin.md"
-;   "CWiki_FAQ.md"
-;   "CWiki_Name.md"
-;   "Features.md"
-;   "How_to_Make_a_Table_of_Contents.md"
-;   "Limits.md"
-;   "Links_Primer.md"
-;   "Motivation.md"
-;   "Other_Wiki_Software.md"
-;   "Pages_Primer.md"
-;   "Path_to_Release.md"
-;   "Preferences.md"
-;   "Sidebar.md"
-;   "Special_Pages.md"
-;   "Tag_Design.md"
-;   "Text_Formatting.md"
-;   "Technical_Notes.md"
-;   "todo.md"
-;   "Wikilinks.md"])
-
 (def valid-roles ["cwiki" "admin" "editor" "writer" "reader"])
-
-;(def initial-tags ["help" "wiki" "cwiki" "linking"])
 
 (def initial-users [{:user_name              "CWiki"
                      :user_role              "cwiki"
@@ -354,8 +316,44 @@
    (get-all-tags h2-db))
   ([db-name]
    (when-let [tag-array (jdbc/query db-name ["select tag_name from tags"])]
-     (into (sorted-set-by case-insensitive-comparator)
-           (mapv #(:tag_name %) tag-array)))))
+     (reduce
+       #(conj %1 (:tag_name %2))
+       (sorted-set-by case-insensitive-comparator)
+       tag-array))))
+
+(defn get-tag-ids-for-page
+  "Return a seq of the tag ids associated with the page-id. Returns
+  nil if the page id is nil."
+  ([page-id]
+   (get-tag-ids-for-page page-id h2-db))
+  ([page-id db]
+   (when page-id
+     (let [sql (str "select tag_id from tags_x_pages where page_id=" page-id)
+           rs (jdbc/query db [sql])]
+       (reduce #(conj %1 (:tag_id %2)) [] rs)))))
+
+(defn convert-seq-to-comma-separated-string
+  [the-seq]
+  (let [but-last-items (butlast the-seq)
+        but-last-comma-mapped (map #(str % ", ") but-last-items)
+        last-item (str (last the-seq))
+        all-with-commas (concat but-last-comma-mapped last-item)]
+    (apply str all-with-commas)))
+
+(defn get-tag-names-for-page
+  "Returns a case-insensitive sorted-set of tag name associated with the page.
+  If ther are no such tags, returns a sorted set containing the word 'None'."
+  ([page-id]
+   (get-tag-names-for-page page-id h2-db))
+  ([page-id db]
+   (if-let [tag-ids (get-tag-ids-for-page page-id)]
+     (let [tag-ids-as-string (convert-seq-to-comma-separated-string tag-ids)
+           sql (str "select tag_name from tags where tag_id in ("
+                    tag-ids-as-string ");")
+           rs (jdbc/query db [sql])]
+       (reduce #(conj %1 (:tag_name %2))
+               (sorted-set-by case-insensitive-comparator) rs))
+     (into (sorted-set-by case-insensitive-comparator) ["None"]))))
 
 (defn- get-tags-from-meta
   "Return a string of tags, nicely separated with commas, from
@@ -448,7 +446,7 @@
   (when rs
     (reduce #(conj %1 (:page_id %2)) #{} rs)))
 
-(defn get-ids-of-all-pages-with-tag
+(defn- get-ids-of-all-pages-with-tag
   "Return a set of all the page ids for pages with the given tag name."
   ([tag-name]
    (get-ids-of-all-pages-with-tag tag-name h2-db))
@@ -462,14 +460,12 @@
                  {:result-set-fn rs->page-ids-as-set}))))
 
 (defn get-titles-of-all-pages-with-tag
-  "Return a case-insensitive sorted set of all of the titles of all
-  of that pages that have tag."
+  "Return a case-insensitive sorted-set of all of the titles of all
+  of the pages that have this tag."
   [tag-name]
   (let [page-ids (get-ids-of-all-pages-with-tag tag-name)]
-    (loop [ids page-ids s (sorted-set-by case-insensitive-comparator)]
-      (if (empty? ids)
-        s
-        (recur (rest ids) (conj s (page-id->title (first ids))))))))
+    (reduce #(conj %1 (page-id->title %2))
+            (sorted-set-by case-insensitive-comparator) page-ids)))
 
 (defn- add-page-with-meta-from-file!
   "Add a page to the database based on the information in a Markdown file
