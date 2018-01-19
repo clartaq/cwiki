@@ -21,14 +21,18 @@ $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 This is made possible by using the online  [MathJax](https://www.mathjax.org/) engine to display mathematics. Of course, you must be online for this ability to operate correctly.
 * Code listings will be highlighted based on the syntax of the programming language in the listing. For example, here is a Clojure function:
 
-```prettyprint
+```prettyprint lang-clj
 (defn insert-new-page!
   "Insert a new page into the database given a title and content.
-  Return the post map for the new page (including id and dates)."
-  [title content]
-  (let [post-map (create-new-post-map title content)]
-    (jdbc/insert! sqlite-db :posts post-map)
-    (find-post-by-title title)))
+  Return the post map for the new page (including id and dates).
+  If the arguments do not include an author id, use the CWiki
+  author id (same as CWiki user id)."
+  ([title content]
+   (insert-new-page! title content (get-cwiki-user-id)))
+  ([title content author-id]
+   (let [post-map (create-new-post-map title content author-id)]
+     (jdbc/insert! h2-db :pages post-map)
+     (find-post-by-title title))))
 ```
 
 * Tables can be created with a simple syntax due to an extension to the Markdown language.

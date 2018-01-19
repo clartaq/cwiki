@@ -2,7 +2,7 @@
 title: Tag Design
 author: CWiki
 date: 1/13/2018 10:21:29 AM 
-updated: 1/17/2018 5:58:58 PM 
+updated: 1/18/2018 5:56:41 PM 
 tags:
   - technical note
   - tags
@@ -112,7 +112,7 @@ There are only a few functions that provide an interface to tag handling by the 
 ---
 #### update-tags-for-page ####
 
-This is the "workhorse" of the tags database functions.
+This is the "workhorse" of the tags database functions. All attempts to change the tags from outside of the database namespace should be routed through this function.
 
 **Arguments**:
 

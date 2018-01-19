@@ -66,7 +66,7 @@
                                        (if (ath/can-edit-and-delete? request title-only)
                                          (let [new-body (layout/view-wiki-page
                                                           (db/find-post-by-title "Front Page") request)]
-                                           (db/delete-page-by-id (db/title->page-id title-only))
+                                           (db/delete-page-by-id! (db/title->page-id title-only))
                                            (build-response new-body request))
                                          ;else
                                          (build-response (layout/compose-403-page) request 403)))

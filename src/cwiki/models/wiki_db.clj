@@ -302,10 +302,6 @@
      (jdbc/insert! h2-db :pages post-map)
      (find-post-by-title title))))
 
-(defn delete-page-by-id
-  [page-id]
-  (jdbc/delete! h2-db :pages ["page_id=?" page-id]))
-
 ;;
 ;; The functions related to tags follow.
 ;;
@@ -333,12 +329,10 @@
        (reduce #(conj %1 (:tag_id %2)) [] rs)))))
 
 (defn convert-seq-to-comma-separated-string
+  "Return a string containing the members of the sequence separated by commas."
   [the-seq]
-  (let [but-last-items (butlast the-seq)
-        but-last-comma-mapped (map #(str % ", ") but-last-items)
-        last-item (str (last the-seq))
-        all-with-commas (concat but-last-comma-mapped last-item)]
-    (apply str all-with-commas)))
+  (let [but-last-comma-mapped (map #(str % ", ") (butlast the-seq))]
+        (apply str (concat but-last-comma-mapped (str (last the-seq))))))
 
 (defn get-tag-names-for-page
   "Returns a case-insensitive sorted-set of tag name associated with the page.
@@ -417,13 +411,45 @@
                    [] new-tag-map)]
      map-vec)))
 
+(defn- tag-is-used?
+  "Return a result set if the tag is used, nil otherwise."
+  ([tag-id]
+   (tag-is-used? tag-id h2-db))
+  ([tag-id db]
+   (println "tag-is-used? tag-id:" tag-id)
+   (let [sql (str "select * from tags_x_pages where tag_id=" tag-id)
+         _ (println "sql:" sql)
+         res (jdbc/query db [sql])]
+     (println "res:" res)
+     (not (empty? res)))))
+
 (defn- remove-deleted-tags
   "Remove deleted tags for the page, and if there are no more pages
   with the tag, remove them from the cross ref and tags tables too."
-  [tag-map-vector page-id]
-  [])
+  ([tag-map-vector page-id]
+   (remove-deleted-tags tag-map-vector page-id h2-db))
+  ([tag-map-vector page-id db]
+   (println "remove-deleted-tags: tag-map-vector:" tag-map-vector
+            ", page-id:" page-id)
+    ; Remove from the cross-reference table.
+   (let [sql (str "select xref_id from tags_x_pages where tag_id in('"
+                  (convert-seq-to-comma-separated-string tag-map-vector)
+                  "');")
+         _ (println "deletion sql:" sql)
+         res (jdbc/delete! db :tags_x_pages ["page_id=?" page-id])
+         _ (println "res:" res)]
+     ; Check if any need to be removed from the tags table because
+     ; they are not referred to by any page.
+     (let [not-used (filterv (complement tag-is-used?) tag-map-vector)
+           _ (println "not-used:" not-used)]
+       (when (not (empty? not-used))
+         (let [sql (str "tag_id in ('"
+                        (convert-seq-to-comma-separated-string not-used) "');")
+               _ (println "sql:" sql)
+               res (jdbc/delete! db :tags [sql])
+               _ (println "result of deletion: res:" res)]))))))
 
-(defn add-tags-and-page-id-to-cross-reference-table
+(defn- add-tags-and-page-id-to-cross-reference-table
   ([map-vec page-id]
    (add-tags-and-page-id-to-cross-reference-table map-vec page-id h2-db))
   ([map-vec page-id db]
@@ -437,6 +463,7 @@
   (let [classified-tags (classify-tags desired-tags)
         nt (insert-new-tags (:new classified-tags))
         ot (:old classified-tags)]
+    ; Shouldn't we update the tags table with new tags here?
     (add-tags-and-page-id-to-cross-reference-table nt page-id)
     (add-tags-and-page-id-to-cross-reference-table ot page-id)))
 
@@ -468,6 +495,15 @@
   (let [page-ids (get-ids-of-all-pages-with-tag tag-name)]
     (reduce #(conj %1 (page-id->title %2))
             (sorted-set-by case-insensitive-comparator) page-ids)))
+
+(defn delete-page-by-id!
+  "Remove the page and related data from the database."
+  [page-id]
+  (println "delete-page-by-id!:" page-id)
+  (when page-id
+    (let [tags (get-tag-ids-for-page page-id)]
+      (remove-deleted-tags tags page-id)
+      (jdbc/delete! h2-db :pages ["page_id=?" page-id]))))
 
 (defn- add-page-with-meta-from-file!
   "Add a page to the database based on the information in a Markdown file
@@ -502,15 +538,15 @@
             page-id (get-row-id (jdbc/insert! h2-db :pages pm))]
         (update-tags-for-page (get-tag-vector-from-meta meta) page-id)))))
 
-(defn- add-page-from-file!
-  [m id]
-  (println "add-page-from-file!: m:" m ", id:" id)
-  (let [resource-prefix "private/md/"
-        title (:title m)
-        content (slurp (io/resource
-                         (str resource-prefix (:file-name m))))
-        post-map (create-new-post-map title content id)]
-    (jdbc/insert! h2-db :pages post-map)))
+;(defn- add-page-from-file!
+;  [m id]
+;  (println "add-page-from-file!: m:" m ", id:" id)
+;  (let [resource-prefix "private/md/"
+;        title (:title m)
+;        content (slurp (io/resource
+;                         (str resource-prefix (:file-name m))))
+;        post-map (create-new-post-map title content id)]
+;    (jdbc/insert! h2-db :pages post-map)))
 
 (defn add-user
   ([user-name user-password user-role]

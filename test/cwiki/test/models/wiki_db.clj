@@ -52,21 +52,21 @@
           new-id (insert-test-data new-title new-content)]
       (is (= new-title (page-id->title new-id)))
       (is (= new-content (page-id->content new-id)))
-      (delete-page-by-id new-id)
+      (delete-page-by-id! new-id)
       (is (nil? (page-id->title new-id))))
     (let [new-title "A New Title"
           new-content "Two lines\nof content."
           new-id (insert-test-data new-title new-content)]
       (is (= new-title (page-id->title new-id)))
       (is (= new-content (page-id->content new-id)))
-      (delete-page-by-id new-id)
+      (delete-page-by-id! new-id)
       (is (nil? (page-id->title new-id))))
     (let [new-title "Another New Title"
           new-content "Three lines\nof content\n\nwith a double linefeed."
           new-id (insert-test-data new-title new-content)]
       (is (= new-title (page-id->title new-id)))
       (is (= new-content (page-id->content new-id)))
-      (delete-page-by-id new-id)
+      (delete-page-by-id! new-id)
       (is (nil? (page-id->title new-id))))))
 
 (deftest page-map->content-test
@@ -77,7 +77,7 @@
           new-map (find-post-by-title new-title)]
       (is (= new-title (page-id->title new-id)))
       (is (= new-content (page-map->content new-map)))
-      (delete-page-by-id new-id)
+      (delete-page-by-id! new-id)
       (is (nil? (page-id->title new-id))))
     (let [new-title "A New Title"
           new-content "Two lines\nof content."
@@ -85,7 +85,7 @@
           new-map (find-post-by-title new-title)]
       (is (= new-title (page-id->title new-id)))
       (is (= new-content (page-map->content new-map)))
-      (delete-page-by-id new-id)
+      (delete-page-by-id! new-id)
       (is (nil? (page-id->title new-id))))
     (let [new-title "Another New Title"
           new-content "Three lines\nof content\n\nwith a double linefeed."
@@ -93,6 +93,6 @@
           new-map (find-post-by-title new-title)]
       (is (= new-title (page-id->title new-id)))
       (is (= new-content (page-map->content new-map)))
-      (delete-page-by-id new-id)
+      (delete-page-by-id! new-id)
       (is (nil? (page-id->title new-id))))))
 
