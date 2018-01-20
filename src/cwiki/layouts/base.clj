@@ -421,10 +421,15 @@
   unordered list and return it"
   [titles]
   (loop [t titles
-         st ""]
+         sb (StringBuilder.)]
     (if (empty? t)
-      (str st "\n")
-      (recur (rest t) (str st "\n- [[" (first t) "]]")))))
+      (-> sb
+          (.append "\n")
+          (.toString))
+      (recur (rest t) (-> sb
+                          (.append "\n- [[")
+                          (.append (first t))
+                          (.append "]]"))))))
 
 (defn- process-tag-set
   "Process a sorted set of tag names into a Markdown-formatted
@@ -435,12 +440,18 @@
   (if (zero? (count tags))
     ""
     (loop [t tags
-           st ""]
+           sb (StringBuilder.)]
       (if (empty? t)
-        (str st "\n")
-        (let [tag (first t)
-              lnk (str "\n- [[" tag "/as-tag|" tag "]]")]
-          (recur (rest t) (str st lnk)))))))
+        (-> sb
+            (.append "\n")
+            (.toString))
+        (let [tag (first t)]
+          (recur (rest t) (-> sb
+                              (.append "\n- [[")
+                              (.append tag)
+                              (.append "/as-tag|")
+                              (.append tag)
+                              (.append "]]"))))))))
 
 (defn- process-name-set
   "Process a sorted set of names into a Markdown-formatted
@@ -450,10 +461,14 @@
   (if (zero? (count names))
     ""
     (loop [t names
-           st ""]
+           sb (StringBuilder.)]
       (if (empty? t)
-        (str st "\n")
-        (recur (rest t) (str st "\n- " (first t)))))))
+        (-> sb
+            (.append "\n")
+            (.toString))
+        (recur (rest t) (-> sb
+                            (.append "\n- ")
+                            (.append (first t))))))))
 
 (defn compose-all-pages-page
   "Return a page listing all of the pages in the wiki."
