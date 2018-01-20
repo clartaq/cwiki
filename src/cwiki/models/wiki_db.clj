@@ -266,8 +266,8 @@
    (get-all-page-names h2-db))
   ([db-name]
    (when-let [title-array (jdbc/query db-name ["select page_title from pages"])]
-     (into (special/get-all-special-page-names)
-           (mapv #(:page_title %) title-array)))))
+     (reduce #(conj %1 (:page_title %2))
+             (special/get-all-special-page-names) title-array))))
 
 (defn- case-insensitive-comparator
   "Case-insensitive string comparator."
