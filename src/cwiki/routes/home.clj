@@ -2,6 +2,7 @@
   (:require [compojure.core :refer :all]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
+            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect]]))
 
@@ -25,18 +26,36 @@
       (layout/compose-not-yet-view "search"))
     (redirect "/login")))
 
+(defn- get-tag-set-from-req
+  "Retrieve a set of tags from the request and return them."
+  [req]
+  (let [params (:multipart-params req)
+        tag-keys (for [n (range 10)] (str "tag" n))
+        tags (set (loop [t tag-keys v []]
+               (if (empty? t)
+                 v
+                 (recur (rest t) (let [tv (get params (first t))]
+                                   (if (and (not (empty? tv))
+                                            (pos? (count tv)))
+                                       (conj v tv)
+                                       v))))))]
+    (println "tags found:" tags)
+    tags))
+
 (defn- save-edits
   "Save any edits to the page back to the database."
   [page-id new-title new-content req]
-  (let [actual-id (Integer. ^String page-id)]
-    (db/update-page-title-and-content! actual-id new-title new-content)
+  (let [actual-id (Integer. ^String page-id)
+        tags (get-tag-set-from-req req)]
+    (db/update-page-title-and-content! actual-id new-title tags new-content)
     (layout/view-wiki-page (db/find-post-by-title new-title) req)))
 
 (defn- save-and-view-page
   "Do the actual saving then retrieve and view the page."
   [title content req]
-  (db/insert-new-page! title content (ri/req->user-id req))
-  (layout/view-wiki-page (db/find-post-by-title title) req))
+  (let [tags (get-tag-set-from-req req)]
+    (db/insert-new-page! title content tags (ri/req->user-id req))
+    (layout/view-wiki-page (db/find-post-by-title title) req)))
 
 (defn- save-new-page
   "Save a new page to the database."

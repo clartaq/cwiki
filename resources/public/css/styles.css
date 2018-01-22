@@ -464,7 +464,7 @@ input#new-tag-button {
     margin-bottom: 1rem;
 }
 
-.form-label {
+.form-label, .tag-edit-label {
     background-color: transparent;
     color: dimgray;
     margin-top: 2rem;
@@ -476,14 +476,38 @@ input#new-tag-button {
 }
 
 .form-text-field {
+    font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
     font-size: 0.9rem;
     padding-top: 0.2rem;
+    padding-left: 0.1rem;
     padding-bottom: 0.3rem;
 }
 
+.tag-text-field {
+    font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    padding-top: 0.1rem;
+    padding-left: 0.1rem;
+    padding-bottom: 0.1rem;
+    max-width: 15ch;
+    margin-right: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+.tag-edit-tag-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 .form-text-area {
+    font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
     font-size: 0.9rem;
     padding-top: 0.2rem;
+    padding-left: 0.1rem;
     padding-bottom: 0.3rem;
 }
 
