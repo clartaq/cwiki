@@ -188,10 +188,9 @@
   [post-map]
   (let [title (db/page-map->title post-map)
         author (db/page-map->author post-map)
-        tags (db/page-map->tags post-map)
         tags (db/convert-seq-to-comma-separated-string
                (db/get-tag-names-for-page (db/page-map->id post-map)))
-        tag-str (if tags
+        tag-str (if (seq tags)
                   tags
                   "None")
         created (db/page-map->created-date post-map)
@@ -326,6 +325,23 @@
 ;; Functions related to viewing or editing wiki pages.
 ;;
 
+(defn- tag-editor-list-component
+  [tags]
+  (let [tv (vec tags)]
+    [:div {:class "tag-edit-container"}
+     [:label {:class "tag-edit-label"} "Tags"]
+     [:div {:class "tag-edit-tag-list"}
+      (text-field {:class "tag-text-field"} "tag0" (nth tv 0 ""))
+      (text-field {:class "tag-text-field"} "tag1" (nth tv 1 ""))
+      (text-field {:class "tag-text-field"} "tag2" (nth tv 2 ""))
+      (text-field {:class "tag-text-field"} "tag3" (nth tv 3 ""))
+      (text-field {:class "tag-text-field"} "tag4" (nth tv 4 ""))
+      (text-field {:class "tag-text-field"} "tag5" (nth tv 5 ""))
+      (text-field {:class "tag-text-field"} "tag6" (nth tv 6 ""))
+      (text-field {:class "tag-text-field"} "tag7" (nth tv 7 ""))
+      (text-field {:class "tag-text-field"} "tag8" (nth tv 8 ""))
+      (text-field {:class "tag-text-field"} "tag9" (nth tv 9 ""))]]))
+
 (defn compose-create-or-edit-page
   "Will compose a page to create or edit a page in the wiki. The
   difference is based on whether or not the post-map passed as
@@ -335,10 +351,7 @@
   (let [id (db/page-map->id post-map)
         title (db/page-map->title post-map)
         content (db/page-map->content post-map)
-        t-title (get-tab-title post-map)
-        tab-title (if id
-                    (str "Editing " t-title)
-                    (str "Creating " t-title))]
+        tags (db/get-tag-names-for-page id)]
     (html5
       (standard-head post-map)
       [:body {:class "page"}
@@ -358,11 +371,13 @@
                               :for   "title"} "Page Title"]]
                     (text-field {:class     "form-text-field"
                                  :autofocus "autofocus"} "title" title)]
-                   [:div {:class "form-group"}
-                    [:div {:class "form-label-div"}
-                     [:label {:class "form-label"
-                              :for   "tags"} "Tags"]]
-                    [:input {:type "submit" :id "new-tag-button"}]]
+                   (tag-editor-list-component tags)
+                   ; KEEP THIS FOR NOW
+                   ;[:div {:class "form-group"}
+                   ; [:div {:class "form-label-div"}
+                   ;  [:label {:class "form-label"
+                   ;           :for   "tags"} "Tags"]]
+                   ; [:input {:type "submit" :id "new-tag-button"}]]
                    [:div {:class "form-group"}
                     [:div {:class "form-label-div"}
                      [:label {:class "form-label"
@@ -489,7 +504,7 @@
 (defn compose-all-tags-page
   "Return a page listing all of the tags in the wiki."
   [req]
-  (let [query-results (db/get-all-tags)
+  (let [query-results (db/get-all-tag-names)
         content (process-tag-set query-results)
         post-map (db/create-new-post-map "All Tags" content)]
     (view-list-page post-map query-results req)))

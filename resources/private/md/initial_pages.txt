@@ -11,6 +11,7 @@ About_Front_Matter.md
 About_Images.md
 About_Import_Export.md
 About_Roles.md
+About_Tags.md
 About_TeX.md
 About_the_Sidebar.md
 Admin.md
