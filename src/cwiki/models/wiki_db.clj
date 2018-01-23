@@ -8,7 +8,6 @@
            [clj-time.core :as t]
            [clj-time.format :as f]
            [cwiki.util.files :as files]
-    ;[cwiki.util.pp :as pp]
            [cwiki.util.special :as special])
   (:import (java.io File)
            (java.util UUID)
@@ -517,12 +516,9 @@
                           (c/to-sql-time (f/parse markdown-pad-format
                                                   update-date-str))
                           creation-date)
-            ;   tags (get-tags-from-meta meta)
             pm (merge (create-new-post-map title content author-id)
                       {:page_created creation-date}
-                      {:page_modified update-date}
-                      ;{:page_tags tags}
-                      )
+                      {:page_modified update-date})
             page-id (get-row-id (jdbc/insert! h2-db :pages pm))
             tv (get-tag-name-set-from-meta meta)]
         (update-tags-for-page tv page-id)))))

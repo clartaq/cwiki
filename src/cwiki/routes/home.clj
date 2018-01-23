@@ -39,7 +39,6 @@
                                             (pos? (count tv)))
                                        (conj v tv)
                                        v))))))]
-    (println "tags found:" tags)
     tags))
 
 (defn- save-edits

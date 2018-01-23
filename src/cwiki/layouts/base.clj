@@ -11,7 +11,6 @@
             [clojure.string :as s]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.authorization :as ath]
-    ; [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.util.wikilinks :refer [replace-wikilinks
                                           get-edit-link-for-existing-page
@@ -30,7 +29,7 @@
            (com.vladsch.flexmark.util.options MutableDataSet)
            (java.util ArrayList)))
 
-(def program-name-and-version "CWiki v0.0.7-SNAPSHOT")
+(def program-name-and-version "CWiki v0.0.7")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.
