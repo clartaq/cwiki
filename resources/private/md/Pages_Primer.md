@@ -2,7 +2,7 @@
 title: Pages Primer
 author: CWiki
 date: 10/24/2017 8:48:43 AM
-updated: 1/8/2018 5:29:20 PM 
+updated: 1/23/2018 1:50:16 PM 
 tags:
   - pages
   - help
@@ -36,9 +36,15 @@ A "page" in the wiki consists of a couple of things.
 
 ### The Title ###
 
-A page must have a title and content. (In the future it may have tags too.)
+A page must have a title and content.
 
 The title must be unique within the wiki. The comparison for uniqueness is case-insensitive, so the titles "Title" and "title" are considered the same. Using titles that differ only by letter case can be confusing and is not allowed.
+
+### Tags ###
+
+You can specify tags (also known as "keywords" or "categories") to be associated with the page. See [[About Tags]]. When you open the edit/new page editor, you will see spaces to add up to 10 tags for the page. It's Ok to leave them blank too.
+
+When you view a page that has tags associated with it, you will see them near the top, under the author name.
 
 ### The Content ###
 
