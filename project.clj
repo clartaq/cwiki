@@ -1,4 +1,4 @@
-(defproject cwiki "0.0.7"
+(defproject cwiki "0.0.8-SNAPSHOT"
   :description "A personal wiki written in Clojure"
   :url "https://bitbucket.org/David_Clark/cwiki"
   :dependencies [[org.clojure/clojure "1.8.0"]
