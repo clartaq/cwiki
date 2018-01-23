@@ -102,9 +102,9 @@
 (defroutes home-routes
            (GET "/" request (home request))
            (GET "/about" request (about request))
-           (POST "/search" request
-             (let [params (request :multipart-params)]
-               (do-search (get params "search-text") request)))
+           (GET "/export" [] (layout/compose-not-yet-view "export"))
+           (GET "/export-all" [] (layout/compose-not-yet-view "export-all"))
+           (GET "/import" [] (layout/compose-not-yet-view "import"))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
                (save-edits (get params "page-id")
@@ -113,4 +113,7 @@
            (POST "/save-new-page" request
              (let [params (request :multipart-params)]
                (save-new-page (get params "title")
-                              (get params "content") request))))
+                              (get params "content") request)))
+           (POST "/search" request
+             (let [params (request :multipart-params)]
+               (do-search (get params "search-text") request))))
