@@ -101,6 +101,10 @@
      [:ul
       (when (db/find-post-by-title "About")
         [:li [:a {:href "/about"} "About"]])
+      (when (not (ri/is-reader-user? req))
+        [:li [:a {:href "/import"} "Import"]])
+      [:li [:a {:href "/export"} "Export"]]
+      [:li [:a {:href "/export-all"} "Export All"]]
       (when (ri/is-admin-user? req)
         [:li [:a {:href "/Admin"} "Admin"]])
       [:li [:a {:href "/logout"} "Sign Off"]]]]]])
