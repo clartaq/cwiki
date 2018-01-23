@@ -22,7 +22,7 @@ To create a stand-alone program, execute `lein uberjar`.
 After the build process is finished, you can run the program from the command line with
 
 ```
-java -jar target\cwiki-0.0.7-standalone.jar
+java -jar target\cwiki-0.0.8-SNAPSHOT-standalone.jar
 ```
 
 Your version number may be different.
