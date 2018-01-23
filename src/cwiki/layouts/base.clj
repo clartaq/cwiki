@@ -269,10 +269,11 @@
      [:p {:class "form-title"} title]
      [:p message]
      [:div {:class "button-bar-container"}
-      [:input {:type    "button" :name "ok-button"
-               :value   "Ok"
-               :class   "form-button"
-               :onclick "window.history.back();"}]]]))
+      [:input {:type      "button" :name "ok-button"
+               :value     "Ok"
+               :class     "form-button"
+               :autofocus "autofocus"
+               :onclick   "window.history.back();"}]]]))
 
 (defn short-message-return-to-referer
   "Return a page with a title, message and 'Ok' button. After the
@@ -283,11 +284,12 @@
      [:p {:class "form-title"} title]
      [:p message]
      [:div {:class "button-bar-container"}
-      [:input {:type    "button"
-               :name    "ok-button"
-               :value   "Ok"
-               :class   "form-button"
-               :onclick (str "window.location.replace('" referer "');")}]]]))
+      [:input {:type      "button"
+               :name      "ok-button"
+               :value     "Ok"
+               :class     "form-button"
+               :autofocus "autofocus"
+               :onclick   (str "window.location.replace('" referer "');")}]]]))
 
 (defn inform-admin-of-first-use
   "Return a page with a title, message and 'Ok' button.
@@ -298,10 +300,11 @@
      [:p {:class "form-title"} title]
      [:div message]
      [:div {:class "button-bar-container"}
-      [:input {:type    "button" :name "ok-button"
-               :value   "Ok"
-               :class   "form-button"
-               :onclick "window.location.href='/login'"}]]]))
+      [:input {:type      "button" :name "ok-button"
+               :value     "Ok"
+               :class     "form-button"
+               :autofocus "autofocus"
+               :onclick   "window.location.href='/login'"}]]]))
 
 (defn compose-not-yet-view
   "Return a page stating that the requested feature

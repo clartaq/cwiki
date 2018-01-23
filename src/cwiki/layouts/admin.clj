@@ -100,7 +100,7 @@
     (if (not= new-name old-name)
       (str "User \"" old-name "\" has been changed to \"" new-name "\"")
       (str "User \"" new-name "\" has been changed"))
-      referer))
+    referer))
 
 (defn select-user-to-edit-page
   "Return a form to obtain the name of the user to be edited."
@@ -121,8 +121,9 @@
                    [:div {:class "form-label-div"}
                     [:label {:class "form-label required"
                              :for   "user-name"} "User Profile to Edit"]]
-                   (drop-down {:class    "form-dropdown"
-                               :required "true"}
+                   (drop-down {:class     "form-dropdown"
+                               :required  "true"
+                               :autofocus "autofocus"}
                               "user-name" cleaned-users)]
                   [:div {class "form-group"}
                    [:div {:class "form-label-div"}
@@ -265,7 +266,8 @@
                    (submit-button {:id    "login-button"
                                    :class "form-button button-bar-item"}
                                   "Delete")
-                   [:input {:type    "button" :name "cancel-button"
-                            :value   "Cancel"
-                            :class   "form-button button-bar-item"
-                            :onclick "window.history.back();"}]])]))))
+                   [:input {:type      "button" :name "cancel-button"
+                            :value     "Cancel"
+                            :class     "form-button button-bar-item"
+                            :autofocus "autofocus"
+                            :onclick   "window.history.back();"}]])]))))

@@ -58,7 +58,8 @@
               [:p "Are you sure?"]
               [:div {:class "button-bar-container"}
                (submit-button {:id    "sign-out-button"
-                               :class "form-button button-bar-item"} "Sign Out")
+                               :class "form-button button-bar-item"
+                               :autofocus "autofocus"} "Sign Out")
                [:input {:type    "button" :name "cancel-button"
                         :value   "Cancel"
                         :class   "form-button button-bar-item"
