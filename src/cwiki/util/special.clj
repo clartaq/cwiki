@@ -51,15 +51,13 @@
   "Return true if the page-name is the name of a 'special' page
   that is generated on demand by the program, nil otherwise."
   [page-name]
-  (if-let [m (find-first-with-name page-name)]
-    (:generated? m)
-    nil))
+  (when-let [m (find-first-with-name page-name)]
+    (:generated? m)))
 
 (defn is-admin-only?
   [page-name]
-  (if-let [m (find-first-with-name page-name)]
-    (:admin-only? m)
-    nil))
+  (when-let [m (find-first-with-name page-name)]
+    (:admin-only? m)))
 
 (defn- case-insensitive-comparator
   "Case-insensitive string comparator."
@@ -70,5 +68,5 @@
   "Return a sorted set of all of the special page titles in the wiki."
   []
   (into (sorted-set-by case-insensitive-comparator)
-        (mapv #(:name %) special-pages)))
+        (mapv :name special-pages)))
 

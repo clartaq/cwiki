@@ -68,7 +68,7 @@
   (let [result (atom {:meta {}
                       :body nil})
         url (io/resource filename)]
-    (when (not (nil? url))
+    (when-not (nil? url)
       (let [contents (-> url
                          (io/input-stream)
                          (InputStreamReader.)
@@ -86,7 +86,7 @@
 (defn- filter-predicate
   "Return true if the line is not empty and does not start with a semi-colon"
   [line]
-  (and (not (empty? line))
+  (and (seq line)
        (not (s/starts-with? line ";"))))
 
 (defn load-initial-page-list
