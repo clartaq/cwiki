@@ -17,6 +17,7 @@ About_the_Sidebar.md
 Admin.md
 CWiki_FAQ.md
 CWiki_Name.md
+Design_of_Import_Export.md
 Features.md
 How_to_Make_a_Table_of_Contents.md
 Limits.md
