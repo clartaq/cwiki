@@ -101,7 +101,7 @@
      [:ul
       (when (db/find-post-by-title "About")
         [:li [:a {:href "/about"} "About"]])
-      (when (not (ri/is-reader-user? req))
+      (when-not (ri/is-reader-user? req)
         [:li [:a {:href "/import"} "Import"]])
       [:li [:a {:href "/export"} "Export"]]
       [:li [:a {:href "/export-all"} "Export All"]]
@@ -326,6 +326,58 @@
   "Return a page stating that the requested action is forbidden (403)."
   []
   (short-message "Forbidden" "You are not allowed to perform that action."))
+
+(defn no-files-to-import-page
+  [req]
+  (short-message "Nothing to Do" "There are no files to import."))
+
+(defn confirm-deletion-page
+  [file-name referer]
+  (short-message-return-to-referer
+    "Deletion Complete"
+    (str "File \"" file-name "\" has been imported") referer))
+
+
+;<input type="file" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+
+(defn compose-import-file-page
+  [req]
+  (let [files nil] ; files/get-import-export-file-names]
+    (if (zero? (count files))
+      (no-files-to-import-page req)
+      (short-form-template
+        [:div {:class "cwiki-form"}
+         (form-to {:enctype      "multipart/form-data"
+                   :autocomplete "off"}
+                  [:post "import"]
+                  (hidden-field "referer" (get (:headers req) "referer"))
+                  [:p {:class "form-title"} "Import a File"]
+                  [:input {:type "file"}]
+                  ;[:p base/warning-span "This action cannot be undone."]
+                  ;base/required-field-hint
+                  ;[:div {:class "form-group"}
+                  ; [:div {:class "form-label-div"}
+                  ;  [:label {:class "form-label required"
+                  ;           :for   "user-name"} "User to Delete"]]
+                  ; (drop-down {:class    "form-dropdown"
+                  ;             :required "true"}
+                  ;            "user-name" cleaned-users)]
+                  ;[:div {class "form-group"}
+                  ; [:div {:class "form-label-div"}
+                  ;  [:label {:class "form-label required"
+                  ;           :for   "password"} "Your Password"]]
+                  ; (password-field {:class    "form-password-field"
+                  ;                  :required "true"}
+                  ;                 "password")]
+                  [:div {:class "button-bar-container"}
+                   (submit-button {:id    "import-button"
+                                   :class "form-button button-bar-item"}
+                                  "Import")
+                   [:input {:type      "button" :name "cancel-button"
+                            :value     "Cancel"
+                            :class     "form-button button-bar-item"
+                            :autofocus "autofocus"
+                            :onclick   "window.history.back();"}]])]))))
 
 ;;
 ;; Functions related to viewing or editing wiki pages.

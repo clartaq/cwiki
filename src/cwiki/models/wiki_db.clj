@@ -173,7 +173,7 @@
           butlast-line-mapped (map #(str % "\n") butlast-line)
           last-line (last lseq)
           all-lines-with-newline (concat butlast-line-mapped last-line)]
-      (apply str all-lines-with-newline))))
+      (s/join all-lines-with-newline))))
 
 (defn- to-map-helper
   "Return a post map created from the result set."
@@ -281,13 +281,13 @@
   ([db-name]
    (when-let [user-array (jdbc/query db-name ["select user_name from users"])]
      (into (sorted-set-by case-insensitive-comparator)
-           (mapv #(:user_name %) user-array)))))
+           (mapv :user_name user-array)))))
 
 (defn convert-seq-to-comma-separated-string
   "Return a string containing the members of the sequence separated by commas."
   [the-seq]
   (let [but-last-comma-mapped (map #(str % ", ") (butlast the-seq))]
-    (apply str (concat but-last-comma-mapped (str (last the-seq))))))
+    (s/join (concat but-last-comma-mapped (str (last the-seq))))))
 
 ;;
 ;; The functions related to tags follow.
@@ -312,7 +312,7 @@
   ([name db]
    (let [sql (str "select tag_id from tags where tag_name='" name "';")
          rs (jdbc/query db [sql])]
-     (when-not (empty? rs)
+     (when (seq rs)
        (:tag_id (first rs))))))
 
 (defn- get-tag-ids-for-page
@@ -411,7 +411,7 @@
     ; Add tags that are new to the database to the tabs table.
    (let [completely-new (filterv (complement is-tag-name-in-tag-table?)
                                  new-tag-set)]
-     (when-not (empty? completely-new)
+     (when (seq completely-new)
        (mapv #(jdbc/insert! db :tags {:tag_name %}) completely-new)))
     ; Add tags to the xref table.
    (let [tag-ids (reduce #(conj %1 (get-tag-id-from-name %2)) [] new-tag-set)]
@@ -572,7 +572,7 @@
 
 (defn- add-initial-pages!
   []
-  (mapv #(add-page-with-meta-from-file! %) (files/load-initial-page-list)))
+  (mapv add-page-with-meta-from-file! (files/load-initial-page-list)))
 
 (defn- add-initial-roles!
   []

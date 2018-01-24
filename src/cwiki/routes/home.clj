@@ -1,10 +1,20 @@
 (ns cwiki.routes.home
   (:require [compojure.core :refer :all]
+            [compojure.response :as response]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
-            [ring.util.response :refer [redirect]]))
+            [ring.util.response :refer [redirect status]]))
+
+(defn- build-response
+  "Build a response structure, possibly with a non-200 return code."
+  ([body req]
+   (build-response body req 200))
+  ([body req stat]
+   (-> (response/render body req)
+       (status stat)
+       (assoc :body body))))
 
 (defn- read-front-page
   "Read the complete post for the front page."
@@ -32,13 +42,13 @@
   (let [params (:multipart-params req)
         tag-keys (for [n (range 10)] (str "tag" n))
         tags (set (loop [t tag-keys v []]
-               (if (empty? t)
-                 v
-                 (recur (rest t) (let [tv (get params (first t))]
-                                   (if (and (not (empty? tv))
-                                            (pos? (count tv)))
-                                       (conj v tv)
-                                       v))))))]
+                    (if (empty? t)
+                      v
+                      (recur (rest t) (let [tv (get params (first t))]
+                                        (if (and (seq tv)
+                                                 (pos? (count tv)))
+                                          (conj v tv)
+                                          v))))))]
     tags))
 
 (defn- save-edits
@@ -99,12 +109,34 @@
     (layout/view-wiki-page (read-about-page) req)
     (redirect "/login")))
 
+(defn- get-import-file
+  [req]
+  (layout/compose-import-file-page req))
+
+(defn- post-import-file
+  [{{file-name "file-name"
+     referer   "referer"} :multipart-params :as req}]
+  )
+
+;(let [session-user (ri/req->user-name req)]
+;  (if (not (db/get-user-by-username-and-password session-user password))
+;    (build-response (admin-layout/wrong-password-page req) req 422)
+;    (do
+;      (if-let [user-id (db/user-name->user-id username)]
+;        (do
+;          (db/delete-user user-id)
+;          (build-response
+;            (admin-layout/confirm-deletion-page username referer)
+;            req 200))
+;        ; should never happen
+;        (build-response (admin-layout/cannot-find-user req) req 500))))))
+
 (defroutes home-routes
            (GET "/" request (home request))
            (GET "/about" request (about request))
            (GET "/export" [] (layout/compose-not-yet-view "export"))
            (GET "/export-all" [] (layout/compose-not-yet-view "export-all"))
-           (GET "/import" [] (layout/compose-not-yet-view "import"))
+           (GET "/import" request (get-import-file request)) ; (layout/compose-not-yet-view "import"))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
                (save-edits (get params "page-id")

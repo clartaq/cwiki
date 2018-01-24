@@ -57,7 +57,7 @@
      referer  "referer"} :multipart-params
     session              :session :as req}]
   (let [session-user (ri/req->user-name req)]
-    (if (not (db/get-user-by-username-and-password session-user password))
+    (if-not (db/get-user-by-username-and-password session-user password)
       (build-response (admin-layout/wrong-password-page req) req 422)
       (let [user-referer {:original-referer referer}]
         (if-let [user-info (merge user-referer (db/find-user-by-name username))]
@@ -79,9 +79,8 @@
   "Return true when the proposed name is the same as the
   existing name or only differs in case, otherwise return nil."
   [proposed-name]
-  (if (db/find-user-by-case-insensitive-name proposed-name)
-    true
-    nil))
+  (when (db/find-user-by-case-insensitive-name proposed-name)
+    true))
 
 (defn- get-new-password
   "Return a digest for the new password or nil if the proposed change
@@ -125,7 +124,7 @@
   ; profile information about the user being modified has been removed.
   (let [new-session (atom (dissoc session :edit-user-info))
         new-req (assoc req :session @new-session)]
-    (if (not (seq new-name))
+    (if-not (seq new-name)
       ; Should never happen since this is a required field in the form.
       (build-response (admin-layout/must-not-be-empty-page) new-req 400)
       ; Normal code path.
@@ -155,7 +154,7 @@
               (swap! changes conj {:user_email new-user-email}))
             (when-let [new-user-password (get-new-password old-password new-password)]
               (swap! changes conj {:user_password new-user-password}))
-            (when (not (empty? @changes))
+            (when (seq @changes)
               (swap! changes conj {:user_touched (c/to-sql-time (t/now))})
               (let [cleaned-existing (dissoc existing-user-info :original-referer)
                     merged-changes (merge cleaned-existing @changes)]
@@ -164,13 +163,13 @@
                 (when same-as-logged-in-user
                   (swap! new-session
                          assoc :identity (dissoc merged-changes :user_password)))))
-            (-> (build-response
-                  (admin-layout/confirm-edits-page
-                    new-name
-                    old-name
-                    original-referer)
-                  req 200)
-                (assoc :session @new-session))))))))
+            (assoc (build-response
+                     (admin-layout/confirm-edits-page
+                       new-name
+                       old-name
+                       original-referer)
+                     req 200)
+              :session @new-session)))))))
 
 ;;
 ;; Functions relating to deleting a user.
@@ -187,17 +186,16 @@
      password "password"
      referer  "referer"} :multipart-params :as req}]
   (let [session-user (ri/req->user-name req)]
-    (if (not (db/get-user-by-username-and-password session-user password))
+    (if-not (db/get-user-by-username-and-password session-user password)
       (build-response (admin-layout/wrong-password-page req) req 422)
-      (do
-        (if-let [user-id (db/user-name->user-id username)]
-          (do
-            (db/delete-user user-id)
-            (build-response
-              (admin-layout/confirm-deletion-page username referer)
-              req 200))
-          ; should never happen
-          (build-response (admin-layout/cannot-find-user req) req 500))))))
+      (if-let [user-id (db/user-name->user-id username)]
+        (do
+          (db/delete-user user-id)
+          (build-response
+            (admin-layout/confirm-deletion-page username referer)
+            req 200))
+        ; should never happen
+        (build-response (admin-layout/cannot-find-user req) req 500)))))
 
 (defroutes admin-routes
            (GET "/compress" [] (layout/compose-not-yet-view "compress"))
