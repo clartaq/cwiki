@@ -354,11 +354,12 @@
                [:div {:class "form-label-div"}
                 [:label {:class "form-label"
                          :for   "filename"} "Select the file to Import"]]
-
-               [:input {:type   "file"
-                        :id     "file-info"
-                        :name   "file-info"
-                        :accept ".txt,.md"}]]
+               [:label {:class "cabinet"}
+                [:input {:type   "file"
+                         :class  "file"
+                         :id     "file-info"
+                         :name   "file-info"
+                         :accept ".txt,.md"}]]]
               [:div {:class "button-bar-container"}
                (submit-button {:id    "import-button"
                                :class "form-button button-bar-item"}
