@@ -8,7 +8,8 @@
            [clj-time.core :as t]
            [clj-time.format :as f]
            [cwiki.util.files :as files]
-           [cwiki.util.special :as special])
+           [cwiki.util.special :as special]
+           [cwiki.util.pp :as pp])
   (:import (java.io File)
            (java.util UUID)
            (org.h2.jdbc JdbcClob)))
@@ -492,13 +493,13 @@
       (remove-deleted-tags tags page-id)
       (jdbc/delete! h2-db :pages ["page_id=?" page-id]))))
 
-(defn- add-page-with-meta-from-file!
-  "Add a page to the database based on the information in a Markdown file
-  containing YAML front matter."
-  [file-name]
-  (let [resource-prefix "private/md/"
-        m (files/load-markdown-resource (str resource-prefix file-name))
-        meta (:meta m)
+(defn add-page-from-map
+  "Add a new page to the wiki using the information in a map. The map must
+  have two keys, :meta and :body. Meta contains things like the author name,
+  tags, etc. The body contains the Markdown content. Note that the author
+  must have an account on the wiki and there must be a title."
+  [m]
+  (let [meta (:meta m)
         author-id (user-name->user-id (:author meta))
         title (:title meta)]
     (when (and author-id title)
@@ -522,6 +523,15 @@
             page-id (get-row-id (jdbc/insert! h2-db :pages pm))
             tv (get-tag-name-set-from-meta meta)]
         (update-tags-for-page tv page-id)))))
+
+(defn- add-page-with-meta-from-file!
+  "Add a page to the database based on the information in a Markdown file
+  containing YAML front matter. The file name is appended to the path for
+  the initial pages in the uberjar."
+  [file-name]
+  (let [resource-prefix "private/md/"
+        m (files/load-markdown-from-resource (str resource-prefix file-name))]
+    (add-page-from-map m)))
 
 (defn add-user
   ([user-name user-password user-role]

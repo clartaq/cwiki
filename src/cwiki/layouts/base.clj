@@ -176,8 +176,8 @@
     [:hgroup {:class "left-header-wrapper"}
      [:h1 {:class "brand-title"} "CWiki"]
      [:p {:class "brand-sub-title"}
-      "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
-                   "Wiki"]]]]])
+      "A Personal " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
+                     "Wiki"]]]]])
 
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
@@ -328,56 +328,46 @@
   (short-message "Forbidden" "You are not allowed to perform that action."))
 
 (defn no-files-to-import-page
-  [req]
-  (short-message "Nothing to Do" "There are no files to import."))
+  "Create a page stating that there are no files to import."
+  [referer]
+  (short-message-return-to-referer
+    "Nothing to Do" "There are no files to import." referer))
 
-(defn confirm-deletion-page
+(defn confirm-import-page
+  "Return a page stating that the file has been imported."
   [file-name referer]
   (short-message-return-to-referer
-    "Deletion Complete"
+    "Import Complete"
     (str "File \"" file-name "\" has been imported") referer))
 
-
-;<input type="file" accept=".doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-
 (defn compose-import-file-page
+  "Compose and return a page that allows the user to choose a file to import."
   [req]
-  (let [files nil] ; files/get-import-export-file-names]
-    (if (zero? (count files))
-      (no-files-to-import-page req)
-      (short-form-template
-        [:div {:class "cwiki-form"}
-         (form-to {:enctype      "multipart/form-data"
-                   :autocomplete "off"}
-                  [:post "import"]
-                  (hidden-field "referer" (get (:headers req) "referer"))
-                  [:p {:class "form-title"} "Import a File"]
-                  [:input {:type "file"}]
-                  ;[:p base/warning-span "This action cannot be undone."]
-                  ;base/required-field-hint
-                  ;[:div {:class "form-group"}
-                  ; [:div {:class "form-label-div"}
-                  ;  [:label {:class "form-label required"
-                  ;           :for   "user-name"} "User to Delete"]]
-                  ; (drop-down {:class    "form-dropdown"
-                  ;             :required "true"}
-                  ;            "user-name" cleaned-users)]
-                  ;[:div {class "form-group"}
-                  ; [:div {:class "form-label-div"}
-                  ;  [:label {:class "form-label required"
-                  ;           :for   "password"} "Your Password"]]
-                  ; (password-field {:class    "form-password-field"
-                  ;                  :required "true"}
-                  ;                 "password")]
-                  [:div {:class "button-bar-container"}
-                   (submit-button {:id    "import-button"
-                                   :class "form-button button-bar-item"}
-                                  "Import")
-                   [:input {:type      "button" :name "cancel-button"
-                            :value     "Cancel"
-                            :class     "form-button button-bar-item"
-                            :autofocus "autofocus"
-                            :onclick   "window.history.back();"}]])]))))
+  (short-form-template
+    [:div {:class "cwiki-form"}
+     (form-to {:enctype      "multipart/form-data"
+               :autocomplete "off"}
+              [:post "import"]
+              (hidden-field "referer" (get (:headers req) "referer"))
+              [:p {:class "form-title"} "Import a File"]
+              [:div {:class "form-group"}
+               [:div {:class "form-label-div"}
+                [:label {:class "form-label"
+                         :for   "filename"} "Select the file to Import"]]
+
+               [:input {:type   "file"
+                        :id     "file-info"
+                        :name   "file-info"
+                        :accept ".txt,.md"}]]
+              [:div {:class "button-bar-container"}
+               (submit-button {:id    "import-button"
+                               :class "form-button button-bar-item"}
+                              "Import")
+               [:input {:type      "button" :name "cancel-button"
+                        :value     "Cancel"
+                        :class     "form-button button-bar-item"
+                        :autofocus "autofocus"
+                        :onclick   "window.history.back();"}]])]))
 
 ;;
 ;; Functions related to viewing or editing wiki pages.

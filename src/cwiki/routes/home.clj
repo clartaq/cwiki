@@ -5,7 +5,9 @@
             [cwiki.models.wiki-db :as db]
             [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
-            [ring.util.response :refer [redirect status]]))
+            [ring.util.response :refer [redirect status]]
+            [cwiki.util.files :as files])
+  (:import (java.io File)))
 
 (defn- build-response
   "Build a response structure, possibly with a non-200 return code."
@@ -110,26 +112,22 @@
     (redirect "/login")))
 
 (defn- get-import-file
+  "Show a page asking the user to specify a file to upload."
   [req]
   (layout/compose-import-file-page req))
 
 (defn- post-import-file
-  [{{file-name "file-name"
+  "Import the file specified in the upload dialog."
+  [{{file-info "file-info"
      referer   "referer"} :multipart-params :as req}]
-  )
-
-;(let [session-user (ri/req->user-name req)]
-;  (if (not (db/get-user-by-username-and-password session-user password))
-;    (build-response (admin-layout/wrong-password-page req) req 422)
-;    (do
-;      (if-let [user-id (db/user-name->user-id username)]
-;        (do
-;          (db/delete-user user-id)
-;          (build-response
-;            (admin-layout/confirm-deletion-page username referer)
-;            req 200))
-;        ; should never happen
-;        (build-response (admin-layout/cannot-find-user req) req 500))))))
+  (let [file-name (:filename file-info)
+        fyle (:tempfile file-info)]
+    (if (or (nil? file-name)
+            (empty? file-name))
+      (build-response (layout/no-files-to-import-page referer) req 400)
+      (do
+        (db/add-page-from-map (files/load-markdown-from-file fyle))
+        (build-response (layout/confirm-import-page file-name referer) req)))))
 
 (defroutes home-routes
            (GET "/" request (home request))
@@ -137,6 +135,7 @@
            (GET "/export" [] (layout/compose-not-yet-view "export"))
            (GET "/export-all" [] (layout/compose-not-yet-view "export-all"))
            (GET "/import" request (get-import-file request)) ; (layout/compose-not-yet-view "import"))
+           (POST "/import" request (post-import-file request))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
                (save-edits (get params "page-id")
