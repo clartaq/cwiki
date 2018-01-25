@@ -2,12 +2,12 @@
 title: Design of Import/Export
 author: CWiki
 date: 1/23/2018 4:25:00 PM 
-updated: 1/23/2018 4:38:37 PM 
+updated: 1/25/2018 1:52:43 PM 
 tags:
   - design
   - import
   - export
-  - tech note
+  - technical note
 ---
 
 CWiki has the ability to export pages from the wiki and import files into the wiki if the user signed in has an appropriate role (reader cannot import.)
@@ -15,6 +15,14 @@ CWiki has the ability to export pages from the wiki and import files into the wi
 Menu items in the "More" drop down in the page header provide access to these functions.
 
 ## Import ##
+
+When this link is selected in the drop down menu, the user will be shown a dialog asking them to select a file to "Upload". When they click the "Browse" button, an OS-specific file dialog will be displayed asking them to select a file. Once they select a file, they will still be presented with the opportunity to continue ("Import") or "Cancel".
+
+If the user elects to "Import", the file will be imported. Another page will be displayed confirming that the import has indeed occurred.
+
+At this point, the user will be returned to the page where they selected the "Import" link, NOT the page that was just imported.
+
+Import will fail silently if the author in the imported file is not recognized as an existing user of the wiki. Import will fail is there is no title for the imported file.
 
 ## Export and Export All ##
 

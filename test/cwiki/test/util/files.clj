@@ -103,16 +103,16 @@
 
 (deftest no-front-matter-test
   (testing "The load-markdown-resource function on a file with no front matter."
-    (is (= {:meta {} :body nil} (load-markdown-resource "no-such-file.md")))
-    (is (not (nil? (load-markdown-resource "test.md"))))
+    (is (= {:meta {} :body nil} (load-markdown-from-resource "no-such-file.md")))
+    (is (not (nil? (load-markdown-from-resource "test.md"))))
     (is (= {:meta {} :body (str "# Test #\n\n"
                                 "This is a **test** of the emergency data"
                                 " acquisition system.")}
-           (load-markdown-resource "private/test_data/test.md")))))
+           (load-markdown-from-resource "private/test_data/test.md")))))
 
 (deftest with-front-matter-test
   (testing "The load-markdown-resource function on a file with front matter."
-    (let [res (load-markdown-resource
+    (let [res (load-markdown-from-resource
                 "private/test_data/post-with-front-matter.md")
           tags (into (sorted-set) (:tags (:meta res)))]
       (is (= "\nThis is part of a post with front matter." (:body res)))

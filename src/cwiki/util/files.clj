@@ -59,29 +59,46 @@
   [s]
   (yaml/parse-string s))
 
-(defn load-markdown-resource
-  "Load a Markdown file, possibly with YAML front matter. Return a map with
-  two top-level keys and subsidiary maps: :body contains the body of the
-  Markdown file. :meta contains the meta-information, possibly from the
-  YAML front matter."
+(defn load-markdown-from-url
+  "Load a Markdown file, possibly with YAML front matter from a url.
+  Return a map with two top-level keys and subsidiary maps: :body
+  contains the body of the Markdown file. :meta contains the
+  meta-information, possibly from the YAML front matter."
+  [url]
+  (when-not (nil? url)
+    (let [result (atom {:meta {}
+                        :body nil})
+          contents (-> url
+                       (io/input-stream)
+                       (InputStreamReader.)
+                       (BufferedReader.)
+                       (line-seq)
+                       (vec))]
+      (when contents
+        (let [parts (split-front-matter-from-body contents)]
+          (when (not-empty (:front parts))
+            (let [meta (yaml->map (st/join "\n" (:front parts)))]
+              (reset! result (assoc @result :meta meta))))
+          (reset! result (assoc @result :body (st/join "\n" (:body parts))))))
+      @result)))
+
+(defn load-markdown-from-resource
+  "Load a Markdown file, possibly with YAML front matter from a resource,
+  usually one inside the program jar. Return a map with two top-level
+  keys and subsidiary maps: :body contains the body of the Markdown file.
+  :meta contains the meta-information, possibly from the YAML front matter."
   [filename]
-  (let [result (atom {:meta {}
-                      :body nil})
-        url (io/resource filename)]
-    (when-not (nil? url)
-      (let [contents (-> url
-                         (io/input-stream)
-                         (InputStreamReader.)
-                         (BufferedReader.)
-                         (line-seq)
-                         (vec))]
-        (when contents
-          (let [parts (split-front-matter-from-body contents)]
-            (when (not-empty (:front parts))
-              (let [meta (yaml->map (st/join "\n" (:front parts)))]
-                (reset! result (assoc @result :meta meta))))
-            (reset! result (assoc @result :body (st/join "\n" (:body parts))))))))
-    @result))
+  (let [url (io/resource filename)]
+    (load-markdown-from-url url)))
+
+(defn load-markdown-from-file
+  "Load a Markdown file, possibly with YAML front matter from a file.
+  Return a map with two top-level keys and subsidiary maps: :body
+  contains the body of the Markdown file. :meta contains the
+  meta-information, possibly from the YAML front matter."
+  [file]
+  (println "load-markdown-from-file:" file)
+  (load-markdown-from-url (io/as-url file)))
 
 (defn- filter-predicate
   "Return true if the line is not empty and does not start with a semi-colon"
