@@ -539,6 +539,33 @@ input#new-tag-button {
 }
 
 /*
+  Special cases for the "file" input element.
+ */
+
+label.cabinet
+{
+    width: 79px;
+    height: 22px;
+    /*background: url(btn-choose-file.gif) 0 0 no-repeat;*/
+    background: url(/public/img/shrunken-a9c6c9-search.svg) 0 0 no-repeat;
+
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+label.cabinet input.file
+{
+    font-size: 16px;
+    position: relative;
+    height: 100%;
+    width: auto;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
+}
+
+/*
   This button is derived from the topcoat-button--large from the
   topcoat css collection at topcoat.io.
  */
