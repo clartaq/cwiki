@@ -2,7 +2,7 @@
 title: Technical Notes
 author: CWiki
 date: 10/01/2017 5:45:07 PM 
-updated: 1/13/2018 10:10:03 AM  
+updated: 1/23/2018 4:37:27 PM 
 tags:
   - technical note
   - motivation
@@ -15,6 +15,7 @@ These are some technical notes about CWiki. If you are only interested in using 
 * [[The Motivation for Writing CWiki]] talks about why the program was written in the first place.
 * [[Limits]] discusses some of the limitations of the program.
 * [[Tag Design]] reviews some of the thinking going into the design of the system of tags.
+* [[Design of Import/Export]] describes the thought process that went into creating the file import and export features.
 
 ## Software Dependencies ##
 
@@ -254,7 +255,7 @@ Based on the above, I rewrote the table creation code above as:
 
 
 <!-- language: clojure -->
-
+```clojure
     (defn create-some-tables
       "Create some tables and a cross-reference table with foreign key constraints."
       []
@@ -295,6 +296,7 @@ Based on the above, I rewrote the table creation code above as:
           (catch Exception e (println e))
           (finally (when conn
                      (.close conn))))))
+```
 
 The tables are created as expected. Some of the `clojure.java.jdbc` functions still don't seem to work as desired though. (See the `jdbc/query` call in the middle of the listing.) Getting things to always work as expected seems very "manual" having to fall back on java interop. And it seems like every interaction with the database requires using the specially configured `Connection` returned by the `get-connection` function.
 

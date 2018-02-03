@@ -8,7 +8,8 @@
            [clj-time.core :as t]
            [clj-time.format :as f]
            [cwiki.util.files :as files]
-           [cwiki.util.special :as special])
+           [cwiki.util.special :as special]
+           [cwiki.util.pp :as pp])
   (:import (java.io File)
            (java.util UUID)
            (org.h2.jdbc JdbcClob)))
@@ -173,7 +174,7 @@
           butlast-line-mapped (map #(str % "\n") butlast-line)
           last-line (last lseq)
           all-lines-with-newline (concat butlast-line-mapped last-line)]
-      (apply str all-lines-with-newline))))
+      (s/join all-lines-with-newline))))
 
 (defn- to-map-helper
   "Return a post map created from the result set."
@@ -281,13 +282,13 @@
   ([db-name]
    (when-let [user-array (jdbc/query db-name ["select user_name from users"])]
      (into (sorted-set-by case-insensitive-comparator)
-           (mapv #(:user_name %) user-array)))))
+           (mapv :user_name user-array)))))
 
 (defn convert-seq-to-comma-separated-string
   "Return a string containing the members of the sequence separated by commas."
   [the-seq]
   (let [but-last-comma-mapped (map #(str % ", ") (butlast the-seq))]
-    (apply str (concat but-last-comma-mapped (str (last the-seq))))))
+    (s/join (concat but-last-comma-mapped (str (last the-seq))))))
 
 ;;
 ;; The functions related to tags follow.
@@ -312,7 +313,7 @@
   ([name db]
    (let [sql (str "select tag_id from tags where tag_name='" name "';")
          rs (jdbc/query db [sql])]
-     (when-not (empty? rs)
+     (when (seq rs)
        (:tag_id (first rs))))))
 
 (defn- get-tag-ids-for-page
@@ -411,7 +412,7 @@
     ; Add tags that are new to the database to the tabs table.
    (let [completely-new (filterv (complement is-tag-name-in-tag-table?)
                                  new-tag-set)]
-     (when-not (empty? completely-new)
+     (when (seq completely-new)
        (mapv #(jdbc/insert! db :tags {:tag_name %}) completely-new)))
     ; Add tags to the xref table.
    (let [tag-ids (reduce #(conj %1 (get-tag-id-from-name %2)) [] new-tag-set)]
@@ -492,13 +493,13 @@
       (remove-deleted-tags tags page-id)
       (jdbc/delete! h2-db :pages ["page_id=?" page-id]))))
 
-(defn- add-page-with-meta-from-file!
-  "Add a page to the database based on the information in a Markdown file
-  containing YAML front matter."
-  [file-name]
-  (let [resource-prefix "private/md/"
-        m (files/load-markdown-resource (str resource-prefix file-name))
-        meta (:meta m)
+(defn add-page-from-map
+  "Add a new page to the wiki using the information in a map. The map must
+  have two keys, :meta and :body. Meta contains things like the author name,
+  tags, etc. The body contains the Markdown content. Note that the author
+  must have an account on the wiki and there must be a title."
+  [m]
+  (let [meta (:meta m)
         author-id (user-name->user-id (:author meta))
         title (:title meta)]
     (when (and author-id title)
@@ -522,6 +523,15 @@
             page-id (get-row-id (jdbc/insert! h2-db :pages pm))
             tv (get-tag-name-set-from-meta meta)]
         (update-tags-for-page tv page-id)))))
+
+(defn- add-page-with-meta-from-file!
+  "Add a page to the database based on the information in a Markdown file
+  containing YAML front matter. The file name is appended to the path for
+  the initial pages in the uberjar."
+  [file-name]
+  (let [resource-prefix "private/md/"
+        m (files/load-markdown-from-resource (str resource-prefix file-name))]
+    (add-page-from-map m)))
 
 (defn add-user
   ([user-name user-password user-role]
@@ -572,7 +582,7 @@
 
 (defn- add-initial-pages!
   []
-  (mapv #(add-page-with-meta-from-file! %) (files/load-initial-page-list)))
+  (mapv add-page-with-meta-from-file! (files/load-initial-page-list)))
 
 (defn- add-initial-roles!
   []

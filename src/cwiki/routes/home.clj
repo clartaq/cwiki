@@ -1,10 +1,22 @@
 (ns cwiki.routes.home
   (:require [compojure.core :refer :all]
+            [compojure.response :as response]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
-            [ring.util.response :refer [redirect]]))
+            [ring.util.response :refer [redirect status]]
+            [cwiki.util.files :as files])
+  (:import (java.io File)))
+
+(defn- build-response
+  "Build a response structure, possibly with a non-200 return code."
+  ([body req]
+   (build-response body req 200))
+  ([body req stat]
+   (-> (response/render body req)
+       (status stat)
+       (assoc :body body))))
 
 (defn- read-front-page
   "Read the complete post for the front page."
@@ -32,13 +44,13 @@
   (let [params (:multipart-params req)
         tag-keys (for [n (range 10)] (str "tag" n))
         tags (set (loop [t tag-keys v []]
-               (if (empty? t)
-                 v
-                 (recur (rest t) (let [tv (get params (first t))]
-                                   (if (and (not (empty? tv))
-                                            (pos? (count tv)))
-                                       (conj v tv)
-                                       v))))))]
+                    (if (empty? t)
+                      v
+                      (recur (rest t) (let [tv (get params (first t))]
+                                        (if (and (seq tv)
+                                                 (pos? (count tv)))
+                                          (conj v tv)
+                                          v))))))]
     tags))
 
 (defn- save-edits
@@ -99,12 +111,31 @@
     (layout/view-wiki-page (read-about-page) req)
     (redirect "/login")))
 
+(defn- get-import-file
+  "Show a page asking the user to specify a file to upload."
+  [req]
+  (layout/compose-import-file-page req))
+
+(defn- post-import-file
+  "Import the file specified in the upload dialog."
+  [{{file-info "file-info"
+     referer   "referer"} :multipart-params :as req}]
+  (let [file-name (:filename file-info)
+        fyle (:tempfile file-info)]
+    (if (or (nil? file-name)
+            (empty? file-name))
+      (build-response (layout/no-files-to-import-page referer) req 400)
+      (do
+        (db/add-page-from-map (files/load-markdown-from-file fyle))
+        (build-response (layout/confirm-import-page file-name referer) req)))))
+
 (defroutes home-routes
            (GET "/" request (home request))
            (GET "/about" request (about request))
            (GET "/export" [] (layout/compose-not-yet-view "export"))
            (GET "/export-all" [] (layout/compose-not-yet-view "export-all"))
-           (GET "/import" [] (layout/compose-not-yet-view "import"))
+           (GET "/import" request (get-import-file request)) ; (layout/compose-not-yet-view "import"))
+           (POST "/import" request (post-import-file request))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
                (save-edits (get params "page-id")
