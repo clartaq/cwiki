@@ -22,11 +22,10 @@
   (if-let [user (db/get-user-by-username-and-password username password)]
 
     ; If authenticated
-    (do
-      (let [identity (dissoc user :user_password)
-            new-session (assoc (redirect "/")
-                          :session (assoc session :identity identity))]
-        new-session))
+    (let [identity (dissoc user :user_password)
+          new-session (assoc (redirect "/")
+                        :session (assoc session :identity identity))]
+      new-session)
 
     ; Otherwise
     (redirect "/login")))
