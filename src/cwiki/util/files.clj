@@ -65,7 +65,6 @@
   contains the body of the Markdown file. :meta contains the
   meta-information, possibly from the YAML front matter."
   [url]
-  (println "load-markdown-from-url: url:" url)
   (let [result (atom {:meta {}
                       :body nil})]
     (when-not (nil? url)
@@ -90,7 +89,6 @@
   :meta contains the meta-information, possibly from the YAML front matter."
   [filename]
   (let [url (io/resource filename)]
-    (println "load-markdown-from-resource: url:" url)
     (load-markdown-from-url url)))
 
 (defn load-markdown-from-file
