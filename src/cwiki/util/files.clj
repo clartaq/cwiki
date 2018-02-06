@@ -3,7 +3,7 @@
             [clojure.java.io :as io]
             [clojure.string :as st]
             [clojure.string :as s])
-  (:import (java.io BufferedReader InputStreamReader)))
+  (:import (java.io BufferedReader InputStreamReader File)))
 
 (defn remove-from-end
   "Remove any instance of 'end' from the end of string s
@@ -95,10 +95,11 @@
   "Load a Markdown file, possibly with YAML front matter from a file.
   Return a map with two top-level keys and subsidiary maps: :body
   contains the body of the Markdown file. :meta contains the
-  meta-information, possibly from the YAML front matter."
-  [file]
-  (println "load-markdown-from-file:" file)
-  (load-markdown-from-url (io/as-url file)))
+  meta-information, possibly from the YAML front matter. Returns nil
+  if the file does not exist."
+  [^File file]
+  (when (.exists file)
+    (load-markdown-from-url (io/as-url file))))
 
 (defn- filter-predicate
   "Return true if the line is not empty and does not start with a semi-colon"
