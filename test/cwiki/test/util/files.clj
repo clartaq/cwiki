@@ -1,7 +1,8 @@
 (ns cwiki.test.util.files
   (:require [clojure.test :refer :all]
             [cwiki.util.files :refer :all]
-            [clojure.string :as s]))
+            [clojure.string :as s])
+  (:import (java.io File)))
 
 (deftest drop-lines-while-test
   (testing "drop-lines-while function"
@@ -124,3 +125,30 @@
       (is (contains? tags "caddy"))
       (is (contains? tags "wordpress"))
       (is (contains? tags "blogging")))))
+
+(deftest incomplete-content-test
+  (testing "The load-markdown-from-file function on a file with parts missing."
+    (is (nil? (load-markdown-from-file (File. "Non-existent file"))))
+    (let [file (File. "test/data/NoContentHere.md")
+          m (load-markdown-from-file file)]
+      (is (empty? (:body m)))
+      (is (= "Someone" (:author (:meta m))))
+      (is (= "No Content Here" (:title (:meta m)))))
+    (let [file (File. "test/data/NoMeta.md")
+          m (load-markdown-from-file file)]
+      (is (empty? (:meta m)))
+      (is (= "A Markdown file without any metadata." (:body m))))
+    (let [file (File. "test/data/NoDatesOrTags.md")
+          m (load-markdown-from-file file)
+          meta (:meta m)]
+      (is (= "Someone" (:author (:meta m))))
+      (is (= "A Crazy Title" (:title (:meta m))))
+      (is (nil? (and (:date (:meta m))
+                     (:created (:meta m)))))
+      (is (nil? (and (:updated (:meta m))
+                     (:changed (:meta m))
+                     (:modified (:meta m)))))
+      (is (nil? (:tags (:meta m))))
+      (is (= "\nA Markdown file without dates or tags in the metadata." (:body m)))
+      )))
+
