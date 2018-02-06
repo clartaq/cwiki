@@ -125,9 +125,9 @@
     (if (or (nil? file-name)
             (empty? file-name))
       (build-response (layout/no-files-to-import-page referer) req 400)
-      (do
-        (db/add-page-from-map (files/load-markdown-from-file fyle))
-        (build-response (layout/confirm-import-page file-name referer) req)))))
+      (let [title (db/add-page-from-map (files/load-markdown-from-file fyle)
+                              (ri/req->user-name req))]
+        (build-response (layout/confirm-import-page file-name title referer) req)))))
 
 (defroutes home-routes
            (GET "/" request (home request))

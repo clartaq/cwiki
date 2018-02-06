@@ -493,17 +493,36 @@
       (remove-deleted-tags tags page-id)
       (jdbc/delete! h2-db :pages ["page_id=?" page-id]))))
 
+(defn- get-author-from-import-meta-data
+  "Return the author id based on the content of the meta-data. If there is no
+  author or they do not have the appropriate role, return the default id."
+  [meta default-author-id]
+  (let [author-name (:author meta)
+        author-id (user-name->user-id author-name)]
+    (if (or (nil? author-id)
+            (= "reader" (user-name->user-role author-name)))
+      (user-name->user-id default-author-id)
+      author-id)))
+
 (defn add-page-from-map
   "Add a new page to the wiki using the information in a map. The map must
   have two keys, :meta and :body. Meta contains things like the author name,
-  tags, etc. The body contains the Markdown content. Note that the author
-  must have an account on the wiki and there must be a title."
-  [m]
+  tags, etc. The body contains the Markdown content. If the author cannot be
+  determined or is not recognized, the contents of the 'default-author'
+  argument is used. If there is no title, a random title is created.
+  Return the title of the imported page."
+  [m default-author]
   (let [meta (:meta m)
-        author-id (user-name->user-id (:author meta))
-        title (:title meta)]
+        _ (println "meta:" meta)
+        author-id (get-author-from-import-meta-data meta default-author)
+        _ (println "author-id:" author-id)
+        title (if (:title meta)
+                (:title meta)
+                (str "Title - " (UUID/randomUUID)))
+        _ (println "title:" title)]
     (when (and author-id title)
       (let [content (:body m)
+            ;_ (println "content:" content)
             creation-date-str (or (:date meta)
                                   (:created meta))
             creation-date (if creation-date-str
@@ -522,7 +541,8 @@
                       {:page_modified update-date})
             page-id (get-row-id (jdbc/insert! h2-db :pages pm))
             tv (get-tag-name-set-from-meta meta)]
-        (update-tags-for-page tv page-id)))))
+        (update-tags-for-page tv page-id)
+        title))))
 
 (defn- add-page-with-meta-from-file!
   "Add a page to the database based on the information in a Markdown file
@@ -531,9 +551,11 @@
   [file-name]
   (let [resource-prefix "private/md/"
         m (files/load-markdown-from-resource (str resource-prefix file-name))]
-    (add-page-from-map m)))
+    (add-page-from-map m "CWiki")))
 
 (defn add-user
+  "Add a user to the system with the given user name and password. Optionally,
+  add an email address for password recovery."
   ([user-name user-password user-role]
    (add-user user-name user-password user-role nil))
   ([user-name user-password user-role user-email]
@@ -551,6 +573,7 @@
      (jdbc/insert! h2-db :users usr))))
 
 (defn delete-user
+  "Delete the user with the give id."
   ([user-id]
    (delete-user user-id h2-db))
   ([user-id db-name]
@@ -565,6 +588,8 @@
     (:admin_has_logged_in (first result))))
 
 (defn set-admin-has-logged-in
+  "Note that the admin user has logged in at least once and record it
+  in the database."
   [b]
   (jdbc/update! h2-db :admin {:admin_has_logged_in b}
                 ["admin_id=?" 1]))

@@ -335,10 +335,10 @@
 
 (defn confirm-import-page
   "Return a page stating that the file has been imported."
-  [file-name referer]
+  [file-name title referer]
   (short-message-return-to-referer
     "Import Complete"
-    (str "File \"" file-name "\" has been imported") referer))
+    (str "File \"" file-name "\" has been imported as \"" title "\".") referer))
 
 (defn compose-import-file-page
   "Compose and return a page that allows the user to choose a file to import."
@@ -354,9 +354,9 @@
                [:div {:class "form-label-div"}
                 [:label {:class "form-label"
                          :for   "filename"} "Select the file to Import"]]
-               [:label {:class "cabinet"}
+               [:label ;{:class "cabinet"}
                 [:input {:type   "file"
-                         :class  "file"
+                        ; :class  "file"
                          :id     "file-info"
                          :name   "file-info"
                          :accept ".txt,.md"}]]]
