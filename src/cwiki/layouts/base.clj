@@ -340,6 +340,34 @@
     "Import Complete"
     (str "File \"" file-name "\" has been imported as \"" title "\".") referer))
 
+(defn compose-import-existing-page-warning
+  "Return a page stating that a page with the same title
+  already exists in the wik."
+  [import-map file-name referer req]
+  (short-form-template
+    [:div {:class "cwiki-form"}
+     (form-to {:enctype      "multipart/form-data"
+               :autocomplete "off"}
+              [:post "proceed-with-import"]
+              (hidden-field "import-map" import-map)
+              (hidden-field "file-name" file-name)
+              (hidden-field "referer" referer)
+              [:p {:class "form-title"} "Page Already Exists"]
+              [:div {:class "form-group"}
+               [:p (str "A page with the title \"" (get-in import-map [:meta :title])
+                        "\" already exists in the wiki.")]
+               [:p (str "Click \"Proceed\" to delete the existing page and "
+                        "replace it with the contents of the imported file.")]
+               [:div {:class "button-bar-container"}
+                (submit-button {:id    "proceed-with-import-button"
+                                :class "form-button button-bar-item"}
+                               "Proceed")
+                [:input {:type      "button" :name "cancel-button"
+                         :value     "Cancel"
+                         :class     "form-button button-bar-item"
+                         :autofocus "autofocus"
+                         :onclick   "window.history.back();"}]]])]))
+
 (defn compose-import-file-page
   "Compose and return a page that allows the user to choose a file to import."
   [req]
@@ -354,9 +382,10 @@
                [:div {:class "form-label-div"}
                 [:label {:class "form-label"
                          :for   "filename"} "Select the file to Import"]]
-               [:label ;{:class "cabinet"}
+               [:p "First select a file to import, the press the \"Import\" button."]
+               [:label                                      ;{:class "cabinet"}
                 [:input {:type   "file"
-                        ; :class  "file"
+                         ; :class  "file"
                          :id     "file-info"
                          :name   "file-info"
                          :accept ".txt,.md"}]]]

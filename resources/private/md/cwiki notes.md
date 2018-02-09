@@ -5,7 +5,7 @@ date: 10/04/2017 2:06:47 PM
 updated: 1/8/2018 5:21:18 PM  
 tags:
   - cwiki
-  - technical notes
+  - technical note
 ---
 
 The Clojure Wiki Project

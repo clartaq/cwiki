@@ -8,8 +8,7 @@
            [clj-time.core :as t]
            [clj-time.format :as f]
            [cwiki.util.files :as files]
-           [cwiki.util.special :as special]
-           [cwiki.util.pp :as pp])
+           [cwiki.util.special :as special])
   (:import (java.io File)
            (java.util UUID)
            (org.h2.jdbc JdbcClob)))
@@ -513,16 +512,12 @@
   Return the title of the imported page."
   [m default-author]
   (let [meta (:meta m)
-        _ (println "meta:" meta)
         author-id (get-author-from-import-meta-data meta default-author)
-        _ (println "author-id:" author-id)
         title (if (:title meta)
                 (:title meta)
-                (str "Title - " (UUID/randomUUID)))
-        _ (println "title:" title)]
+                (str "Title - " (UUID/randomUUID)))]
     (when (and author-id title)
       (let [content (:body m)
-            ;_ (println "content:" content)
             creation-date-str (or (:date meta)
                                   (:created meta))
             creation-date (if creation-date-str

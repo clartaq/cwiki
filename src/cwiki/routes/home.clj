@@ -3,11 +3,10 @@
             [compojure.response :as response]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
-            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
-            [cwiki.util.files :as files])
-  (:import (java.io File)))
+            [cwiki.util.files :as files]
+            [cwiki.layouts.base :as base]))
 
 (defn- build-response
   "Build a response structure, possibly with a non-200 return code."
@@ -116,8 +115,21 @@
   [req]
   (layout/compose-import-file-page req))
 
+(defn- do-the-import
+  "Do the actual file import. Upon completion, notify the user that the
+  import has succeeded. When acknowledged, display the imported page."
+  [import-map file-name req]
+  (let [imported-page-title (db/add-page-from-map import-map
+                                                  (ri/req->user-name req))
+        new-referer (str "/" imported-page-title)]
+    (build-response (layout/confirm-import-page
+                      file-name
+                      imported-page-title new-referer) req)))
+
 (defn- post-import-file
-  "Import the file specified in the upload dialog."
+  "Import the file specified in the upload dialog. Checks the page title
+  against existing pages. If a page of the same name exists, asks for
+  confirmation before importing."
   [{{file-info "file-info"
      referer   "referer"} :multipart-params :as req}]
   (let [file-name (:filename file-info)
@@ -125,17 +137,43 @@
     (if (or (nil? file-name)
             (empty? file-name))
       (build-response (layout/no-files-to-import-page referer) req 400)
-      (let [title (db/add-page-from-map (files/load-markdown-from-file fyle)
-                              (ri/req->user-name req))]
-        (build-response (layout/confirm-import-page file-name title referer) req)))))
+      (let [import-map (files/load-markdown-from-file fyle)
+            new-title (get-in import-map [:meta :title])
+            existing-id (db/title->page-id new-title)]
+        (if existing-id
+          (build-response
+            (base/compose-import-existing-page-warning import-map file-name
+                                                       referer req)
+            req)
+          (do-the-import import-map file-name req))))))
+
+(defn- get-map-from-string
+  "Utility to convert a map in a string to a real map and return it."
+  [s]
+  (binding [*read-eval* false]
+    (read-string s)))
+
+(defn- post-proceed-with-import
+  "Proceed with the import since the user has decided to overwrite an
+  existing version of the page. Delete the existing version first, then
+  import the new one."
+  ; The maps are coming in as strings
+  [{{import-map "import-map"
+     file-name  "file-name"} :multipart-params :as req}]
+  (let [im (get-map-from-string import-map)
+        title (get-in im [:meta :title])
+        page-id (db/title->page-id title)]
+    (db/delete-page-by-id! page-id)
+    (do-the-import im file-name req)))
 
 (defroutes home-routes
            (GET "/" request (home request))
            (GET "/about" request (about request))
            (GET "/export" [] (layout/compose-not-yet-view "export"))
            (GET "/export-all" [] (layout/compose-not-yet-view "export-all"))
-           (GET "/import" request (get-import-file request)) ; (layout/compose-not-yet-view "import"))
+           (GET "/import" request (get-import-file request))
            (POST "/import" request (post-import-file request))
+           (POST "/proceed-with-import" request (post-proceed-with-import request))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
                (save-edits (get params "page-id")
