@@ -2,7 +2,7 @@
 title: To Do
 author: CWiki
 date: 10/24/2017 9:17:04 AM  
-updated: 1/25/2018 1:47:07 PM 
+updated: 02/10/2018 1:12:18 PM
 tags:
   - technical note
   - releases
@@ -13,7 +13,6 @@ This is an ever-evolving list of things that need doing.
 * Ability to import and export pages, including metadata.
 * Creation of wikilinks needs to understand in-line code spans, `<code></code>`, and `<pre></pre>` so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
 * Create a function that will update the existing database new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
-* Add a tagging system. Look into hierarchical tagging systems.
 * Implement within-wiki search.
 * Any maintenance tasks like database compression, backup and restore, for example.
 * Beautify and style the edit/create pages.
@@ -41,5 +40,6 @@ This is an ever-evolving list of things that need doing.
 * ~~Consolidate some of the nav stuff in the page header into a "More" drop-down menu.~~
 * ~~Read initial files based on a text file containing the list of files to load.~~
 * ~~Display, adding, deletion and editing tags in the page editing page.~~
+* ~~Add a tagging system. Look into hierarchical tagging systems.~~
 
 
