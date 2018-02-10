@@ -2,7 +2,7 @@
 title: About Import/Export
 author: CWiki
 date: 12/10/2017 9:47:06 AM
-updated: 1/23/2018 4:27:01 PM 
+updated: 02/10/2018 01:21:24 PM
 tags:
   - about
   - import
@@ -23,6 +23,10 @@ Import is just as easy. [[Pages Primer|Create a new page]] (click "New" up in th
 This method can be more convenient in some cases. If your role is a "reader", it is your only option since you will not be able to open an editing page. Readers can only export, they are not allowed to import content in to the wiki.
 
 ### Things You Should Know
+
+#### Import is Fragile
+
+Really fragile. If the front matter is not properly formatted, it will crash the program. No useful error messages other that a stack trace. Bleah. Just to lazy too bullet-proof it right now.
 
 #### Author
 

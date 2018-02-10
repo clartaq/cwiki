@@ -2,6 +2,7 @@
 ; Line that start with a semi-colon are considered comments and are ignored
 ; by the loader.
 Front_Page.md
+A_Timestamp_Plugin_for_Sublime_Text_3.md
 About.md
 About_Admin_Pages.md
 About_Backup_and_Restore.md
@@ -17,6 +18,7 @@ About_the_Sidebar.md
 Admin.md
 CWiki_FAQ.md
 CWiki_Name.md
+Description_of_an_Import_Bug.md
 Design_of_Import_Export.md
 Features.md
 How_to_Make_a_Table_of_Contents.md
