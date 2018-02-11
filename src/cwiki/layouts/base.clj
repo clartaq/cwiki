@@ -382,7 +382,7 @@
                [:div {:class "form-label-div"}
                 [:label {:class "form-label"
                          :for   "filename"} "Select the file to Import"]]
-               [:p "First select a file to import, the press the \"Import\" button."]
+               [:p "First select a file to import, then press the \"Import\" button."]
                [:label                                      ;{:class "cabinet"}
                 [:input {:type   "file"
                          ; :class  "file"
@@ -393,6 +393,38 @@
                (submit-button {:id    "import-button"
                                :class "form-button button-bar-item"}
                               "Import")
+               [:input {:type      "button" :name "cancel-button"
+                        :value     "Cancel"
+                        :class     "form-button button-bar-item"
+                        :autofocus "autofocus"
+                        :onclick   "window.history.back();"}]])]))
+
+(defn compose-export-file-page
+  "Compose and return a page that allows the user to choose a directory
+  to export a page to."
+  [req]
+  (short-form-template
+    [:div {:class "cwiki-form"}
+     (form-to {:enctype "multipart/form-data"
+               :authcomplete "off"}
+              [:post "export"]
+              (hidden-field "referer" (get (:headers req) "referer"))
+              [:p {:class "form-title"} "Export a File"]
+              [:div {:class "form-group"}
+               [:div {:class "form-label-div"}
+                [:label {:class "form-label"
+                         :for "filename"} "Select the file to Export"]]
+               [:p "First select a directory to export to, then press the \"Export\" button."]
+               [:label
+                [:input {:type "file"
+                         :id "file-export-info"
+                         :name "file-export-info"
+                         :directory ""
+                         }]]]
+              [:div {:class "button-bar-container"}
+               (submit-button {:id    "export-button"
+                               :class "form-button button-bar-item"}
+                              "Export")
                [:input {:type      "button" :name "cancel-button"
                         :value     "Cancel"
                         :class     "form-button button-bar-item"
