@@ -513,9 +513,7 @@
   [m default-author]
   (let [meta (:meta m)
         author-id (get-author-from-import-meta-data meta default-author)
-        title (if (:title meta)
-                (:title meta)
-                (str "Title - " (UUID/randomUUID)))]
+        title (or (:title meta) (str "Title - " (UUID/randomUUID)))]
     (when (and author-id title)
       (let [content (:body m)
             creation-date-str (or (:date meta)

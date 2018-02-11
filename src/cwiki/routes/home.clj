@@ -3,10 +3,10 @@
             [compojure.response :as response]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
-            [cwiki.util.req-info :as ri]
-            [ring.util.response :refer [redirect status]]
             [cwiki.util.files :as files]
-            [cwiki.layouts.base :as base]))
+            [cwiki.util.pp :as pp]
+            [cwiki.util.req-info :as ri]
+            [ring.util.response :refer [redirect status]]))
 
 (defn- build-response
   "Build a response structure, possibly with a non-200 return code."
@@ -110,6 +110,8 @@
     (layout/view-wiki-page (read-about-page) req)
     (redirect "/login")))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defn- get-import-file
   "Show a page asking the user to specify a file to upload."
   [req]
@@ -142,7 +144,7 @@
             existing-id (db/title->page-id new-title)]
         (if existing-id
           (build-response
-            (base/compose-import-existing-page-warning import-map file-name
+            (layout/compose-import-existing-page-warning import-map file-name
                                                        referer req)
             req)
           (do-the-import import-map file-name req))))))
@@ -166,10 +168,27 @@
     (db/delete-page-by-id! page-id)
     (do-the-import im file-name req)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn- get-export-file
+  [req]
+  (layout/compose-export-file-page req))
+
+
+; <asp:FileUpload ID="FileUpload1" onchange="selectFolder(event)" webkitdirectory mozdirectory msdirectory odirectory directory AllowMultiple="true" runat="server" />
+(defn- post-export-file
+  [req]
+  (let [params (:multipart-params req)]
+    (println "params:" (pp/pp-map params))
+  (build-response "Want to export file" req)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defroutes home-routes
            (GET "/" request (home request))
            (GET "/about" request (about request))
-           (GET "/export" [] (layout/compose-not-yet-view "export"))
+           (GET "/export" request (get-export-file request)) ;[] (layout/compose-not-yet-view "export"))
+           (POST "/export" request (post-export-file request))
            (GET "/export-all" [] (layout/compose-not-yet-view "export-all"))
            (GET "/import" request (get-import-file request))
            (POST "/import" request (post-import-file request))
