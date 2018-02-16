@@ -4,7 +4,6 @@
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.files :as files]
-            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]))
 
@@ -145,7 +144,7 @@
         (if existing-id
           (build-response
             (layout/compose-import-existing-page-warning import-map file-name
-                                                       referer req)
+                                                         referer)
             req)
           (do-the-import import-map file-name req))))))
 
@@ -174,13 +173,30 @@
   [req]
   (layout/compose-export-file-page req))
 
-
-; <asp:FileUpload ID="FileUpload1" onchange="selectFolder(event)" webkitdirectory mozdirectory msdirectory odirectory directory AllowMultiple="true" runat="server" />
 (defn- post-export-file
   [req]
-  (let [params (:multipart-params req)]
-    (println "params:" (pp/pp-map params))
-  (build-response "Want to export file" req)))
+  (let [params (:multipart-params req)
+        referer (get params "referer")
+        page-id-str (get params "page-id")
+        page-id (Integer. ^String (re-find #"\d+" page-id-str))
+        tags (db/get-tag-names-for-page page-id)
+        _ (println "post-export-file: tags:" tags)
+        page-name (db/page-id->title page-id)
+        page-map (db/find-post-by-title page-name)
+        author-name (db/page-map->author page-map)]
+    (println "params:" params)
+    (println "referer:" referer)
+    (println "page-id-str:" page-id-str)
+    (println "page-id:" page-id)
+    (println "page-name:" page-name)
+    (let [res (files/export-page page-map author-name tags)]
+      (println "res:" res)
+      (if res
+        (layout/confirm-export-page page-name res referer)
+        (layout/short-message-return-to-referer
+          "There was a Problem"
+          "The page was not exported correctly."
+          referer)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
