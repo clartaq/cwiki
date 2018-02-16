@@ -1,9 +1,17 @@
 (ns cwiki.util.files
   (:require [clj-yaml.core :as yaml]
+            [clj-time.format :as f]
             [clojure.java.io :as io]
             [clojure.string :as st]
             [clojure.string :as s])
-  (:import (java.io BufferedReader InputStreamReader File)))
+  (:import (java.io BufferedReader InputStreamReader File)
+           (org.joda.time DateTime)))
+
+(def ^:const sep (File/separator))
+
+;; Things related to time formatting.
+
+(def markdown-pad-format (f/formatter-local "MM/dd/yyy h:mm:ss a"))
 
 (defn remove-from-end
   "Remove any instance of 'end' from the end of string s
@@ -100,6 +108,105 @@
   [^File file]
   (when (.exists file)
     (load-markdown-from-url (io/as-url file))))
+
+; Characters that are illegal in file names in some operating systems.
+(def ^:const illegal-chars [\newline, \space, \tab, \formfeed, \backspace,
+                            \return \/ \\ \u0000 \` \' \" \? \| \* \< \> \:])
+
+; Device names that are reserved on some operating system. From
+; org.eclipse.core.resources.IWorkspace.validateName(String, int)
+(def ^:const reserved-dev-names ["aux" "clock$ " "com1" "com2" "com3" "com4"
+                                 "com5" "com6" "com7" "com8" "com9" "con"
+                                 "lpt1" "lpt2" "lpt3" "lpt4" "lpt5" "lpt6"
+                                 "lpt7" "lpt8" "lpt9" "nul" "prn"])
+
+(defn trim-leading-and-trailing-underscores
+  "Return a copy of the string in which any leading and trailing
+  underscores have been removed."
+  [s]
+  (-> (st/replace-first s (re-pattern "^\\_+") "")
+      (st/replace (re-pattern "\\_+$") "")))
+
+(defn in?
+  "Return true if coll contains elm."
+  [elm coll]
+  (some #(= elm %) coll))
+
+(defn- red-fun
+  "A helper function for the following reduction. Replaces illegal characters
+  with an underscore."
+  [accum elm]
+  (if (in? elm illegal-chars)
+    (.append accum \_)
+    (.append accum elm)))
+
+(defn remove-illegal-file-name-chars
+  "Return a version of the sting where illegal characters have been
+  replaces with underscores."
+  [s]
+  (str (reduce red-fun (StringBuilder.) s)))
+
+(defn remove-reserved-device-names
+  "Return an empty string if 's' is equal (case-insensitive) to any of the
+  reserved device names. Otherwise return 's'."
+  [s]
+  (if (some #(= (.toLowerCase s) %) reserved-dev-names)
+    ""
+    s))
+
+(defn sanitize-page-name
+  "If possible, return a version of the page name with problematic characters
+  and other issues translated to a version that can be used on any
+  operating system."
+  [page-name]
+  (let [sanitary-name (-> (remove-illegal-file-name-chars page-name)
+                          (trim-leading-and-trailing-underscores)
+                          (remove-reserved-device-names))]
+    sanitary-name))
+
+(defn get-formatted-date-time
+  "Take a sql timestamp and return a formatted string version."
+  [timestamp]
+  (let [dt (DateTime. (java.sql.Timestamp/valueOf ^String (.toString timestamp)))]
+    (f/unparse markdown-pad-format dt)))
+
+(defn build-tag-yaml
+  "Return the tags section of the YAML front matter."
+  [tag-set]
+  (if (seq tag-set)
+    (let [sb (StringBuffer. "tags:\n")]
+      (mapv #(.append sb (str "  - " % "\n")) tag-set)
+      (.toString sb))
+    ""))
+
+(defn build-yaml
+  "Return the YAML front matter based on the metadata for the page."
+  [page-map author-name tags]
+  (let [title (:page_title page-map)
+        created (get-formatted-date-time (:page_created page-map))
+        modified (get-formatted-date-time (:page_modified page-map))
+        yaml (StringBuffer. "---\n")]
+    (doto yaml
+      (.append (str "author: " author-name "\n"))
+      (.append (str "title: " title "\n"))
+      (.append (str "date: " created "\n"))
+      (.append (str "updated: " modified "\n"))
+      (.append (build-tag-yaml tags)))
+    (.toString (.append yaml "---\n\n"))))
+
+(defn export-page
+  "Export the page described in the page-map to a file."
+  [page-map author-name tags]
+  (let [page-name (:page_title page-map)
+        sanitized-name (sanitize-page-name page-name)]
+    (if (empty? sanitized-name)
+      (println "Problem with translating the page name")
+      (let [f (File. ".")
+            d (.getCanonicalPath f)
+            path (str d sep (sanitize-page-name page-name) ".md")
+            content (:page_content page-map)]
+        (spit path (str (build-yaml page-map author-name tags) content))
+        path))))
 
 (defn- filter-predicate
   "Return true if the line is not empty and does not start with a semi-colon"

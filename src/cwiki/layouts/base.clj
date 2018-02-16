@@ -12,6 +12,7 @@
             [cwiki.models.wiki-db :as db]
             [cwiki.util.authorization :as ath]
             [cwiki.util.req-info :as ri]
+            [cwiki.util.special :as special]
             [cwiki.util.wikilinks :refer [replace-wikilinks
                                           get-edit-link-for-existing-page
                                           get-delete-link-for-existing-page]]
@@ -27,6 +28,7 @@
                                         ParserEmulationProfile)
            (com.vladsch.flexmark.util KeepType)
            (com.vladsch.flexmark.util.options MutableDataSet)
+           (java.net URL URLDecoder)
            (java.util ArrayList)))
 
 (def program-name-and-version "CWiki v0.0.8-SNAPSHOT")
@@ -93,21 +95,24 @@
 
 (defn- drop-menu
   "Return the drop-down menu for use in the page header."
-  [req]
-  [:div {:class "menu-item"}
-   [:ul
-    [:li {:class "subNav"}
-     [:a "More  ▾"]
+  [req post-map options]
+  (let [page-title (db/page-map->title post-map)]
+    [:div {:class "menu-item"}
      [:ul
-      (when (db/find-post-by-title "About")
-        [:li [:a {:href "/about"} "About"]])
-      (when-not (ri/is-reader-user? req)
-        [:li [:a {:href "/import"} "Import"]])
-      [:li [:a {:href "/export"} "Export"]]
-      [:li [:a {:href "/export-all"} "Export All"]]
-      (when (ri/is-admin-user? req)
-        [:li [:a {:href "/Admin"} "Admin"]])
-      [:li [:a {:href "/logout"} "Sign Off"]]]]]])
+      [:li {:class "subNav"}
+       [:a "More  ▾"]
+       [:ul
+        (when (db/find-post-by-title "About")
+          [:li [:a {:href "/about"} "About"]])
+        (when-not (ri/is-reader-user? req)
+          [:li [:a {:href "/import"} "Import"]])
+        (when-not (or (special/is-generated? page-title)
+                      (:editing options))
+          [:li [:a {:href "/export"} "Export"]])
+        [:li [:a {:href "/export-all"} "Export All"]]
+        (when (ri/is-admin-user? req)
+          [:li [:a {:href "/Admin"} "Admin"]])
+        [:li [:a {:href "/logout"} "Sign Off"]]]]]]))
 
 (defn- searchbox
   "Return the search box element for use in the page header."
@@ -151,7 +156,7 @@
       (when delete-link
         (menu-item-span delete-link))
       (menu-item-span [:a {:href "/"} "Home"])
-      (drop-menu req)
+      (drop-menu req post-map options)
       (searchbox)])))
 
 (defn wiki-header-component
@@ -343,7 +348,7 @@
 (defn compose-import-existing-page-warning
   "Return a page stating that a page with the same title
   already exists in the wik."
-  [import-map file-name referer req]
+  [import-map file-name referer]
   (short-form-template
     [:div {:class "cwiki-form"}
      (form-to {:enctype      "multipart/form-data"
@@ -399,37 +404,55 @@
                         :autofocus "autofocus"
                         :onclick   "window.history.back();"}]])]))
 
+(defn confirm-export-page
+  "Return a page stating that the file has been exported."
+  [page-name file-name referer]
+  (short-message-return-to-referer
+    "Export Complete"
+    (str "Page \"" page-name "\" has been exported to \"" file-name "\".") referer))
+
+
 (defn compose-export-file-page
   "Compose and return a page that allows the user to choose a directory
   to export a page to."
   [req]
-  (short-form-template
-    [:div {:class "cwiki-form"}
-     (form-to {:enctype "multipart/form-data"
-               :authcomplete "off"}
-              [:post "export"]
-              (hidden-field "referer" (get (:headers req) "referer"))
-              [:p {:class "form-title"} "Export a File"]
-              [:div {:class "form-group"}
-               [:div {:class "form-label-div"}
-                [:label {:class "form-label"
-                         :for "filename"} "Select the file to Export"]]
-               [:p "First select a directory to export to, then press the \"Export\" button."]
-               [:label
-                [:input {:type "file"
-                         :id "file-export-info"
-                         :name "file-export-info"
-                         :directory ""
-                         }]]]
-              [:div {:class "button-bar-container"}
-               (submit-button {:id    "export-button"
-                               :class "form-button button-bar-item"}
-                              "Export")
-               [:input {:type      "button" :name "cancel-button"
-                        :value     "Cancel"
-                        :class     "form-button button-bar-item"
-                        :autofocus "autofocus"
-                        :onclick   "window.history.back();"}]])]))
+  (let [referer (get (:headers req) "referer")
+        ; First figure out if they are trying to export the Front Page or
+        ; a 'regular' page.
+        file-name (.getFile (URL. referer))
+        page-title (if (= "/" file-name)
+                     "Front Page"
+                     (let [snip (.substring ^String referer
+                                            (inc (s/last-index-of referer "/")))]
+                       (URLDecoder/decode snip "UTF-8")))
+        page-id (db/title->page-id page-title)]
+    (if (nil? page-id)
+      (short-message-return-to-referer
+        "Page Name Translation Error"
+        (str "There was a problem getting the page name from the referring URL: \""
+             referer "\".")
+        referer)
+      (short-form-template
+        [:div {:class "cwiki-form"}
+         (form-to {:enctype      "multipart/form-data"
+                   :autocomplete "off"}
+                  [:post "export"]
+                  (hidden-field "page-id" page-id)
+                  (hidden-field "referer" referer)
+                  [:p {:class "form-title"} "Export a File"]
+                  [:div {:class "form-group"}
+                   [:div {:class "form-label-div"}
+                    [:label {:class "form-label"
+                             :for   "filename"} (str "Export page \"" page-title "\"?")]]]
+                  [:div {:class "button-bar-container"}
+                   (submit-button {:id    "export-button"
+                                   :class "form-button button-bar-item"}
+                                  "Export")
+                   [:input {:type      "button" :name "cancel-button"
+                            :value     "Cancel"
+                            :class     "form-button button-bar-item"
+                            :autofocus "autofocus"
+                            :onclick   "window.history.back();"}]])]))))
 
 ;;
 ;; Functions related to viewing or editing wiki pages.
