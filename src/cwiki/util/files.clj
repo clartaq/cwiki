@@ -183,6 +183,7 @@
   "Return the YAML front matter based on the metadata for the page."
   [page-map author-name tags]
   (let [title (:page_title page-map)
+        ;author-name (:page_author page-map)
         created (get-formatted-date-time (:page_created page-map))
         modified (get-formatted-date-time (:page_modified page-map))
         yaml (StringBuffer. "---\n")]
@@ -194,6 +195,11 @@
       (.append (build-tag-yaml tags)))
     (.toString (.append yaml "---\n\n"))))
 
+(defn get-execution-directory
+  "Return the canonical path where the program is executing."
+  []
+  (.getCanonicalPath (File. ".")))
+
 (defn export-page
   "Export the page described in the page-map to a file."
   [page-map author-name tags]
@@ -201,9 +207,8 @@
         sanitized-name (sanitize-page-name page-name)]
     (if (empty? sanitized-name)
       (println "Problem with translating the page name")
-      (let [f (File. ".")
-            d (.getCanonicalPath f)
-            path (str d sep (sanitize-page-name page-name) ".md")
+      (let [path (str (get-execution-directory) sep
+                      (sanitize-page-name page-name) ".md")
             content (:page_content page-map)]
         (spit path (str (build-yaml page-map author-name tags) content))
         path))))

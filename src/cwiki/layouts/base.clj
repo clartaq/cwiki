@@ -411,7 +411,6 @@
     "Export Complete"
     (str "Page \"" page-name "\" has been exported to \"" file-name "\".") referer))
 
-
 (defn compose-export-file-page
   "Compose and return a page that allows the user to choose a directory
   to export a page to."
@@ -439,7 +438,7 @@
                   [:post "export"]
                   (hidden-field "page-id" page-id)
                   (hidden-field "referer" referer)
-                  [:p {:class "form-title"} "Export a File"]
+                  [:p {:class "form-title"} "Export a Page"]
                   [:div {:class "form-group"}
                    [:div {:class "form-label-div"}
                     [:label {:class "form-label"
@@ -453,6 +452,37 @@
                             :class     "form-button button-bar-item"
                             :autofocus "autofocus"
                             :onclick   "window.history.back();"}]])]))))
+
+(defn confirm-export-all-pages
+  "Return a page stating that the file has been exported."
+  [dir-name referer]
+  (short-message-return-to-referer
+    "Export Complete"
+    (str "All pages have been exported to the directory " dir-name ".") referer))
+
+(defn compose-export-all-pages
+  [req]
+  (let [referer (get (:headers req) "referer")]
+    (short-form-template
+      [:div {:class "cwiki-form"}
+       (form-to {:enctype      "multipart/form-data"
+                 :autocomplete "off"}
+                [:post "export-all"]
+                (hidden-field "referer" referer)
+                [:p {:class "form-title"} "Export All Pages"]
+                [:div {:class "form-group"}
+                 [:div {:class "form-label-div"}
+                  [:label {:class "form-label"
+                           :for   "filename"} "Export all pages?"]]]
+                [:div {:class "button-bar-container"}
+                 (submit-button {:id    "export-all-button"
+                                 :class "form-button button-bar-item"}
+                                "Export All")
+                 [:input {:type      "button" :name "cancel-button"
+                          :value     "Cancel"
+                          :class     "form-button button-bar-item"
+                          :autofocus "autofocus"
+                          :onclick   "window.history.back();"}]])])))
 
 ;;
 ;; Functions related to viewing or editing wiki pages.

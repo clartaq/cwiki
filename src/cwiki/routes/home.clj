@@ -127,7 +127,7 @@
                       file-name
                       imported-page-title new-referer) req)))
 
-(defn- post-import-file
+(defn- post-import-page
   "Import the file specified in the upload dialog. Checks the page title
   against existing pages. If a page of the same name exists, asks for
   confirmation before importing."
@@ -169,27 +169,36 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defn- get-export-file
+(defn- get-export-page
   [req]
   (layout/compose-export-file-page req))
 
-(defn- post-export-file
+(defn- get-params-for-export
+  "Based on the page name, get the page-map and tags required to do the
+  export."
+  [page-name]
+  (let [page-map (db/find-post-by-title page-name)
+        author-name (db/page-map->author page-map)
+        page-id (db/page-map->id page-map)
+        tags (db/get-tag-names-for-page page-id)]
+    {:page-map page-map :author-name author-name :tags tags}))
+
+(defn- post-export-page
+  "Export a single page from the wiki to a Markdown file."
   [req]
   (let [params (:multipart-params req)
         referer (get params "referer")
         page-id-str (get params "page-id")
         page-id (Integer. ^String (re-find #"\d+" page-id-str))
-        tags (db/get-tag-names-for-page page-id)
-        _ (println "post-export-file: tags:" tags)
         page-name (db/page-id->title page-id)
-        page-map (db/find-post-by-title page-name)
-        author-name (db/page-map->author page-map)]
+        param-map (get-params-for-export page-name)]
     (println "params:" params)
     (println "referer:" referer)
     (println "page-id-str:" page-id-str)
     (println "page-id:" page-id)
     (println "page-name:" page-name)
-    (let [res (files/export-page page-map author-name tags)]
+    (let [res (files/export-page (:page-map param-map) (:author-name param-map)
+                                 (:tags param-map))]
       (println "res:" res)
       (if res
         (layout/confirm-export-page page-name res referer)
@@ -200,14 +209,42 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defn- get-export-all-pages
+  "Put up a page asking the user if they want to export all pages."
+  [req]
+  (layout/compose-export-all-pages req))
+
+(defn- post-export-all-pages
+  "Export all pages (except generated pages) to Markdown files in the
+  home directory of the program. NO ERROR CHECKING!"
+  [req]
+  (let [params (:multipart-params req)
+        referer (get params "referer")
+        page-names (db/get-all-page-names-in-db)
+        d (files/get-execution-directory)]
+    (println "referer:" referer)
+    (println "(type page-names):" (type page-names))
+    (println "page-names:" page-names)
+    (mapv (fn [name-map]
+            (let [title (:page_title name-map)
+                  param-map (get-params-for-export title)]
+              (println "Exporting:" title)
+              (files/export-page (:page-map param-map)
+                                 (:author-name param-map)
+                                 (:tags param-map)))) page-names)
+    (layout/confirm-export-all-pages (str "\"" d "\"") referer)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defroutes home-routes
            (GET "/" request (home request))
            (GET "/about" request (about request))
-           (GET "/export" request (get-export-file request)) ;[] (layout/compose-not-yet-view "export"))
-           (POST "/export" request (post-export-file request))
-           (GET "/export-all" [] (layout/compose-not-yet-view "export-all"))
+           (GET "/export" request (get-export-page request))
+           (POST "/export" request (post-export-page request))
+           (GET "/export-all" request (get-export-all-pages request))
+           (POST "/export-all" request (post-export-all-pages request))
            (GET "/import" request (get-import-file request))
-           (POST "/import" request (post-import-file request))
+           (POST "/import" request (post-import-page request))
            (POST "/proceed-with-import" request (post-proceed-with-import request))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
