@@ -31,7 +31,7 @@
            (java.net URL URLDecoder)
            (java.util ArrayList)))
 
-(def program-name-and-version "CWiki v0.0.8-SNAPSHOT")
+(def program-name-and-version "CWiki v0.0.8")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.

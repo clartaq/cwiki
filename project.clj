@@ -1,4 +1,4 @@
-(defproject cwiki "0.0.8-SNAPSHOT"
+(defproject cwiki "0.0.8"
   :description "A personal wiki written in Clojure"
   :url "https://bitbucket.org/David_Clark/cwiki"
   :dependencies [[org.clojure/clojure "1.8.0"]
@@ -9,9 +9,9 @@
                  [com.h2database/h2 "1.4.196"]
                  [circleci/clj-yaml "0.5.6"]
                  [clj-time "0.14.2"]
-                 [com.vladsch.flexmark/flexmark "0.30.0"]
-                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.30.0"]
-                 [com.vladsch.flexmark/flexmark-ext-tables "0.30.0"]
+                 [com.vladsch.flexmark/flexmark "0.32.4"]
+                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.32.4"]
+                 [com.vladsch.flexmark/flexmark-ext-tables "0.32.4"]
                  [compojure "1.6.0"]
                  [hiccup "1.0.5"]
                  [org.clojure/java.jdbc "0.7.5"]

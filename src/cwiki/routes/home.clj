@@ -196,14 +196,8 @@
         page-id (Integer. ^String (re-find #"\d+" page-id-str))
         page-name (db/page-id->title page-id)
         param-map (get-params-for-export page-name)]
-    (println "params:" params)
-    (println "referer:" referer)
-    (println "page-id-str:" page-id-str)
-    (println "page-id:" page-id)
-    (println "page-name:" page-name)
     (let [res (files/export-page (:page-map param-map) (:author-name param-map)
                                  (:tags param-map))]
-      (println "res:" res)
       (if res
         (layout/confirm-export-page page-name res referer)
         (layout/short-message-return-to-referer
@@ -226,13 +220,9 @@
         referer (get params "referer")
         page-names (db/get-all-page-names-in-db)
         d (files/get-execution-directory)]
-    (println "referer:" referer)
-    (println "(type page-names):" (type page-names))
-    (println "page-names:" page-names)
     (mapv (fn [name-map]
             (let [title (:page_title name-map)
                   param-map (get-params-for-export title)]
-              (println "Exporting:" title)
               (files/export-page (:page-map param-map)
                                  (:author-name param-map)
                                  (:tags param-map)))) page-names)
