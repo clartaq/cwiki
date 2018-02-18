@@ -1,42 +1,33 @@
 ---
+author: 1
 title: Front Page
-author: CWiki
-date: 10/01/2017 5:45:07 PM 
-updated: 12/26/2017 10:34:46 AM   
+date: 10/01/2017 5:45:07 PM
+updated: 02/18/2018 9:18:57 AM
 tags:
   - about
-  - help
   - front page
+  - help
 ---
+
+
 This is the **Front Page** of your new [wiki](https://en.wikipedia.org/wiki/Wiki). This particular wiki goes by the name of [[About CWiki|CWiki]].
 
 As the article linked above describes, a wiki is a program that allows you to organize (or not) bits of information that you want to record somewhere. A wiki differs from a note taking application in that it allows you to link it's various parts together. For example, scattered throughout this page are links to both external web sites and pages maintained in a database on your local computer.
 
-The syntax used to write pages is a slight variant of [Markdown](https://daringfireball.net/projects/markdown/). The syntax accepted by this wiki includes an extension to allow  [[Wikilinks|wikilinks]], that is, links to other pages within the wiki, in a Markdown file. (See the [[Links Primer]] for details.)
-
-If this is your first time here and you're an admin (administrative) user, you can read about the types of administrative maintenance tasks you can do [[About Admin Pages|here]].
-
-## Features ##
+If you are the **admin** for the wiki, read [[About Admin Pages]] for some background on what you can do.
 
 The [[Features]] page describes some of the features of CWiki.
 
-## Formatting ##
+There is a [[CWiki FAQ|FAQ]] with answers to a few common questions about CWiki.
 
-One of the fun features of both Markdown and wikis is the ability to do simple formatting of your text quickly and easily -- no arcane HTML or formatting commands to memorize. The pointer to the Markdown page provides very good background. However, take a look at our page on [[Text Formatting|text formatting]] for some additional details.
+## Getting Started ##
 
-## Pages Primer ##
+### Read Some of What's Already Here ###
 
-The [[Pages Primer]] describes the basics of using wiki pages -- creating, editing, and deleting.
+Over on the left, in the [[About the Sidebar|Sidebar]] you will see a section titled "Useful Links". There's a link to [[All Pages]]. Clicking it will show you all the pages in the wiki. That link creates the page whenever you click it, so it will always show you an up-to-date list of pages.
 
-## Special Pages ##
+Take a look.
 
-There are some "special" pages in the wiki. There are described [[Special Pages|here]].
+### Create Some of Your Own Pages ###
 
-## Inspiration ##
-
-Here is a [[Other Wiki Software|link]] to some other open source wiki software. These programs have both features I enjoy and some I don't care for so much. They served as the inspiration for CWiki.
-
-## FAQ ##
-
-There is a [[CWiki FAQ|FAQ]] with answers to some common questions about CWiki.
-
+The whole point is to create your own pages. Check out the [[Pages Primer]] for guidance on how to do that. Start building what you want.

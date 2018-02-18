@@ -2,7 +2,7 @@
 title: Features
 author: CWiki
 date: 9/09/2017 9:24:01 AM
-updated: 1/16/2018 9:04:48 AM  
+updated: 02/17/2018 01:48:26 PM  
 tags:
   - cwiki
   - features
@@ -14,6 +14,7 @@ These are some features of CWiki.
 * The program is written in the [Clojure](https://clojure.org/) programming language. Clojure is a modern [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) dialect that is hosted on the [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) (JVM).
 * The program achieves cross-platform functionality by the use of Clojure, the JVM and using a web server running on your local machine.
 * All of the data in the program is stored in a single database file. CWiki uses the [H2](http://h2database.com/html/main.html) database engine to store and maintain your data.
+* You're data is not locked in. You can export the contents of the wiki to Markdown with YAML front matter. You can export individual pages or all of the pages at once.
 * If you know [CSS](https://www.w3.org/Style/CSS/Overview.en.html), you can change some aspects of the way your wiki appears on screen.
 * Because the native markup language is [Markdown](https://daringfireball.net/projects/markdown/) with some extension for internal [[Wikilinks]], the pages you write can freely link to the external [World Wide Web](https://en.wikipedia.org/wiki/World_Wide_Web) and other pages inside you local wiki.
 * You can use CWiki to create pages that attractively format mathematics. For example, here is an inline equation $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$, and here is the same equation on it's own:

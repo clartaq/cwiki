@@ -2,7 +2,7 @@
 title: To Do
 author: CWiki
 date: 10/24/2017 9:17:04 AM  
-updated: 02/10/2018 1:12:18 PM
+updated: 02/17/2018 03:55:49 PM
 tags:
   - technical note
   - releases
@@ -10,7 +10,6 @@ tags:
 ---
 This is an ever-evolving list of things that need doing.
 
-* Ability to import and export pages, including metadata.
 * Creation of wikilinks needs to understand in-line code spans, `<code></code>`, and `<pre></pre>` so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
 * Create a function that will update the existing database new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
 * Implement within-wiki search.
@@ -41,5 +40,6 @@ This is an ever-evolving list of things that need doing.
 * ~~Read initial files based on a text file containing the list of files to load.~~
 * ~~Display, adding, deletion and editing tags in the page editing page.~~
 * ~~Add a tagging system. Look into hierarchical tagging systems.~~
+* ~~Ability to import and export pages, including metadata.~~
 
 
