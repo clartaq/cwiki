@@ -1,5 +1,6 @@
 (ns cwiki.routes.home
-  (:require [compojure.core :refer :all]
+  (:require [cemerick.url :as url]
+            [compojure.core :refer :all]
             [compojure.response :as response]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
@@ -57,7 +58,10 @@
   (let [actual-id (Integer. ^String page-id)
         tags (get-tag-set-from-req req)]
     (db/update-page-title-and-content! actual-id new-title tags new-content)
-    (layout/view-wiki-page (db/find-post-by-title new-title) req)))
+    (let [escaped-title (url/url-encode new-title)]
+      ; Important! We redirect here so that functions which use the
+      ; refering page get the page itself and not the editing page.
+      (redirect (str "/" escaped-title)))))
 
 (defn- save-and-view-page
   "Do the actual saving then retrieve and view the page."
