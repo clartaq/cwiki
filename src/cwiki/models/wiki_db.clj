@@ -226,6 +226,9 @@
          res (jdbc/query db-name sql-str {:result-set-fn to-content-helper})]
      res)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Get information from page maps.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defn page-map->id
   [m]
   (:page_id m))
@@ -259,13 +262,24 @@
   [m]
   (:page_modified m))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn get-all-page-names-in-db
+  "Return a collection of page name maps with all of the page names
+  in the db (as opposed to any generated pages.)"
+  ([]
+   (get-all-page-names-in-db h2-db))
+  ([db-name]
+   (let [title-array (jdbc/query db-name ["select page_title from pages"])]
+     title-array)))
+
 (defn get-all-page-names
   "Return a sorted set of all of the page titles in the wiki,
   including all of the 'special' pages."
   ([]
    (get-all-page-names h2-db))
   ([db-name]
-   (when-let [title-array (jdbc/query db-name ["select page_title from pages"])]
+   (when-let [title-array (get-all-page-names-in-db db-name)]
      (reduce #(conj %1 (:page_title %2))
              (special/get-all-special-page-names) title-array))))
 
