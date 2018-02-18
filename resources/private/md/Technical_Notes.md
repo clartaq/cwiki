@@ -1,13 +1,14 @@
 ---
-title: Technical Notes
 author: CWiki
-date: 10/01/2017 5:45:07 PM 
-updated: 1/23/2018 4:37:27 PM 
+title: Technical Notes
+date: 10/01/2017 5:45:07 PM
+updated: 02/18/2018 9:44:24 AM
 tags:
-  - technical note
-  - motivation
   - how it works
+  - motivation
+  - technical note
 ---
+
 These are some technical notes about CWiki. If you are only interested in using the wiki, you can ignore this stuff. If you want to know how CWiki works or why it works the way it does or how to build and modify your own version, the information here might be useful.
 
 ## Links to Related Pages ##
@@ -26,6 +27,7 @@ Almost no software is written without dependencies these days -- programs are ju
 * Developed and tested on late versions of Java 8 and early versions of Java 9.
 * [Flexmark](https://github.com/vsch/flexmark-java) is used for the Markdown parser and renderer.
 * [Jetty](http://www.eclipse.org/jetty/) is used as the server software.
+* [H2](http://h2database.com/html/main.html) is used for database functions.
 
 ### Clojure Stuff ###
 
@@ -36,7 +38,6 @@ Almost no software is written without dependencies these days -- programs are ju
 * [Compojure](https://github.com/weavejester/compojure) is used for routing.
 * [Hiccup](https://github.com/weavejester/hiccup) is used for "lispy" creation of HTML.
 * [Ring](https://github.com/ring-clojure/ring) is the web applications library.
-* [H2](http://h2database.com/html/main.html) is used for database functions.
 * [url](https://github.com/cemerick/url) is used for manipulating URLs.
 
 ### Everything Else ###

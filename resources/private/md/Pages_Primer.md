@@ -1,14 +1,16 @@
 ---
-title: Pages Primer
 author: CWiki
+title: Pages Primer
 date: 10/24/2017 8:48:43 AM
-updated: 1/23/2018 1:50:16 PM 
+updated: 02/18/2018 9:18:12 AM
 tags:
-  - pages
   - help
+  - pages
 ---
 
 This "Pages Primer" is a brief introduction to creating, editing, and deleting pages in the wiki.
+
+The syntax used to write pages is a slight variant of [Markdown](https://daringfireball.net/projects/markdown/). The syntax accepted by this wiki includes an extension to allow  [[Wikilinks|wikilinks]], that is, links to other pages within the wiki, in a Markdown file. (See the [[Links Primer]] for details.)
 
 ## Creating Pages ##
 
@@ -16,11 +18,11 @@ You can create pages in CWiki if you have been assigned the role of **writer**, 
 
 You can create a page by one of three methods.
 
-### Link to A Non-Existent Page (Recommended) ###
+### Link to A Non-Existent Page ###
 
 When you are editing a page and want to link to a page that doesn't exist yet, just enter the link to the non-existent page. When you are done editing the current page, the link to the page you want to create will appear in red, like this: [[page I want to link to]]. Then you can just click on the red link. The editor will open up letting you put whatever content you want on the newly created page.
 
-### Click the "New" Link in the Navigation Bar ###
+### Click the "New" Link in the Navigation Bar (Recommended) ###
 
 At the top of the wiki window in your browser, there are a series of navigation links, including one that says "New". When you click that link, a new page will be created. Just change the title and enter the content you want. Finally, click the "Save Changes" button below the editor. The new page will be saved.
 
@@ -66,3 +68,6 @@ You can't undo this. So be thoughtful about your choices.
 
 Note that some pages can't be deleted regardless of you role. These pages are vital to the operation of the CWiki program itself.
 
+## Special Pages ##
+
+There are some [[Special Pages]] in the wiki too. You can read about them by clicking the link.
