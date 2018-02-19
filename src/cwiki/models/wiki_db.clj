@@ -475,6 +475,25 @@
 ;; End of tag functions.
 ;;
 
+(defn get-ids-of-all-pages-with-user
+  "Return a set of all the page ids for pages with the given user name."
+  ([user-name]
+   (get-ids-of-all-pages-with-user user-name h2-db))
+  ([user-name db]
+   (let [user-id (user-name->user-id user-name)]
+     (jdbc/query
+       db
+       ["select page_id from pages where page_author=?" user-id]
+       {:result-set-fn rs->page-ids-as-set}))))
+
+(defn get-titles-of-all-pages-with-user
+  "Return a case-insensitive sorted-set of all of the titles of all
+  of the pages that have this user name."
+  [user-name]
+  (let [page-ids (get-ids-of-all-pages-with-user user-name)]
+    (reduce #(conj %1 (page-id->title %2))
+            (sorted-set-by case-insensitive-comparator) page-ids)))
+
 (defn update-page-title-and-content!
   [id title tag-set content]
   (jdbc/update! h2-db :pages {:page_title    title
