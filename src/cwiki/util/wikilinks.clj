@@ -108,6 +108,12 @@
   [title]
   (s/ends-with? title "/as-tag"))
 
+(defn- as-user?
+  "Handle the special case when a link points to a user. Used to build
+  the All Users page."
+  [title]
+  (s/ends-with? title "/as-user"))
+
 (defn link-parts->html-link
   "Given a map containing a (possibly identical) page title for
   a link and some text to be displayed for the link,
@@ -115,6 +121,7 @@
   [link-parts req]
   (let [title (:title-part link-parts)]
     (if (or (as-tag? title)
+            (as-user? title)
             (special/is-generated? title)
             (article-is-present? title))
       (get-view-link-for-existing-page link-parts req)

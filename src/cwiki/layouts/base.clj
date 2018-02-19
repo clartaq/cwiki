@@ -332,6 +332,10 @@
   []
   (short-message "Forbidden" "You are not allowed to perform that action."))
 
+;;
+;; Import/Export related pages.
+;;
+
 (defn no-files-to-import-page
   "Create a page stating that there are no files to import."
   [referer]
@@ -645,8 +649,11 @@
             (.append "\n")
             (.toString))
         (recur (rest t) (-> sb
-                            (.append "\n- ")
-                            (.append (first t))))))))
+                            (.append "\n- [[")
+                            (.append (first t))
+                            (.append "/as-user|")
+                            (.append (first t))
+                            (.append "]]")))))))
 
 (defn compose-all-pages-page
   "Return a page listing all of the pages in the wiki."
@@ -662,6 +669,16 @@
   (let [query-results (db/get-all-users)
         content (process-name-set query-results)
         post-map (db/create-new-post-map "All Users" content)]
+    (view-list-page post-map query-results req)))
+
+(defn compose-all-pages-with-user
+  "Return a page listing the titles of all of the pages attributed to the user."
+  [user-name req]
+  (let [query-results (db/get-titles-of-all-pages-with-user user-name)
+        content (process-title-set query-results)
+        post-map (db/create-new-post-map (str "All pages attributed to user \""
+                                              user-name "\"")
+                                         content)]
     (view-list-page post-map query-results req)))
 
 (defn compose-all-tags-page

@@ -70,6 +70,9 @@
                                            (build-response new-body request))
                                          ;else
                                          (build-response (layout/compose-403-page) request 403)))
+      (s/ends-with? title "/as-user") (let [author-only (s/replace title "/as-user" "")
+                                            new-body (layout/compose-all-pages-with-user author-only request)]
+                                        (build-response new-body request))
       (s/ends-with? title "/as-tag") (let [tag-only (s/replace title "/as-tag" "")
                                            new-body (layout/compose-all-pages-with-tag tag-only request)]
                                        (build-response new-body request))
