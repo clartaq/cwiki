@@ -167,7 +167,7 @@
 (defn- clob->string
   "Return a string created by translating and H2 Clob."
   [clob]
-  (with-open [rdr (.getCharacterStream clob)]
+  (with-open [rdr (.getCharacterStream ^JdbcClob clob)]
     (let [lseq (line-seq rdr)
           butlast-line (butlast lseq)
           butlast-line-mapped (map #(str % "\n") butlast-line)
