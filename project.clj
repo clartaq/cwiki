@@ -1,7 +1,7 @@
 (defproject cwiki "0.0.9-SNAPSHOT"
   :description "A personal wiki written in Clojure"
   :url "https://bitbucket.org/David_Clark/cwiki"
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [buddy/buddy-auth "2.1.0"]
                  [buddy/buddy-hashers "1.3.0"]
                  [com.cemerick/url "0.1.1"]
