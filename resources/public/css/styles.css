@@ -42,12 +42,29 @@ html {
 }
 
 :root {
-    --heading-background: transparent;
-    --heading-color: dimgray;
-    --h2-bottom-border: #ccc;
 
-    --body-background: #fafafa;
+    /* Some colors. */
+
+    --heading-background-color: transparent;
+    --heading-color: dimgray;
+
+    --body-background-color: #fafafa;
     --body-color: #111111;
+
+    --normal-link-color: #5580ff;
+    /*
+    --link-color: var(--normal-link-color); !*#5580ff;*!
+    --link-focus-color: var(--normal-link-color); !*#5580ff;*!
+    --link-visited-color: var(--normal-link-color); !*#5580ff;*!
+    --link-hover-color: var(--normal-link-color); !*#5580ff;*!
+    --link-active-color: var(--normal-link-color); !*#5580ff;*!
+    */
+
+    /* Color used for Rules, vertical separators, etc. */
+    --rule-color: #ccc;
+
+    /* Used for the borders of buttons, etc. */
+    --active-border-color: #9daca9;
 
     --page-header-background-color: dimgray;
 
@@ -62,12 +79,12 @@ html {
     --menu-item-subnav-background: dimgray;
 
     --search-text-color: dimgray;
-    --search-text-border-color: #9daca9;
+/*    --search-text-border-color: #9daca9;*/
     --search-text-box-shadow-color: #fff;
 
     --search-submit-color: #a0e0ff;
     --search-submit-background-color: #fafafa;
-    --search-submit-border-color: #9daca9;
+/*    --search-submit-border-color: #9daca9;*/
     --search-submit-box-shadow-color: #fff;
 
     --search-submit-hover-color: dimgray;
@@ -78,25 +95,21 @@ html {
     --search-submit-focus-box-shadow-color: #6fb5f1;
 
     --search-submit-active-color: #e5ecf4;
-    --search-submit-active-border-color: #9da;
+    /*--search-submit-active-border-color: #9daca9;*/
     --search-submit-active-background-color: #d2d6d6;
 
     --search-submit-disabled-color: #e5ecf4;
 
-    --left-aside-h6-bottom-border: #ccc;
-
-    --page-content-left-border-color: #ccc; /*dddddd;*/
-
-    --centered-content-link-color: #a0e0ff;
-    --centered-content-link-visited-color: #5689a9;
-    --centered-content-link-active-color: #a0e0ff;
+    --content-link-color: #a0e0ff;
+    --content-link-visited-color: #5689a9;
+    --content-link-active-color: #a0e0ff;
 
     --form-title-color: dimgray;
     --form-label-color: dimgray;
     --form-label-background: transparent;
     
     --form-button-background-color:#e5e9e8;
-    --form-button-border-color: #9daca9;
+   /* --form-button-border-color: #9daca9;*/
     --form-button-box-shadow-color: #fff;
     --form-button-color: #454545;
     --form-button-text-shadow-color: #fff;
@@ -105,7 +118,7 @@ html {
     --form-button-focus-border-color: #0036ff;
     --form-button-focus-box-shadow-color: #6fb5f1;
 
-    --form-button-active-border-color: #9daca9;
+    /*--form-button-active-border-color: #9daca9;*/
     --form-button-active-background-color: #d2d6d6;
     --form-button-active-box-shadow-color: rgba(0, 0, 0, 0.1);
 
@@ -127,29 +140,23 @@ html {
     --footer-color: lightgrey;
     --footer-background-color: dimgray;
 
-    --blockquote-left-border-color: #ccc; /*dddddd;*/
     --blockquote-color: #777777;
-
-    --horizontal-rule-bottom-border-color: #ccc;
-
-    --link-color: #5580ff;
-    --link-focus-color: #5580ff;
-    --link-visited-color: #5580ff;
-    --link-hover-color: #5580ff;
-    --link-active-color: #5580ff;
 
     --menu-item-link-color: #a0e0ff;
 
     --code-background-color: #eee;
     --code-highlight-color: #f6f8fa;
 
-    --two-column-list-column-rule-color: #ccc;
-    
+    /* Fonts. */
+
+    --fixed-font-family: Consolas, Menlo, Monaco, "Lucida Console",
+    "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+    "Courier New", monospace, serif;
 }
 
 /* Some typography */
 h1, h2, h3, h4, h5, h6 {
-    background-color: var(--heading-background);
+    background-color: var(--heading-background-color);
     color: var(--heading-color);
     font-family: "Segoe UI", "Lucida Grande", Tahoma, Verdana, Helvetica,
     Arial, sans-serif;
@@ -165,7 +172,7 @@ h1 {
 
 h2 {
     font-size: 1.728em;
-    border-bottom: var(--h2-bottom-border);
+    border-bottom: var(--rule-color);
     padding-bottom: 0.3em;
 }
 
@@ -195,7 +202,7 @@ body {
     Tahoma, Verdana, Helvetica, Arial, sans-serif;
     font-weight: normal;
     color: var(--body-color);
-    background-color: var(--body-background);
+    background-color: var(--body-background-color);
     font-size: 1em;
     line-height: 1.5em;
     margin: 0; /*gets rid of white space around body*/
@@ -329,7 +336,7 @@ body {
 #search-text {
     font-size: 0.8em;
     color: var(--search-text-color);
-    border: 1px solid var(--search-text-border-color);
+    border: 1px solid var(--active-border-color); /*search-text-border-color);*/
     border-radius: 4px;
     box-shadow: inset 0 1px var(--search-text-box-shadow-color);
     box-sizing: border-box;
@@ -345,7 +352,7 @@ body {
     font-weight: bold;
     color: var(--search-submit-color);
     background-color: var(--search-submit-background-color);
-    border: 1px solid var(--search-submit-border-color);
+    border: 1px solid var(--active-border-color); /*search-submit-border-color);*/
     border-radius: 4px;
     box-shadow: inset 0 1px var(--search-submit-box-shadow-color);
     box-sizing: border-box;
@@ -360,14 +367,14 @@ body {
 
 #search-submit:focus {
     color: var(--search-submit-focus-color);
-    border: 1px solid var(--search-submit-focus-border-color);
+    border: 1px solid var(--active-border-color); /*search-submit-focus-border-color);*/
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--search-submit-focus-box-shadow-color);
     outline: 0;
 }
 
 #search-submit:active {
     color: var(--search-submit-active-color);
-    border: 1px solid var(--search-submit-active-border-color);
+    border: 1px solid var(--active-border-color); /*search-submit-active-border-color);*/
     background-color: var(--search-submit-active-background-color);
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
 }
@@ -395,7 +402,7 @@ inside another flexbox. */
 
 .left-aside h6 {
     font-size: 0.8em;
-    border-bottom: 1px solid var(--left-aside-h6-bottom-border);
+    border-bottom: 1px solid var(--rule-color); /*left-aside-h6-bottom-border);*/
 }
 
 .left-aside p {
@@ -422,7 +429,7 @@ inside another flexbox. */
     padding: 0.5em 0.5em 0.5em 1.5em;
     max-width: 70ch;
     flex: 1 1 auto;
-    border-left: 1px solid var(--page-content-left-border-color);
+    border-left: 1px solid var(--rule-color); /*page-content-left-border-color);*/
 }
 
 /* content and centered content are used for 404, edit, and create
@@ -452,15 +459,15 @@ textarea#content {
 }
 
 .centered-content a:link, .content a:link {
-    color: var(--centered-content-link-color);
+    color: var(--content-link-color);
 }
 
 .centered-content a:visited, .content a:visited {
-    color: var(--centered-content-link-visited-color);
+    color: var(--content-link-visited-color);
 }
 
 .centered-content a:hover:active:focus, .content a:hover:active:focus {
-    color: var(--centered-content-link-active-color);
+    color: var(--content-link-active-color);
     text-decoration: underline;
 }
 
@@ -663,7 +670,7 @@ label.cabinet input.file
  */
 .form-button {
     background-color: var(--form-button-background-color);
-    border: 1ps solid var(--form-button-border-color);
+    border: 1ps solid var(--active-border-color); /*form-button-border-color);*/
     border-radius: 4px;
     box-shadow: inset 0 1px var(--form-button-box-shadow-color);
     box-sizing: border-box;
@@ -690,13 +697,13 @@ label.cabinet input.file
 }
 
 .form-button:focus {
-    border: 1px solid var(--form-button-focus-border-color);
+    border: 1px solid var(--active-border-color); /*form-button-focus-border-color);*/
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--form-button-focus-box-shadow-color);
     outline: 0;
 }
 
 .form-button:active {
-    border: 1px solid var(--form-button-active-border-color);
+    border: 1px solid var(--active-border-color); /*form-button-active-border-color);*/
     background-color: var(--form-button-active-background-color);
     box-shadow: inset 0 1px var(--form-button-active-box-shadow-color);
 }
@@ -727,15 +734,19 @@ label.cabinet input.file
 table {
     font-size: 0.85em;
     color: var(--table-color);
-    border: 1px var(--table-border-color);
+    border: 1px solid var(--table-border-color);
     border-collapse: collapse;
     margin-bottom: 1em;
+}
+
+thead {
+    border: 1px solid var(--table-header-border-color);
 }
 
 th {
     background-color: var(--table-header-background-color);
     padding: 8px;
-    border: var(--table-header-border-color);
+    border: 1px solid var(--table-header-border-color);
 }
 
 tbody tr:nth-child(odd) {
@@ -786,7 +797,7 @@ br {
 }
 
 blockquote {
-    border-left: 4px solid var(--blockquote-left-border-color);
+    border-left: 4px solid var(--rule-color); /*blockquote-left-border-color);*/
     padding: 0 15px;
     color:  var(--blockquote-color);
 }
@@ -805,7 +816,7 @@ hr {
     overflow: hidden;
     background: transparent;
     border: 0;
-    border-bottom: 1px solid var(--horizontal-rule-bottom-border-color);
+    border-bottom: 1px solid var(--rule-color); /*horizontal-rule-bottom-border-color);*/
 }
 
 li {
@@ -823,27 +834,27 @@ li:first-child {
 /* Some link styling. */
 
 a:link {
-    color: var(--link-color);
+    color: var(--normal-link-color); /*link-color);*/
     text-decoration: none;
 }
 
 a:focus {
-    color: var(--link-focus-color);
+    color: var(--normal-link-color); /*link-focus-color);*/
     text-decoration: underline;
 }
 
 a:visited {
-    color: var(--link-visited-color);
+    color: var(--normal-link-color); /*link-visited-color);*/
     text-decoration: none;
 }
 
 a:hover {
-    color: var(--link-hover-color);
+    color: var(--normal-link-color); /*link-hover-color);*/
     text-decoration: underline;
 }
 
 a:active {
-    color: var(--link-active-color);
+    color: var(--normal-link-color); /*link-active-color);*/
     text-decoration: underline;
 }
 
@@ -865,7 +876,10 @@ q {
 /* pre and code blocks */
 pre, code {
     background-color: var(--code-background-color);
-    font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
+    font-family: var(--fixed-font-family);
+    /*Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono",
+    "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace,
+    serif;*/
     margin-bottom: 10px;
     margin-left: 2em;
     overflow: auto;
@@ -874,42 +888,48 @@ pre, code {
 
 code {
     background-color: var(--code-background-color);
-    font-size: 100%;
+    font-family: var(--fixed-font-family);
+    /*Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono",
+    "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace,
+    serif;*/
+    font-size: 85%;
     margin: 0;
     padding: .2em 0
 }
 
-del code {
+/*del code {
     text-decoration: inherit
-}
+}*/
 
 pre > code {
     background: transparent;
-    border: 0;
+    /*border: green; !*0;*!*/
     font-size: 100%;
     margin: 0;
     padding: 0;
-    white-space: pre
+    /*white-space: pre*/
 }
 
 .highlight {
     margin-bottom: 16px
 }
 
+/*
 pre {
     margin-bottom: 0
 }
+*/
 
 .highlight pre, pre {
     background-color: var(--code-highlight-color);
     font-size: 85%;
-    line-height: 1.45;
+    line-height: inherit;
     overflow: auto;
     padding: 16px
 }
 
 pre code {
-    border: 0;
+    /*border: red; !*0;*!*/
     display: inline;
     line-height: inherit;
     margin: 0;
@@ -923,7 +943,7 @@ div.two-column-list {
     max-width: 70ch;
     columns: 2;
     column-gap: 2em;
-    column-rule: 1px solid var(--two-column-list-column-rule-color);
+    column-rule: 1px solid var(--rule-color); /*two-column-list-column-rule-color);*/
 }
 
 div.two-column-list li {
