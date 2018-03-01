@@ -23,6 +23,7 @@
             [hiccup.element :refer [link-to]])
   (:import (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
+           (com.vladsch.flexmark.ext.footnotes FootnoteExtension)
            (com.vladsch.flexmark.html HtmlRenderer HtmlRenderer$Builder)
            (com.vladsch.flexmark.parser Parser Parser$Builder
                                         ParserEmulationProfile)
@@ -50,7 +51,8 @@
                  (.set TablesExtension/HEADER_SEPARATOR_COLUMN_MATCH true)
                  (.set Parser/EXTENSIONS (ArrayList.
                                            [(StrikethroughExtension/create)
-                                            (TablesExtension/create)]))))
+                                            (TablesExtension/create)
+                                            (FootnoteExtension/create)]))))
 
 (def parser (.build (Parser/builder options)))
 (def renderer (.build (HtmlRenderer/builder options)))
