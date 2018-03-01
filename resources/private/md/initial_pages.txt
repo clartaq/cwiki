@@ -17,6 +17,7 @@ About_TeX.md
 About_the_Sidebar.md
 Admin.md
 Choosing_an_Embeddable_Markdown_Editor.md
+Code_Formatting_and_Highlighting.md
 CWiki_FAQ.md
 CWiki_Name.md
 Description_of_an_Import_Bug.md
