@@ -52,18 +52,10 @@ html {
     --body-color: #111111;
 
     --normal-link-color: #5580ff;
-    /*
-    --link-color: var(--normal-link-color); !*#5580ff;*!
-    --link-focus-color: var(--normal-link-color); !*#5580ff;*!
-    --link-visited-color: var(--normal-link-color); !*#5580ff;*!
-    --link-hover-color: var(--normal-link-color); !*#5580ff;*!
-    --link-active-color: var(--normal-link-color); !*#5580ff;*!
-    */
 
     /* Color used for Rules, vertical separators, etc. */
     --rule-color: #ccc;
 
-    /* Used for the borders of buttons, etc. */
     --active-border-color: #9daca9;
 
     --page-header-background-color: dimgray;
@@ -79,12 +71,10 @@ html {
     --menu-item-subnav-background: dimgray;
 
     --search-text-color: dimgray;
-/*    --search-text-border-color: #9daca9;*/
     --search-text-box-shadow-color: #fff;
 
     --search-submit-color: #a0e0ff;
     --search-submit-background-color: #fafafa;
-/*    --search-submit-border-color: #9daca9;*/
     --search-submit-box-shadow-color: #fff;
 
     --search-submit-hover-color: dimgray;
@@ -95,7 +85,6 @@ html {
     --search-submit-focus-box-shadow-color: #6fb5f1;
 
     --search-submit-active-color: #e5ecf4;
-    /*--search-submit-active-border-color: #9daca9;*/
     --search-submit-active-background-color: #d2d6d6;
 
     --search-submit-disabled-color: #e5ecf4;
@@ -109,7 +98,6 @@ html {
     --form-label-background: transparent;
     
     --form-button-background-color:#e5e9e8;
-   /* --form-button-border-color: #9daca9;*/
     --form-button-box-shadow-color: #fff;
     --form-button-color: #454545;
     --form-button-text-shadow-color: #fff;
@@ -118,7 +106,6 @@ html {
     --form-button-focus-border-color: #0036ff;
     --form-button-focus-box-shadow-color: #6fb5f1;
 
-    /*--form-button-active-border-color: #9daca9;*/
     --form-button-active-background-color: #d2d6d6;
     --form-button-active-box-shadow-color: rgba(0, 0, 0, 0.1);
 
@@ -173,8 +160,6 @@ h1, h2, h3, h4, h5, h6 {
     background-color: var(--heading-background-color);
     color: var(--heading-color);
     font-family: var(--headline-font-family);
-/*"Segoe UI", "Lucida Grande", Tahoma, Verdana, Helvetica,
-    Arial, sans-serif;*/
     margin-top: 1.25em;
     margin-bottom: 0.8em;
     line-height: 1.25em;
@@ -214,8 +199,6 @@ small {
 body {
     padding: 0.15em;
     font-family: var(--body-font-family);
-/*"Segoe UI", Candara, "Helvetica Neue", "Lucida Grande",
-    Tahoma, Verdana, Helvetica, Arial, sans-serif;*/
     font-weight: normal;
     color: var(--body-color);
     background-color: var(--body-background-color);
@@ -314,9 +297,6 @@ body {
     position: relative;
 }
 .menu-item a {
-    /* font-weight: 800;*/
-    /*padding: 5px 10px;*/
-    /*display: block;*/
 }
 .menu-item > ul > li.subNav ul {
     display: none;
@@ -346,13 +326,12 @@ body {
 }
 
 #searchbox {
-
 }
 
 #search-text {
     font-size: 0.8em;
     color: var(--search-text-color);
-    border: 1px solid var(--active-border-color); /*search-text-border-color);*/
+    border: 1px solid var(--active-border-color);
     border-radius: 4px;
     box-shadow: inset 0 1px var(--search-text-box-shadow-color);
     box-sizing: border-box;
@@ -368,7 +347,7 @@ body {
     font-weight: bold;
     color: var(--search-submit-color);
     background-color: var(--search-submit-background-color);
-    border: 1px solid var(--active-border-color); /*search-submit-border-color);*/
+    border: 1px solid var(--active-border-color);
     border-radius: 4px;
     box-shadow: inset 0 1px var(--search-submit-box-shadow-color);
     box-sizing: border-box;
@@ -383,14 +362,14 @@ body {
 
 #search-submit:focus {
     color: var(--search-submit-focus-color);
-    border: 1px solid var(--active-border-color); /*search-submit-focus-border-color);*/
+    border: 1px solid var(--active-border-color);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--search-submit-focus-box-shadow-color);
     outline: 0;
 }
 
 #search-submit:active {
     color: var(--search-submit-active-color);
-    border: 1px solid var(--active-border-color); /*search-submit-active-border-color);*/
+    border: 1px solid var(--active-border-color);
     background-color: var(--search-submit-active-background-color);
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
 }
@@ -418,7 +397,7 @@ inside another flexbox. */
 
 .left-aside h6 {
     font-size: 0.8em;
-    border-bottom: 1px solid var(--rule-color); /*left-aside-h6-bottom-border);*/
+    border-bottom: 1px solid var(--rule-color);
 }
 
 .left-aside p {
@@ -445,7 +424,7 @@ inside another flexbox. */
     padding: 0.5em 0.5em 0.5em 1.5em;
     max-width: 70ch;
     flex: 1 1 auto;
-    border-left: 1px solid var(--rule-color); /*page-content-left-border-color);*/
+    border-left: 1px solid var(--rule-color);
 }
 
 /* content and centered content are used for 404, edit, and create
@@ -593,8 +572,6 @@ input#new-tag-button {
 
 .form-text-field {
     font-family: var(--form-font-family);
-/*    Calibri, "Segoe UI", Candara, "Helvetica Neue",
-    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;*/
     font-size: 0.9rem;
     padding-top: 0.2rem;
     padding-left: 0.1rem;
@@ -603,8 +580,6 @@ input#new-tag-button {
 
 .tag-text-field {
     font-family: var(--tag-font-family);
-  /*  Calibri, "Segoe UI", Candara, "Helvetica Neue",
-    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;*/
     font-size: 0.8rem;
     padding-top: 0.1rem;
     padding-left: 0.1rem;
@@ -622,8 +597,6 @@ input#new-tag-button {
 
 .form-text-area {
     font-family: var(--form-font-family);
-    /*Calibri, "Segoe UI", Candara, "Helvetica Neue",
-    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;*/
     font-size: 0.9rem;
     padding-top: 0.2rem;
     padding-left: 0.1rem;
@@ -689,7 +662,7 @@ label.cabinet input.file
  */
 .form-button {
     background-color: var(--form-button-background-color);
-    border: 1ps solid var(--active-border-color); /*form-button-border-color);*/
+    border: 1ps solid var(--active-border-color);
     border-radius: 4px;
     box-shadow: inset 0 1px var(--form-button-box-shadow-color);
     box-sizing: border-box;
@@ -716,13 +689,13 @@ label.cabinet input.file
 }
 
 .form-button:focus {
-    border: 1px solid var(--active-border-color); /*form-button-focus-border-color);*/
+    border: 1px solid var(--active-border-color);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--form-button-focus-box-shadow-color);
     outline: 0;
 }
 
 .form-button:active {
-    border: 1px solid var(--active-border-color); /*form-button-active-border-color);*/
+    border: 1px solid var(--active-border-color);
     background-color: var(--form-button-active-background-color);
     box-shadow: inset 0 1px var(--form-button-active-box-shadow-color);
 }
@@ -816,7 +789,7 @@ br {
 }
 
 blockquote {
-    border-left: 4px solid var(--rule-color); /*blockquote-left-border-color);*/
+    border-left: 4px solid var(--rule-color);
     padding: 0 15px;
     color:  var(--blockquote-color);
 }
@@ -835,7 +808,7 @@ hr {
     overflow: hidden;
     background: transparent;
     border: 0;
-    border-bottom: 1px solid var(--rule-color); /*horizontal-rule-bottom-border-color);*/
+    border-bottom: 1px solid var(--rule-color);
 }
 
 li {
@@ -847,33 +820,32 @@ li:last-child {
 }
 
 li:first-child {
-/*    margin-top: -0.8em;*/
 }
 
 /* Some link styling. */
 
 a:link {
-    color: var(--normal-link-color); /*link-color);*/
+    color: var(--normal-link-color);
     text-decoration: none;
 }
 
 a:focus {
-    color: var(--normal-link-color); /*link-focus-color);*/
+    color: var(--normal-link-color);
     text-decoration: underline;
 }
 
 a:visited {
-    color: var(--normal-link-color); /*link-visited-color);*/
+    color: var(--normal-link-color);
     text-decoration: none;
 }
 
 a:hover {
-    color: var(--normal-link-color); /*link-hover-color);*/
+    color: var(--normal-link-color);
     text-decoration: underline;
 }
 
 a:active {
-    color: var(--normal-link-color); /*link-active-color);*/
+    color: var(--normal-link-color);
     text-decoration: underline;
 }
 
@@ -894,16 +866,6 @@ q {
 
 /* Styles for pre-formatted blocks and code blocks. The order is important. */
 
-/*
-code {
-    background-color: var(--code-background-color);
-    font-family: var(--fixed-font-family);
-    font-size: 85%;
-    margin: 0;
-    padding: .2em!* 0*!
-}
-*/
-
 /* Both pre-formatted and code blocks get this treatment. This
    sets up in-line code that is contained in another body of
    text. */
@@ -912,8 +874,8 @@ pre, code {
     font-family: var(--fixed-font-family);
     font-size: 85%;
     margin: 0;
-    padding: .2em;/* 0*/
-    overflow: scroll; /*auto;*/
+    padding: .2em;
+    overflow: scroll;
 }
 
 /* Style code blocks that have a pre-formatted ancestor.  This
@@ -921,36 +883,18 @@ pre, code {
 pre code {
     background: transparent;
     font-size: 100%;
-   /* display: inline;*/
-    /*line-height: inherit;*/
-    /*margin: 0;*/
-    /*margin-bottom: 16px;*/
-    overflow: scroll; /*visible;*/
+    overflow: scroll;
     padding: 0
 }
 
-/*pre > code {
-    background: transparent;
-    font-size: 100%;
-    margin: 0;
-    padding: 0;
-}*/
-
-/*
-.highlight {
-    margin-bottom: 16px
-}
-*/
-
 /* This sets up pre-formatted blocks that are not code listings. */
 
-/*.highlight pre,*/ pre {
+pre {
     background-color: var(--code-highlight-color);
     font-size: 85%;
-    line-height: 1.4rem; /*inherit;*/
-    overflow: scroll; /*auto;*/
-    margin-bottom: 1ch; /* 16px;*/
-    /*padding: 16px*/
+    line-height: 1.4rem;
+    overflow: scroll;
+    margin-bottom: 1ch;
 }
 
 /* Styles for building a two-column list page. */
@@ -959,7 +903,7 @@ div.two-column-list {
     max-width: 70ch;
     columns: 2;
     column-gap: 2em;
-    column-rule: 1px solid var(--rule-color); /*two-column-list-column-rule-color);*/
+    column-rule: 1px solid var(--rule-color);
 }
 
 div.two-column-list li {

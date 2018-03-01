@@ -37,6 +37,7 @@
     <orderEntry type="library" name="Leiningen: com.googlecode.jarjar/jarjar:1.1" level="project" />
     <orderEntry type="library" name="Leiningen: com.h2database/h2:1.4.196" level="project" />
     <orderEntry type="library" name="Leiningen: com.lambdaworks/scrypt:1.4.0" level="project" />
+    <orderEntry type="library" name="Leiningen: com.vladsch.flexmark/flexmark-ext-footnotes:0.32.4" level="project" />
     <orderEntry type="library" name="Leiningen: com.vladsch.flexmark/flexmark-ext-gfm-strikethrough:0.32.4" level="project" />
     <orderEntry type="library" name="Leiningen: com.vladsch.flexmark/flexmark-ext-tables:0.32.4" level="project" />
     <orderEntry type="library" name="Leiningen: com.vladsch.flexmark/flexmark-formatter:0.32.4" level="project" />
@@ -59,12 +60,14 @@
     <orderEntry type="library" name="Leiningen: org.apache.ant/ant:1.8.2" level="project" />
     <orderEntry type="library" name="Leiningen: org.bouncycastle/bcpkix-jdk15on:1.58" level="project" />
     <orderEntry type="library" name="Leiningen: org.bouncycastle/bcprov-jdk15on:1.58" level="project" />
-    <orderEntry type="library" name="Leiningen: org.clojure/clojure:1.8.0" level="project" />
+    <orderEntry type="library" name="Leiningen: org.clojure/clojure:1.9.0" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/clojurescript:0.0-1586" level="project" />
+    <orderEntry type="library" name="Leiningen: org.clojure/core.specs.alpha:0.1.24" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/google-closure-library-third-party:0.0-2029-2" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/google-closure-library:0.0-2029-2" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/java.classpath:0.2.3" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/java.jdbc:0.7.5" level="project" />
+    <orderEntry type="library" name="Leiningen: org.clojure/spec.alpha:0.1.143" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/tools.macro:0.1.5" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/tools.namespace:0.2.11" level="project" />
     <orderEntry type="library" name="Leiningen: org.clojure/tools.nrepl:0.2.12" level="project" />
