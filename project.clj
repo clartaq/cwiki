@@ -1,7 +1,7 @@
 (defproject cwiki "0.0.9-SNAPSHOT"
   :description "A personal wiki written in Clojure"
   :url "https://bitbucket.org/David_Clark/cwiki"
-  :dependencies [[org.clojure/clojure "1.8.0"]
+  :dependencies [[org.clojure/clojure "1.9.0"]
                  [buddy/buddy-auth "2.1.0"]
                  [buddy/buddy-hashers "1.3.0"]
                  [com.cemerick/url "0.1.1"]
@@ -11,6 +11,7 @@
                  [clj-time "0.14.2"]
                  [com.vladsch.flexmark/flexmark "0.32.4"]
                  [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.32.4"]
+                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.32.4"]
                  [com.vladsch.flexmark/flexmark-ext-tables "0.32.4"]
                  [compojure "1.6.0"]
                  [hiccup "1.0.5"]
