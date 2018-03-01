@@ -144,22 +144,37 @@ html {
 
     --menu-item-link-color: #a0e0ff;
 
+    /* For in-line code segments of text. */
     --code-background-color: #eee;
-    --code-highlight-color: #f6f8fa;
+    /* For code blocks and pre-formatted blocks. */
+    --code-highlight-color: #f4f2fa;
 
     /* Fonts. */
+
+    --headline-font-family: "Segoe UI", "Lucida Grande", Tahoma, Verdana,
+    Helvetica, Arial, sans-serif;
+
+    --body-font-family: "Segoe UI", Candara, "Helvetica Neue", "Lucida Grande",
+    Tahoma, Verdana, Helvetica, Arial, sans-serif;
 
     --fixed-font-family: Consolas, Menlo, Monaco, "Lucida Console",
     "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
     "Courier New", monospace, serif;
+
+    --form-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;;
+
+    --tag-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;;
 }
 
 /* Some typography */
 h1, h2, h3, h4, h5, h6 {
     background-color: var(--heading-background-color);
     color: var(--heading-color);
-    font-family: "Segoe UI", "Lucida Grande", Tahoma, Verdana, Helvetica,
-    Arial, sans-serif;
+    font-family: var(--headline-font-family);
+/*"Segoe UI", "Lucida Grande", Tahoma, Verdana, Helvetica,
+    Arial, sans-serif;*/
     margin-top: 1.25em;
     margin-bottom: 0.8em;
     line-height: 1.25em;
@@ -198,8 +213,9 @@ small {
 
 body {
     padding: 0.15em;
-    font-family: "Segoe UI", Candara, "Helvetica Neue", "Lucida Grande",
-    Tahoma, Verdana, Helvetica, Arial, sans-serif;
+    font-family: var(--body-font-family);
+/*"Segoe UI", Candara, "Helvetica Neue", "Lucida Grande",
+    Tahoma, Verdana, Helvetica, Arial, sans-serif;*/
     font-weight: normal;
     color: var(--body-color);
     background-color: var(--body-background-color);
@@ -576,8 +592,9 @@ input#new-tag-button {
 }
 
 .form-text-field {
-    font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
-    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+    font-family: var(--form-font-family);
+/*    Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;*/
     font-size: 0.9rem;
     padding-top: 0.2rem;
     padding-left: 0.1rem;
@@ -585,8 +602,9 @@ input#new-tag-button {
 }
 
 .tag-text-field {
-    font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
-    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+    font-family: var(--tag-font-family);
+  /*  Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;*/
     font-size: 0.8rem;
     padding-top: 0.1rem;
     padding-left: 0.1rem;
@@ -603,8 +621,9 @@ input#new-tag-button {
 }
 
 .form-text-area {
-    font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
-    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+    font-family: var(--form-font-family);
+    /*Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;*/
     font-size: 0.9rem;
     padding-top: 0.2rem;
     padding-left: 0.1rem;
@@ -873,68 +892,65 @@ q {
     color: var(--menu-item-link-color);
 }
 
-/* pre and code blocks */
-pre, code {
-    background-color: var(--code-background-color);
-    font-family: var(--fixed-font-family);
-    /*Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono",
-    "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace,
-    serif;*/
-    margin-bottom: 10px;
-    margin-left: 2em;
-    overflow: auto;
-    padding: 5px 5px 20px
-}
+/* Styles for pre-formatted blocks and code blocks. The order is important. */
 
+/*
 code {
     background-color: var(--code-background-color);
     font-family: var(--fixed-font-family);
-    /*Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono",
-    "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace,
-    serif;*/
     font-size: 85%;
     margin: 0;
-    padding: .2em 0
-}
-
-/*del code {
-    text-decoration: inherit
-}*/
-
-pre > code {
-    background: transparent;
-    /*border: green; !*0;*!*/
-    font-size: 100%;
-    margin: 0;
-    padding: 0;
-    /*white-space: pre*/
-}
-
-.highlight {
-    margin-bottom: 16px
-}
-
-/*
-pre {
-    margin-bottom: 0
+    padding: .2em!* 0*!
 }
 */
 
-.highlight pre, pre {
-    background-color: var(--code-highlight-color);
+/* Both pre-formatted and code blocks get this treatment. This
+   sets up in-line code that is contained in another body of
+   text. */
+pre, code {
+    background-color: var(--code-background-color);
+    font-family: var(--fixed-font-family);
     font-size: 85%;
-    line-height: inherit;
-    overflow: auto;
-    padding: 16px
+    margin: 0;
+    padding: .2em;/* 0*/
+    overflow: scroll; /*auto;*/
 }
 
+/* Style code blocks that have a pre-formatted ancestor.  This
+   sets up code listings. */
 pre code {
-    /*border: red; !*0;*!*/
-    display: inline;
-    line-height: inherit;
-    margin: 0;
-    overflow: visible;
+    background: transparent;
+    font-size: 100%;
+   /* display: inline;*/
+    /*line-height: inherit;*/
+    /*margin: 0;*/
+    /*margin-bottom: 16px;*/
+    overflow: scroll; /*visible;*/
     padding: 0
+}
+
+/*pre > code {
+    background: transparent;
+    font-size: 100%;
+    margin: 0;
+    padding: 0;
+}*/
+
+/*
+.highlight {
+    margin-bottom: 16px
+}
+*/
+
+/* This sets up pre-formatted blocks that are not code listings. */
+
+/*.highlight pre,*/ pre {
+    background-color: var(--code-highlight-color);
+    font-size: 85%;
+    line-height: 1.4rem; /*inherit;*/
+    overflow: scroll; /*auto;*/
+    margin-bottom: 1ch; /* 16px;*/
+    /*padding: 16px*/
 }
 
 /* Styles for building a two-column list page. */
