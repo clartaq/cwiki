@@ -193,7 +193,7 @@
                    (email-field {:class "form-email-field"
                                  :value user-email} "new-email")
                    [:div {:class "form-restrictions"}
-                    "To erase the email field, erase delete all of the text
+                    "To erase the email field, delete all of the text
                      in the field and leave it blank."]]
                   [:div {:class "button-bar-container"}
                    (submit-button {:id    "change-user-button"

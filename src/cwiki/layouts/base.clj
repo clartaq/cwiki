@@ -85,15 +85,20 @@
     (str "CWiki: " (db/page-map->title post-map))
     "CWiki"))
 
+(def debugging-css true)
 (defn standard-head
   "Return the standard html head section for the wiki html pages."
   [post-map]
+  (let [q (if debugging-css
+            (str "?" (rand-int 2147483647))
+            "")]
+    (println "q:" q)
   [:head
    [:title (get-tab-title post-map)]
-   (include-css "/css/styles.css")
+   (include-css (str "/css/styles.css" q))
    (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
    (include-js "/js/mathjax-config.js")
-   (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")])
+   (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]))
 
 (defn- drop-menu
   "Return the drop-down menu for use in the page header."
@@ -540,7 +545,7 @@
                     [:div {:class "form-label-div"}
                      [:label {:class "form-label required"
                               :for   "title"} "Page Title"]]
-                    (text-field {:class     "form-text-field"
+                    (text-field {:class     "form-title-field"
                                  :autofocus "autofocus"} "title" title)]
                    (tag-editor-list-component tags)
                    ; KEEP THIS FOR NOW
