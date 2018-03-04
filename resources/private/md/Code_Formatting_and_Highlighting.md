@@ -2,7 +2,7 @@
 title: Code Formatting and Highlighting
 author: CWiki
 date: 02/27/2018 09:46:04 AM 
-updated: 03/01/2018 05:52:26 PM
+updated: 03/02/2018 03:43:57 PM
 tags:
   - technical note
   - text formatting
@@ -49,7 +49,7 @@ A lovely sunset.
 
 CSS for `<pre>` tags should not assume that there will be a code block within the tags unless it includes some special class that handles it.
 
-[GFM](https://github.github.com/gfm/) offers the convenience of what it calls "fenced code blocks" using a triple backtick ("\`\`\`") before and after the code block -- no indenting is required.
+[GFM](https://github.github.com/gfm/), which CWiki emulates, offers the convenience of what it calls "fenced code blocks" using a triple backtick ("\`\`\`") before and after the code block -- no indenting is required.
 
 ```
 (defn ex
@@ -64,6 +64,22 @@ CSS for `<pre>` tags should not assume that there will be a code block within th
 ```
 
 And then there are syntax highlighters to throw into the mix.
+
+In addition to the syntax highlighting mentioned later, there is a way to use a highlighter with pre-formatted blocks too. You can supply a class to the `<pre>` like this `<pre class="prettyprint"></pre>` and it will produce a result like this:
+
+<pre class="prettyprint">
+(defn ex
+  [an-arg]
+  (let [an-array [1 3 37]
+        a-set #{"a" "b" "c"}
+        a-map {:key-one "Something" :key-two "Else" :a-really-long-key "to see what happens with overflow"}]
+    (+ an-arg (second an-array))))
+=> #'user/ex
+(ex 14)
+=> 17
+</pre>
+
+As I write this, it produces a listing with a border. Since this is a pretty contrived method, it won't be used or mentioned in the future. 
 
 ### Syntax Highlighting ###
 
