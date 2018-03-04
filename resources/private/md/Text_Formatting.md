@@ -2,7 +2,7 @@
 title: Text Formatting
 author: CWiki
 date: 10/24/2017 8:57:33 AM 
-updated: 1/7/2018 10:46:26 AM     
+updated: 03/02/2018 03:48:56 PM
 tags:
   - formatting
   - Markdown
@@ -149,20 +149,7 @@ The markup above will render as:
 
 Using `code-prettify` in this way requires an active internet connection.
 
-There are a couple of additional ways to show code listings. Since Markdown passes through HTML unchanged, you can use the `<pre></pre>` and `<code></code>` tags directly.
-
-The `<code></code>` can be used for inline code like <code>a37 = 1.5*c2 + 15.346;</code>
-
-The `<pre></pre>`  tags can be used for code blocks. This might be useful if "prettyprint" is not recognizing the language in the block. You can specify a class containing the language like this `<pre class="prettyprint lang-clj">`, which indicates that the listing is in Clojure. Here's a listing of the same function as above, but the `<pre class="prettyprint lang-clj"></pre>` tags surround the code block.
-
-<pre class="prettyprint lang-clj">(defn f [x]
-  "A comment at the beginning."
-  (let [my-x x]
-    (println "my-x: " my-x) ; a line comment.
-    (+ 2 my-x)))
-</pre>
-
-Whew!
+There are a couple of additional ways to show code listings too. They wont' be described here, but you can look at [[Code Formatting and Highlighting]] for more details
 
 ## Tables ##
 
