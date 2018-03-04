@@ -2,7 +2,7 @@
 title: To Do
 author: CWiki
 date: 10/24/2017 9:17:04 AM  
-updated: 02/17/2018 03:55:49 PM
+updated: 03/02/2018 04:44:50 PM
 tags:
   - technical note
   - releases
@@ -15,7 +15,6 @@ This is an ever-evolving list of things that need doing.
 * Implement within-wiki search.
 * Any maintenance tasks like database compression, backup and restore, for example.
 * Beautify and style the edit/create pages.
-* Rationalize the CSS
 * At some point, we are going to have to stop creating the initial database from a bunch of Markdown files and just add a pre-built database to the repository. Need to get the tools
 * Make page lookup from links case-insensitive for the first letter in words.
 * Version tracking?
@@ -41,5 +40,6 @@ This is an ever-evolving list of things that need doing.
 * ~~Display, adding, deletion and editing tags in the page editing page.~~
 * ~~Add a tagging system. Look into hierarchical tagging systems.~~
 * ~~Ability to import and export pages, including metadata.~~
+* ~~Rationalize the CSS~~
 
 
