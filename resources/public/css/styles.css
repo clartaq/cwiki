@@ -96,8 +96,8 @@ html {
     --form-title-color: dimgray;
     --form-label-color: dimgray;
     --form-label-background: transparent;
-    
-    --form-button-background-color:#e5e9e8;
+
+    --form-button-background-color: #e5e9e8;
     --form-button-box-shadow-color: #fff;
     --form-button-color: #454545;
     --form-button-text-shadow-color: #fff;
@@ -114,14 +114,14 @@ html {
     --table-color: #333333;
     --table-border-color: #999999;
 
-    --table-header-background-color:#cfe7ed;
+    --table-header-background-color: #cfe7ed;
     --table-header-border-color: #a9c6c9;
 
     --table-body-table-row-nth-odd-color: #fafafa;
     --table-row-background-color: #f6f8fa;
 
     --table-node-border-color: #a9c6c9;
-    
+
     --table-row-hover-background-color: #f6f8fa;
 
     --footer-color: lightgrey;
@@ -152,7 +152,15 @@ html {
     "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;;
 
     --tag-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
-    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;;
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+
+    /* Some sizes and spacings. */
+
+    --content-max-width: 70ch;
+    --tag-field-right-margin: 0.2rem;
+    --form-component-max-width: calc(0.3*var(--content-max-width));
+    --tag-field-width: calc((var(--content-max-width)
+    - (4*var(--tag-field-right-margin)))/5);
 }
 
 /* Some typography */
@@ -422,7 +430,7 @@ inside another flexbox. */
 
 .page-content {
     padding: 0.5em 0.5em 0.5em 1.5em;
-    max-width: 70ch;
+    max-width: var(--content-max-width);
     flex: 1 1 auto;
     border-left: 1px solid var(--rule-color);
 }
@@ -432,7 +440,7 @@ pages at the moment.
  */
 
 textarea#content {
-    width: 70ch;
+    width: var(--content-max-width);
     height: 30em;
 }
 
@@ -445,7 +453,7 @@ textarea#content {
 
 .centered-content {
     padding: 0.5em;
-    max-width: 70ch;
+    max-width: var(--content-max-width);
     margin-left: auto; /* center content horizontally */
     margin-right: auto;
     flex: 1 1 auto;
@@ -570,8 +578,16 @@ input#new-tag-button {
 .form-label-div {
 }
 
-.form-text-field {
-    font-family: var(--form-font-family);
+.form-title-field {
+    width: var(--content-max-width);
+    font-size: 0.9rem;
+    padding-top: 0.2rem;
+    padding-left: 0.1rem;
+    padding-bottom: 0.3rem;
+}
+
+.form-text-field, .form-email-field {
+    width: var(--form-component-max-width);
     font-size: 0.9rem;
     padding-top: 0.2rem;
     padding-left: 0.1rem;
@@ -579,14 +595,13 @@ input#new-tag-button {
 }
 
 .tag-text-field {
-    font-family: var(--tag-font-family);
     font-size: 0.8rem;
     padding-top: 0.1rem;
     padding-left: 0.1rem;
     padding-bottom: 0.1rem;
-    max-width: 15ch;
-    margin-right: 0.2rem;
-    margin-bottom: 0.2rem;
+    width: var(--tag-field-width);
+    margin-right: var(--tag-field-right-margin);
+    margin-bottom: 0.3rem;
 }
 
 .tag-edit-tag-list {
@@ -596,22 +611,17 @@ input#new-tag-button {
 }
 
 .form-text-area {
-    font-family: var(--form-font-family);
     font-size: 0.9rem;
     padding-top: 0.2rem;
     padding-left: 0.1rem;
-    padding-bottom: 0.3rem;
-}
-
-.form-email-field {
-    font-size: 0.9rem;
-    padding-top: 0.2rem;
+    padding-right: 0.1rem;
     padding-bottom: 0.3rem;
 }
 
 .form-dropdown {
-    width: 30%;
+    width: var(--form-component-max-width);
     font-size: 0.9rem;
+    background-color: transparent;
     padding-top: 0.2rem;
     padding-bottom: 0.3rem;
 }
@@ -624,7 +634,7 @@ input#new-tag-button {
 }
 
 .form-password-field {
-    width: 30%;
+    width: var(--form-component-max-width);
     font-size: 0.9rem;
     padding-top: 0.2rem;
     padding-bottom: 0.3rem;
@@ -900,7 +910,7 @@ pre {
 /* Styles for building a two-column list page. */
 
 div.two-column-list {
-    max-width: 70ch;
+    max-width: var(--content-max-width);
     columns: 2;
     column-gap: 2em;
     column-rule: 1px solid var(--rule-color);
@@ -913,7 +923,7 @@ div.two-column-list li {
 }
 
 div.one-column-list {
-    max-width: 70ch;
+    max-width: var(--content-max-width);
 }
 
 div.one-column-list li {
