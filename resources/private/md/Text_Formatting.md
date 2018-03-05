@@ -2,7 +2,7 @@
 title: Text Formatting
 author: CWiki
 date: 10/24/2017 8:57:33 AM 
-updated: 03/02/2018 03:48:56 PM
+updated: 03/05/2018 03:28:01 PM
 tags:
   - formatting
   - Markdown
@@ -10,91 +10,19 @@ tags:
   - TeX
 ---
 
-Markdown provides a wealth of ways to easily format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+Markdown provides a wealth of ways to easily format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, specifically some [GitHub Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
 
-This page provides a quick description of some of the ways you can format text in CWiki. It also shows how to use some of the extensions like syntax highlighting in code listings, mathematics, and tables. Remember, you can always just edit this page to see how something was done.
+1. [Strikethrough](#strikethrough)
+1. [Code Listings](#code-listings)
+2. [Tables](#tables)
+3. [Mathematics](#mathematics)
+4. [Tables of Contents](#toc)
 
-Here are some examples of the types of formatting and things you can do.
+## Strikethrough <a name="strikethrough"></a> ##
 
-You can do inline formatting like:
+Markdown has a number of ways to emphasize text in a paragraph: bold, italic, underline and combinations. For some reason it does not have a method for formatting test with a strikethrough, something very useful in collaborative editing. GFM _does_ include an extension to support formatting with strikethrough. Just surround the text with two tildes. For example, `~~strikethrough~~` will produce ~~strikethrough~~.
 
-* Making **bold** items.
-* Marking words and *phrases* as italic.
-* You can <u>underline</u> some things.
-* You can also mark some things as deleted with ~~strikethrough~~.
-* And do various combinations of the above like <u>***underlined bold italics***</u>.
-
-## Headers ##
-
-You can make headers by inserting one or more number signs ("#") (or pound signs or hashes) before and after the heading. The more number signs, the lower level the header. A total of six levels are supported.
-
-Here are the different types supported and how to make them.
-
-```
-# Header 1 #
-## Header 2 ##
-### Header 3 ###
-#### Header 4 ####
-##### Header 5 #####
-###### Header 6 ######
-```
-
-The above produces:
-
-# Header 1 #
-## Header 2 ##
-### Header 3 ###
-#### Header 4 ####
-##### Header 5 #####
-###### Header 6 ######
-
-Note that not all Markdown editors require the heading text to be followed by the same number of number signs. However, others do. When importing or exporting text from CWiki, it's probably a good idea to match the number signs. As far as I know, all Markdown editors will work with that markup.
-
-## Lists ##
-An unordered, or "bullet", list can be created by preceding each line in the list with an asterisk or dash.
-
-```
-- a list item
-- another list item
-- list item with formatting like **bold**, *italic*.
-```
-produces:
-
-- a list item
-- another list item
-- list item with formatting like **bold**, *italic*.
-
-Note that the words within a list item may themselves have additional formatting applied. Lists can also have multiple levels, achieved by indenting the levels:
-
-```
-- top level
-	- second level
-		- third level
-			- and so on.
-```
-- top level
-	- second level
-		- third level
-			- and so on.
-
-You can produce numbered lists by preceding the list items with a number and period. This:
-
-```
-1. The first item.
-	1. The first sub-item.
-	2. And another.
-1. The second item.
-1. And the third.
-```
-Produces:
-
-1. The first item.
-	1. The first sub-item.
-	2. And another.
-1. The second item.
-1. And the third.
-
-## Code Listings ##
+## Code Listings <a name="code-listings"></a> ##
 
 CWiki handles code listings too. 
 
@@ -151,7 +79,7 @@ Using `code-prettify` in this way requires an active internet connection.
 
 There are a couple of additional ways to show code listings too. They wont' be described here, but you can look at [[Code Formatting and Highlighting]] for more details
 
-## Tables ##
+## Tables <a name="tables"></a> ##
 
 Tables are not a part of the original Markdown. However, they are very useful and available in many of the dialects of Markdown. CWiki implements the Github Flavored Markdown (GFM) version of tables.
 
@@ -188,7 +116,7 @@ Less | Pretty | Markdown
 1 | 2 | 3
 
 
-## Mathematics ##
+## Mathematics <a name="mathematics"></a> ##
 
 You can also enter mathematics using the familiar  [[About TeX|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
 
@@ -202,34 +130,6 @@ $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 
 For inline math, use single dollar signs, `$` to surround the math. For example, here is the markup for the same equation as above `$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$` which renders as $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$.
 
-## Miscellaneous ##
-### Horizontal Rule ###
-
-Here is a horizontal rule produced by at least three or more hyphens in a row: `---`.
-
----
-
-### Block Quotes ###
-Block quotes are produced by preceding each line with a "greater than" sign, ">". For example, this:
-
-
-    > This is what a block quote looks like.
-    > It can go on and on, just like the
-    > person you are quoting. You don't
-    > have to use it for quotes though. You
-    > can use it just as another way to make
-    > a particular piece of text stand out.
-
-produces this output:
-
-> This is what a block quote looks like.
-> It can go on and on, just like the
-> person you are quoting. You don't
-> have to use it for quotes though. You
-> can use it just as another way to make
-> a particular piece of text stand out.
-
-
-## Tables of Contents ##
+## Tables of Contents <a name="toc"></a> ##
 
 CWiki does not include any extensions to produce Tables of Contents since they can be created easily in almost any Markdown editor. See [[How to Make a Table of Contents]] for an example.
