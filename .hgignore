@@ -3,8 +3,8 @@ target/**
 resources/public/db/**
 *.jar
 *.xml
-/.lein-*
-/.nrepl-port
+.lein-*
+.nrepl-port
 .gitignore
 .git/**
 resources/public/db/**
