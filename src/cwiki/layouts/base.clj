@@ -85,14 +85,14 @@
     (str "CWiki: " (db/page-map->title post-map))
     "CWiki"))
 
-(def debugging-css true)
+(def debugging-css false)
+
 (defn standard-head
   "Return the standard html head section for the wiki html pages."
   [post-map]
   (let [q (if debugging-css
             (str "?" (rand-int 2147483647))
             "")]
-    (println "q:" q)
   [:head
    [:title (get-tab-title post-map)]
    (include-css (str "/css/styles.css" q))
