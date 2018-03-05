@@ -3,7 +3,7 @@
 ;;
 
 (ns cwiki.util.pp
-  (require [clojure.pprint :as pretty]))
+  (:require [clojure.pprint :as pretty]))
 
 (defn pp-map
   [m]
