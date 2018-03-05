@@ -134,7 +134,7 @@ html {
     /* For in-line code segments of text. */
     --code-background-color: #eee;
     /* For code blocks and pre-formatted blocks. */
-    --code-highlight-color: #f4f2fa;
+    --code-highlight-color: #eaf7fc; /*#f4f2fa;*/
 
     /* Fonts. */
 
@@ -612,10 +612,7 @@ input#new-tag-button {
 
 .form-text-area {
     font-size: 0.9rem;
-    padding-top: 0.2rem;
-    padding-left: 0.1rem;
-    padding-right: 0.1rem;
-    padding-bottom: 0.3rem;
+    padding: 0.2rem 0.1rem 0.3rem;
 }
 
 .form-dropdown {
