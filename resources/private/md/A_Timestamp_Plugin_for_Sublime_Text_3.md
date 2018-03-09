@@ -1,8 +1,8 @@
 ---
 title: A Timestamp Plugin for Sublime Text 3
 author: david
-date: 2/10/2018 10:16:57 AM
-modified: 03/09/2018 10:20:04 AM
+date: 2018-02-10T10:16:57.00000-05:00 
+modified: 2018-03-09T16:12:17.294154-05:00
 
 tags:
   - sublime text
@@ -16,8 +16,9 @@ tags:
 
  I found this [answer](https://stackoverflow.com/questions/11879481/can-i-add-date-time-for-sublime-snippet#13882791) to a similar question on StackOverflow. 
 
- Getting a timestamp worked, but it was in the wrong format. (Not really wrong, just an old version that I used based on the MarkdownPad editor.) I wanted to make the the output of the `Export` function of CWiki as compatible as possible with the input expected by the Hugo static blog generator. That required a different format. For example, as I write this, the ISO 8601 version of the current instant is `2018-03-09T10:26:35.249840-05:00`.
- Based on that, I added the following little snippet as a plugin on Sublime Text (Tools/Developer/New Plugin...).
+ Getting a timestamp worked, but it was in the wrong format. (Not really wrong, just an old version that I used based on the MarkdownPad editor.) I wanted to make the the output of the `Export` function of CWiki as compatible as possible with the input expected by the [Hugo](https://gohugo.io) static blog generator. That required a different format. For example, as I write this, the ISO 8601 version of the current instant is `2018-03-09T10:26:35.249840-05:00`.
+
+ Based on that, I added the following little snippet as a plugin for Sublime Text (Tools/Developer/New Plugin...).
 
  ```
 import datetime, time, getpass
