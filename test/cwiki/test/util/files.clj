@@ -152,3 +152,31 @@
       (is (= "\nA Markdown file without dates or tags in the metadata." (:body m)))
       )))
 
+(deftest trim-leading-and-trailing-underscores-test
+  (testing "The trim-leading-and-trailing-underscores function."
+    (is (nil? (trim-leading-and-trailing-underscores nil)))
+    (is (= "" (trim-leading-and-trailing-underscores "")))
+    (is (= "" (trim-leading-and-trailing-underscores "_")))
+    (is (= "" (trim-leading-and-trailing-underscores "____")))
+    (is (= "word" (trim-leading-and-trailing-underscores "word")))
+    (is (= "word" (trim-leading-and-trailing-underscores "_word")))
+    (is (= "word" (trim-leading-and-trailing-underscores "word_")))
+    (is (= "word" (trim-leading-and-trailing-underscores "_word_")))
+    (is (= "word" (trim-leading-and-trailing-underscores "___word__")))
+    (is (= "hyphenated-word" (trim-leading-and-trailing-underscores
+                               "__hyphenated-word_")))))
+
+(deftest in?-test
+  (testing "The in? function."
+    (is nil? (in? nil "x"))
+    (is nil? (in? 32 nil))
+    (is nil? (in? 32 [12 15 40 56]))
+    (is true? (in? 32 [13 939 32 909485]))
+    (is true? (in? \g "finger"))
+    (is nil? (in? \z "finger"))
+    (is nil? (in? 32 '(45 67 9883)))
+    (is true? (in? 32 '(1 3 5 32 95 891234789)))
+    (is true? (in? "in" "finger"))
+    (is nil? (in? "zinger" "finger"))
+    (is true? (in? 32 #{1 3 5 32 95 891234789}))
+    (is nil? (in? 32 #{1 3 5 432 95 891234789}))))
