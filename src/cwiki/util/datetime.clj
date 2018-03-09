@@ -12,7 +12,7 @@
 ;; Things related to time formatting.
 
 (def markdown-pad-format (f/formatter-local "MM/dd/yyy h:mm:ss a"))
-(def hugo-format (f/formatter-local "yyy-MM-dd'T'HH:mm:ss.SSSZZ" ))
+(def hugo-format (f/formatter-local "yyy-MM-dd'T'HH:mm:ss.SSSZZ"))
 
 (defn get-formatted-date-time
   "Take a sql timestamp and return a formatted string version."
@@ -26,5 +26,13 @@
 
 (defn meta-datetime-to-sql-datetime
   [timestamp]
-  (c/to-sql-time (f/parse markdown-pad-format
-                          timestamp)))
+  (println "meta-datetime-to-sql-datetime: timestamp:" timestamp)
+  (println "(type timestamp):" (type timestamp))
+  (if (string? timestamp)
+    (c/to-sql-time (f/parse markdown-pad-format
+                            timestamp))
+    (let [r (c/to-sql-time timestamp)]
+      (println "r:" r)
+      r)
+    )
+  )
