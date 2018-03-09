@@ -12,6 +12,7 @@
 ;; Things related to time formatting.
 
 (def markdown-pad-format (f/formatter-local "MM/dd/yyy h:mm:ss a"))
+(def hugo-format (f/formatter-local "yyy-MM-dd'T'HH:mm:ss.SSSZZ" ))
 
 (defn remove-from-end
   "Remove any instance of 'end' from the end of string s
@@ -124,8 +125,11 @@
   "Return a copy of the string in which any leading and trailing
   underscores have been removed."
   [s]
-  (-> (st/replace-first s (re-pattern "^\\_+") "")
-      (st/replace (re-pattern "\\_+$") "")))
+  (when s
+    (st/replace
+      (st/replace-first s (re-pattern "^\\_+") "")
+      (re-pattern "\\_+$")
+      "")))
 
 (defn in?
   "Return true if coll contains elm."
@@ -167,7 +171,7 @@
 (defn get-formatted-date-time
   "Take a sql timestamp and return a formatted string version."
   [timestamp]
-  (let [dt (DateTime. (java.sql.Timestamp/valueOf ^String (.toString timestamp)))]
+  (let [dt (DateTime. (java.sql.Timestamp/valueOf ^String (str timestamp)))]
     (f/unparse markdown-pad-format dt)))
 
 (defn build-tag-yaml
@@ -176,7 +180,7 @@
   (if (seq tag-set)
     (let [sb (StringBuffer. "tags:\n")]
       (mapv #(.append sb (str "  - " % "\n")) tag-set)
-      (.toString sb))
+      (str sb))
     ""))
 
 (defn build-yaml
@@ -187,13 +191,14 @@
         created (get-formatted-date-time (:page_created page-map))
         modified (get-formatted-date-time (:page_modified page-map))
         yaml (StringBuffer. "---\n")]
+    (println "formatters:\n" (f/show-formatters))
     (doto yaml
       (.append (str "author: " author-name "\n"))
       (.append (str "title: " title "\n"))
       (.append (str "date: " created "\n"))
-      (.append (str "updated: " modified "\n"))
+      (.append (str "modified: " modified "\n"))
       (.append (build-tag-yaml tags)))
-    (.toString (.append yaml "---\n\n"))))
+    (str (.append yaml "---\n\n"))))
 
 (defn get-execution-directory
   "Return the canonical path where the program is executing."
