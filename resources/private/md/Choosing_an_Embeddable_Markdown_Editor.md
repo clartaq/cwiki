@@ -2,7 +2,7 @@
 title: Choosing an Embeddable Markdown Editor
 author: CWiki
 date: 02/24/2018 03:08:39 PM
-updated: 02/24/2018 03:26:13 PM    
+updated: 03/08/2018 12:07:53 PM
 tags:
   - technical note
   - Markdown
@@ -28,3 +28,5 @@ There are some issues too.
 So, what to do?
 
 Why, rewrite it all in ClojureScript of course.
+
+Another option to follow was the [Minimalist Online Markdown Editor](https://github.com/pioul/Minimalist-Online-Markdown-Editor/tree/master) by Philippe Masset.
