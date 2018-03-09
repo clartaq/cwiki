@@ -1,21 +1,12 @@
 (ns cwiki.util.files
   (:require [clj-yaml.core :as yaml]
-            ;[clj-time.format :as f]
-
             [clojure.java.io :as io]
             [clojure.string :as st]
             [clojure.string :as s]
             [cwiki.util.datetime :as dt])
-  (:import (java.io BufferedReader InputStreamReader File)
-           ;(org.joda.time DateTime)
-           ))
+  (:import (java.io BufferedReader InputStreamReader File)))
 
 (def ^:const sep (File/separator))
-
-;; Things related to time formatting.
-
-;(def markdown-pad-format (f/formatter-local "MM/dd/yyy h:mm:ss a"))
-;(def hugo-format (f/formatter-local "yyy-MM-dd'T'HH:mm:ss.SSSZZ" ))
 
 (defn remove-from-end
   "Remove any instance of 'end' from the end of string s
@@ -171,12 +162,6 @@
                           (remove-reserved-device-names))]
     sanitary-name))
 
-;(defn get-formatted-date-time
-;  "Take a sql timestamp and return a formatted string version."
-;  [timestamp]
-;  (let [dt (DateTime. (java.sql.Timestamp/valueOf ^String (str timestamp)))]
-;    (f/unparse markdown-pad-format dt)))
-
 (defn build-tag-yaml
   "Return the tags section of the YAML front matter."
   [tag-set]
@@ -190,11 +175,9 @@
   "Return the YAML front matter based on the metadata for the page."
   [page-map author-name tags]
   (let [title (:page_title page-map)
-        ;author-name (:page_author page-map)
         created (dt/get-formatted-date-time (:page_created page-map))
         modified (dt/get-formatted-date-time (:page_modified page-map))
         yaml (StringBuffer. "---\n")]
-    ;(println "formatters:\n" (f/show-formatters))
     (doto yaml
       (.append (str "author: " author-name "\n"))
       (.append (str "title: " title "\n"))
