@@ -8,3 +8,4 @@ resources/public/db/**
 .gitignore
 .git/**
 resources/public/db/**
+*.md
