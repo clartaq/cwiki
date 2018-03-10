@@ -2,7 +2,7 @@
 title: A Timestamp Plugin for Sublime Text 3
 author: david
 date: 2018-02-10T10:16:57.00000-05:00 
-modified: 2018-03-09T16:12:17.294154-05:00
+modified: 2018-03-10T09:54:19.045992-05:00
 
 tags:
   - sublime text
@@ -16,7 +16,7 @@ tags:
 
  I found this [answer](https://stackoverflow.com/questions/11879481/can-i-add-date-time-for-sublime-snippet#13882791) to a similar question on StackOverflow. 
 
- Getting a timestamp worked, but it was in the wrong format. (Not really wrong, just an old version that I used based on the MarkdownPad editor.) I wanted to make the the output of the `Export` function of CWiki as compatible as possible with the input expected by the [Hugo](https://gohugo.io) static blog generator. That required a different format. For example, as I write this, the ISO 8601 version of the current instant is `2018-03-09T10:26:35.249840-05:00`.
+ Getting a timestamp worked, but it was in the wrong format. (Not really wrong, just an old version that I used based on the MarkdownPad editor.) I wanted to make the the output of the `Export` function of CWiki as compatible as possible with the input expected by the [Hugo](https://gohugo.io) static blog generator. That required a different format -- an ISO 8601 compatible version. For example, as I write this, the [ISO 8601](https://www.cl.cam.ac.uk/~mgk25/iso-time.html) version of the current instant is `2018-03-09T10:26:35.249840-05:00`. (See also [RFC 3339](http://www.ietf.org/rfc/rfc3339.txt).)
 
  Based on that, I added the following little snippet as a plugin for Sublime Text (Tools/Developer/New Plugin...).
 
@@ -60,4 +60,4 @@ class AddTimestampCommand(sublime_plugin.TextCommand):
 ]
  ```
 
- _Viola!_ Now I can insert timestamps into my front matter to my heart's content.
+ _Viola!_ Now I can insert timestamps into my front matter to my heart's content. (Now I need a macro to update the `modified:` field, then save the file.)
