@@ -4,11 +4,9 @@
             [clojure.java.jdbc :as jdbc]
             [clojure.set :as set]
             [clojure.string :as s]
-            [clj-time.coerce :as c]
-            [clj-time.core :as t]
-            [clj-time.format :as f]
             [cwiki.util.files :as files]
-            [cwiki.util.special :as special])
+            [cwiki.util.special :as special]
+            [cwiki.util.datetime :as dt])
   (:import (java.io File)
            (java.util UUID)
            (org.h2.jdbc JdbcClob)))
@@ -29,21 +27,18 @@
             :subname     db-file-name
             :make-pool?  true})
 
-;; Things related to time formatting.
-
-(def markdown-pad-format (f/formatter-local "MM/dd/yyy h:mm:ss a"))
-
 (defn create-new-post-map
+  "Return a new post map with the information provided."
   ([title]
    (create-new-post-map title ""))
   ([title content]
    (create-new-post-map title content 1))
   ([title content author-id]
-   {:page_created  (c/to-sql-time (t/now))
-    :page_modified (c/to-sql-time (t/now))
-    :page_author   author-id
-    :page_title    title
-    :page_content  content}))
+   {:page_created (dt/sql-now)
+    :page_modified (dt/sql-now)
+    :page_author author-id
+    :page_title title
+    :page_content content}))
 
 (def valid-roles ["cwiki" "admin" "editor" "writer" "reader"])
 
@@ -55,8 +50,8 @@
                      :user_email             nil
                      :user_email_token       0
                      :user_email_expires     nil
-                     :user_touched           (c/to-sql-time (t/now))
-                     :user_registration      (c/to-sql-time (t/now))}
+                     :user_touched           (dt/sql-now)
+                     :user_registration      (dt/sql-now)}
                     {:user_name              "admin"
                      :user_role              "admin"
                      :user_password          (hashers/derive "admin")
@@ -65,8 +60,8 @@
                      :user_email             nil
                      :user_email_token       0
                      :user_email_expires     nil
-                     :user_touched           (c/to-sql-time (t/now))
-                     :user_registration      (c/to-sql-time (t/now))}
+                     :user_touched           (dt/sql-now)
+                     :user_registration      (dt/sql-now)}
                     {:user_name              "guest"
                      :user_role              "reader"
                      :user_password          (hashers/derive "guest")
@@ -75,8 +70,8 @@
                      :user_email             nil
                      :user_email_token       0
                      :user_email_expires     nil
-                     :user_touched           (c/to-sql-time (t/now))
-                     :user_registration      (c/to-sql-time (t/now))}])
+                     :user_touched           (dt/sql-now)
+                     :user_registration      (dt/sql-now)}])
 
 (defn user-name->user-id
   ([name]
@@ -498,7 +493,7 @@
   [id title tag-set content]
   (jdbc/update! h2-db :pages {:page_title    title
                               :page_content  content
-                              :page_modified (c/to-sql-time (t/now))}
+                              :page_modified (dt/sql-now)}
                 ["page_id=?" id])
   (update-tags-for-page tag-set id))
 
@@ -552,15 +547,14 @@
             creation-date-str (or (:date meta)
                                   (:created meta))
             creation-date (if creation-date-str
-                            (c/to-sql-time (f/parse markdown-pad-format
-                                                    creation-date-str))
-                            (c/to-sql-time (t/now)))
+                            (dt/meta-datetime-to-sql-datetime creation-date-str)
+                            (dt/sql-now)
+                            )
             update-date-str (or (:updated meta)
                                 (:changed meta)
                                 (:modified meta))
             update-date (if update-date-str
-                          (c/to-sql-time (f/parse markdown-pad-format
-                                                  update-date-str))
+                          (dt/meta-datetime-to-sql-datetime update-date-str)
                           creation-date)
             pm (merge (create-new-post-map title content author-id)
                       {:page_created creation-date}
@@ -594,8 +588,8 @@
               :user_email             user-email
               :user_email_token       0
               :user_email_expires     nil
-              :user_touched           (c/to-sql-time (t/now))
-              :user_registration      (c/to-sql-time (t/now))}]
+              :user_touched           (dt/sql-now)
+              :user_registration      (dt/sql-now)}]
      (jdbc/insert! h2-db :users usr))))
 
 (defn delete-user
