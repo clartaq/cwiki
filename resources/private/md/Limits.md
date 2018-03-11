@@ -2,13 +2,13 @@
 title: Limits
 author: CWiki
 date: 1/7/2018 10:00:07 AM  
-updated: 1/8/2018 4:06:35 PM 
+updated: 2018-03-11T16:55:27.944313-04:00
 tags:
   - technical note
   - limitations
 ---
 
-Like all programs, CWiki has some limitations. Here are some of them.
+Like all programs, CWiki has it's limitations. Here are some of them.
 
 ## The Database ##
 

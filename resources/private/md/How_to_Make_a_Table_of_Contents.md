@@ -2,7 +2,7 @@
 title: How to Make a Table of Contents
 author: CWiki
 date: 12/04/2017 1:14:29 PM
-updated: 1/15/2018 3:25:49 PM  
+updated: 2018-03-11T16:50:47.262617-04:00
 tags:
   - how-to
   - TOC
@@ -15,7 +15,7 @@ Note: Some Markdown editors allow spaces in the links. The parser used by CWiki 
 
 Here is a short example:
 
-```
+```markdown
 # Table of contents
 1. [Introduction](#introduction)
 2. [Some paragraph](#paragraph1)
