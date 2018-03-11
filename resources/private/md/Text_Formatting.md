@@ -2,7 +2,7 @@
 title: Text Formatting
 author: CWiki
 date: 10/24/2017 8:57:33 AM 
-updated: 03/05/2018 03:28:01 PM
+updated: 2018-03-11T09:58:39.939131-04:00
 tags:
   - formatting
   - Markdown
@@ -53,11 +53,9 @@ produces:
       }
 ```
 
-CWiki uses Google's [code-prettify](https://github.com/google/code-prettify) to do language-specific syntax highlighting by following the initial three graves with the word "prettyprint".
+CWiki uses [highlight.js](https://highlightjs.org) to do syntax highlighting. It attempts to auto-recognize the language used, but on short samples, like those above, it can make an error. In the snippet below, it will not recognize that the language is Clojure. You can tell it which language is shown by putting a hint in like so:
 
-Here is some markup to pretty-print a Clojure function.
-
-	```prettyprint lang-clj
+	```clojure
     (defn f [x]
       "A comment at the beginning."
       (let [my-x x]
@@ -67,15 +65,13 @@ Here is some markup to pretty-print a Clojure function.
 
 The markup above will render as:
 
-```prettyprint lang-clj
+```clojure
 (defn f [x]
   "A comment at the beginning."
   (let [my-x x]
     (println "my-x: " my-x) ; a line comment.
     (+ 2 my-x)))
 ```
-
-Using `code-prettify` in this way requires an active internet connection.
 
 There are a couple of additional ways to show code listings too. They wont' be described here, but you can look at [[Code Formatting and Highlighting]] for more details
 

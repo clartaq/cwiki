@@ -1,8 +1,8 @@
 ---
 title: Code Formatting and Highlighting
 author: CWiki
-date: 02/27/2018 09:46:04 AM 
-updated: 03/02/2018 03:43:57 PM
+date: 2018-03-07T17:40:28-05:00
+modified: 2018-03-11T09:43:02.090476-04:00
 tags:
   - technical note
   - text formatting
@@ -65,22 +65,6 @@ CSS for `<pre>` tags should not assume that there will be a code block within th
 
 And then there are syntax highlighters to throw into the mix.
 
-In addition to the syntax highlighting mentioned later, there is a way to use a highlighter with pre-formatted blocks too. You can supply a class to the `<pre>` like this `<pre class="prettyprint"></pre>` and it will produce a result like this:
-
-<pre class="prettyprint">
-(defn ex
-  [an-arg]
-  (let [an-array [1 3 37]
-        a-set #{"a" "b" "c"}
-        a-map {:key-one "Something" :key-two "Else" :a-really-long-key "to see what happens with overflow"}]
-    (+ an-arg (second an-array))))
-=> #'user/ex
-(ex 14)
-=> 17
-</pre>
-
-As I write this, it produces a listing with a border. Since this is a pretty contrived method, it won't be used or mentioned in the future. 
-
 ### Syntax Highlighting ###
 
 The final piece of the puzzle is the inclusion of syntax highlighting for code blocks. Most of the syntax highlighters that I am aware of work with the GFM triple backtick form of demarcating code blocks.
@@ -89,11 +73,14 @@ The difficulty comes in because all of the highlighters do not use the same synt
 
 Picking a syntax highlighter to use with CWiki was a bit of a puzzler. There was no problem in handling highlighting within the wiki, but what about documents imported and exported from the wiki? Those could come from anywhere, like blog posts or `readme` files. They might be exported for use in the same types of documents as well. Blogs and code repositories don't all do highlighting the same way.
 
-In the end, I decided to use Google's [`code-prettify`](https://github.com/google/code-prettify).
+In the end, I decided to use [highlight.js](https://highlightjs.org).
 
-* It's used by Google, of course, and Stack Overflow.
+* It's used by lots of folks, like the [Hugo](https://gohugo.io) static site generator. That makes interchanging pages and posts easier for me.
+* It can be embedded directly in the executable for CWiki. It doesn't add too much size and reduces the necessity of being connected to the internet.
 * It works with lots of languages.
 * It's themable.
+
+The package used in CWiki is a custom download that includes most of the languages I have ever used or am interested in. So it's a little smaller than the complete package, but larger than that available over CDN.
 
 ## Use Cases ##
 
@@ -107,7 +94,7 @@ Given the above, there are several use cases that the CSS must cover.
 
 ## Making the CSS Work ##
 
-The CSS used for these situations must look nice and handle the interactions gracefully.
+The CSS used for these situations must look nice and handle the interactions gracefully. The interaction of CWiki CSS and CSS for the syntax highlighter is relatively smooth.
 
 ### Inline Code ###
 
@@ -117,7 +104,7 @@ For this, I use CSS to select from a family of fixed-width fonts, give it a size
 
 ### Pre-formatted Text ###
 
-Items wrapped in the `<pre></pre>` tags should be left pretty much alone. Just apply the same formatting as inline code, but for a block.
+Items wrapped in the `<pre></pre>` tags should be left pretty much alone. Just apply the same formatting as inline code, but for a block. We don't want it to contrast with indented code blocks though. So, we give it a background the same color as the background provided by the syntax highlighter theme.
 
 ### Indented Code Blocks ###
 
@@ -131,17 +118,17 @@ should do the trick.
 
 ### Fenced Code Blocks ###
 
-Since `code-prettify` can do automatic language recognition from the code within the block, you can start with something like:
+Since `highlight.js` can do automatic language recognition from the code within the block, you can start with something like:
 
 ```
-    ```prettyprint
+    ```
     some code here...
     ```
 ```
 
 Which produces:
 
-```prettyprint
+```
 (defn ex
   [an-arg]
   (let [an-array [1 3 37]
@@ -157,7 +144,7 @@ This generates a
 
 ```
 <pre>
-    <code class="language-prettyprint prettyprinted" style="">
+    <code class="hljs ruby">
         ...
     </code>
 </pre>`
@@ -165,17 +152,17 @@ This generates a
 
 HTML block.
 
-If your language isn't recognized automatically, you can be more explicit. Using
+If your language isn't recognized automatically, as in this case, you can be more explicit. Using
 
 ```
-    ```prettyprint lang-clj
+    ```clojure
     some code here...
     ```
 ```
 
 will give something like
 
-```prettyprint lang-clj
+```clojure
 (defn ex
   [an-arg]
   (let [an-array [1 3 37]
@@ -187,9 +174,9 @@ will give something like
 => 17
 ```
 
-This is a useful tactic if your code block is to short for `code-prettify` to do a reliable recognition. 
+which looks a little better. The code class it uses in this case is `<code class="language-clojure hljs">.`
 
-For this example, it produces exactly the same class definition as above. So, if you want to specialize the CSS when you have a pretty printed block, you might want to have some CSS for the `prettyprinted` class. CWiki does not do this.
+This is a useful tactic if your code block is to short for `highlight.js` to do a reliable recognition. It also precludes just using indenting the block by four spaces. If you only indent, the language will not be recognized correctly and the wrong highlighting will be applied.
 
 [^1]: [This haiku was written by Basho Matsuo (1644-1694) and copied from "Examples of Haiku Poems" on steemit.com](http://examples.yourdictionary.com/examples-of-haiku-poems.html)
 
