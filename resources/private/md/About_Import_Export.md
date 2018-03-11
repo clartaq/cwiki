@@ -2,7 +2,7 @@
 title: About Import/Export
 author: CWiki
 date: 12/10/2017 9:47:06 AM
-updated: 02/10/2018 01:21:24 PM
+updated: 2018-03-11T10:47:57.482754-04:00
 tags:
   - about
   - import
@@ -20,7 +20,7 @@ Import is just as easy. [[Pages Primer|Create a new page]] (click "New" up in th
 
 ## Reading and Writing to the File System
 
-Importing and exporting files is supported by commands on the drop-down menu up in the title bar. There are items for "Import" (if allowed), "Export" to export a single page, and "Export All" to export the entire contents of the wiki. These methods work with Markdown files that contain [[YAML front matter|About Front Matter]].
+Importing and exporting files is supported by commands on the drop-down menu up in the title bar. There are items for "Import" (if allowed), "Export" to export a single page, and "Export All" to export the entire contents of the wiki. These methods work with Markdown files that contain [[About Front Matter|YAML front matter]].
 
 This method can be more convenient in some cases. If your role is a "reader", it is your only option since you will not be able to open an editing page. Readers can only export, they are not allowed to import content in to the wiki.
 
@@ -32,7 +32,7 @@ When you have a Markdown file that you want to import into the wiki, go to the "
 
 #### Import is Fragile
 
-Really fragile. If the front matter is not properly formatted, it will crash the program. No useful error messages other that a stack trace. Bleah. Just to lazy too bullet-proof it right now.
+Really fragile. If the front matter is not properly formatted, it will crash the program. No useful error messages other that a stack trace. Bleah. Just too lazy to bullet-proof it right now.
 
 #### Author
 
@@ -57,6 +57,10 @@ When you are viewing a page you want to export, select the "Export" item from th
 Upon success, you will be informed that the export was completed an where the file was stored.
 
 ### Exporting All Pages
+
+You can select the drop-down menu to "Export All" to save a copy of every (non-generated) page in the wiki. It could take awhile. It could take up a lot of space.
+
+It's one way to back up your database although importing each page one page at a time might be lengthy and tedious.
 
 ### Things You Should Know About Exporting
 
