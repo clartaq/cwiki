@@ -2,7 +2,7 @@
 title: About TeX
 author: CWiki
 date: 12/09/2017 1:06:22 PM
-updated: 1/8/2018 5:14:16 PM 
+updated: 2018-03-11T16:36:06.596935-04:00
 tags:
   - about
   - TeX
@@ -14,7 +14,7 @@ Writing mathematics in $\rm\TeX$ is a deep subject in and of itself. You are enc
 
 We won't try to teach you $\rm\TeX$ notation here. But to give you a flavor, here is what the formula for the population standard deviation looks like in  $\rm\TeX$ notation.
 
-```
+```tex
 $$
 \sigma = \sqrt{ \frac{1}{N} \sum_{i=1}^N (x_i -\mu)^2}
 $$

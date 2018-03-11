@@ -2,7 +2,7 @@
 title: Tag Design
 author: CWiki
 date: 1/13/2018 10:21:29 AM 
-updated: 1/22/2018 5:41:03 PM 
+updated: 2018-03-11T17:39:52.796556-04:00
 tags:
   - technical note
   - tags
@@ -23,7 +23,7 @@ Some of the characteristics of tags include:
 
 For me personally, I try to minimize the number of tags I use. Otherwise it seems like you're creating a new tag for every page. I also tend to use lower-case only except when the tag is an acronym, like "FAQ", or a proper name, like "TeX".
 
-Trying to stick to either plural or singular tags is probably a good idea too, but hard to do. For example, there are lots of "special" pages. When I write a description of a special page, do I use the tag "special page" or "special pages". I try to be consistent, but am not always successful. You can check the [[All Tags]] page to see if you are sticking to you plan. If it shows that you have used both versions, you can drill down to see if the majority are one form or the other and make corrections. Or maybe it really does make sense to use the plural and singular in some cases.
+Trying to stick to either plural or singular tags is probably a good idea too, but hard to do. For example, there are lots of "special" pages. When I write a description of a special page, do I use the tag "special page" or "special pages"? I try to be consistent, but am not always successful. You can check the [[All Tags]] page to see if you are sticking to you plan. If it shows that you have used both versions, you can drill down to see if the majority are one form or the other and make corrections. Or maybe it really does make sense to use the plural and singular in some cases.
 
 ## Tags in the Database ##
 
@@ -46,7 +46,7 @@ There are only a few functions that provide an interface to tag handling by the 
 
 **Example Usage**: The [[All Tags]] page makes use of this function when building the page.
 
-```prettyprint lang-clj
+```clojure
     (defn compose-all-tags-page
       "Return a page listing all of the tags in the wiki."
       [req]
@@ -74,7 +74,7 @@ There are only a few functions that provide an interface to tag handling by the 
 
 **Example Usage**: The `compose-all-pages-with-tag` function displays the list of page names that use a tag. It is reached by clicking any of the links in the [[All Tags]] page. It uses this function to get the list of page names to display.
 
-```prettyprint lang-clj
+```clojure
     (defn compose-all-pages-with-tag
       "Return a page listing all of the pages with the tag."
       [tag req]
@@ -97,7 +97,7 @@ Near the top of the display of a wiki page there is a line that starts with "**T
 
 When editing a wiki page, the editor page shows a group of inputs for tags just below the page name. The number of tags that can be used with a page is limited by the number of text fields available for them. Currently there are 10 such fields.
 
-These inputs are initialized with the existing values of the tags for the page. When all edits to the page are accepted, any tags in the input are retrieved and used as the argument(s) to the `update-tags-for-page` function described above. This single function is responsible for removing any tags no longer used by the page (or possibly anywhere else in the wiki) and adding any new tags. When the user accepts changes to the page, it will be displayed with the new tags too.
+These inputs are initialized with the existing values of the tags for the page. When all edits to the page are accepted, any tags in the input are retrieved and used as the argument(s) to the `update-tags-for-page` function. This single function is responsible for removing any tags no longer used by the page (or possibly anywhere else in the wiki) and adding any new tags. When the user accepts changes to the page, it will be displayed with the new tags too.
 
 ### The All Tags Page ###
 

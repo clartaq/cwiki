@@ -2,7 +2,7 @@
 title: CWiki FAQ
 author: CWiki
 date: 10/27/2017 10:21:37 AM
-updated: 1/13/2018 10:08:42 AM  
+updated: 2018-03-11T16:43:34.326542-04:00
 tags:
   - cwiki
   - FAQ
@@ -45,7 +45,7 @@ You may be asking yourself "If CWiki is a personal wiki, why does it allow multi
 
 Similar to the "Why Users?" question, it's a matter of keeping things separate when you have more than one user.
 
-It can make initially signing in a bit more of a hassle every time you do it, but you can have your browser remember you login credentials if you want.
+It can make initially signing in a bit more of a hassle every time you do it, but you can have your browser remember your login credentials if you want.
 
 #### Why Doesn't the Content of a Page Use the Entire Width of the Browser Window? <a name="Why_Doesn't_the_Content_of_a_Page_Use_the_Entire_Width_of_the_Browser_Window?"></a> ####
 
