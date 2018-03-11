@@ -132,9 +132,9 @@ html {
     --menu-item-link-color: #a0e0ff;
 
     /* For in-line code segments of text. */
-    --code-background-color: #eee;
+    --code-background-color: #f0f0f0;
     /* For code blocks and pre-formatted blocks. */
-    --code-highlight-color: #eaf7fc; /*#f4f2fa;*/
+    --code-highlight-color: #f0f0f0; /*#f4f2fa;*/
 
     /* Fonts. */
 
