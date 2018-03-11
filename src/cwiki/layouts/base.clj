@@ -96,9 +96,10 @@
   [:head
    [:title (get-tab-title post-map)]
    (include-css (str "/css/styles.css" q))
+   (include-css (str "/js/styles/default.css"))
    (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
    (include-js "/js/mathjax-config.js")
-   (include-js "https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js")]))
+   (include-js "/js/highlight.pack.js")]))
 
 (defn- drop-menu
   "Return the drop-down menu for use in the page header."
@@ -582,7 +583,8 @@
          (sidebar-aside req)
          [:div (limited-width-title-component post-map)
           (limited-width-content-component req content)])
-       (footer-component)])))
+       (footer-component)]
+      (include-js "/js/onload.js"))))
 
 (defn view-list-page
   "Return a one or two column layout of list items. Number
