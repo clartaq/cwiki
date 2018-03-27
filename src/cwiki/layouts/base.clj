@@ -120,7 +120,7 @@
         [:li [:a {:href "/export-all"} "Export All"]]
         (when (ri/is-admin-user? req)
           [:li [:a {:href "/Admin"} "Admin"]])
-        [:li [:a {:href "/logout"} "Sign Off"]]]]]]))
+        [:li [:a {:href "/logout"} "Sign Out"]]]]]]))
 
 (defn- searchbox
   "Return the search box element for use in the page header."
