@@ -93,13 +93,13 @@
   (let [q (if debugging-css
             (str "?" (rand-int 2147483647))
             "")]
-  [:head
-   [:title (get-tab-title post-map)]
-   (include-css (str "/css/styles.css" q))
-   (include-css (str "/js/styles/default.css"))
-   (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
-   (include-js "/js/mathjax-config.js")
-   (include-js "/js/highlight.pack.js")]))
+    [:head
+     [:title (get-tab-title post-map)]
+     (include-css (str "/css/styles.css" q))
+     (include-css (str "/js/styles/default.css"))
+     (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
+     (include-js "/js/mathjax-config.js")
+     (include-js "/js/highlight.pack.js")]))
 
 (defn- drop-menu
   "Return the drop-down menu for use in the page header."
@@ -260,7 +260,7 @@
   [:div {:class "sidebar-and-article"}
    sidebar
    [:article {:class "page-content"}
-    [:div article]]])
+    article]])
 
 ;;
 ;; Pages that show no sidebar information.
@@ -535,8 +535,8 @@
        (wiki-header-component post-map req {:editing true})
        (sidebar-and-article
          (sidebar-aside req)
-         [:div
-          (form-to {:enctype "multipart/form-data"}
+         [:div {:class "editor-container"}
+          (form-to {:enctype "multipart/form-data" :class "editor-form"}
                    (if id
                      [:post "save-edits"]
                      [:post "save-new-page"])
