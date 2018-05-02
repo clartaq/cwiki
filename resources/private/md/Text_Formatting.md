@@ -2,7 +2,7 @@
 title: Text Formatting
 author: CWiki
 date: 10/24/2017 8:57:33 AM 
-updated: 2018-03-11T09:58:39.939131-04:00
+updated: 2018-04-26T13:51:10.475279-04:00
 tags:
   - formatting
   - Markdown
@@ -10,7 +10,7 @@ tags:
   - TeX
 ---
 
-Markdown provides a wealth of ways to easily format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, specifically some [GitHub Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
+Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, specifically some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
 
 1. [Strikethrough](#strikethrough)
 1. [Code Listings](#code-listings)
@@ -20,7 +20,7 @@ Markdown provides a wealth of ways to easily format your content. For the detail
 
 ## Strikethrough <a name="strikethrough"></a> ##
 
-Markdown has a number of ways to emphasize text in a paragraph: bold, italic, underline and combinations. For some reason it does not have a method for formatting test with a strikethrough, something very useful in collaborative editing. GFM _does_ include an extension to support formatting with strikethrough. Just surround the text with two tildes. For example, `~~strikethrough~~` will produce ~~strikethrough~~.
+Markdown has some ways to emphasize text in a paragraph: bold, italic, underline and combinations. For some reason, it does not have a method for formatting text with a strikethrough, something very useful in collaborative editing. GFM _does_ include an extension to support formatting with strikethrough. Surround the text with two tildes. For example, `~~strikethrough~~` will produce ~~strikethrough~~.
 
 ## Code Listings <a name="code-listings"></a> ##
 
@@ -55,13 +55,13 @@ produces:
 
 CWiki uses [highlight.js](https://highlightjs.org) to do syntax highlighting. It attempts to auto-recognize the language used, but on short samples, like those above, it can make an error. In the snippet below, it will not recognize that the language is Clojure. You can tell it which language is shown by putting a hint in like so:
 
-	```clojure
+  ```clojure
     (defn f [x]
       "A comment at the beginning."
       (let [my-x x]
         (println "my-x: " my-x) ; a line comment.
         (+ 2 my-x)))
-	```
+  ```
 
 The markup above will render as:
 
@@ -73,11 +73,11 @@ The markup above will render as:
     (+ 2 my-x)))
 ```
 
-There are a couple of additional ways to show code listings too. They wont' be described here, but you can look at [[Code Formatting and Highlighting]] for more details
+There are a couple of additional ways to show code listings too. They won't be described here, but you can look at [[Code Formatting and Highlighting]] for more details
 
 ## Tables <a name="tables"></a> ##
 
-Tables are not a part of the original Markdown. However, they are very useful and available in many of the dialects of Markdown. CWiki implements the Github Flavored Markdown (GFM) version of tables.
+Tables are not a part of the original Markdown. However, they are handy and available in many of the dialects of Markdown. CWiki implements the Github Flavored Markdown (GFM) version of tables.
 
 Here's some markup
 
@@ -97,7 +97,7 @@ that produces this:
 | Plum   | Purple |     Tart    |         1.99 |
 | Orange | Orange | Tangy |      1.29 |
 
-There must be at least 3 dashes separating each header cell. The outer pipes (|) are optional, and you don't need to make the raw Markdown line up prettily. So, if you are using a proportional font to layout the table, you don't have to worry about trying to get everything to line up perfectly from line to line. You can also use inline Markdown to format items within the table cells.
+There must be at least three dashes separating each header cell. The outer pipes (|) are optional, and you don't need to make the raw Markdown line up prettily. So, if you are using a proportional font to layout the table, you don't have to worry about trying to get everything to line up correctly from line to line. You can also use inline Markdown to format items within the table cells.
 
     Less | Pretty | Markdown
     --- | --- | ---
@@ -116,7 +116,7 @@ Less | Pretty | Markdown
 
 You can also enter mathematics using the familiar  [[About TeX|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
 
-The markup to show an equation on a line by itself uses double dollar signs, `$$`, to start and end a block of $\rm\TeX$ like this.
+The markup to show an equation on a line by itself uses double dollar signs, `$$,` to start and end a block of $\rm\TeX$ like this.
 
 `$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$`
 
@@ -128,4 +128,4 @@ For inline math, use single dollar signs, `$` to surround the math. For example,
 
 ## Tables of Contents <a name="toc"></a> ##
 
-CWiki does not include any extensions to produce Tables of Contents since they can be created easily in almost any Markdown editor. See [[How to Make a Table of Contents]] for an example.
+CWiki does not include any extensions to produce Tables of Contents since they can be created quickly in almost any Markdown editor. See [[How to Make a Table of Contents]] for example.
