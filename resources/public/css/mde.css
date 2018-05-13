@@ -1,22 +1,33 @@
 /*
-** Styles for elements in the mde editor.
+** Styles for elements in the mde editor. In the styles used in program,
+** ids are used to find things. Classes are used to style things. As such,
+** there are no ids referenced here.
  */
 
-.mde-editor-and-preview-container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: row;
-}
-
+/*
+** The mde container is a column with the toolbar, if present, across the
+** top and the editor and preview in a row below it.
+ */
 .mde-container {
-    /* Make this container fill all remaining space in it's parent. */
-    flex: 1;
-    /* Put the children toolbar and editor in a column. */
+    /* make this container fill all remaining space in it's (flexbox) parent. */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     border: 1px solid #e0e0e0;
 }
 
+/* The editor and preview pane are set up in a row. */
+.mde-editor-and-preview-container {
+    /* Make this container fill all remaining space in it's parent. */
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+/*
+** The toolbar, if present, takes up all of the width across the top
+** of the editor and preview pane.
+ */
 .mde-toolbar-class {
     /* Put the child buttons in a row. */
     display: flex;
@@ -28,9 +39,15 @@
 .mde-toolbar-button {
     font-size: 0.9em;
     background-color: transparent;
+    min-width: 20px;
     border: none;
     cursor: pointer;
-    vertical-align: bottom;
+    margin-right: 5px;
+}
+
+.mde-toolbar-button:hover {
+    background-color: #333333;
+    color: white;
 }
 
 .mde-toolbar-button:active {
@@ -42,43 +59,52 @@
     background-color: #e0e0e0;
 }
 
+/*
+** The editor uses the default font for text areas.
+ */
 .mde-editor-class {
- /*   display:flex;
-    flex-direction: column;*/
-    flex-grow: 1;
-  /*  margin: 0;*/
-   /* margin: 5px;*/
-   /* padding: 0;*/
+    flex: 1;
     font-size: 1.0rem;
-    /*padding-left: 5px;
-    padding-right: 5px;*/
- /*   width: 55ch;*/
-    max-width: 55ch;
-    flex-basis: 55ch;
     border: none;
     outline: none;
-    overflow: auto;
+    overflow-y: scroll;
     padding-left: 10px;
     padding-right: 10px;
 }
 
-.mde-editorc-class:focus {
+/*
+** Take away the blue border around the editor when it is being
+** typed in.
+ */
+.mde-editor-class:focus {
     outline: none;
     border: none;
 }
 
 .mde-preview-class {
-    flex-grow: 1;
-    /*flex-basis: 55ch;*/
+    flex: 1;
+    font-size: 1.0rem;
     padding-left: 10px;
     padding-right: 10px;
-    border-top: 1px solid #e0e0e0;
-    border-right: 1px solid #e0e0e0;
-    border-bottom: 1px solid #e0e0e0;
-    max-width: 55ch;
-    width: 55ch;
-    flex-basis: 55ch;
-    overflow:auto;
+    /* border-top: 1px solid #e0e0e0;
+     border-right: 1px solid #e0e0e0;
+     border-bottom: 1px solid #e0e0e0;*/
+    overflow-y:scroll;
+}
+
+/*
+** Additional formatting for list items. Shift them right to get the
+** bullets to show.
+ */
+li {
+    margin-left: 2em;
+}
+
+li:last-child {
+    padding-bottom: 1em;
+}
+
+li:first-child {
 }
 
 /*

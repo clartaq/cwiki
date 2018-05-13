@@ -7,7 +7,9 @@
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]))
+                                     trace debug info warn error]]
+            [cwiki.layouts.editor :as editor-layout]
+            [cwiki.models.wiki-db :as db]))
 
 (let [{:keys [ch-recv send-fn connected-uids
               ajax-post-fn ajax-get-or-ws-handshake-fn]}
@@ -33,15 +35,30 @@
   (infof "New version of content: %s" new-content))
 
 (defn handle-message! [{:keys [id client-id ?data]}]
-  (infof "handle-message!: id: %s, client-id: %s" id client-id)
+;  (infof "handle-message!: id: %s, client-id: %s" id client-id)
   (when (= id :mde/content-updated)
-    (infof "Saw 'content updated' notification.")
+ ;   (infof "Saw 'content updated' notification.")
     (when ?data
       (update-content ?data))))
 
 (defn send-document-to-editor [req]
-  (infof "Responding to request to send the document for editing: %s" req)
+  (infof "Responding to request to send the document for editing")
   "The document.")
+
+(defn launch-mde
+  [req]
+  (println "launch-mde")
+  (let [my-post-map (db/find-post-by-title "Front Page")]
+    (editor-layout/layout-editor-page my-post-map req)))
+; (layout/mde-template req
+;   [:div
+;    [:h1 "Saw request for mde editor."]
+;    [:p (str "Request: \n" req)]]))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;(defroutes ajax-routes
+;           (GET "/mde" request (launch-mde request)))
 
 ;;;; Sente event router (our `event-msg-handler` loop)
 
@@ -61,6 +78,7 @@
             ch-chsk handle-message!)))
 
 (defroutes websocket-routes
+           (GET "/mde" request (launch-mde request))
            (GET "/serve-document-to-editor" req (send-document-to-editor req))
            (GET "/ws" req (ring-ajax-get-or-ws-handshake req))
            (POST "/ws" req (ring-ajax-post req)))

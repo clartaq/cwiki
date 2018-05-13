@@ -2,7 +2,7 @@
 title: Text Formatting
 author: CWiki
 date: 10/24/2017 8:57:33 AM 
-updated: 2018-04-26T13:51:10.475279-04:00
+updated: 2018-05-08T15:42:02.818426-04:00
 tags:
   - formatting
   - Markdown
@@ -10,7 +10,7 @@ tags:
   - TeX
 ---
 
-Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, specifically some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
+Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, especially some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
 
 1. [Strikethrough](#strikethrough)
 1. [Code Listings](#code-listings)
@@ -28,7 +28,7 @@ CWiki handles code listings too.
 
 You can show code inline by surrounding it with the grave character (backquote) . For example, \`a = b + c*34;\` will render as: `a = b + c*34;`.
 
-For multi-line blocks of code, the simplest method to show the listing is just to indent every line four spaces:
+For multi-line blocks of code, the simplest method to show the listing is to indent every line four spaces:
 
      function sayHello()
       {
@@ -53,7 +53,7 @@ produces:
       }
 ```
 
-CWiki uses [highlight.js](https://highlightjs.org) to do syntax highlighting. It attempts to auto-recognize the language used, but on short samples, like those above, it can make an error. In the snippet below, it will not recognize that the language is Clojure. You can tell it which language is shown by putting a hint in like so:
+CWiki uses [highlight.js](https://highlightjs.org) to do syntax highlighting. It attempts to auto-recognize the language used, but on short samples, like those above, it can make an error. In the snippet below, it will not recognize that the language is Clojure. You can tell it which language to highlight by putting a hint in like so:
 
   ```clojure
     (defn f [x]
@@ -73,7 +73,7 @@ The markup above will render as:
     (+ 2 my-x)))
 ```
 
-There are a couple of additional ways to show code listings too. They won't be described here, but you can look at [[Code Formatting and Highlighting]] for more details
+There are a couple of additional ways to show code listings too. They aren't described here, but you can look at [[Code Formatting and Highlighting]] for more details
 
 ## Tables <a name="tables"></a> ##
 
