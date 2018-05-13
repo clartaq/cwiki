@@ -1,6 +1,5 @@
 syntax: glob
 target/**
-resources/public/db/**
 *.jar
 *.xml
 .lein-*
@@ -9,3 +8,8 @@ resources/public/db/**
 .git/**
 resources/public/db/**
 *.md
+resources/public/js/compiled/**
+doo-index.html
+figwheel_server.log
+cwiki.iml
+.rebel_readline_history

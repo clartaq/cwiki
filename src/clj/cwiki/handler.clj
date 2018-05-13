@@ -102,7 +102,7 @@
            (route/not-found (layout/compose-404-page)))
 
 (def app
-  (-> (routes admin-routes home-routes ajax-routes login-routes websocket-routes app-routes)
+  (-> (routes admin-routes home-routes login-routes websocket-routes app-routes)
       (wrap-authentication backend)
       (handler/site)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
