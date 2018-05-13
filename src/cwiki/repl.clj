@@ -6,6 +6,7 @@
 (ns cwiki.repl
   (:require [cwiki.handler :refer [app init destroy]]
             [cwiki.models.wiki-db :as db]
+            [cwiki.routes.ws :as ws]
             [org.httpkit.server :as http-kit]
             [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.file-info :refer [wrap-file-info]]
@@ -54,9 +55,11 @@
   server in development mode from the REPL."
   [& [port]]
   (db/init-db!)
+  (ws/start-router!)
   (start-web-server! 1350))
 
 (defn stop-app
   "Shut down the application."
   []
+  (ws/stop-router!)
   (stop-web-server!))

@@ -161,6 +161,8 @@
         (menu-item-span [:a {:href "/New Page"} "New"]))
       (when edit-link
         (menu-item-span edit-link))
+      (when edit-link
+        (menu-item-span [:a {:href "/mde"} "mde"]))
       (when delete-link
         (menu-item-span delete-link))
       (menu-item-span [:a {:href "/"} "Home"])
