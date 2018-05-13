@@ -1,14 +1,16 @@
 ;;;
-;;; Some repl convenience functions. The application should be
-;;; launched from here.
+;;; Some repl convenience functions. The application can be
+;;; launched from here in development mode.
 ;;;
 
 (ns cwiki.repl
   (:require [cwiki.handler :refer [app init destroy]]
             [cwiki.models.wiki-db :as db]
+            [org.httpkit.server :as http-kit]
             [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.file-info :refer [wrap-file-info]]
-            [ring.server.standalone :refer [serve]]))
+            [ring.middleware.reload :as reload]
+            [taoensso.timbre :refer [tracef debugf infof warnf errorf]]))
 
 (defonce server (atom nil))
 
@@ -23,32 +25,38 @@
     ; Content-Type, Content-Length, and Last Modified headers for files in body.
     (wrap-file-info)))
 
-(defn start-server
-  "Used for starting the server in development mode from REPL."
-  [& [port]]
-  (let [port (if port (Integer/parseInt port) 1350)]
-    (reset! server
-            (serve (get-handler)
-                   {:port port
-                    :init init
-                    :auto-reload? true
-                    :destroy destroy
-                    :join true}))
-    (println (str "You can view the site at http://localhost:" port))))
+(def in-dev? true)
+
+(defonce web-server_ (atom nil))
+
+(defn stop-web-server! []
+  (when-let [stop-fn @web-server_] (stop-fn)))
+
+(defn start-web-server! [& [port]]
+  (stop-web-server!)
+  (let [port (or port 1350)
+        ring-handler (if in-dev?
+                       (reload/wrap-reload (get-handler))
+                       (get-handler))
+        [port stop-fn] (let [stop-fn (http-kit/run-server ring-handler {:port port})]
+                         [(:local-port (meta stop-fn)) (fn [] (stop-fn :timeout 100))])
+        uri (format "http://localhost:%s/" port)]
+
+    (infof "Web server is running at `%s`" uri)
+    (try
+      (.browse (java.awt.Desktop/getDesktop) (java.net.URI. uri))
+      (catch java.awt.HeadlessException _))
+
+    (reset! web-server_ stop-fn)))
 
 (defn start-app
   "Used to initialize the database, if needed, and start the
   server in development mode from the REPL."
   [& [port]]
   (db/init-db!)
-  (start-server port))
-
-(defn stop-server []
-  (.stop @server)
-  (reset! server nil))
+  (start-web-server! 1350))
 
 (defn stop-app
   "Shut down the application."
   []
-  (stop-server))
-
+  (stop-web-server!))
