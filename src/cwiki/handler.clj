@@ -9,7 +9,9 @@
             [compojure.route :as route]
             [cwiki.models.wiki-db :as db]
             [cwiki.routes.admin :refer [admin-routes]]
+            [cwiki.routes.ajax :refer [ajax-routes]]
             [cwiki.routes.home :refer [home-routes]]
+            [cwiki.routes.ws :refer [websocket-routes]]
             [cwiki.routes.login :refer [login-routes]]
             [cwiki.util.authorization :as ath]
             [cwiki.util.req-info :as ri]
@@ -100,7 +102,7 @@
            (route/not-found (layout/compose-404-page)))
 
 (def app
-  (-> (routes admin-routes home-routes login-routes app-routes)
+  (-> (routes admin-routes home-routes ajax-routes login-routes websocket-routes app-routes)
       (wrap-authentication backend)
       (handler/site)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
