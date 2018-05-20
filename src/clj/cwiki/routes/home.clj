@@ -5,6 +5,7 @@
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.files :as files]
+            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]))
 
@@ -240,6 +241,8 @@
            (GET "/import" request (get-import-file request))
            (POST "/import" request (post-import-page request))
            (POST "/proceed-with-import" request (post-proceed-with-import request))
+           (POST "/save-mde-edits" request
+             (println "save-mde-edits: request: " (pp/pp-map request)))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
                (save-edits (get params "page-id")

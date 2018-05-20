@@ -1,5 +1,5 @@
 ;;;
-;;; Websocket/AJAX routes are setup here.
+;;; Server-side Websocket/AJAX routes are setup here.
 ;;;
 
 (ns cwiki.routes.ws
@@ -21,44 +21,59 @@
   (def ring-ajax-get-or-ws-handshake ajax-get-or-ws-handshake-fn)
   (def ch-chsk ch-recv)                                     ; ChannelSocket's receive channel
   (def chsk-send! send-fn)                                  ; ChannelSocket's send API fn
-  (def connected-uids connected-uids)                       ; Watchable, read-only atom
-  )
+  (def connected-uids connected-uids) )                     ; Watchable, read-only atom
 
-(defn save-doc! [content]
-  (infof "save-doc!: content: %s" content)
-  ;(db/save-doc! doc)
-  content)
+(defn- save-doc!
+  "Save new, edited content."
+  [content-data-map]
+  (tracef "save-doc!: content-data-map: %s" content-data-map)
+  (let [content-only (:data content-data-map)
+        page-map-for-editing (editor-layout/get-post-map-for-editing)
+        original-content (db/page-map->content page-map-for-editing)]
+    (when (not= content-data-map original-content)
+      (let [original-id (db/page-map->id page-map-for-editing)]
+        (db/update-content-only original-id content-only)))))
 
-(defn update-content
-  "Update the local copy of the editor content."
-  [new-content]
-  (infof "New version of content: %s" new-content))
+(defn send-document-to-editor
+  [client-id]
+  (trace "server sending document")
+  (chsk-send! client-id [:hey-editor/here-is-the-document
+                         (editor-layout/get-content-for-websocket)]))
 
-(defn handle-message! [{:keys [id client-id ?data]}]
-;  (infof "handle-message!: id: %s, client-id: %s" id client-id)
-  (when (= id :mde/content-updated)
- ;   (infof "Saw 'content updated' notification.")
-    (when ?data
-      (update-content ?data))))
+(defn content-updated
+  [?data]
+  (trace "Saw 'content updated' notification.")
+  (when ?data
+    (editor-layout/update-content-for-websocket ?data)))
 
-(defn send-document-to-editor [req]
-  (infof "Responding to request to send the document for editing")
-  "The document.")
+(defn save-edited-document
+  [client-id ?data]
+  (trace "Editor asked to save edited document.")
+  (when ?data
+    (save-doc! ?data))
+  (chsk-send! client-id [:hey-editor/shutdown-now]))
 
-(defn launch-mde
-  [req]
-  (println "launch-mde")
-  (let [my-post-map (db/find-post-by-title "Front Page")]
-    (editor-layout/layout-editor-page my-post-map req)))
-; (layout/mde-template req
-;   [:div
-;    [:h1 "Saw request for mde editor."]
-;    [:p (str "Request: \n" req)]]))
+(defn cancel-editing
+  [client-id]
+  (trace "Editor asked to cancel editing.")
+  (chsk-send! client-id [:hey-editor/shutdown-now]))
+
+(defn handle-message!
+  "Handle any message that we know about. It is an error to send
+  unrecognized messages."
+  [{:keys [id client-id ?data]}]
+  (tracef "handle-message!: id: %s, client-id: %s" id client-id)
+  (cond
+    (= id :hey-server/send-document-to-editor) (send-document-to-editor client-id)
+    (= id :hey-server/content-updated) (content-updated ?data)
+    (= id :hey-server/save-edited-document) (save-edited-document client-id ?data)
+    (= id :hey-server/cancel-editing) (cancel-editing client-id)
+    (= id :chsk/uidport-open) (trace ":chsk/uidport-open")
+    (= id :chsk/uidport-close) (trace ":chsk/uidport-close")
+    :default (errorf "Unknown message id received: %s" id)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(defroutes ajax-routes
-;           (GET "/mde" request (launch-mde request)))
 
 ;;;; Sente event router (our `event-msg-handler` loop)
 
@@ -66,19 +81,17 @@
 
 (defn stop-router!
   []
-  (info "Stopping websocket router")
+  (trace "Stopping websocket router")
   (when-let [stop-fn @router_]
     (stop-fn)))
 
 (defn start-router! []
-  (info "Starting websocket router.")
+  (trace "Starting websocket router.")
   (stop-router!)
   (reset! router_
           (sente/start-server-chsk-router!
             ch-chsk handle-message!)))
 
 (defroutes websocket-routes
-           (GET "/mde" request (launch-mde request))
-           (GET "/serve-document-to-editor" req (send-document-to-editor req))
            (GET "/ws" req (ring-ajax-get-or-ws-handshake req))
            (POST "/ws" req (ring-ajax-post req)))
