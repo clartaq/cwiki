@@ -50,6 +50,14 @@
       (get-different-parts clean-link)
       {:title-part clean-link :display-part clean-link})))
 
+(defn get-mde-edit-link-for-existing-page
+  [post-map req]
+  (let [page-title (db/page-map->title post-map)]
+    (when (special/is-editable? page-title)
+      (let [uri (u/url-encode (str page-title "/mde-edit"))
+            h (hc/html (link-to uri "MDE Edit"))]
+        h))))
+
 (defn get-edit-link-for-existing-page
   "Return a link to be used with a button or menu."
   [post-map req]

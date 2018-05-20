@@ -4,9 +4,11 @@
 ;;;
 
 (ns cwiki-mde.core
-  (:require [ajax.core :refer [GET POST]]
+  (:require [ajax.core :refer [GET]]
             [cwiki-mde.ws :as ws]
-            [reagent.core :as reagent]))
+            [reagent.core :as reagent]
+            [taoensso.timbre :refer [tracef debugf infof warnf errorf
+                                     trace debug info warn error]]))
 
 ; MathJax would go here too.
 (defn highlight-code
@@ -41,7 +43,7 @@
     :on-change (fn [arg]
                  (let [new-content (-> arg .-target .-value)]
                    (reset! content new-content)
-                   (ws/send-message! [:mde/content-updated {:?data new-content}])
+                   (ws/send-message! [:hey-server/content-updated {:?data new-content}])
                    new-content))}])
 
 (defn preview
@@ -51,35 +53,75 @@
    (when (not-empty @content)
      (markdown-component @content))])
 
-(defn grab-document-to-edit
-  [doc]
-  (println "Trying to grab the document")
-  (GET "/serve-document-to-editor"
-       {:headers {"Accept" "application/transit+json"}
-        :handler #(reset! doc (str %))}))
+;;
+;; Websocket messages handlers to work with the server.
+;;
 
-(defn response-handler
-  [content errors]
-  (fn [{[_ doc] :?data}]
-    (if-let [response-errors (:errors doc)]
-      (reset! errors response-errors)
-      (do
-        (reset! errors nil)
-        (reset! content (:content doc))))))
+(defn send-document-to-save
+  "Send the message (including content) to the server to save the
+  edited document."
+  [doc]
+  (info "Editor: Telling server to save the document.")
+  (ws/send-message! [:hey-server/save-edited-document {:data @doc}]))
+
+(def the-doc-content (reagent/atom nil))
+
+(defn editor-handshake-handler
+  "Handle the handshake event between the server and client. This function
+  sends the message to the server to send over the document for editing."
+  [{:keys [?data]}]
+  (info "Editor: Connection established!")
+  (ws/send-message! [:hey-server/send-document-to-editor {}]))
+
+(defn editor-state-handler
+  "Handle changes in the state of the editor."
+  [{:keys [?data]}]
+  (info "Editor: State changed!"))
+
+(defn editor-message-handler
+  [{:keys [?data]}]
+  (infof "Editor: Message received: %s" ?data)
+  (let [message-id (first ?data)]
+    (infof "message-id: %s" message-id)
+    (when (= message-id :hey-editor/here-is-the-document)
+      (when-let [the-data (second ?data)]
+        (reset! the-doc-content the-data)))
+    (when (= message-id :hey-editor/shutdown-now)
+      (ws/stop-router!)
+      (.back (.-history js/window)))))
 
 (defn the-editor-container
-  "Puts the editor and preview area side-by-side."
+  "Starts the websocket router and returns a function that lays out
+  the editor and preview area side-by-side."
   []
-  (let [content (reagent/atom nil)
-        errors (reagent/atom nil)]
-    (ws/start-router! (response-handler content errors))
-    (grab-document-to-edit content)
-    (ws/send-message! [:mde/send-document-to-editor {:data "Here's a string of data"}])
-    (fn []
-      [:div {:class "mde-container"}
-       [:div {:class "mde-editor-and-preview-container"}
-        [editor content]
-        [preview content]]])))
+  (ws/start-router! editor-handshake-handler editor-state-handler
+                    editor-message-handler)
+  (fn []
+    [:div {:class "mde-container"}
+     [:div {:class "mde-editor-and-preview-container"}
+      [editor the-doc-content]
+      [preview the-doc-content]]
+
+     [:div {:class "button-bar-container"}
+      [:input {:type    "button"
+               :id      "Save Button"
+               :name    "save-button"
+               :value   "Save Changes"
+               :class   "form-button button-bar-item"
+               :onClick #(do
+                           (.log js/console "Saw Click on Save Button!")
+                           (.log js/console (str "Here's the document: " @the-doc-content))
+                           (send-document-to-save the-doc-content))}]
+      [:input {:type    "button"
+               :id      "Cancel Button"
+               :name    "cancel-button"
+               :value   "Cancel"
+               :class   "form-button button-bar-item"
+               :onClick #(do
+                           (.log js/console "saw click on CANCEL button")
+                           (ws/send-message! [:hey-server/cancel-editing]))}]]
+
+     ]))
 
 (defn reload []
   (reagent/render [the-editor-container] (.getElementById js/document "editor-container")))

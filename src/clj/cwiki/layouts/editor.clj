@@ -1,3 +1,9 @@
+;;;
+;;; This namespace lays out a page for editing with by the ClojureScript
+;;; editor. It also contains functions to respond to requests from the
+;;; websocket routes.
+;;;
+
 (ns cwiki.layouts.editor
   (:require [cwiki.models.wiki-db :as db]
             [hiccup.core :refer [html]]
@@ -7,33 +13,6 @@
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
 
-;(defn embed-editor
-;  "Return a piece of layout that will embed the MDE editor in the page."
-;  []
-;  [:section {:class "editor-section"}
-;   [:div {:class "title-edit-section"}
-;    [:p "Title Edit Section"]]
-;   [:div {:class "tag-edit-secton"}
-;    [:p "Tag Edit Section"]]
-;   [:div {:id "editor-container" :class "editor-container"}
-;    ; This should get overwritten by the running ClojureScript editor.
-;    [:p "The stuff from the ClojureScript editor should show up here."]]
-;   [:div {:class "button-bar-container"}
-;    [:input {:type    "button"
-;             :id      "Save Button"
-;             :name    "save-button"
-;             :value   "Save Changes"
-;             :class   "form-button button-bar-item"
-;             :onclick "console.log(\"Saw click on save button!\");"}]
-;    [:input {:type    "button"
-;             :id      "Cancel Button"
-;             :name    "cancel-button"
-;             :value   "Cancel"
-;             :class   "form-button button-bar-item"
-;             :onclick "window.history.back();"}]]])
-
-; Try to force changes in CSS to be re-loaded each time that browser
-; page is reloaded.
 (def debugging-css true)
 
 (defn standard-head
@@ -61,23 +40,38 @@
    (include-js "js/compiled/cwiki-mde.js")
    [:script "window.addEventListener(\"DOMContentLoaded\", cwiki_mde.core.main());"]])
 
-;[post-map req]
-;(println "mde-template")
-;(let [id (db/page-map->id post-map)
-;      title (db/page-map->title post-map)
-;      content (db/page-map->content post-map)
-;      tags (db/get-tag-names-for-page id)]
-;
-;  (editor-layout/layout-editor title content)))
+(def ^{:private true} editable-content (atom nil))
+
+(def ^{:private true} post-map-for-editing (atom nil))
+
+(defn get-post-map-for-editing
+  "Return a copy of the post map that can be used for editing."
+  []
+  @post-map-for-editing)
+
+(defn get-content-for-websocket
+  "Return a copy of the editable content."
+  []
+  @editable-content)
+
+(defn update-content-for-websocket
+  "Update the editable content with new content. Might be called on
+  every keystroke."
+  [new-content]
+  (reset! editable-content new-content))
 
 (defn layout-editor-page
   "Create the base page layout and plug the content into it."
   [post-map req]
-  (let [id (db/page-map->id post-map)
-        title (db/page-map->title post-map)
-        content (db/page-map->content post-map)
-        tags (db/get-tag-names-for-page id)]
-    (infof "layout-editor-page: id: %s, title: %s" id title)
+  (reset! post-map-for-editing post-map)
+  (debugf "(get-post-map-for-editing): %s" (get-post-map-for-editing))
+  (reset! editable-content (db/page-map->content @post-map-for-editing))
+  (let [id (db/page-map->id @post-map-for-editing)
+        title (db/page-map->title @post-map-for-editing)
+        ;content (db/page-map->content @copy-for-editing)
+        ;tags (db/get-tag-names-for-page id)
+        ]
+    (debugf "layout-editor-page: id: %s, title: %s" id title)
     (html5
       {:ng-app "MDE Test" :lang "en"}
       (standard-head title)
@@ -97,19 +91,20 @@
          [:div {:id "editor-container" :class "editor-container"}
           ; This should get overwritten by the running ClojureScript editor.
           [:p "The stuff from the ClojureScript editor should show up here."]]
-         [:div {:class "button-bar-container"}
-          [:input {:type    "button"
-                   :id      "Save Button"
-                   :name    "save-button"
-                   :value   "Save Changes"
-                   :class   "form-button button-bar-item"
-                   :onclick "console.log(\"Saw click on save button!\");"}]
-          [:input {:type    "button"
-                   :id      "Cancel Button"
-                   :name    "cancel-button"
-                   :value   "Cancel"
-                   :class   "form-button button-bar-item"
-                   :onclick "window.history.back();"}]]]]
+         ;[:div {:class "button-bar-container"}
+         ; [:input {:type    "button"
+         ;          :id      "Save Button"
+         ;          :name    "save-button"
+         ;          :value   "Save Changes"
+         ;          :class   "form-button button-bar-item"
+         ;          :onclick "console.log(\"Saw click on save button!\");"}]
+         ; [:input {:type    "button"
+         ;          :id      "Cancel Button"
+         ;          :name    "cancel-button"
+         ;          :value   "Cancel"
+         ;          :class   "form-button button-bar-item"
+         ;          :onclick "window.history.back();"}]]
+         ]]
        [:footer {:class "test-footer"}
         [:p "This is a fixed footer, just like the page where I intend to use
        the editor."]]]
