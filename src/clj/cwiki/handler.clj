@@ -58,15 +58,13 @@
       (= title "Orphans") (let [new-body (layout/compose-not-yet-view "Orphans")]
                             (build-response new-body request))
 
-      (s/ends-with? title "/mde-edit") (do
-                                         (println "Saw title: " title)
-                                         (let [title-only (s/replace title "/mde-edit" "")]
-                                           (if (ath/can-edit-and-delete? request title-only)
-                                             (let [new-body (layout-editor/layout-editor-page
-                                                              (db/find-post-by-title title-only) request)]
-                                               (build-response new-body request))
-                                             ;else
-                                             (build-response (layout/compose-403-page) request 403))))
+      (s/ends-with? title "/mde-edit") (let [title-only (s/replace title "/mde-edit" "")]
+                                         (if (ath/can-edit-and-delete? request title-only)
+                                           (let [new-body (layout-editor/layout-editor-page
+                                                            (db/find-post-by-title title-only) request)]
+                                             (build-response new-body request))
+                                           ;else
+                                           (build-response (layout/compose-403-page) request 403)))
 
       (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")]
                                      (if (ath/can-edit-and-delete? request title-only)
