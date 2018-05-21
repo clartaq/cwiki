@@ -15,17 +15,17 @@
 (defn state-handler
   "Handle changes in state."
   [{:keys [?data]}]
-  (infof "state changed: %s" ?data)) ; (str "state changed: " ?data)))
+  (infof "state changed: %s" ?data))
 
 (defn handshake-handler
   "Handle messages that the handshake has been established."
   [{:keys [?data]}]
-  (infof "connection established: %s" ?data)) ; (str "connection established: " ?data)))
+  (infof "connection established: %s" ?data))
 
 (defn default-event-handler
   "Unidentified events get sent here."
   [ev-msg]
-  (infof "Unhandled event: %s" (:event ev-msg))) ;(str "Unhandled event: " (:event ev-msg))))
+  (infof "Unhandled event: %s" (:event ev-msg)))
 
 (defn event-msg-handler
   "The event message handler. Supplies it's own defaults if not all handlers
