@@ -70,6 +70,7 @@
     (= id :hey-server/cancel-editing) (cancel-editing client-id)
     (= id :chsk/uidport-open) (trace ":chsk/uidport-open")
     (= id :chsk/uidport-close) (trace ":chsk/uidport-close")
+    (= id :chsk/ws-ping) (trace ":chsk/ws-ping")
     :default (errorf "Unknown message id received: %s" id)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
