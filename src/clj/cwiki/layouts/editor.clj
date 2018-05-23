@@ -5,7 +5,8 @@
 ;;;
 
 (ns cwiki.layouts.editor
-  (:require [cwiki.models.wiki-db :as db]
+  (:require [cwiki.layouts.base :as base]
+            [cwiki.models.wiki-db :as db]
             [hiccup.core :refer [html]]
             [hiccup.element :refer [link-to]]
             [hiccup.form :refer [submit-button]]
@@ -19,12 +20,12 @@
   "Return the standard html head section for the wiki html pages. If the var
   'debugging-css' is def'ed to true, should reload CSS everytime the page
   loads."
-  [title]
+  [post-map]
   (let [q (if debugging-css
             (str "?" (rand-int 2147483647))
             "")]
     [:head
-     [:title title]
+     [:title (base/get-tab-title post-map)]
      (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css")
      (include-css (str "css/styles.css" q))
      (include-css (str "css/editor-styles.css" q))
@@ -34,9 +35,10 @@
   "Returns a div with the standard scripts to include in the page."
   []
   [:div {:class "standard-scripts"}
-   (include-js "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js")
-   (include-js "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/languages/clojure.min.js")
-   (include-js "//cdnjs.cloudflare.com/ajax/libs/marked/0.3.19/marked.min.js")
+   (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
+   (include-js "/js/mathjax-config.js")
+   (include-js "/js/highlight.pack.js")
+   (include-js "/js/marked.min.js")
    (include-js "js/compiled/cwiki-mde.js")
    [:script "window.addEventListener(\"DOMContentLoaded\", cwiki_mde.core.main());"]])
 
@@ -64,17 +66,16 @@
   "Create the base page layout and plug the content into it."
   [post-map req]
   (reset! post-map-for-editing post-map)
-  (debugf "(get-post-map-for-editing): %s" (get-post-map-for-editing))
   (reset! editable-content (db/page-map->content @post-map-for-editing))
   (let [id (db/page-map->id @post-map-for-editing)
         title (db/page-map->title @post-map-for-editing)
         ;content (db/page-map->content @copy-for-editing)
-        ;tags (db/get-tag-names-for-page id)
+        tags (db/get-tag-names-for-page id)
         ]
     (debugf "layout-editor-page: id: %s, title: %s" id title)
     (html5
-      {:ng-app "MDE Test" :lang "en"}
-      (standard-head title)
+      {:ng-app "CWiki" :lang "en"}
+      (standard-head (get-post-map-for-editing))
       [:body {:class "page-container"}
        [:header {:class "test-header"}
         [:h1 "MDE Test"]
@@ -105,7 +106,5 @@
          ;          :class   "form-button button-bar-item"
          ;          :onclick "window.history.back();"}]]
          ]]
-       [:footer {:class "test-footer"}
-        [:p "This is a fixed footer, just like the page where I intend to use
-       the editor."]]]
+       (base/footer-component)]
       (standard-end-of-body))))
