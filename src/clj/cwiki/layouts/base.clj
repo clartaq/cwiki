@@ -78,7 +78,7 @@
   [time-as-long]
   (f/unparse custom-formatter (c/from-long time-as-long)))
 
-(defn- get-tab-title
+(defn get-tab-title
   "Return a string to be displayed in the browser tab."
   [post-map]
   (if (and post-map
