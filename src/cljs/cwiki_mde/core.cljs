@@ -95,7 +95,7 @@
         (reset! the-doc-content the-data)))
     (when (= message-id :hey-editor/shutdown-now)
       (ws/stop-router!)
-      (.back (.-history js/window)))))
+      (.replace js/location (.-referrer js/document)))))
 
 (defn the-editor-container
   "Starts the websocket router and returns a function that lays out
