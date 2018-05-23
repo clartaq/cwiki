@@ -8,18 +8,24 @@
             [cwiki-mde.ws :as ws]
             [reagent.core :as reagent]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]))
+                                     trace debug info warn error]]
+            [cljs.pprint :as pp]))
 
-; MathJax would go here too.
 (defn highlight-code
   "Highlights any <pre><code></code></pre> blocks in the html."
   [html-node]
+  (info "highlight-code")
   (let [nodes (.querySelectorAll html-node "pre code")]
     (loop [i (.-length nodes)]
       (when-not (neg? i)
         (when-let [item (.item nodes i)]
           (.highlightBlock js/hljs item))
         (recur (dec i))))))
+
+(defn typeset-latex
+  "Typeset any mathematics in the text."
+  [latex-node]
+  (js/MathJax.Hub.Queue #js ["Typeset" js/MathJax.Hub latex-node]))
 
 (defn markdown-component
   "Set the content in the preview pane, optionally highlighting it."
@@ -31,6 +37,7 @@
      {:component-did-mount
       (fn [this]
         (let [node (reagent/dom-node this)]
+          (typeset-latex node)
           (highlight-code node)))})])
 
 (defn editor
@@ -49,7 +56,7 @@
 (defn preview
   "The preview div."
   [content]
-  [:div {:class "mde-preview-class"}
+  [:div {:class "mde-preview-class" :id "mde-preview-id"}
    (when (not-empty @content)
      (markdown-component @content))])
 
@@ -119,9 +126,7 @@
                :class   "form-button button-bar-item"
                :onClick #(do
                            (.log js/console "saw click on CANCEL button")
-                           (ws/send-message! [:hey-server/cancel-editing]))}]]
-
-     ]))
+                           (ws/send-message! [:hey-server/cancel-editing]))}]]]))
 
 (defn reload []
   (reagent/render [the-editor-container] (.getElementById js/document "editor-container")))
