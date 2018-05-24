@@ -254,14 +254,14 @@
   []
   [:aside {:class "left-aside"} ""])
 
-(defn- sidebar-aside
+(defn sidebar-aside
   "Return an aside with the content of the sidebar page."
   [req]
   (let [sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
     [:aside {:class "left-aside"}
      (limited-width-content-component req sidebar-content)]))
 
-(defn- sidebar-and-article
+(defn sidebar-and-article
   "Return a sidebar and article div with the given content."
   [sidebar article]
   [:div {:class "sidebar-and-article"}
