@@ -11,6 +11,8 @@
                                      trace debug info warn error]]
             [cljs.pprint :as pp]))
 
+(def options {:send-every-keystroke true})
+
 (defn highlight-code
   "Highlights any <pre><code></code></pre> blocks in the html."
   [html-node]
@@ -50,7 +52,9 @@
     :on-change (fn [arg]
                  (let [new-content (-> arg .-target .-value)]
                    (reset! content new-content)
-                   (ws/send-message! [:hey-server/content-updated {:?data new-content}])
+                   (when (:send-every-keystroke options)
+                     (ws/send-message! [:hey-server/content-updated
+                                        {:?data new-content}]))
                    new-content))}])
 
 (defn preview
@@ -64,14 +68,8 @@
 ;; Websocket messages handlers to work with the server.
 ;;
 
-(defn send-document-to-save
-  "Send the message (including content) to the server to save the
-  edited document."
-  [doc]
-  (info "Editor: Telling server to save the document.")
-  (ws/send-message! [:hey-server/save-edited-document {:data @doc}]))
-
 (def the-doc-content (reagent/atom nil))
+(def the-page-map (reagent/atom nil))
 
 (defn editor-handshake-handler
   "Handle the handshake event between the server and client. This function
@@ -92,10 +90,65 @@
     (infof "message-id: %s" message-id)
     (when (= message-id :hey-editor/here-is-the-document)
       (when-let [the-data (second ?data)]
-        (reset! the-doc-content the-data)))
+        (infof "the-data: %s" the-data)
+        (reset! the-page-map the-data)
+        (reset! the-doc-content (:page_content @the-page-map))))
     (when (= message-id :hey-editor/shutdown-now)
       (ws/stop-router!)
       (.replace js/location (.-referrer js/document)))))
+
+;;
+;; Layout and change handlers for the page.
+;;
+
+(defn tag-change-listener
+  "Return a change listener function for the tag indicated."
+  [page-map-atom n]
+  (fn [arg]
+    (let [new-tag (-> arg .-target .-value)]
+      (swap! page-map-atom assoc-in [:tags n] new-tag)
+      (when (:send-every-keystroke options)
+        (ws/send-message! [:hey-server/content-updated
+                           {:?data @page-map-atom}])))))
+
+(defn make-tag-input-element
+  "Return an input element for the nth tag from the vector."
+  [page-map-atom n]
+  ^{:key (str "tag-" n)}
+  [:input {:type        "text"
+           :class       "tag-text-field"
+           :placeholder (str "Tag #" (+ 1 n))
+           :value       (nth (:tags @page-map-atom) n "")
+           :on-change   (tag-change-listener page-map-atom n)}])
+
+(defn make-tag-list-input-component
+  "Build and return the piece of the page allowing tags to be edited."
+  [page-map-atom]
+  (infof "tags %s" (:tags @page-map-atom))
+  [:div {:class "tag-edit-container tag-edit-section"}
+   [:label {:class "tag-edit-label"} "Tags"]
+   [:div {:class "tag-edit-tag-list" :id "tag-edit-list"}
+    (doall (for [x (range 10)]
+             (make-tag-input-element page-map-atom x)))]])
+
+(defn make-title-input-element
+  "Build and return an element for displaying/editing the post title"
+  [page-map-atom]
+  [:div {:class "form-group title-edit-section"}
+   [:div {:class "form-label-div"}
+    [:label {:class "form-label required"
+             :for   "title"} "Page Title"]]
+   [:input {:type      "text" :class "form-title-field"
+            :name      "page-title"
+            :value     (if-let [title (:page_title @page-map-atom)]
+                         title
+                         "Enter a Title for the Page")
+            :on-change (fn [arg]
+                         (let [new-title (-> arg .-target .-value)]
+                           (swap! page-map-atom assoc :page_title new-title)
+                           (when (:send-every-keystroke options)
+                             (ws/send-message! [:hey-server/content-updated
+                                                {:?data @page-map-atom}]))))}]])
 
 (defn the-editor-container
   "Starts the websocket router and returns a function that lays out
@@ -105,6 +158,14 @@
                     editor-message-handler)
   (fn []
     [:div {:class "mde-container"}
+     (make-title-input-element the-page-map)
+     (infof "the tags: %s" (:tags @the-page-map))
+     (make-tag-list-input-component the-page-map)
+     [:div {:class "form-group"}
+      [:div {:class "form-label-div"}
+       [:label {:class "form-label"
+                :for   "content"} "Page Content"]]]
+
      [:div {:class "mde-editor-and-preview-container"}
       [editor the-doc-content]
       [preview the-doc-content]]
@@ -116,16 +177,17 @@
                :value   "Save Changes"
                :class   "form-button button-bar-item"
                :onClick #(do
-                           (.log js/console "Saw Click on Save Button!")
-                           (.log js/console (str "Here's the document: " @the-doc-content))
-                           (send-document-to-save the-doc-content))}]
+                           (info "Saw Click on Save Button!")
+                           (swap! the-page-map assoc :page_content @the-doc-content)
+                           (ws/send-message! [:hey-server/save-edited-document
+                                              {:data @the-page-map}]))}]
       [:input {:type    "button"
                :id      "Cancel Button"
                :name    "cancel-button"
                :value   "Cancel"
                :class   "form-button button-bar-item"
                :onClick #(do
-                           (.log js/console "saw click on CANCEL button")
+                           (info "Saw Click on the Cancel Button!")
                            (ws/send-message! [:hey-server/cancel-editing]))}]]]))
 
 (defn reload []

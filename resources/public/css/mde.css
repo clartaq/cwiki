@@ -65,6 +65,7 @@
 .mde-editor-class {
     flex: 1;
     font-size: 1.0rem;
+    line-height: 1.5rem;
     border: none;
     outline: none;
     overflow-y: scroll;
