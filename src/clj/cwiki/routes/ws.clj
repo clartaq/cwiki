@@ -9,7 +9,9 @@
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]
             [cwiki.layouts.editor :as editor-layout]
-            [cwiki.models.wiki-db :as db]))
+            [cwiki.models.wiki-db :as db]
+            [cemerick.url :as url]
+            [ring.util.response :refer [redirect status]]))
 
 (let [{:keys [ch-recv send-fn connected-uids
               ajax-post-fn ajax-get-or-ws-handshake-fn]}
@@ -21,18 +23,47 @@
   (def ring-ajax-get-or-ws-handshake ajax-get-or-ws-handshake-fn)
   (def ch-chsk ch-recv)                                     ; ChannelSocket's receive channel
   (def chsk-send! send-fn)                                  ; ChannelSocket's send API fn
-  (def connected-uids connected-uids) )                     ; Watchable, read-only atom
+  (def connected-uids connected-uids))                      ; Watchable, read-only atom
 
 (defn- save-doc!
   "Save new, edited content."
-  [content-data-map]
-  (tracef "save-doc!: content-data-map: %s" content-data-map)
-  (let [content-only (:data content-data-map)
-        page-map-for-editing (editor-layout/get-post-map-for-editing)
-        original-content (db/page-map->content page-map-for-editing)]
-    (when (not= content-data-map original-content)
-      (let [original-id (db/page-map->id page-map-for-editing)]
-        (db/update-content-only original-id content-only)))))
+  [websocket-data]
+  (infof "save-doc!: websocket-data: %s" websocket-data)
+  (let [post-map (:data websocket-data)
+        id (db/page-map->id post-map)
+        title (db/page-map->title post-map)
+        content (db/page-map->content post-map)
+        tags (:tags post-map)
+        ;page-map-for-editing (editor-layout/get-post-map-for-editing)
+        ;original-content (db/page-map->content page-map-for-editing)
+        ]
+    (infof "save-doc!:\n  id: %s\n  title: %s\n  tags: %s\n  content: %s"
+           id title tags content)
+    (db/update-page-title-and-content! id title (into #{} tags) content)
+    ;(when (not= websocket-data original-content)
+    ;  (let [original-id (db/page-map->id page-map-for-editing)]
+    ;    (defn update-page-title-and-content!
+    ;      [id title tag-set content]
+    ;
+    ;      (db/update-content-only original-id post-map)))))
+    (let [escaped-title (url/url-encode title)]
+      ; Important! We redirect here so that functions which use the
+      ; refering page get the page itself and not the editing page.
+      (infof "save-doc!: redirecting to: %s" escaped-title)
+      (redirect (str "/" escaped-title)))))
+
+(defn post-request-to-save
+  [websocket-data]
+  (info "post-request-to-save")
+  (let [post-map (:data websocket-data)
+        id (if-let [the-id (db/page-map->id post-map)]
+             the-id
+             nil)
+        title (db/page-map->title post-map)
+        content (db/page-map->content post-map)
+        tags (:tags post-map)]
+    ;(-> request)
+    ))
 
 (defn send-document-to-editor
   [client-id]
@@ -48,14 +79,14 @@
 
 (defn save-edited-document
   [client-id ?data]
-  (trace "Editor asked to save edited document.")
+  (info "Editor asked to save edited document.")
   (when ?data
     (save-doc! ?data))
   (chsk-send! client-id [:hey-editor/shutdown-now]))
 
 (defn cancel-editing
   [client-id]
-  (trace "Editor asked to cancel editing.")
+  (info "Editor asked to cancel editing.")
   (chsk-send! client-id [:hey-editor/shutdown-now]))
 
 (defn handle-message!

@@ -7,19 +7,21 @@
             [compojure.handler :as handler]
             [compojure.response :as response]
             [compojure.route :as route]
+            [cwiki.layouts.base :as layout]
+            [cwiki.layouts.editor :as layout-editor]
             [cwiki.models.wiki-db :as db]
             [cwiki.routes.admin :refer [admin-routes]]
-    ; [cwiki.routes.ajax :refer [ajax-routes]]
             [cwiki.routes.home :refer [home-routes]]
             [cwiki.routes.ws :refer [websocket-routes]]
             [cwiki.routes.login :refer [login-routes]]
             [cwiki.util.authorization :as ath]
+            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
-            [cwiki.layouts.base :as layout]
-            [cwiki.layouts.editor :as layout-editor]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [ring.util.response :refer [redirect status]]))
+            [ring.util.response :refer [redirect status]]
+            [taoensso.timbre :refer [tracef debugf infof warnf errorf
+                                     trace debug info warn error]]))
 
 (def backend (backends/session))
 
@@ -41,7 +43,14 @@
   [request]
   (let [raw-title (u/url-decode (:uri request))
         title (s/replace-first raw-title "/" "")
-        raw-post (db/find-post-by-title title)]
+        raw-post (db/find-post-by-title title)
+        raw-id (db/title->page-id title)]
+    (info "respond-to-page-request")
+    (infof "  raw-title: %s" raw-title)
+    (infof "  title: %s" title)
+    (infof "  raw-post: %s" raw-post)
+    (infof "  raw-id: %s" raw-id)
+    (infof "  request: %s" (pp/pp-map request))
     (cond
       raw-post (let [new-page (layout/view-wiki-page raw-post request)]
                  (build-response new-page request))
@@ -61,16 +70,20 @@
       (s/ends-with? title "/mde-edit") (let [title-only (s/replace title "/mde-edit" "")]
                                          (if (ath/can-edit-and-delete? request title-only)
                                            (let [new-body (layout-editor/layout-editor-page
-                                                            (db/find-post-by-title title-only) request)]
-                                             (build-response new-body request))
+                                                            (db/find-post-by-title title-only) request)
+                                                 response (build-response new-body request)]
+                                             (infof "  mde-edit route response: %s" (pp/pp-map response))
+                                             response)
                                            ;else
                                            (build-response (layout/compose-403-page) request 403)))
 
       (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")]
                                      (if (ath/can-edit-and-delete? request title-only)
                                        (let [new-body (layout/compose-create-or-edit-page
-                                                        (db/find-post-by-title title-only) request)]
-                                         (build-response new-body request))
+                                                        (db/find-post-by-title title-only) request)
+                                             response (build-response new-body request)]
+                                         (infof "  edit route response: %s" (pp/pp-map response))
+                                         response)
                                        ;else
                                        (build-response (layout/compose-403-page) request 403)))
       (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")]

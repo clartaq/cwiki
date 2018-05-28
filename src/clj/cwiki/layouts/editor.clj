@@ -54,13 +54,14 @@
 (defn get-content-for-websocket
   "Return a copy of the editable content."
   []
-  @editable-content)
+  ;@editable-content
+  (get-post-map-for-editing))
 
 (defn update-content-for-websocket
   "Update the editable content with new content. Might be called on
   every keystroke."
-  [new-content]
-  (reset! editable-content new-content))
+  [new-post-map]
+  (reset! post-map-for-editing new-post-map))
 
 (defn sidebar-and-editor
   "Return a sidebar and div with the given content. This is just like the
@@ -78,11 +79,14 @@
   (debugf "(get-post-map-for-editing): %s" (get-post-map-for-editing))
   (reset! editable-content (db/page-map->content @post-map-for-editing))
   (let [id (db/page-map->id @post-map-for-editing)
-        title (db/page-map->title @post-map-for-editing)
+     ;   title (db/page-map->title @post-map-for-editing)
         ;content (db/page-map->content @copy-for-editing)
-        tags (db/get-tag-names-for-page id)
+        tags (vec (db/get-tag-names-for-page id))
         ]
-    (debugf "layout-editor-page: id: %s, title: %s" id title)
+    (reset! post-map-for-editing (assoc @post-map-for-editing :tags tags))
+    (debugf "tags: %s" tags)
+    (debugf "@post-map-for-editing: %s" @post-map-for-editing)
+    ;(debugf "layout-editor-page: id: %s, title: %s" id title)
     (html5
       {:ng-app "CWiki" :lang "en"}
       (standard-head (get-post-map-for-editing))
@@ -91,10 +95,10 @@
        (sidebar-and-editor
          (base/sidebar-aside req)
          [:section {:class "editor-section"}
-          [:div {:class "title-edit-section"}
-           [:p "Title Edit Section"]]
-          [:div {:class "tag-edit-secton"}
-           [:p "Tag Edit Section"]]
+          ;[:div {:class "title-edit-section"}
+          ; [:p "Title Edit Section"]]
+          ;[:div {:class "tag-edit-secton"}
+          ; [:p "Tag Edit Section"]]
           [:div {:id "editor-container" :class "editor-container"}
            ; This should get overwritten by the running ClojureScript editor.
            [:p "The stuff from the ClojureScript editor should show up here."]]
