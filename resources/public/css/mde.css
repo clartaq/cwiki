@@ -59,6 +59,21 @@
     background-color: #e0e0e0;
 }
 
+.mde-title-edit-section {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    width: 50%;
+}
+
+.mde-form-title-field {
+    width: 98%;
+    font-size: 0.9rem;
+    padding-top: 0.2rem;
+    padding-left: 0.1rem;
+    padding-bottom: 0.3rem;
+}
+
+
 /*
 ** The editor uses the default font for text areas.
  */
@@ -90,6 +105,30 @@
     overflow-y:scroll;
 }
 
+/*
+** Tag area styling.
+ */
+
+.mde-tag-edit-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    margin: -0.1rem 0 0 -0.1rem;
+}
+
+.mde-tag-text-field {
+    font-size: 0.8rem;
+    padding-top: 0.2rem;
+    padding-left: 0.1rem;
+    padding-bottom: 0.1rem;
+    margin: 0.1rem 0 0 0.1rem;
+    width: calc(100% * (1/5) - 0.1rem - 6px);
+}
+
+/*
+** Some misc. tweaks.
+ */
+
 .mde-content-label-div {
     margin-top: 0.75rem;
 }
@@ -104,7 +143,6 @@
 .mde-button-bar-item {
     margin-right: 0.5em;
 }
-
 
 /*
 ** Additional formatting for list items. Shift them right to get the

@@ -116,7 +116,7 @@
   [page-map-atom n]
   ^{:key (str "tag-" n)}
   [:input {:type        "text"
-           :class       "tag-text-field"
+           :class       "mde-tag-text-field"
            :placeholder (str "Tag #" (+ 1 n))
            :value       (nth (:tags @page-map-atom) n "")
            :on-change   (tag-change-listener page-map-atom n)}])
@@ -127,18 +127,18 @@
   (infof "tags %s" (:tags @page-map-atom))
   [:div {:class "tag-edit-container tag-edit-section"}
    [:label {:class "tag-edit-label"} "Tags"]
-   [:div {:class "tag-edit-tag-list" :id "tag-edit-list"}
+   [:div {:class "mde-tag-edit-list" :id "mde-tag-edit-list"}
     (doall (for [x (range 10)]
              (make-tag-input-element page-map-atom x)))]])
 
 (defn make-title-input-element
   "Build and return an element for displaying/editing the post title"
   [page-map-atom]
-  [:div {:class "form-group title-edit-section"}
+  [:div {:class "mde-title-edit-section"}
    [:div {:class "form-label-div"}
     [:label {:class "form-label required"
              :for   "title"} "Page Title"]]
-   [:input {:type      "text" :class "form-title-field"
+   [:input {:type      "text" :class "mde-form-title-field"
             :name      "page-title"
             :value     (if-let [title (:page_title @page-map-atom)]
                          title
@@ -161,16 +161,15 @@
      (make-title-input-element the-page-map)
      (infof "the tags: %s" (:tags @the-page-map))
      (make-tag-list-input-component the-page-map)
-     [:div {:class "form-group"}
-      [:div {:class "form-label-div"}
+      [:div {:class "mde-content-label-div"}
        [:label {:class "form-label"
-                :for   "content"} "Page Content"]]]
+                :for   "content"} "Page Content"]]
 
      [:div {:class "mde-editor-and-preview-container"}
       [editor the-doc-content]
       [preview the-doc-content]]
 
-     [:div {:class "button-bar-container"}
+     [:div {:class "mde-button-bar-container"}
       [:input {:type    "button"
                :id      "Save Button"
                :name    "save-button"
