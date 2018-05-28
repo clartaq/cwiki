@@ -13,7 +13,7 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    border: 1px solid #e0e0e0;
+   /* border: 1px solid #e0e0e0;*/
 }
 
 /* The editor and preview pane are set up in a row. */
@@ -87,11 +87,24 @@
     font-size: 1.0rem;
     padding-left: 10px;
     padding-right: 10px;
-    /* border-top: 1px solid #e0e0e0;
-     border-right: 1px solid #e0e0e0;
-     border-bottom: 1px solid #e0e0e0;*/
     overflow-y:scroll;
 }
+
+.mde-content-label-div {
+    margin-top: 0.75rem;
+}
+
+.mde-button-bar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+}
+.mde-button-bar-item {
+    margin-right: 0.5em;
+}
+
 
 /*
 ** Additional formatting for list items. Shift them right to get the

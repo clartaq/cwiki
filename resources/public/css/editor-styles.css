@@ -218,8 +218,9 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: scroll;
-    padding: 0.15em;
+    padding: 0.5em 0.5em 0.5em 1.5em;
     background-color: var(--body-background-color);
+    border-left: 1px solid var(--rule-color);
 }
 
 .editor-container {
