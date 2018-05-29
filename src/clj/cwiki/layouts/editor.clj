@@ -42,7 +42,7 @@
    (include-js "js/compiled/cwiki-mde.js")
    [:script "window.addEventListener(\"DOMContentLoaded\", cwiki_mde.core.main());"]])
 
-(def ^{:private true} editable-content (atom nil))
+;(def ^{:private true} editable-content (atom nil))
 
 (def ^{:private true} post-map-for-editing (atom nil))
 
@@ -54,7 +54,6 @@
 (defn get-content-for-websocket
   "Return a copy of the editable content."
   []
-  ;@editable-content
   (get-post-map-for-editing))
 
 (defn update-content-for-websocket
@@ -77,9 +76,9 @@
   [post-map req]
   (reset! post-map-for-editing post-map)
   (debugf "(get-post-map-for-editing): %s" (get-post-map-for-editing))
-  (reset! editable-content (db/page-map->content @post-map-for-editing))
+  ;(reset! editable-content (db/page-map->content @post-map-for-editing))
   (let [id (db/page-map->id @post-map-for-editing)
-     ;   title (db/page-map->title @post-map-for-editing)
+        ;   title (db/page-map->title @post-map-for-editing)
         ;content (db/page-map->content @copy-for-editing)
         tags (vec (db/get-tag-names-for-page id))
         ]
@@ -95,96 +94,8 @@
        (sidebar-and-editor
          (base/sidebar-aside req)
          [:section {:class "editor-section"}
-          ;[:div {:class "title-edit-section"}
-          ; [:p "Title Edit Section"]]
-          ;[:div {:class "tag-edit-secton"}
-          ; [:p "Tag Edit Section"]]
           [:div {:id "editor-container" :class "editor-container"}
            ; This should get overwritten by the running ClojureScript editor.
-           [:p "The stuff from the ClojureScript editor should show up here."]]
-          ;[:div {:class "button-bar-container"}
-          ; [:input {:type    "button"
-          ;          :id      "Save Button"
-          ;          :name    "save-button"
-          ;          :value   "Save Changes"
-          ;          :class   "form-button button-bar-item"
-          ;          :onclick "console.log(\"Saw click on save button!\");"}]
-          ; [:input {:type    "button"
-          ;          :id      "Cancel Button"
-          ;          :name    "cancel-button"
-          ;          :value   "Cancel"
-          ;          :class   "form-button button-bar-item"
-          ;          :onclick "window.history.back();"}]]
-          ])
+           [:p "The stuff from the ClojureScript editor should show up here."]]])
        (base/footer-component)
        (standard-end-of-body)])))
-
-#_(defn- tag-editor-list-component
-    [tags]
-    (let [tv (vec tags)]
-      [:div {:class "tag-edit-container"}
-       [:label {:class "tag-edit-label"} "Tags"]
-       [:div {:class "tag-edit-tag-list"}
-        (text-field {:class "tag-text-field"} "tag0" (nth tv 0 ""))
-        (text-field {:class "tag-text-field"} "tag1" (nth tv 1 ""))
-        (text-field {:class "tag-text-field"} "tag2" (nth tv 2 ""))
-        (text-field {:class "tag-text-field"} "tag3" (nth tv 3 ""))
-        (text-field {:class "tag-text-field"} "tag4" (nth tv 4 ""))
-        (text-field {:class "tag-text-field"} "tag5" (nth tv 5 ""))
-        (text-field {:class "tag-text-field"} "tag6" (nth tv 6 ""))
-        (text-field {:class "tag-text-field"} "tag7" (nth tv 7 ""))
-        (text-field {:class "tag-text-field"} "tag8" (nth tv 8 ""))
-        (text-field {:class "tag-text-field"} "tag9" (nth tv 9 ""))]]))
-
-#_(defn compose-create-or-edit-page
-    "Will compose a page to create or edit a page in the wiki. The
-    difference is based on whether or not the post-map passed as
-    argument has a nil entry for the :post_id key in the map -- nil causes
-    creation, non-nil is an edit."
-    [post-map req]
-    (let [id (db/page-map->id post-map)
-          title (db/page-map->title post-map)
-          content (db/page-map->content post-map)
-          tags (db/get-tag-names-for-page id)]
-      (html5
-        {:lang "en"}
-        (standard-head post-map)
-        [:body {:class "page"}
-         (wiki-header-component post-map req {:editing true})
-         (sidebar-and-article
-           (sidebar-aside req)
-           [:div {:class "editor-container"}
-            (form-to {:enctype "multipart/form-data" :class "editor-form"}
-                     (if id
-                       [:post "save-edits"]
-                       [:post "save-new-page"])
-                     (when id
-                       (hidden-field :page-id id))
-                     [:div {:class "form-group"}
-                      [:div {:class "form-label-div"}
-                       [:label {:class "form-label required"
-                                :for   "title"} "Page Title"]]
-                      (text-field {:class     "form-title-field"
-                                   :autofocus "autofocus"} "title" title)]
-                     (tag-editor-list-component tags)
-                     ; KEEP THIS FOR NOW
-                     ;[:div {:class "form-group"}
-                     ; [:div {:class "form-label-div"}
-                     ;  [:label {:class "form-label"
-                     ;           :for   "tags"} "Tags"]]
-                     ; [:input {:type "submit" :id "new-tag-button"}]]
-                     [:div {:class "form-group"}
-                      [:div {:class "form-label-div"}
-                       [:label {:class "form-label"
-                                :for   "content"} "Page Content"]]
-                      (text-area {:class "form-text-area"} "content" content)]
-                     [:div {:class "button-bar-container"}
-                      (submit-button {:id    "Save Button"
-                                      :class "form-button button-bar-item"}
-                                     "Save Changes")
-                      [:input {:type    "button" :name "cancel-button"
-                               :value   "Cancel"
-                               :class   "form-button button-bar-item"
-                               :onclick "window.history.back();"}]])])
-         (footer-component)])))
-

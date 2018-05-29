@@ -54,18 +54,6 @@
       (infof "save-doc!: redirecting to: %s" escaped-title)
       (redirect (str "/" escaped-title)))))
 
-(defn post-request-to-save
-  [websocket-data]
-  (info "post-request-to-save")
-  (let [post-map (:data websocket-data)
-        id (when-let [the-id (db/page-map->id post-map)]
-             the-id)
-        title (db/page-map->title post-map)
-        content (db/page-map->content post-map)
-        tags (:tags post-map)]
-    ;(-> request)
-    ))
-
 (defn send-document-to-editor
   [client-id]
   (trace "server sending document")
