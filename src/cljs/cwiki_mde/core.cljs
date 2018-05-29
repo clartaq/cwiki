@@ -124,7 +124,7 @@
 (defn make-tag-list-input-component
   "Build and return the piece of the page allowing tags to be edited."
   [page-map-atom]
-  (infof "tags %s" (:tags @page-map-atom))
+  (tracef "tags %s" (:tags @page-map-atom))
   [:div {:class "tag-edit-container tag-edit-section"}
    [:label {:class "tag-edit-label"} "Tags"]
    [:div {:class "mde-tag-edit-list" :id "mde-tag-edit-list"}
@@ -159,7 +159,7 @@
   (fn []
     [:div {:class "mde-container"}
      (make-title-input-element the-page-map)
-     (infof "the tags: %s" (:tags @the-page-map))
+     (tracef "the tags: %s" (:tags @the-page-map))
      (make-tag-list-input-component the-page-map)
       [:div {:class "mde-content-label-div"}
        [:label {:class "form-label"
@@ -176,7 +176,7 @@
                :value   "Save Changes"
                :class   "form-button button-bar-item"
                :onClick #(do
-                           (info "Saw Click on Save Button!")
+                           (trace "Saw Click on Save Button!")
                            (swap! the-page-map assoc :page_content @the-doc-content)
                            (ws/send-message! [:hey-server/save-edited-document
                                               {:data @the-page-map}]))}]
@@ -186,7 +186,7 @@
                :value   "Cancel"
                :class   "form-button button-bar-item"
                :onClick #(do
-                           (info "Saw Click on the Cancel Button!")
+                           (trace "Saw Click on the Cancel Button!")
                            (ws/send-message! [:hey-server/cancel-editing]))}]]]))
 
 (defn reload []

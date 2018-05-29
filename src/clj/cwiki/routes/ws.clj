@@ -39,7 +39,9 @@
         ]
     (infof "save-doc!:\n  id: %s\n  title: %s\n  tags: %s\n  content: %s"
            id title tags content)
-    (db/update-page-title-and-content! id title (into #{} tags) content)
+    (db/update-page-title-and-content! id title (set tags) content)
+    (infof "after saving to database, id for title from db: %s"
+           (db/title->page-id title))
     ;(when (not= websocket-data original-content)
     ;  (let [original-id (db/page-map->id page-map-for-editing)]
     ;    (defn update-page-title-and-content!
@@ -56,9 +58,8 @@
   [websocket-data]
   (info "post-request-to-save")
   (let [post-map (:data websocket-data)
-        id (if-let [the-id (db/page-map->id post-map)]
-             the-id
-             nil)
+        id (when-let [the-id (db/page-map->id post-map)]
+             the-id)
         title (db/page-map->title post-map)
         content (db/page-map->content post-map)
         tags (:tags post-map)]

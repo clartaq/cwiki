@@ -101,13 +101,20 @@
                                            new-body (layout/compose-all-pages-with-tag tag-only request)]
                                        (build-response new-body request))
       :else (if (ath/can-create? request)
-              (let [title-only (s/replace title "/create" "")
-                    new-body (layout/compose-create-or-edit-page
-                               (db/create-new-post-map
-                                 title-only
-                                 ""
-                                 (ri/req->user-id request)) request)]
-                (build-response new-body request))
+              (do
+                (info "respond-to-page-request: FELL THROUGH TO THE ROUTE TO CREATE A NEW PAGE")
+                (infof "  title: %s" title)
+                (infof "  raw-post: %s" raw-post)
+                (infof "  raw-id: %s" raw-id)
+                (infof "  request: %s" (pp/pp-map request))
+
+                (let [title-only (s/replace title "/create" "")
+                      new-body (layout/compose-create-or-edit-page
+                                 (db/create-new-post-map
+                                   title-only
+                                   ""
+                                   (ri/req->user-id request)) request)]
+                  (build-response new-body request)))
               ;else
               (build-response (layout/compose-403-page) request 403)))))
 
