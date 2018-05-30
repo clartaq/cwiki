@@ -1,7 +1,8 @@
 (ns cwiki-test.core-test
   (:require [cljs.test :refer-macros [deftest testing is]]
-            [cwiki-mde.core :as core]))
+            ;[cwiki-mde.core :as core]
+            ))
 
 (deftest fake-test
-  (testing "fake de scription"
+  (testing "fake description"
     (is (= 1 2))))
