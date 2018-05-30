@@ -10,7 +10,7 @@
             [org.httpkit.server :as http-kit]
             [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.file-info :refer [wrap-file-info]]
-            [ring.middleware.reload :as reload]
+            ;[ring.middleware.reload :as reload]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf]]))
 
 (defonce server (atom nil))
@@ -26,7 +26,7 @@
     ; Content-Type, Content-Length, and Last Modified headers for files in body.
     (wrap-file-info)))
 
-(def in-dev? true)
+;(def in-dev? true)
 
 (defonce web-server_ (atom nil))
 
@@ -36,9 +36,10 @@
 (defn start-web-server! [& [port]]
   (stop-web-server!)
   (let [port (or port 1350)
-        ring-handler (if in-dev?
-                       (reload/wrap-reload (get-handler))
-                       (get-handler))
+        ring-handler ;(if in-dev?
+                       ;(reload/wrap-reload (get-handler))
+                       (get-handler)
+                       ;)
         [port stop-fn] (let [stop-fn (http-kit/run-server ring-handler {:port port})]
                          [(:local-port (meta stop-fn)) (fn [] (stop-fn :timeout 100))])
         uri (format "http://localhost:%s/" port)]
