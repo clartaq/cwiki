@@ -22,7 +22,7 @@
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
-                 [javax.xml.bind/jaxb-api "2.2.12"]
+                 [javax.xml.bind/jaxb-api "2.3.0"]
                  [reagent "0.8.1"]
                  [ring/ring-defaults "0.3.1"]]
 
@@ -57,6 +57,7 @@
               {:dependencies [[binaryage/devtools "0.9.10"]
                               [cider/piggieback "0.3.5"]
                               [figwheel-sidecar "0.5.16"]
+                              [ring/ring-mock "0.3.2"]
                               [ring/ring-devel "1.6.3"]]
                :source-paths ["src/cljs"]
                :plugins      [[lein-doo "0.1.10"]
