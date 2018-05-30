@@ -22,10 +22,9 @@
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
+                 [javax.xml.bind/jaxb-api "2.2.12"]
                  [reagent "0.8.1"]
                  [ring/ring-defaults "0.3.1"]]
-
-  :jvm-opts ["--add-modules" "java.xml.bind"]
 
   :main cwiki.main
 
@@ -50,7 +49,10 @@
   :figwheel {:css-dirs ["resources/public/css"]}
 
   :profiles {:uberjar
-              {:aot :all}
+              {:aot :all
+               :omit-source true
+               :hooks []
+               :prep-tasks ["clean" "compile" ["cljsbuild" "once" "min"]]}
              :dev
               {:dependencies [[binaryage/devtools "0.9.10"]
                               [cider/piggieback "0.3.5"]
