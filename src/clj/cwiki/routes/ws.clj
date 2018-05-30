@@ -3,15 +3,15 @@
 ;;;
 
 (ns cwiki.routes.ws
-  (:require [compojure.core :refer [GET POST defroutes]]
+  (:require [cemerick.url :as url]
+            [compojure.core :refer [GET POST defroutes]]
+            [cwiki.layouts.editor :as editor-layout]
+            [cwiki.models.wiki-db :as db]
+            [ring.util.response :refer [redirect status]]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]
-            [cwiki.layouts.editor :as editor-layout]
-            [cwiki.models.wiki-db :as db]
-            [cemerick.url :as url]
-            [ring.util.response :refer [redirect status]]))
+                                     trace debug info warn error]]))
 
 (let [{:keys [ch-recv send-fn connected-uids
               ajax-post-fn ajax-get-or-ws-handshake-fn]}
@@ -33,21 +33,12 @@
         id (db/page-map->id post-map)
         title (db/page-map->title post-map)
         content (db/page-map->content post-map)
-        tags (:tags post-map)
-        ;page-map-for-editing (editor-layout/get-post-map-for-editing)
-        ;original-content (db/page-map->content page-map-for-editing)
-        ]
+        tags (:tags post-map)]
     (infof "save-doc!:\n  id: %s\n  title: %s\n  tags: %s\n  content: %s"
            id title tags content)
     (db/update-page-title-and-content! id title (set tags) content)
     (infof "after saving to database, id for title from db: %s"
            (db/title->page-id title))
-    ;(when (not= websocket-data original-content)
-    ;  (let [original-id (db/page-map->id page-map-for-editing)]
-    ;    (defn update-page-title-and-content!
-    ;      [id title tag-set content]
-    ;
-    ;      (db/update-content-only original-id post-map)))))
     (let [escaped-title (url/url-encode title)]
       ; Important! We redirect here so that functions which use the
       ; refering page get the page itself and not the editing page.
@@ -55,27 +46,32 @@
       (redirect (str "/" escaped-title)))))
 
 (defn send-document-to-editor
+  "Get the post to be edited and send it to the editor."
   [client-id]
   (trace "server sending document")
   (chsk-send! client-id [:hey-editor/here-is-the-document
-                         (editor-layout/get-content-for-websocket)]))
+                         (editor-layout/get-post-map-for-editing)]))
 
 (defn content-updated
+  "When the content of the post being edited changes, do something with it
+  here if desired."
   [?data]
   (trace "Saw 'content updated' notification.")
   (when ?data
     (editor-layout/update-content-for-websocket ?data)))
 
 (defn save-edited-document
+  "Save the edited post and ask the client to shut itself down."
   [client-id ?data]
-  (info "Editor asked to save edited document.")
+  (trace "Editor asked to save edited document.")
   (when ?data
     (save-doc! ?data))
   (chsk-send! client-id [:hey-editor/shutdown-now]))
 
 (defn cancel-editing
+  "Stop editing the post and ask the client to shut itself down."
   [client-id]
-  (info "Editor asked to cancel editing.")
+  (trace "Editor asked to cancel editing.")
   (chsk-send! client-id [:hey-editor/shutdown-now]))
 
 (defn handle-message!
@@ -101,12 +97,15 @@
 (defonce router_ (atom nil))
 
 (defn stop-router!
+  "Stop the websocket router."
   []
-  (trace "Stopping websocket router")
+  (trace "Stopping websocket router.")
   (when-let [stop-fn @router_]
     (stop-fn)))
 
-(defn start-router! []
+(defn start-router!
+  "Start the websocket router."
+  []
   (trace "Starting websocket router.")
   (stop-router!)
   (reset! router_

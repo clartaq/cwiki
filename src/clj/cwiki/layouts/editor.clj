@@ -42,19 +42,12 @@
    (include-js "js/compiled/cwiki-mde.js")
    [:script "window.addEventListener(\"DOMContentLoaded\", cwiki_mde.core.main());"]])
 
-;(def ^{:private true} editable-content (atom nil))
-
 (def ^{:private true} post-map-for-editing (atom nil))
 
 (defn get-post-map-for-editing
   "Return a copy of the post map that can be used for editing."
   []
   @post-map-for-editing)
-
-(defn get-content-for-websocket
-  "Return a copy of the editable content."
-  []
-  (get-post-map-for-editing))
 
 (defn update-content-for-websocket
   "Update the editable content with new content. Might be called on
@@ -76,16 +69,11 @@
   [post-map req]
   (reset! post-map-for-editing post-map)
   (debugf "(get-post-map-for-editing): %s" (get-post-map-for-editing))
-  ;(reset! editable-content (db/page-map->content @post-map-for-editing))
   (let [id (db/page-map->id @post-map-for-editing)
-        ;   title (db/page-map->title @post-map-for-editing)
-        ;content (db/page-map->content @copy-for-editing)
-        tags (vec (db/get-tag-names-for-page id))
-        ]
-    (reset! post-map-for-editing (assoc @post-map-for-editing :tags tags))
+        tags (vec (db/get-tag-names-for-page id))]
+    (swap! post-map-for-editing assoc :tags tags)
     (debugf "tags: %s" tags)
     (debugf "@post-map-for-editing: %s" @post-map-for-editing)
-    ;(debugf "layout-editor-page: id: %s, title: %s" id title)
     (html5
       {:ng-app "CWiki" :lang "en"}
       (standard-head (get-post-map-for-editing))
@@ -95,7 +83,6 @@
          (base/sidebar-aside req)
          [:section {:class "editor-section"}
           [:div {:id "editor-container" :class "editor-container"}
-           ; This should get overwritten by the running ClojureScript editor.
            [:p "The stuff from the ClojureScript editor should show up here."]]])
        (base/footer-component)
        (standard-end-of-body)])))
