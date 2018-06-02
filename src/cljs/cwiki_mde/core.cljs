@@ -4,12 +4,10 @@
 ;;;
 
 (ns cwiki-mde.core
-  (:require [ajax.core :refer [GET]]
-            [cwiki-mde.ws :as ws]
+  (:require [cwiki-mde.ws :as ws]
             [reagent.core :as reagent]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]
-            [cljs.pprint :as pp]))
+                                     trace debug info warn error]]))
 
 (def options {:send-every-keystroke true})
 
@@ -93,9 +91,14 @@
         (infof "the-data: %s" the-data)
         (reset! the-page-map the-data)
         (reset! the-doc-content (:page_content @the-page-map))))
-    (when (= message-id :hey-editor/shutdown-now)
+    (when (= message-id :hey-editor/shutdown-after-save)
+      (let [new-location (str "/" (:page_title @the-page-map))]
+        (infof "The new location is: %s" new-location)
+        (ws/stop-router!)
+        (.replace js/location new-location))
+    (when (= message-id :hey-editor/shutdown-after-cancel)
       (ws/stop-router!)
-      (.replace js/location (.-referrer js/document)))))
+      (.replace js/location (.-referrer js/document))))))
 
 ;;
 ;; Layout and change handlers for the page.
@@ -161,9 +164,9 @@
      (make-title-input-element the-page-map)
      (tracef "the tags: %s" (:tags @the-page-map))
      (make-tag-list-input-component the-page-map)
-      [:div {:class "mde-content-label-div"}
-       [:label {:class "form-label"
-                :for   "content"} "Page Content"]]
+     [:div {:class "mde-content-label-div"}
+      [:label {:class "form-label"
+               :for   "content"} "Page Content"]]
 
      [:div {:class "mde-editor-and-preview-container"}
       [editor the-doc-content]
