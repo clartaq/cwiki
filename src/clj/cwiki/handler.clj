@@ -15,7 +15,6 @@
             [cwiki.routes.ws :refer [websocket-routes]]
             [cwiki.routes.login :refer [login-routes]]
             [cwiki.util.authorization :as ath]
-            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
@@ -43,14 +42,7 @@
   [request]
   (let [raw-title (u/url-decode (:uri request))
         title (s/replace-first raw-title "/" "")
-        raw-post (db/find-post-by-title title)
-        raw-id (db/title->page-id title)]
-    (info "respond-to-page-request")
-    (infof "  raw-title: %s" raw-title)
-    (infof "  title: %s" title)
-    (infof "  raw-post: %s" raw-post)
-    (infof "  raw-id: %s" raw-id)
-    (infof "  request: %s" (pp/pp-map request))
+        raw-post (db/find-post-by-title title)]
     (cond
       raw-post (let [new-page (layout/view-wiki-page raw-post request)]
                  (build-response new-page request))
@@ -72,7 +64,6 @@
                                            (let [new-body (layout-editor/layout-editor-page
                                                             (db/find-post-by-title title-only) request)
                                                  response (build-response new-body request)]
-                                             (infof "  mde-edit route response: %s" (pp/pp-map response))
                                              response)
                                            ;else
                                            (build-response (layout/compose-403-page) request 403)))
@@ -82,7 +73,6 @@
                                        (let [new-body (layout/compose-create-or-edit-page
                                                         (db/find-post-by-title title-only) request)
                                              response (build-response new-body request)]
-                                         (infof "  edit route response: %s" (pp/pp-map response))
                                          response)
                                        ;else
                                        (build-response (layout/compose-403-page) request 403)))
@@ -101,20 +91,13 @@
                                            new-body (layout/compose-all-pages-with-tag tag-only request)]
                                        (build-response new-body request))
       :else (if (ath/can-create? request)
-              (do
-                (info "respond-to-page-request: FELL THROUGH TO THE ROUTE TO CREATE A NEW PAGE")
-                (infof "  title: %s" title)
-                (infof "  raw-post: %s" raw-post)
-                (infof "  raw-id: %s" raw-id)
-                (infof "  request: %s" (pp/pp-map request))
-
-                (let [title-only (s/replace title "/create" "")
-                      new-body (layout/compose-create-or-edit-page
-                                 (db/create-new-post-map
-                                   title-only
-                                   ""
-                                   (ri/req->user-id request)) request)]
-                  (build-response new-body request)))
+              (let [title-only (s/replace title "/create" "")
+                    new-body (layout/compose-create-or-edit-page
+                               (db/create-new-post-map
+                                 title-only
+                                 ""
+                                 (ri/req->user-id request)) request)]
+                (build-response new-body request))
               ;else
               (build-response (layout/compose-403-page) request 403)))))
 
