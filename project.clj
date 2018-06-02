@@ -12,7 +12,6 @@
                  [com.h2database/h2 "1.4.197"]
                  [circleci/clj-yaml "0.5.6"]
                  [clj-time "0.14.4"]
-                 [cljs-ajax "0.7.3"]
                  [com.taoensso/sente "1.12.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.vladsch.flexmark/flexmark "0.32.24"]
@@ -49,20 +48,20 @@
   :figwheel {:css-dirs ["resources/public/css"]}
 
   :profiles {:uberjar
-              {:aot :all
-               :omit-source true
-               :hooks []
-               :prep-tasks ["clean" "compile" ["cljsbuild" "once" "min"]]}
+             {:aot         :all
+              :omit-source true
+              :hooks       []
+              :prep-tasks  ["clean" "compile" ["cljsbuild" "once" "min"]]}
              :dev
-              {:dependencies [[binaryage/devtools "0.9.10"]
-                              [cider/piggieback "0.3.5"]
-                              [figwheel-sidecar "0.5.16"]
-                              [ring/ring-mock "0.3.2"]
-                              [ring/ring-devel "1.6.3"]]
-               :source-paths ["src/cljs"]
-               :plugins      [[lein-doo "0.1.10"]
-                              [lein-figwheel "0.5.16"]]
-               :test-paths   ["test/cljs"]}}
+             {:dependencies [[binaryage/devtools "0.9.10"]
+                             [cider/piggieback "0.3.5"]
+                             [figwheel-sidecar "0.5.16"]
+                             [ring/ring-mock "0.3.2"]
+                             [ring/ring-devel "1.6.3"]]
+              :source-paths ["src/cljs"]
+              :plugins      [[lein-doo "0.1.10"]
+                             [lein-figwheel "0.5.16"]]
+              :test-paths   ["test/cljs"]}}
 
   :cljsbuild {:builds
               [{:id           "dev"
