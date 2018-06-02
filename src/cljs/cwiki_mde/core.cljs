@@ -95,10 +95,10 @@
       (let [new-location (str "/" (:page_title @the-page-map))]
         (infof "The new location is: %s" new-location)
         (ws/stop-router!)
-        (.replace js/location new-location))
+        (.replace js/location new-location)))
     (when (= message-id :hey-editor/shutdown-after-cancel)
       (ws/stop-router!)
-      (.replace js/location (.-referrer js/document))))))
+      (.replace js/location (.-referrer js/document)))))
 
 ;;
 ;; Layout and change handlers for the page.
