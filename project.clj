@@ -23,7 +23,7 @@
                  [http-kit "2.3.0"]
                  [javax.xml.bind/jaxb-api "2.3.0"]
                  [reagent "0.8.1"]
-                 [ring/ring-defaults "0.3.1"]]
+                 [ring/ring-defaults "0.3.2"]]
 
   :main cwiki.main
 
@@ -51,7 +51,10 @@
              {:aot         :all
               :omit-source true
               :hooks       []
-              :prep-tasks  ["clean" "compile" ["cljsbuild" "once" "min"]]}
+              :prep-tasks  ["clean" "compile" ["cljsbuild" "once" "min"]]
+              ; This really shouldn't be required. Need to move the REPL
+              ; stuff out of the uberjar build.
+              :dependencies [[ring/ring-mock "0.3.2"]]}
              :dev
              {:dependencies [[binaryage/devtools "0.9.10"]
                              [cider/piggieback "0.3.5"]
