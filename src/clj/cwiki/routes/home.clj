@@ -248,8 +248,6 @@
            (GET "/import" request (get-import-file request))
            (POST "/import" request (post-import-page request))
            (POST "/proceed-with-import" request (post-proceed-with-import request))
-           (POST "/save-mde-edits" request
-             (println "save-mde-edits: request: " (pp/pp-map request)))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]
                (save-edits (get params "page-id")
