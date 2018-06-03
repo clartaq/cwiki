@@ -24,6 +24,11 @@
   (def chsk-send! send-fn)                                  ; ChannelSocket's send API fn
   (def connected-uids connected-uids))                      ; Watchable, read-only atom
 
+(defn- save-new-doc!
+  "Save a completely new page to the database and display it."
+  [title content tags author-id]
+  (db/insert-new-page! title content tags author-id))
+
 (defn- save-doc!
   "Save new, edited content."
   [websocket-data]
@@ -35,7 +40,9 @@
         tags (:tags post-map)]
     (infof "save-doc!:\n  id: %s\n  title: %s\n  tags: %s\n  content: %s"
            id title tags (str (take 20 content)))
-    (db/update-page-title-and-content! id title (set tags) content)))
+    (if id
+      (db/update-page-title-and-content! id title (set tags) content)
+      (save-new-doc! title content tags (:author_id post-map)))))
 
 (defn send-document-to-editor
   "Get the post to be edited and send it to the editor."
