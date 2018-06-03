@@ -3,8 +3,7 @@
 ;;;
 
 (ns cwiki.routes.ws
-  (:require [cemerick.url :as url]
-            [compojure.core :refer [GET POST defroutes]]
+  (:require [compojure.core :refer [GET POST defroutes]]
             [cwiki.layouts.editor :as editor-layout]
             [cwiki.models.wiki-db :as db]
             [ring.util.response :refer [redirect status]]
