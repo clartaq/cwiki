@@ -15,7 +15,8 @@
             [cwiki.util.special :as special]
             [cwiki.util.wikilinks :refer [replace-wikilinks
                                           get-edit-link-for-existing-page
-                                          get-delete-link-for-existing-page]]
+                                          get-delete-link-for-existing-page
+                                          get-mde-edit-link-for-existing-page]]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [drop-down email-field form-to hidden-field
                                  password-field select-options
@@ -77,7 +78,7 @@
   [time-as-long]
   (f/unparse custom-formatter (c/from-long time-as-long)))
 
-(defn- get-tab-title
+(defn get-tab-title
   "Return a string to be displayed in the browser tab."
   [post-map]
   (if (and post-map
@@ -96,10 +97,15 @@
     [:head
      [:title (get-tab-title post-map)]
      (include-css (str "/css/styles.css" q))
-     (include-css (str "/js/styles/default.css"))
-     (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
-     (include-js "/js/mathjax-config.js")
-     (include-js "/js/highlight.pack.js")]))
+     (include-css (str "/js/styles/default.css"))]))
+
+(defn standard-end-of-body
+  "Returns a div with the standard scripts to include in the page."
+  []
+  [:div {:class "standard-scripts"}
+   (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
+   (include-js "/js/mathjax-config.js")
+   (include-js "/js/highlight.pack.js")])
 
 (defn- drop-menu
   "Return the drop-down menu for use in the page header."
@@ -152,6 +158,10 @@
                         allow-editing
                         can-edit-and-delete
                         (get-edit-link-for-existing-page post-map req))
+         mde-link (and post-map
+                       allow-editing
+                       can-edit-and-delete
+                       (get-mde-edit-link-for-existing-page post-map req))
          delete-link (and post-map
                           allow-editing
                           can-edit-and-delete
@@ -159,8 +169,12 @@
      [:nav {:class "hmenu"}
       (when (ath/can-create? req)
         (menu-item-span [:a {:href "/New Page"} "New"]))
+      ;(when (ath/can-create? req)
+      ;  (menu-item-span [:a {:href "/New MDE Page"} "New MDE"]))
+      ;(when edit-link
+      ;  (menu-item-span edit-link))
       (when edit-link
-        (menu-item-span edit-link))
+        (menu-item-span mde-link)) ;[:a {:href "/mde"} "mde"]))
       (when delete-link
         (menu-item-span delete-link))
       (menu-item-span [:a {:href "/"} "Home"])
@@ -247,14 +261,14 @@
   []
   [:aside {:class "left-aside"} ""])
 
-(defn- sidebar-aside
+(defn sidebar-aside
   "Return an aside with the content of the sidebar page."
   [req]
   (let [sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
     [:aside {:class "left-aside"}
      (limited-width-content-component req sidebar-content)]))
 
-(defn- sidebar-and-article
+(defn sidebar-and-article
   "Return a sidebar and article div with the given content."
   [sidebar article]
   [:div {:class "sidebar-and-article"}
@@ -277,7 +291,8 @@
      (sidebar-and-article
        (no-content-aside)
        content)
-     (footer-component)]))
+     (footer-component)
+     (standard-end-of-body)]))
 
 (defn short-message
   "Return a page with a title, message and 'Ok' button."
@@ -568,7 +583,8 @@
                              :value   "Cancel"
                              :class   "form-button button-bar-item"
                              :onclick "window.history.back();"}]])])
-       (footer-component)])))
+       (footer-component)
+       (standard-end-of-body)])))
 
 (defn view-wiki-page
   "Return a 'regular' wiki page view."
@@ -583,7 +599,8 @@
          (sidebar-aside req)
          [:div (limited-width-title-component post-map)
           (limited-width-content-component req content)])
-       (footer-component)]
+       (footer-component)
+       (standard-end-of-body)]
       (include-js "/js/onload.js"))))
 
 (defn view-list-page
@@ -604,7 +621,8 @@
          [:div (limited-width-title-component post-map)
           [:div {:class class-to-use}
            (limited-width-content-component req content)]])
-       (footer-component)])))
+       (footer-component)
+       (standard-end-of-body)])))
 
 ;;
 ;; Pages and utilities that show all there are of something, like

@@ -489,6 +489,13 @@
     (reduce #(conj %1 (page-id->title %2))
             (sorted-set-by case-insensitive-comparator) page-ids)))
 
+(defn update-content-only
+  [id content]
+  (println "update-content-only: id: " id ", content: " content)
+  (jdbc/update! h2-db :pages {:page_content content
+                              :page_modified (dt/sql-now)}
+                ["page_id=?" id]))
+
 (defn update-page-title-and-content!
   [id title tag-set content]
   (jdbc/update! h2-db :pages {:page_title    title

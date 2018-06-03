@@ -1,11 +1,13 @@
 syntax: glob
+.idea/**
 target/**
-resources/public/db/**
 *.jar
 *.xml
 .lein-*
 .nrepl-port
-.gitignore
-.git/**
 resources/public/db/**
-*.md
+resources/public/js/compiled/**
+doo-index.html
+figwheel_server.log
+cwiki.iml
+.rebel_readline_history
