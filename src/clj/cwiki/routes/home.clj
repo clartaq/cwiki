@@ -5,8 +5,11 @@
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.files :as files]
+            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
-            [ring.util.response :refer [redirect status]]))
+            [ring.util.response :refer [redirect status]]
+            [taoensso.timbre :refer [tracef debugf infof warnf errorf
+                                     trace debug info warn error]]))
 
 (defn- build-response
   "Build a response structure, possibly with a non-200 return code."
@@ -55,6 +58,11 @@
 (defn- save-edits
   "Save any edits to the page back to the database."
   [page-id new-title new-content req]
+  (info "save-edits")
+  (infof "  page-id: :%s" page-id)
+  (infof "  new-title: %s" new-title)
+  (infof "  new-content: %s ..." (take 20 new-content))
+  (infof "  req: %s" (pp/pp-map req))
   (let [actual-id (Integer. ^String page-id)
         tags (get-tag-set-from-req req)]
     (db/update-page-title-and-content! actual-id new-title tags new-content)

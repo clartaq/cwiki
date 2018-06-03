@@ -7,16 +7,20 @@
             [compojure.handler :as handler]
             [compojure.response :as response]
             [compojure.route :as route]
+            [cwiki.layouts.base :as layout]
+            [cwiki.layouts.editor :as layout-editor]
             [cwiki.models.wiki-db :as db]
             [cwiki.routes.admin :refer [admin-routes]]
             [cwiki.routes.home :refer [home-routes]]
+            [cwiki.routes.ws :refer [websocket-routes]]
             [cwiki.routes.login :refer [login-routes]]
             [cwiki.util.authorization :as ath]
             [cwiki.util.req-info :as ri]
-            [cwiki.layouts.base :as layout]
             [hiccup.middleware :refer [wrap-base-url]]
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-            [ring.util.response :refer [redirect status]]))
+            [ring.util.response :refer [redirect status]]
+            [taoensso.timbre :refer [tracef debugf infof warnf errorf
+                                     trace debug info warn error]]))
 
 (def backend (backends/session))
 
@@ -55,11 +59,21 @@
       (= title "Orphans") (let [new-body (layout/compose-not-yet-view "Orphans")]
                             (build-response new-body request))
 
+      (s/ends-with? title "/mde-edit") (let [title-only (s/replace title "/mde-edit" "")]
+                                         (if (ath/can-edit-and-delete? request title-only)
+                                           (let [new-body (layout-editor/layout-editor-page
+                                                            (db/find-post-by-title title-only) request)
+                                                 response (build-response new-body request)]
+                                             response)
+                                           ;else
+                                           (build-response (layout/compose-403-page) request 403)))
+
       (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")]
                                      (if (ath/can-edit-and-delete? request title-only)
                                        (let [new-body (layout/compose-create-or-edit-page
-                                                        (db/find-post-by-title title-only) request)]
-                                         (build-response new-body request))
+                                                        (db/find-post-by-title title-only) request)
+                                             response (build-response new-body request)]
+                                         response)
                                        ;else
                                        (build-response (layout/compose-403-page) request 403)))
       (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")]
@@ -76,16 +90,29 @@
       (s/ends-with? title "/as-tag") (let [tag-only (s/replace title "/as-tag" "")
                                            new-body (layout/compose-all-pages-with-tag tag-only request)]
                                        (build-response new-body request))
-      :else (if (ath/can-create? request)
-              (let [title-only (s/replace title "/create" "")
-                    new-body (layout/compose-create-or-edit-page
-                               (db/create-new-post-map
-                                 title-only
-                                 ""
-                                 (ri/req->user-id request)) request)]
-                (build-response new-body request))
-              ;else
-              (build-response (layout/compose-403-page) request 403)))))
+      :else (let [title-only (s/replace title "/mde-edit" "")]
+              (if (ath/can-edit-and-delete? request title-only)
+                (let [new-body (layout-editor/layout-editor-page
+                                 (db/create-new-post-map
+                                   title-only
+                                   ""
+                                   (ri/req->user-id request)) request)
+                      ;(db/find-post-by-title title-only) request)
+                      response (build-response new-body request)]
+                  response)
+                ;else
+                (build-response (layout/compose-403-page) request 403)))
+      ;(if (ath/can-create? request)
+      ;  (let [title-only (s/replace title "/create" "")
+      ;        new-body (layout/compose-create-or-edit-page
+      ;                   (db/create-new-post-map
+      ;                     title-only
+      ;                     ""
+      ;                     (ri/req->user-id request)) request)]
+      ;    (build-response new-body request))
+      ;  ;else
+      ;  (build-response (layout/compose-403-page) request 403))
+      )))
 
 (defn page-finder-route
   []
@@ -100,7 +127,7 @@
            (route/not-found (layout/compose-404-page)))
 
 (def app
-  (-> (routes admin-routes home-routes login-routes app-routes)
+  (-> (routes admin-routes home-routes login-routes websocket-routes app-routes)
       (wrap-authentication backend)
       (handler/site)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
