@@ -36,5 +36,5 @@ Special_Pages.md
 Tag_Design.md
 Text_Formatting.md
 Technical_Notes.md
-todo.md
+To_Do.md
 Wikilinks.md
