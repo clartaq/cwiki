@@ -97,10 +97,15 @@
     [:head
      [:title (get-tab-title post-map)]
      (include-css (str "/css/styles.css" q))
-     (include-css (str "/js/styles/default.css"))
-     (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
-     (include-js "/js/mathjax-config.js")
-     (include-js "/js/highlight.pack.js")]))
+     (include-css (str "/js/styles/default.css"))]))
+
+(defn standard-end-of-body
+  "Returns a div with the standard scripts to include in the page."
+  []
+  [:div {:class "standard-scripts"}
+   (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
+   (include-js "/js/mathjax-config.js")
+   (include-js "/js/highlight.pack.js")])
 
 (defn- drop-menu
   "Return the drop-down menu for use in the page header."
@@ -284,7 +289,8 @@
      (sidebar-and-article
        (no-content-aside)
        content)
-     (footer-component)]))
+     (footer-component)
+     (standard-end-of-body)]))
 
 (defn short-message
   "Return a page with a title, message and 'Ok' button."
@@ -575,7 +581,8 @@
                              :value   "Cancel"
                              :class   "form-button button-bar-item"
                              :onclick "window.history.back();"}]])])
-       (footer-component)])))
+       (footer-component)
+       (standard-end-of-body)])))
 
 (defn view-wiki-page
   "Return a 'regular' wiki page view."
@@ -590,7 +597,8 @@
          (sidebar-aside req)
          [:div (limited-width-title-component post-map)
           (limited-width-content-component req content)])
-       (footer-component)]
+       (footer-component)
+       (standard-end-of-body)]
       (include-js "/js/onload.js"))))
 
 (defn view-list-page
@@ -611,7 +619,8 @@
          [:div (limited-width-title-component post-map)
           [:div {:class class-to-use}
            (limited-width-content-component req content)]])
-       (footer-component)])))
+       (footer-component)
+       (standard-end-of-body)])))
 
 ;;
 ;; Pages and utilities that show all there are of something, like
