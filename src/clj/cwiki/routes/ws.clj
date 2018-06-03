@@ -28,22 +28,15 @@
 (defn- save-doc!
   "Save new, edited content."
   [websocket-data]
-  (infof "save-doc!: websocket-data: %s" websocket-data)
+  ;(infof "save-doc!: websocket-data: %s" websocket-data)
   (let [post-map (:data websocket-data)
         id (db/page-map->id post-map)
         title (db/page-map->title post-map)
         content (db/page-map->content post-map)
         tags (:tags post-map)]
     (infof "save-doc!:\n  id: %s\n  title: %s\n  tags: %s\n  content: %s"
-           id title tags content)
-    (db/update-page-title-and-content! id title (set tags) content)
-    (infof "after saving to database, id for title from db: %s"
-           (db/title->page-id title))
-    (let [escaped-title (url/url-encode title)]
-      ; Important! We redirect here so that functions which use the
-      ; refering page get the page itself and not the editing page.
-      (infof "save-doc!: redirecting to: %s" escaped-title)
-      (redirect (str "/" escaped-title)))))
+           id title tags (str (take 20 content)))
+    (db/update-page-title-and-content! id title (set tags) content)))
 
 (defn send-document-to-editor
   "Get the post to be edited and send it to the editor."
@@ -66,13 +59,13 @@
   (trace "Editor asked to save edited document.")
   (when ?data
     (save-doc! ?data))
-  (chsk-send! client-id [:hey-editor/shutdown-now]))
+  (chsk-send! client-id [:hey-editor/shutdown-after-save]))
 
 (defn cancel-editing
   "Stop editing the post and ask the client to shut itself down."
   [client-id]
   (trace "Editor asked to cancel editing.")
-  (chsk-send! client-id [:hey-editor/shutdown-now]))
+  (chsk-send! client-id [:hey-editor/shutdown-after-cancel]))
 
 (defn handle-message!
   "Handle any message that we know about. It is an error to send
@@ -85,7 +78,7 @@
     (= id :hey-server/save-edited-document) (save-edited-document client-id ?data)
     (= id :hey-server/cancel-editing) (cancel-editing client-id)
     (= id :chsk/uidport-open) (trace ":chsk/uidport-open")
-    (= id :chsk/uidport-close) (trace ":chsk/uidport-close")
+    (= id :chsk/uidport-close) (info ":chsk/uidport-close")
     (= id :chsk/ws-ping) (trace ":chsk/ws-ping")
     :default (errorf "Unknown message id received: %s" id)))
 

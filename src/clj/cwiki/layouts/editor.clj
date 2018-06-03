@@ -68,12 +68,9 @@
   "Create the base page layout and plug the content into it."
   [post-map req]
   (reset! post-map-for-editing post-map)
-  (debugf "(get-post-map-for-editing): %s" (get-post-map-for-editing))
   (let [id (db/page-map->id @post-map-for-editing)
         tags (vec (db/get-tag-names-for-page id))]
     (swap! post-map-for-editing assoc :tags tags)
-    (debugf "tags: %s" tags)
-    (debugf "@post-map-for-editing: %s" @post-map-for-editing)
     (html5
       {:ng-app "CWiki" :lang "en"}
       (standard-head (get-post-map-for-editing))
