@@ -4,7 +4,8 @@
 ;;;
 
 (ns cwiki-mde.core
-  (:require [cwiki-mde.ws :as ws]
+  (:require [clojure.string :refer [blank?]]
+            [cwiki-mde.ws :as ws]
             [reagent.core :as reagent]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
@@ -79,26 +80,24 @@
 (defn editor-state-handler
   "Handle changes in the state of the editor."
   [{:keys [?data]}]
-  (info "Editor: State changed!"))
+  (info "Editor: Connection state changed!"))
 
 (defn editor-message-handler
   [{:keys [?data]}]
-  (infof "Editor: Message received: %s" ?data)
+  (infof "Editor: Message received")
   (let [message-id (first ?data)]
     (infof "message-id: %s" message-id)
-    (when (= message-id :hey-editor/here-is-the-document)
-      (when-let [the-data (second ?data)]
-        (infof "the-data: %s" the-data)
-        (reset! the-page-map the-data)
-        (reset! the-doc-content (:page_content @the-page-map))))
-    (when (= message-id :hey-editor/shutdown-after-save)
-      (let [new-location (str "/" (:page_title @the-page-map))]
-        (infof "The new location is: %s" new-location)
-        (ws/stop-router!)
-        (.replace js/location new-location)))
-    (when (= message-id :hey-editor/shutdown-after-cancel)
-      (ws/stop-router!)
-      (.replace js/location (.-referrer js/document)))))
+    (cond
+      (= message-id :hey-editor/here-is-the-document) (when-let [the-data (second ?data)]
+                                                        (tracef "the-data: %s" the-data)
+                                                        (reset! the-page-map the-data)
+                                                        (reset! the-doc-content (:page_content @the-page-map)))
+      (= message-id :hey-editor/shutdown-after-save) (let [new-location (str "/" (:page_title @the-page-map))]
+                                                       (tracef "The new location is: %s" new-location)
+                                                       (ws/stop-router!)
+                                                       (.replace js/location new-location))
+      (= message-id :hey-editor/shutdown-after-cancel) (do (ws/stop-router!)
+                                                           (.replace js/location (.-referrer js/document))))))
 
 ;;
 ;; Layout and change handlers for the page.
@@ -109,7 +108,12 @@
   [page-map-atom n]
   (fn [arg]
     (let [new-tag (-> arg .-target .-value)]
-      (swap! page-map-atom assoc-in [:tags n] new-tag)
+      (if (blank? new-tag)
+        (let [old-tag-vec (:tags @page-map-atom)
+              new-vec (vec (concat (subvec old-tag-vec 0 n)
+                                   (subvec old-tag-vec (inc n))))]
+          (swap! page-map-atom assoc :tags new-vec))
+        (swap! page-map-atom assoc-in [:tags n] new-tag))
       (when (:send-every-keystroke options)
         (ws/send-message! [:hey-server/content-updated
                            {:?data @page-map-atom}])))))
