@@ -90,16 +90,29 @@
       (s/ends-with? title "/as-tag") (let [tag-only (s/replace title "/as-tag" "")
                                            new-body (layout/compose-all-pages-with-tag tag-only request)]
                                        (build-response new-body request))
-      :else (if (ath/can-create? request)
-              (let [title-only (s/replace title "/create" "")
-                    new-body (layout/compose-create-or-edit-page
-                               (db/create-new-post-map
-                                 title-only
-                                 ""
-                                 (ri/req->user-id request)) request)]
-                (build-response new-body request))
-              ;else
-              (build-response (layout/compose-403-page) request 403)))))
+      :else (let [title-only (s/replace title "/mde-edit" "")]
+              (if (ath/can-edit-and-delete? request title-only)
+                (let [new-body (layout-editor/layout-editor-page
+                                 (db/create-new-post-map
+                                   title-only
+                                   ""
+                                   (ri/req->user-id request)) request)
+                      ;(db/find-post-by-title title-only) request)
+                      response (build-response new-body request)]
+                  response)
+                ;else
+                (build-response (layout/compose-403-page) request 403)))
+      ;(if (ath/can-create? request)
+      ;  (let [title-only (s/replace title "/create" "")
+      ;        new-body (layout/compose-create-or-edit-page
+      ;                   (db/create-new-post-map
+      ;                     title-only
+      ;                     ""
+      ;                     (ri/req->user-id request)) request)]
+      ;    (build-response new-body request))
+      ;  ;else
+      ;  (build-response (layout/compose-403-page) request 403))
+      )))
 
 (defn page-finder-route
   []

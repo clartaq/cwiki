@@ -169,8 +169,10 @@
      [:nav {:class "hmenu"}
       (when (ath/can-create? req)
         (menu-item-span [:a {:href "/New Page"} "New"]))
-      (when edit-link
-        (menu-item-span edit-link))
+      ;(when (ath/can-create? req)
+      ;  (menu-item-span [:a {:href "/New MDE Page"} "New MDE"]))
+      ;(when edit-link
+      ;  (menu-item-span edit-link))
       (when edit-link
         (menu-item-span mde-link)) ;[:a {:href "/mde"} "mde"]))
       (when delete-link
