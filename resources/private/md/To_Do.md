@@ -1,46 +1,47 @@
 ---
-author: CWiki
+author: Unknown
 title: To Do
-date: 2017-10-24T09:17:04.000-04:00
-modified: 2018-06-03T17:06:53.961-04:00
+date: 2018-06-04T15:38:47.538-04:00
+modified: 2018-06-04T16:23:00.439-04:00
 tags:
+  - architecture
+  - bugs
   - cwiki
-  - releases
+  - enhancements
+  - process
   - technical note
 ---
 
-This is an ever-evolving list of things that need doing.
+​An ever-evolving list of things to be fixed and improved. These fall into the following categories:
 
-* When editing really long pages, like the [[Technical Notes]] page, the `Save` and `Cancel` buttons sometimes get pushed below the bottom of the view and can't be scrolled into view.
-* There is a nasty bug that will crash the program and pollute the databse if you try to enter a page title or tag containing an apostrophe. Should also check if other characters cause similar problems.
+* [Bugs](#bugs). These are things that are flat out wrong and must be fixed.
+* [Enhancements](#enhancements). These are ideas for improving the way things work.
+* [Architecture](#architecture). These are problems with the structure of the code and project that should be investigated and remedied.
+* [Process](#process). Changes to the way things get done that are more systematic, informative and less error-prone.
+
+### Bugs <a name="bugs"></a>
+
+* There is a nasty bug that will crash the program and pollute the database if you try to enter a page title or tag containing an apostrophe. Should also check if other characters cause similar problems.
+* When editing long pages, like the Technical Notes page, the Save and Cancel buttons sometimes get pushed below the bottom of the view and can't be scrolled into view.
+* When in the editor, removing a tag by highlighting it and deleting​ it does not always eliminate it.
+
+### Enhancements <a name="enhancements"></a>
+
+* Synchronize scrolling between the editing and preview panes of the editor.
+* Automatic continuation of lists. It sure would be nice just to hit return and have the ​bullet marker show up.
+* Keyboard shortcuts. Making the editor more similar to existing external editors could reduce the cognitive dissonance of using the internal editor.
 * Creation of wikilinks needs to understand in-line code spans, `<code></code>`, and `<pre></pre>` so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
-* Create a function that will update the existing database new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
+* Create a function that will update the existing database with new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
 * Implement within-wiki search.
 * Any maintenance tasks like database compression, backup and restore, for example.
 * Beautify and style the edit/create pages.
-* At some point, we are going to have to stop creating the initial database from a bunch of Markdown files and just add a pre-built database to the repository. Need to get the tools
-* Make page lookup from links case-insensitive for the first letter in words.
-* Version tracking?
-* ~~Be consistent in the use of the name -- either "CWiki" or "cwiki".~~
-* ~~Layout and use the Sidebar.~~
-* ~~Add extensions and CSS for tables.~~
-* ~~The edit and create pages should not have a "Delete" link in the nav bar.~~
-* ~~Put role-based users in place.~~
-*  ~~The routes to the admin pages are spelled, hyphenated, and capitalized differently in different places in the program.~~
-*  ~~For users with the "reader" role, links to non-existent pages should be disabled rather than showing a normal, clickable link that then throws an error message.~~
-* ~~Add validation to login page and other forms.~~
-* ~~New page creation should check for an existing page of the same name before saving.~~
-* ~~Somewhere along the way, I introduced a huge bug in the routing created when you try to create a new page from the "New" item in the nav bar.~~
-* ~~Add the ability to generate a Table of Contents (TOC) for long pages.~~
-* ~~How to handle images. Should they go in a the database? (Almost certainly yes.)~~
-* ~~Show a page to create an administrator account upon first use after installation.~~
-* ~~The first line in the second level of a list has some poor formatting -- too close to the line above.~~
-* ~~When the initial admin user changes their profile then attempts to sign out, the signout page shows the user name before modifications, presumably because it is still in the session record.~~
-* ~~Need some sort of confirmation after adding a user, editing a user, or deleting a user.~~
-* ~~When running from an uberjar, the program only works when run from the development directory. It needs to be able to reference the resources in the jar rather than the file system.~~
-* ~~Consolidate some of the nav stuff in the page header into a "More" drop-down menu.~~
-* ~~Read initial files based on a text file containing the list of files to load.~~
-* ~~Display, adding, deletion and editing tags in the page editing page.~~
-* ~~Add a tagging system. Look into hierarchical tagging systems.~~
-* ~~Ability to import and export pages, including metadata.~~
-* ~~Rationalize the CSS~~
+* At some point, we are going to have to stop initializing the database from a bunch of Markdown files and add a pre-built database to the repository. Need to get the tools
+* I prefer the styling of inline​ code that used in the editor. It can make things look like buttons. Harmonize the editor preview with the view in the main wiki page.
+
+### Architecture <a name="architecture"></a>
+
+* The CSS needs some serious reorganization. Maybe we should look at SCCS again, especially since we are trying to keep CSS for the editor synchronized​ with the appearance of the server.
+
+### Process <a name="process"></a>
+
+* Annotate these notes with the commit number that fixes or addresses the issue.
