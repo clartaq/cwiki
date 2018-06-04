@@ -38,7 +38,7 @@
         title (db/page-map->title post-map)
         content (db/page-map->content post-map)
         tags (:tags post-map)]
-    (infof "save-doc!:\n  id: %s\n  title: %s\n  tags: %s\n  content: %s"
+    (tracef "save-doc!:\n  id: %s\n  title: %s\n  tags: %s\n  content: %s"
            id title tags (str (take 20 content)))
     (if id
       (db/update-page-title-and-content! id title (set tags) content)
@@ -84,7 +84,7 @@
     (= id :hey-server/save-edited-document) (save-edited-document client-id ?data)
     (= id :hey-server/cancel-editing) (cancel-editing client-id)
     (= id :chsk/uidport-open) (trace ":chsk/uidport-open")
-    (= id :chsk/uidport-close) (info ":chsk/uidport-close")
+    (= id :chsk/uidport-close) (trace ":chsk/uidport-close")
     (= id :chsk/ws-ping) (trace ":chsk/ws-ping")
     :default (errorf "Unknown message id received: %s" id)))
 
