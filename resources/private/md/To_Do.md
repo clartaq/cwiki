@@ -1,8 +1,8 @@
 ---
-author: Unknown
+author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-06-04T16:23:00.439-04:00
+modified: 2018-06-05T09:52:23.820-04:00
 tags:
   - architecture
   - bugs
@@ -11,6 +11,7 @@ tags:
   - process
   - technical note
 ---
+
 
 ​An ever-evolving list of things to be fixed and improved. These fall into the following categories:
 
@@ -37,6 +38,7 @@ tags:
 * Beautify and style the edit/create pages.
 * At some point, we are going to have to stop initializing the database from a bunch of Markdown files and add a pre-built database to the repository. Need to get the tools
 * I prefer the styling of inline​ code that used in the editor. It can make things look like buttons. Harmonize the editor preview with the view in the main wiki page.
+* Make the options usable.
 
 ### Architecture <a name="architecture"></a>
 
@@ -45,3 +47,5 @@ tags:
 ### Process <a name="process"></a>
 
 * Annotate these notes with the commit number that fixes or addresses the issue.
+* Develop and use a release checklist.
+* Create and maintain a "Changes" file.
