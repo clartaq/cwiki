@@ -132,9 +132,9 @@ html {
     --menu-item-link-color: #a0e0ff;
 
     /* For in-line code segments of text. */
-    --code-background-color: #eee;
+    --code-background-color: #f0f0f0;
     /* For code blocks and pre-formatted blocks. */
-    --code-highlight-color: #eaf7fc; /*#f4f2fa;*/
+    --code-highlight-color: #f0f0f0; /*#f4f2fa;*/
 
     /* Fonts. */
 
@@ -433,6 +433,8 @@ inside another flexbox. */
     max-width: var(--content-max-width);
     flex: 1 1 auto;
     border-left: 1px solid var(--rule-color);
+    display: flex;
+    flex-direction: column;
 }
 
 /* content and centered content are used for 404, edit, and create
@@ -553,6 +555,17 @@ input#new-tag-button {
 
 /* Forms */
 
+.editor-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 .cwiki-form {
 }
 
@@ -565,6 +578,7 @@ input#new-tag-button {
 
 .form-group {
     margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
 .form-label, .tag-edit-label {
@@ -613,6 +627,7 @@ input#new-tag-button {
 .form-text-area {
     font-size: 0.9rem;
     padding: 0.2rem 0.1rem 0.3rem;
+    flex: 1;
 }
 
 .form-dropdown {

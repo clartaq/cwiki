@@ -2,7 +2,7 @@
 author: CWiki
 title: Pages Primer
 date: 10/24/2017 8:48:43 AM
-updated: 02/18/2018 9:18:12 AM
+updated: 2018-03-11T17:26:44.075580-04:00
 tags:
   - help
   - pages
@@ -30,7 +30,9 @@ This method is probably the quickest way to get started writing something, but y
 
 ### Edit the Browser Address Bar (Not Recommended) ###
 
-If you look at the address bar in your browser, it should show something like `http://localhost:8050/Pages Primer`, that is, the title of the page is at the end of the address. You can change that address to the name of the page you want to create. If there is no other page with the same name in the wiki already, you will be shown an editor page to create it and then save it.
+If you look at the address bar in your browser, it should show something like `http://localhost:1350/Pages%20Primer`, that is, the title of the page is at the end of the address. You can change that address to the name of the page you want to create. If there is no other page with the same name in the wiki already, you will be shown an editor page to create it and then save it.
+
+This method is becoming less reliable. Many browsers now support search directly in the address bar. If this is the case, changing the address bar initiates a search rather than creating a new page.
 
 ## Page Content ##
 
@@ -66,7 +68,7 @@ If you have the appropriate role (see [[About Roles]]), you can delete pages. Si
 
 You can't undo this. So be thoughtful about your choices.
 
-Note that some pages can't be deleted regardless of you role. These pages are vital to the operation of the CWiki program itself.
+Note that some pages can't be deleted regardless of your role. These pages are vital to the operation of the CWiki program itself.
 
 ## Special Pages ##
 

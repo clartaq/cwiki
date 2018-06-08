@@ -2,7 +2,7 @@
 title: Path to Release 0.1.0
 author: CWiki
 date: 1/1/2018 10:43:10 AM  
-updated: 02/21/2018 04:43:08 PM     
+updated: 2018-03-11T17:30:37.643148-04:00  
 tags:
   - technical note
   - releases
@@ -17,7 +17,7 @@ Things to accomplish before release 0.1.0:
 - Implement full text search.
 - ~~Make contents of "All Users" and "All Tags" pages clickable links.~~ Done.
 - Integrate Writing Markdown editor.
-- Rationalize CSS, particularly for code listings.
+- ~~Rationalize CSS, particularly for code listings.~~
 - Test operation when installed on a server.
 - Complete documentation pages.
 

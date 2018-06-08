@@ -2,7 +2,7 @@
 title: A Timestamp Plugin for Sublime Text 3
 author: david
 date: 2018-02-10T10:16:57.00000-05:00 
-modified: 2018-03-10T09:54:19.045992-05:00
+modified: 2018-03-11T10:01:54.480490-04:00
 
 tags:
   - sublime text
@@ -20,7 +20,7 @@ tags:
 
  Based on that, I added the following little snippet as a plugin for Sublime Text (Tools/Developer/New Plugin...).
 
- ```
+ ```python
 import datetime, time, getpass
 import sublime, sublime_plugin
 
