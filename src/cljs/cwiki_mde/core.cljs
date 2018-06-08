@@ -15,7 +15,7 @@
 (defn highlight-code
   "Highlights any <pre><code></code></pre> blocks in the html."
   [html-node]
-  (info "highlight-code")
+  (trace "highlight-code")
   (let [nodes (.querySelectorAll html-node "pre code")]
     (loop [i (.-length nodes)]
       (when-not (neg? i)
@@ -74,19 +74,19 @@
   "Handle the handshake event between the server and client. This function
   sends the message to the server to send over the document for editing."
   [{:keys [?data]}]
-  (info "Editor: Connection established!")
+  (trace "Editor: Connection established!")
   (ws/send-message! [:hey-server/send-document-to-editor {}]))
 
 (defn editor-state-handler
   "Handle changes in the state of the editor."
   [{:keys [?data]}]
-  (info "Editor: Connection state changed!"))
+  (trace "Editor: Connection state changed!"))
 
 (defn editor-message-handler
   [{:keys [?data]}]
-  (infof "Editor: Message received")
+  (tracef "Editor: Message received!")
   (let [message-id (first ?data)]
-    (infof "message-id: %s" message-id)
+    (tracef "message-id: %s" message-id)
     (cond
       (= message-id :hey-editor/here-is-the-document) (when-let [the-data (second ?data)]
                                                         (tracef "the-data: %s" the-data)

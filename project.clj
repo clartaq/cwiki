@@ -1,6 +1,9 @@
-(defproject cwiki "0.0.9-SNAPSHOT"
+(defproject cwiki "0.0.10-SNAPSHOT"
   :description "A personal wiki written in Clojure"
   :url "https://bitbucket.org/David_Clark/cwiki"
+  :license {:name "Simplfied BSD"
+            :url "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
+            :distribution :repo}
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [org.clojure/clojurescript "1.10.238"]
                  [org.clojure/core.async "0.4.474"]

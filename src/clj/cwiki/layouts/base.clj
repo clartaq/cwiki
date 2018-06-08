@@ -25,15 +25,14 @@
   (:import (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
            (com.vladsch.flexmark.ext.footnotes FootnoteExtension)
-           (com.vladsch.flexmark.html HtmlRenderer HtmlRenderer$Builder)
-           (com.vladsch.flexmark.parser Parser Parser$Builder
-                                        ParserEmulationProfile)
+           (com.vladsch.flexmark.html HtmlRenderer)
+           (com.vladsch.flexmark.parser Parser)
            (com.vladsch.flexmark.util KeepType)
            (com.vladsch.flexmark.util.options MutableDataSet)
            (java.net URL URLDecoder)
            (java.util ArrayList)))
 
-(def program-name-and-version "CWiki v0.0.9-SNAPSHOT")
+(def program-name-and-version "CWiki v0.0.10-SNAPSHOT")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.
