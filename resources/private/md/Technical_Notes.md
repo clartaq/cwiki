@@ -1,32 +1,22 @@
 ---
-title: Technical Notes
 author: CWiki
-date: 10/01/2017 5:45:07 PM 
-updated: 12/30/2017 2:12:11 PM     
+title: Technical Notes
+date: 10/01/2017 5:45:07 PM
+updated: 2018-03-11T10:16:25.891920-04:00
 tags:
-  - technical note
-  - motivation
   - how it works
+  - motivation
+  - technical note
 ---
+
 These are some technical notes about CWiki. If you are only interested in using the wiki, you can ignore this stuff. If you want to know how CWiki works or why it works the way it does or how to build and modify your own version, the information here might be useful.
 
-## Motivation ##
+## Links to Related Pages ##
 
-You might rightly ask "Why does the world need another wiki program?" Well, CWiki probably isn't vital to the survival of civilization as we know it. But I was motivated by a few things.
-
-First, I've always been fascinated by wiki software (and blog software, and editors, and news aggregators). I've been using wikis in one form or another for years, decades actually. I wanted to see what it would be like to write my own just for me. No schedule, nobody else's set of features and requirements, just whatever I wanted.
-
-**Written in Clojure**. I know the implementation language isn't too important, but I like [Clojure](https://clojure.org/). No Javascript. Even though it is very popular right now, it is ugly. I don't like it at all.
-
-**Markdown with Extensions**. I like Markdown too. But this is a wiki. It has to support wiki links as well and HTML links.
-
-**Syntax-Highlighted Code Listings**. I put a lot of code listings in some of the things I write. Has to look nice and be easy to do.
-
-**Mathematics**. I want to be able to write content containing mathematics. Markdown does not support it natively. I wanted to be able to use [$\rm\TeX$](https://en.wikibooks.org/wiki/LaTeX/Mathematics).
-
-**Runs in a Browser**. Since Markdown generates HTML and a lot of the links will point to external web sites, might as well use the browser as the UI for the program too.
-
-CWiki was written as a learning experience and to develop a tool I would want to use.
+* [[The Motivation for Writing CWiki]] talks about why the program was written in the first place.
+* [[Limits]] discusses some of the limitations of the program.
+* [[Tag Design]] reviews some of the thinking going into the design of the system of tags.
+* [[Design of Import/Export]] describes the thought process that went into creating the file import and export features.
 
 ## Software Dependencies ##
 
@@ -37,6 +27,7 @@ Almost no software is written without dependencies these days -- programs are ju
 * Developed and tested on late versions of Java 8 and early versions of Java 9.
 * [Flexmark](https://github.com/vsch/flexmark-java) is used for the Markdown parser and renderer.
 * [Jetty](http://www.eclipse.org/jetty/) is used as the server software.
+* [H2](http://h2database.com/html/main.html) is used for database functions.
 
 ### Clojure Stuff ###
 
@@ -47,16 +38,15 @@ Almost no software is written without dependencies these days -- programs are ju
 * [Compojure](https://github.com/weavejester/compojure) is used for routing.
 * [Hiccup](https://github.com/weavejester/hiccup) is used for "lispy" creation of HTML.
 * [Ring](https://github.com/ring-clojure/ring) is the web applications library.
-* [sqlite-jdbc](https://bitbucket.org/xerial/sqlite-jdbc/overview) is used for "lispy" access to the sqlite (see bellow) database program.
 * [url](https://github.com/cemerick/url) is used for manipulating URLs.
 
 ### Everything Else ###
 
 #### Database ####
 
-[SQLite](https://sqlite.org/) is used for the database functions of the wiki. It is perhaps not as "heavy duty" as some other possibilities. However, it has the tremendous benefit that it requires no administration by the user.
+CWiki uses the [H2](http://h2database.com/html/main.html) database for the database functions of the wiki. It is perhaps not as "heavy duty" as some other possibilities. However, it has the tremendous benefit that it requires no administration by the user.
 
-SQLite is reputed not to scale well to truly huge databases. I don't know where that crossover occurs for something like this wiki. (I know that [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) can use SQLite as it's database.) If it looks like it will become an issue for a moderately sized wiki, the database may change in the future.
+Earlier in development, the program used [SQLite](https://sqlite.org/). However, it proved too cumbersome (and slow) for continued use in this project.
 
 #### Editor ####
 
@@ -85,7 +75,7 @@ Authorization is home-grown and based on the roles users have been assigned. See
 
 ## How Pages Get Rendered ##
 
-The pages in CWiki are a mashup of [Markdown](https://daringfireball.net/projects/markdown/syntax), [[WikiLinks]], and [[About TeX|$\rm\TeX$]]. No single parser/HTML generator handles all of those pieces. So rendering a page happens in several stages.
+The pages in CWiki are a mashup of [Markdown](https://daringfireball.net/projects/markdown/syntax), [[Wikilinks]], and [[About TeX|$\rm\TeX$]]. No single parser/HTML generator handles all of those pieces. So rendering a page happens in several stages.
 
 1. First, all of the WikiLinks are located and translated to HTML-style links. These links point to pages within the CWiki database. If there is no such page, the link is displayed in red.
 2. The Markdown content, including the translated WikiLinks, are converted to HTML. Since Markdown parsers pass HTML through unaltered, the translated WikiLinks are left intact.
@@ -174,55 +164,53 @@ It seems like there are 4 possible approaches.
 
 I filed an issue with the flexmark developers and they pointed me to this example:
 
-
 ### Enforcing Foreign Key Constraints with SQLite and clojure.java.jdbc ###
 
 I'm working on a wiki program and using SQLite as the database. I want to create a many-to-many relationship between wiki pages and tags describing those pages. I'm using  `clojure.java.jdbc` to handle the database operations. I would like to enforce foreign key constraints in the page-to-tags cross-reference table. I looked at the information about foreign keys on the SQLite site (https://www.sqlite.org/foreignkeys.html) and believe something like this is what I want;
 
-<!-- language: clojure -->
+```clojure
+(def the-db-name "the.db")
+(def the-db {:classname   "org.sqlite.JDBC"
+             :subprotocol "sqlite"
+             :subname     the-db-name})
 
-    (def the-db-name "the.db")
-    (def the-db {:classname   "org.sqlite.JDBC"
-                 :subprotocol "sqlite"
-                 :subname     the-db-name})
-    
-    (defn create-some-tables
-      "Create some tables and a cross-reference table with foreign key constraints."
-      []
-      (try (jdbc/db-do-commands
-             the-db false
-             ["PRAGMA foreign_keys = ON;"
-              (jdbc/create-table-ddl :pages
-                                     [[:page_id :integer :primary :key]
-                                      ;...
-                                      [:page_content :text]])
-              (jdbc/create-table-ddl :tags
-                                     [[:tag_id :integer :primary :key]
-                                      [:tag_name :text "NOT NULL"]])
-              (jdbc/create-table-ddl :tags_x_pages
-                                     [[:x_ref_id :integer :primary :key]
-                                      [:tag_id :integer]
-                                      [:page_id :integer]
-                                      ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
-                                      ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
-    
-           (catch Exception e (println e))))
+(defn create-some-tables
+  "Create some tables and a cross-reference table with foreign key constraints."
+  []
+  (try (jdbc/db-do-commands
+         the-db false
+         ["PRAGMA foreign_keys = ON;"
+          (jdbc/create-table-ddl :pages
+                                 [[:page_id :integer :primary :key]
+                                  ;...
+                                  [:page_content :text]])
+          (jdbc/create-table-ddl :tags
+                                 [[:tag_id :integer :primary :key]
+                                  [:tag_name :text "NOT NULL"]])
+          (jdbc/create-table-ddl :tags_x_pages
+                                 [[:x_ref_id :integer :primary :key]
+                                  [:tag_id :integer]
+                                  [:page_id :integer]
+                                  ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
+                                  ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
 
+       (catch Exception e (println e))))
+```
 But attempting to turn the pragma on has no effect.
 
 Just trying to turn the pragma on and check for effect:
 
-<!-- language: clojure -->
+```clojure
+(println "Check before:" (jdbc/query the-db ["PRAGMA foreign_keys;"]))
+; Transactions on or off makes no difference.
+(println "Result of execute!:" (jdbc/execute! the-db
+                                              ["PRAGMA foreign_keys = ON;"]))
+(println "Check after:" (jdbc/query the-db ["PRAGMA foreign_keys;"]))
 
-    (println "Check before:" (jdbc/query the-db ["PRAGMA foreign_keys;"]))
-    ; Transactions on or off makes no difference.
-    (println "Result of execute!:" (jdbc/execute! the-db
-                                                  ["PRAGMA foreign_keys = ON;"]))
-    (println "Check after:" (jdbc/query the-db ["PRAGMA foreign_keys;"]))
-    
-    ;=> Check before: ({:foreign_keys 0})
-    ;=> Result of execute!: [0]
-    ;=> Check after: ({:foreign_keys 0})
+;=> Check before: ({:foreign_keys 0})
+;=> Result of execute!: [0]
+;=> Check after: ({:foreign_keys 0})
+```
 
 The results indicate that the library (org.xerial/sqlite-jdbc "3.21.0.1") was compiled to support foreign keys since there were no errors, but trying to set the pragma has no effect.
 
@@ -231,82 +219,81 @@ I found [this](https://dev.clojure.org/jira/browse/JDBC-38) in the JIRA for the 
 Finally found [this answer](https://stackoverflow.com/questions/13348843/in-clojure-what-happens-when-you-call-sql-with-connection-within-another-sql-wi) to a Stackoverflow question that pointed to [this post](https://code-know-how.blogspot.ru/2011/10/how-to-enable-foreign-keys-in-sqlite3.html) back in 2011. That allowed me to cobble together something that did seem to set the pragma. The code below depends on creating a specially configured `Connection`.
 
 
-<!-- language: clojure -->
+```clojure
+(ns example
+  (:require [clojure.java.jdbc :as jdbc])
+  (:import (java.sql Connection DriverManager)
+           (org.sqlite SQLiteConfig)))
 
-    (ns example
-      (:require [clojure.java.jdbc :as jdbc])
-      (:import (java.sql Connection DriverManager)
-               (org.sqlite SQLiteConfig)))
-    
-    (def the-db-name "the.db")
-    (def the-db {:classname   "org.sqlite.JDBC"
-                 :subprotocol "sqlite"
-                 :subname     the-db-name})
-    
-    (defn ^Connection get-connection
-      "Return a connection to a SQLite database that
-      enforces foreign key constraints."
-      [db]
-      (Class/forName (:classname db))
-      (let [config (SQLiteConfig.)]
-        (.enforceForeignKeys config true)
-        (let [connection (DriverManager/getConnection
-                           (str "jdbc:sqlite:" (:subname db))
-                           (.toProperties config))]
-          connection)))
-    
-    (defn exec-foreign-keys-pragma-statement
-      [db]
-      (let [con ^Connection (get-connection db)
-            statement (.createStatement con)]
-        (println "exec-foreign-keys-pragma-statement:"
-                 (.execute statement "PRAGMA foreign_keys;"))))
+(def the-db-name "the.db")
+(def the-db {:classname   "org.sqlite.JDBC"
+             :subprotocol "sqlite"
+             :subname     the-db-name})
+
+(defn ^Connection get-connection
+  "Return a connection to a SQLite database that
+  enforces foreign key constraints."
+  [db]
+  (Class/forName (:classname db))
+  (let [config (SQLiteConfig.)]
+    (.enforceForeignKeys config true)
+    (let [connection (DriverManager/getConnection
+                       (str "jdbc:sqlite:" (:subname db))
+                       (.toProperties config))]
+      connection)))
+
+(defn exec-foreign-keys-pragma-statement
+  [db]
+  (let [con ^Connection (get-connection db)
+        statement (.createStatement con)]
+    (println "exec-foreign-keys-pragma-statement:"
+             (.execute statement "PRAGMA foreign_keys;"))))
+```
 
 Based on the above, I rewrote the table creation code above as:
 
+```clojure
+(defn create-some-tables
+  "Create some tables and a cross-reference table with foreign key constraints"
+  []
+  (when-let [conn (get-connection the-db)]
+    (try
+      (jdbc/with-db-connection
+        [conn the-db]
+        ; Creating the tables with the foreign key constraints works.
+        (try (jdbc/db-do-commands
+               the-db false
+               [(jdbc/create-table-ddl :pages
+                                       [[:page_id :integer :primary :key]
+                                        [:page_content :text]])
+                (jdbc/create-table-ddl :tags
+                                       [[:tag_id :integer :primary :key]
+                                        [:tag_name :text "NOT NULL"]])
+                (jdbc/create-table-ddl :tags_x_pages
+                                       [[:x_ref_id :integer :primary :key]
+                                         [:tag_id :integer]
+                                        [:page_id :integer]
+                                        ["FOREIGN KEY(tag_id) REFERENCES tags()"]
+                                        ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
+    
+             ; This still doesn't work.
+             (println "After table creation:"
+                      (jdbc/query the-db "PRAGMA foreign_keys;"))
 
-<!-- language: clojure -->
+             (catch Exception e (println e))))
 
-    (defn create-some-tables
-      "Create some tables and a cross-reference table with foreign key constraints."
-      []
-      (when-let [conn (get-connection the-db)]
+      ; This returns the expected results.
+      (when-let [statement (.createStatement conn)]
         (try
-          (jdbc/with-db-connection
-            [conn the-db]
-            ; Creating the tables with the foreign key constraints works.
-            (try (jdbc/db-do-commands
-                   the-db false
-                   [(jdbc/create-table-ddl :pages
-                                           [[:page_id :integer :primary :key]
-                                            [:page_content :text]])
-                    (jdbc/create-table-ddl :tags
-                                           [[:tag_id :integer :primary :key]
-                                            [:tag_name :text "NOT NULL"]])
-                    (jdbc/create-table-ddl :tags_x_pages
-                                           [[:x_ref_id :integer :primary :key]
-                                            [:tag_id :integer]
-                                            [:page_id :integer]
-                                            ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
-                                            ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
-    
-                 ; This still doesn't work.
-                 (println "After table creation:"
-                          (jdbc/query the-db "PRAGMA foreign_keys;"))
-    
-                 (catch Exception e (println e))))
-    
-          ; This returns the expected results.
-          (when-let [statement (.createStatement conn)]
-            (try
-              (println "After creating some tables: PRAGMA foreign_keys =>"
-                       (.execute statement "PRAGMA foreign_keys;"))
-              (catch Exception e (println e))
-              (finally (when statement
-                         (.close statement)))))
+          (println "After creating some tables: PRAGMA foreign_keys =>"
+                   (.execute statement "PRAGMA foreign_keys;"))
           (catch Exception e (println e))
-          (finally (when conn
-                     (.close conn))))))
+          (finally (when statement
+                     (.close statement)))))
+      (catch Exception e (println e))
+      (finally (when conn
+                 (.close conn))))))
+```
 
 The tables are created as expected. Some of the `clojure.java.jdbc` functions still don't seem to work as desired though. (See the `jdbc/query` call in the middle of the listing.) Getting things to always work as expected seems very "manual" having to fall back on java interop. And it seems like every interaction with the database requires using the specially configured `Connection` returned by the `get-connection` function.
 

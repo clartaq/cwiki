@@ -1,3 +1,16 @@
+---
+title: About Backup and Restore
+author: CWiki
+date: 12/03/2017 10:12:36 AM
+updated: 1/8/2018 4:34:17 PM 
+tags:
+  - about
+  - admin
+  - backup
+  - restore
+  - special pages
+---
+
 Backing up and restoring the database file is pretty easy and can be accomplished in different ways.
 
 ## Manual Method ##

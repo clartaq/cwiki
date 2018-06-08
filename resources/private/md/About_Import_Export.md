@@ -1,3 +1,89 @@
-There are no explicit commands to import or export page content. Since you can open a page to edit most pages ([[About Roles|if you are allowed]], you can export it by using "Select All" (`Ctrl-A`) and "Copy" (`Ctrl-C`) any existing page. Then you can paste what you have copied into any other program.
+---
+title: About Import/Export
+author: CWiki
+date: 12/10/2017 9:47:06 AM
+updated: 2018-03-11T10:47:57.482754-04:00
+tags:
+  - about
+  - import
+  - export
+  - help
+---
+
+CWiki lets you import ([[About Roles|if you are allowed]]) and export content from the wiki to the file system and *vice versa*. There are two ways to do it, explained below.
+
+## Cut and Paste
+
+Since you can open a page to edit most pages ([[About Roles|if you are allowed]]), you can export it by using "Select All" (`Ctrl-A`) and "Copy" (`Ctrl-C`) any existing page. Then you can paste what you have copied into any other program.
 
 Import is just as easy. [[Pages Primer|Create a new page]] (click "New" up in the window header) and paste your content into the edit window.
+
+## Reading and Writing to the File System
+
+Importing and exporting files is supported by commands on the drop-down menu up in the title bar. There are items for "Import" (if allowed), "Export" to export a single page, and "Export All" to export the entire contents of the wiki. These methods work with Markdown files that contain [[About Front Matter|YAML front matter]].
+
+This method can be more convenient in some cases. If your role is a "reader", it is your only option since you will not be able to open an editing page. Readers can only export, they are not allowed to import content in to the wiki.
+
+### Importing
+
+When you have a Markdown file that you want to import into the wiki, go to the "More" drop-down menu, click it, any you should see a page asking you to select a file to import.
+
+### Things You Should Know About Importing
+
+#### Import is Fragile
+
+Really fragile. If the front matter is not properly formatted, it will crash the program. No useful error messages other that a stack trace. Bleah. Just too lazy to bullet-proof it right now.
+
+#### Author
+
+When importing from a file, the author must be known to the system. If the meta data contains an author known to the system, and they have the “writer” role or greater (see [[About Roles]], the page will be imported with them as the author.
+
+If the page has no author, or the author is unknown to the system, or the author does not have permission to create files (they have the “reader” role), the file will be imported with the currently logged in user listed as the author.
+
+#### Title
+
+If the metadata does not include a title, a random title will be generated. It will be very ugly, so it should be easy to see on the [[All Pages]] page.
+
+#### Timestamps
+
+If the metadata in the file does not contain a creation date and time, the current date and time will be used.
+
+If the metadata does not include a date and time for the last time it was modified, the current date and time will be used.
+
+### Exporting a Single Page
+
+When you are viewing a page you want to export, select the "Export" item from the drop-down menu. You will be asked if you really want to do the export. If you confirm your intention, the page will be exported.
+
+Upon success, you will be informed that the export was completed an where the file was stored.
+
+### Exporting All Pages
+
+You can select the drop-down menu to "Export All" to save a copy of every (non-generated) page in the wiki. It could take awhile. It could take up a lot of space.
+
+It's one way to back up your database although importing each page one page at a time might be lengthy and tedious.
+
+### Things You Should Know About Exporting
+
+#### Exporting Generated Pages
+
+You cannot export pages that are generated upon request, like the "All Tags" page or search results.
+
+#### Exporting While Editing.
+
+You cannot import while editing. The option won't even appear in the drop-down menu.
+
+
+#### Export May Have to Translate Your Page Name
+
+The export function creates a file with a name based on the page name. It tries to create a file named in such a way that it is acceptable on Linux, Windows, and macOS. Some characters that are allowed in page titles are not allowed in file names. As such, some characters in the page name may be changed to some other character, usually an underscore, "_".
+
+When the file has been exported successfully, the program will show you the name that it used.
+
+#### Export will Overwrite Existing Files without Warning
+
+If a file with the same name already exists, it will be overwritten by the export function.
+
+#### The "Export All" Will Attempt to Proceed Even if there are Errors
+
+The function will try to export as many files as it can. If a particular file fails to export correctly, it will be skipped without warning.
+

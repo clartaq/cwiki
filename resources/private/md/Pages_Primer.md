@@ -1,4 +1,16 @@
+---
+author: CWiki
+title: Pages Primer
+date: 10/24/2017 8:48:43 AM
+updated: 2018-03-11T17:26:44.075580-04:00
+tags:
+  - help
+  - pages
+---
+
 This "Pages Primer" is a brief introduction to creating, editing, and deleting pages in the wiki.
+
+The syntax used to write pages is a slight variant of [Markdown](https://daringfireball.net/projects/markdown/). The syntax accepted by this wiki includes an extension to allow  [[Wikilinks|wikilinks]], that is, links to other pages within the wiki, in a Markdown file. (See the [[Links Primer]] for details.)
 
 ## Creating Pages ##
 
@@ -6,11 +18,11 @@ You can create pages in CWiki if you have been assigned the role of **writer**, 
 
 You can create a page by one of three methods.
 
-### Link to A Non-Existent Page (Recommended) ###
+### Link to A Non-Existent Page ###
 
 When you are editing a page and want to link to a page that doesn't exist yet, just enter the link to the non-existent page. When you are done editing the current page, the link to the page you want to create will appear in red, like this: [[page I want to link to]]. Then you can just click on the red link. The editor will open up letting you put whatever content you want on the newly created page.
 
-### Click the "New" Link in the Navigation Bar ###
+### Click the "New" Link in the Navigation Bar (Recommended) ###
 
 At the top of the wiki window in your browser, there are a series of navigation links, including one that says "New". When you click that link, a new page will be created. Just change the title and enter the content you want. Finally, click the "Save Changes" button below the editor. The new page will be saved.
 
@@ -18,7 +30,9 @@ This method is probably the quickest way to get started writing something, but y
 
 ### Edit the Browser Address Bar (Not Recommended) ###
 
-If you look at the address bar in your browser, it should show something like `http://localhost:8050/Pages Primer`, that is, the title of the page is at the end of the address. You can change that address to the name of the page you want to create. If there is no other page with the same name in the wiki already, you will be shown an editor page to create it and then save it.
+If you look at the address bar in your browser, it should show something like `http://localhost:1350/Pages%20Primer`, that is, the title of the page is at the end of the address. You can change that address to the name of the page you want to create. If there is no other page with the same name in the wiki already, you will be shown an editor page to create it and then save it.
+
+This method is becoming less reliable. Many browsers now support search directly in the address bar. If this is the case, changing the address bar initiates a search rather than creating a new page.
 
 ## Page Content ##
 
@@ -26,9 +40,15 @@ A "page" in the wiki consists of a couple of things.
 
 ### The Title ###
 
-A page must have a title and content. (In the future it may have tags too.)
+A page must have a title and content.
 
 The title must be unique within the wiki. The comparison for uniqueness is case-insensitive, so the titles "Title" and "title" are considered the same. Using titles that differ only by letter case can be confusing and is not allowed.
+
+### Tags ###
+
+You can specify tags (also known as "keywords" or "categories") to be associated with the page. See [[About Tags]]. When you open the edit/new page editor, you will see spaces to add up to 10 tags for the page. It's Ok to leave them blank too.
+
+When you view a page that has tags associated with it, you will see them near the top, under the author name.
 
 ### The Content ###
 
@@ -48,5 +68,8 @@ If you have the appropriate role (see [[About Roles]]), you can delete pages. Si
 
 You can't undo this. So be thoughtful about your choices.
 
-Note that some pages can't be deleted regardless of you role. These pages are vital to the operation of the CWiki program itself.
+Note that some pages can't be deleted regardless of your role. These pages are vital to the operation of the CWiki program itself.
 
+## Special Pages ##
+
+There are some [[Special Pages]] in the wiki too. You can read about them by clicking the link.
