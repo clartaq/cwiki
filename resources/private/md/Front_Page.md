@@ -1,8 +1,8 @@
 ---
 author: CWiki
 title: Front Page
-date: 10/01/2017 5:45:07 PM
-updated: 02/18/2018 9:18:57 AM
+date: 2017-10-01T17:45:07.000-04:00
+modified: 2018-06-04T15:13:25.215-04:00
 tags:
   - about
   - front page
@@ -10,9 +10,10 @@ tags:
 ---
 
 
+
 This is the **Front Page** of your new [wiki](https://en.wikipedia.org/wiki/Wiki). This particular wiki goes by the name of [[About CWiki|CWiki]].
 
-As the article linked above describes, a wiki is a program that allows you to organize (or not) bits of information that you want to record somewhere. A wiki differs from a note taking application in that it allows you to link it's various parts together. For example, scattered throughout this page are links to both external web sites and pages maintained in a database on your local computer.
+As the article linked above describes, a wiki is a program that allows you to organize (or not) bits of information that you want to record somewhere. A wiki differs from a note taking application in that it allows you to link it's various parts together. For example, scattered throughout this page are links to both external websites​ and pages maintained in a database on your local computer.
 
 If you are the **admin** for the wiki, read [[About Admin Pages]] for some background on what you can do.
 
