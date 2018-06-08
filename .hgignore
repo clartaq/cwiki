@@ -13,3 +13,5 @@ figwheel_server.log
 cwiki.iml
 .rebel_readline_history
 /resources/public/db/database.db.mv.db
+test/data/db/**
+
