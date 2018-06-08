@@ -1,3 +1,15 @@
+---
+title: About the Sidebar
+author: CWiki
+date: 06/11/2017 4:39:37 PM  
+updated: 1/14/2018 3:34:41 PM             
+tags:
+  - about
+  - help
+  - special pages
+  - sidebar
+---
+
 The [[Sidebar]] is a special location on the screen and one of the [[Special Pages]] used in this wiki. It's on the left side of the browser window. Things there look a little smaller than the page view where you're reading this.
 
 It's purpose is to provide a place to put often-used information so you don't have to go searching through the whole wiki to find them. The wiki comes with some default content for the sidebar, but you can edit it an customize it for your particular needs.
