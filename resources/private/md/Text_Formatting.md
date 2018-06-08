@@ -1,57 +1,71 @@
-This page describes the ways you can format text in CWiki.
+---
+title: Text Formatting
+author: CWiki
+date: 10/24/2017 8:57:33 AM 
+updated: 2018-05-08T15:42:02.818426-04:00
+tags:
+  - formatting
+  - Markdown
+  - MathJax
+  - TeX
+---
 
-Here are some examples of the types of formatting and things you can do.
+Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, especially some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
 
-You can do inline formatting like:
+1. [Strikethrough](#strikethrough)
+1. [Code Listings](#code-listings)
+2. [Tables](#tables)
+3. [Mathematics](#mathematics)
+4. [Tables of Contents](#toc)
 
-* Making **bold** items.
-* Marking words and *phrases* as italic.
-* You can <u>underline</u> some things.
-* You can also mark some things as deleted with ~~strikethrough~~.
-* And do various combinations of the above like <u>***underlined bold italics***</u>.
+## Strikethrough <a name="strikethrough"></a> ##
 
-You can make headers. Here are the different types supported.
+Markdown has some ways to emphasize text in a paragraph: bold, italic, underline and combinations. For some reason, it does not have a method for formatting text with a strikethrough, something very useful in collaborative editing. GFM _does_ include an extension to support formatting with strikethrough. Surround the text with two tildes. For example, `~~strikethrough~~` will produce ~~strikethrough~~.
 
-# Header 1 #
-## Header 2 ##
-### Header 3 ###
-#### Header 4 ####
-##### Header 5 #####
-###### Header 6 ######
+## Code Listings <a name="code-listings"></a> ##
 
-Here is a horizontal rule.
+CWiki handles code listings too. 
 
-----------
+You can show code inline by surrounding it with the grave character (backquote) . For example, \`a = b + c*34;\` will render as: `a = b + c*34;`.
 
+For multi-line blocks of code, the simplest method to show the listing is to indent every line four spaces:
 
-Here is an unordered list:
+     function sayHello()
+      {
+         alert("Hello there");
+      }
 
-- a list item
-- another list item
-- list item with formatting like **bold**, *italic*.
+ Also, you can use the same convention as Github -- precede the code with a line consisting of three graves and end the listing with another line of three graves. 
 
-Here is a numbered list:
+    ```
+         function sayHello()
+          {
+             alert("Hello there");
+          }
+    ```
 
-1. The first item.
-1. The second item.
-1. And the third.
+produces:
 
-> This is what a block quote looks like.
-> It can go on and on, just like the
-> person you are quoting. You don't
-> have to use it for quotes though. You
-> can use it just as another way to make
-> a particular piece of text stand out.
+```
+     function sayHello()
+      {
+         alert("Hello there");
+      }
+```
 
-## Code Listings
+CWiki uses [highlight.js](https://highlightjs.org) to do syntax highlighting. It attempts to auto-recognize the language used, but on short samples, like those above, it can make an error. In the snippet below, it will not recognize that the language is Clojure. You can tell it which language to highlight by putting a hint in like so:
 
-CWiki handles code listings too. You can show code inline by surrounding it with the grave character (backquote) "\`". Here is an example: `a = b + c*34;`.
+  ```clojure
+    (defn f [x]
+      "A comment at the beginning."
+      (let [my-x x]
+        (println "my-x: " my-x) ; a line comment.
+        (+ 2 my-x)))
+  ```
 
-For multi-line listings, we use the same convention as Github -- precede the code with a line consisting of three graves and end the listing with another line of three graves. You can get language-specific syntax highlighting by following the initial three graves with the word "prettyprint".
+The markup above will render as:
 
-Here is some code.
-
-```prettyprint lang-clj
+```clojure
 (defn f [x]
   "A comment at the beginning."
   (let [my-x x]
@@ -59,52 +73,59 @@ Here is some code.
     (+ 2 my-x)))
 ```
 
-There are a couple of additional ways to show code listings. Since Markdown passes through HTML unchanged, you can use the `<pre></pre>` and `<code></code>` tags directly.
+There are a couple of additional ways to show code listings too. They aren't described here, but you can look at [[Code Formatting and Highlighting]] for more details
 
-The `<code></code>` can be used for inline code like <code>a37 = 1.5*c2 + 15.346;</code>
+## Tables <a name="tables"></a> ##
 
-The `<pre></pre>`  tags can be used for code blocks. This might be useful if "prettyprint" is not recognizing the language in the block. You can specify a class containing the language like this `<pre class="prettyprint lang-clj">`, which indicates that the listing is in Clojure. Here's a listing of the same function as above, but the `<pre class="prettyprint lang-clj"></pre>` surround the code block.
+Tables are not a part of the original Markdown. However, they are handy and available in many of the dialects of Markdown. CWiki implements the Github Flavored Markdown (GFM) version of tables.
 
-<pre class="prettyprint lang-clj">(defn f [x]
-  "A comment at the beginning."
-  (let [my-x x]
-    (println "my-x: " my-x) ; a line comment.
-    (+ 2 my-x)))
-</pre>
+Here's some markup
 
-Whew!
+    | Fruit  |  Color | Description | Price ($/lb) |
+    |--------|:------:|:------------|-------------:|
+    | Apple  |   Red  |    Crisp    |         0.99 |
+    | Pear   |  Green |    Sweet    |         1.49 |
+    | Plum   | Purple |     Tart    |         1.99 |
+    | Orange | Orange | Tangy       |         1.29 |
 
-## Mathematics
-
-You can also enter mathematics. You use the familiar  [[About Latex|$\rm\LaTeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
-
-Some math in an independent block on it's own line:
-
-$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
-
-Here is the same equation $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$
-inline.
-
-## Tables ##
-
-Tables are not a part of the original Markdown. However, they are very useful. CWiki implements the Github Flavored Markdown (GFM) version of tables.
-
-Colons can be used to align columns.
+that produces this:
 
 | Fruit |  Color | Description | Price ($/lb) |
 |-------|:------:|:-----------|-------------:|
 | Apple  |   Red  |    Crisp    |         0.99 |
 | Pear   |  Green |    Sweet    |         1.49 |
 | Plum   | Purple |     Tart    |         1.99 |
-| Orange | Orange | Tangy |      1.29
+| Orange | Orange | Tangy |      1.29 |
 
-(From the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)))
+There must be at least three dashes separating each header cell. The outer pipes (|) are optional, and you don't need to make the raw Markdown line up prettily. So, if you are using a proportional font to layout the table, you don't have to worry about trying to get everything to line up correctly from line to line. You can also use inline Markdown to format items within the table cells.
 
-There must be at least 3 dashes separating each header cell.
-The outer pipes (|) are optional, and you don't need to make the 
-raw Markdown line up prettily. You can also use inline Markdown.
+    Less | Pretty | Markdown
+    --- | --- | ---
+    *Still* | `renders` | **nicely**
+    1 | 2 | 3
+
+gives:
 
 Less | Pretty | Markdown
 --- | --- | ---
 *Still* | `renders` | **nicely**
 1 | 2 | 3
+
+
+## Mathematics <a name="mathematics"></a> ##
+
+You can also enter mathematics using the familiar  [[About TeX|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
+
+The markup to show an equation on a line by itself uses double dollar signs, `$$,` to start and end a block of $\rm\TeX$ like this.
+
+`$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$`
+
+The above will render like this:
+
+$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
+
+For inline math, use single dollar signs, `$` to surround the math. For example, here is the markup for the same equation as above `$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$` which renders as $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$.
+
+## Tables of Contents <a name="toc"></a> ##
+
+CWiki does not include any extensions to produce Tables of Contents since they can be created quickly in almost any Markdown editor. See [[How to Make a Table of Contents]] for example.

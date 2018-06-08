@@ -6,13 +6,30 @@
 **
 ** The intent with this layout is to have a page layout that remains
 ** constant except for the content in the middle. It contains an
-** horizontal menu, header, content area, and footer. The "difficult"
-** part was putting the footer at the bottom of the window when there
-** is little content and the bottom of the content when there is lots,
-** all without knowing or estimating the height of the footer.
+** horizontal menu, header, content area, sidebar, and footer. The
+** "difficult" part was putting the footer at the bottom of the window
+** when there is little content and the bottom of the content when there
+** is lots, all without knowing or estimating the height of the footer.
 **
 ** The other thing I wanted were left and right-justified parts in the
 ** footer.
+*/
+
+/*
+   Loading the MathJax fonts if they are stored on the server.
+
+@font-face {
+    font-family: "STIX2Text";
+url("/public/fonts/STIX2Text-Regular.woff2") format("woff2"),
+url("/public/fonts/STIX2Text-Italic.woff2") format("woff2"),
+url("/public/fonts/STIX2Text-Bold.woff2") format("woff2"),
+url("/public/fonts/STIX2Text-BoldItalic.woff2") format("woff2"),
+}
+
+@font-face {
+    font-family: "STIX2Math";
+url("/public/fonts/STIX2Math.woff2") format("woff2"),
+}
 */
 
 * {
@@ -24,12 +41,133 @@ html {
     font-size: 1em;
 }
 
+:root {
+
+    /* Some colors. */
+
+    --heading-background-color: transparent;
+    --heading-color: dimgray;
+
+    --body-background-color: #fafafa;
+    --body-color: #111111;
+
+    --normal-link-color: #5580ff;
+
+    /* Color used for Rules, vertical separators, etc. */
+    --rule-color: #ccc;
+
+    --active-border-color: #9daca9;
+
+    --page-header-background-color: dimgray;
+
+    --brand-title-color: #cfe7ed;
+    --brand-sub-title-color: #cfe7ed;
+    --brand-link-color: #a0e0ff;
+    --brand-link-visited-color: #cfe7ed;
+
+    --hmenu-background-color: dimgray;
+
+    --menu-item-color: #cfe7ed;
+    --menu-item-subnav-background: dimgray;
+
+    --search-text-color: dimgray;
+    --search-text-box-shadow-color: #fff;
+
+    --search-submit-color: #a0e0ff;
+    --search-submit-background-color: #fafafa;
+    --search-submit-box-shadow-color: #fff;
+
+    --search-submit-hover-color: dimgray;
+    --search-submit-hover-background-color: #eff1f1;
+
+    --search-submit-focus-color: #e5ecf4;
+    --search-submit-focus-border-color: #0036;
+    --search-submit-focus-box-shadow-color: #6fb5f1;
+
+    --search-submit-active-color: #e5ecf4;
+    --search-submit-active-background-color: #d2d6d6;
+
+    --search-submit-disabled-color: #e5ecf4;
+
+    --content-link-color: #a0e0ff;
+    --content-link-visited-color: #5689a9;
+    --content-link-active-color: #a0e0ff;
+
+    --form-title-color: dimgray;
+    --form-label-color: dimgray;
+    --form-label-background: transparent;
+
+    --form-button-background-color: #e5e9e8;
+    --form-button-box-shadow-color: #fff;
+    --form-button-color: #454545;
+    --form-button-text-shadow-color: #fff;
+
+    --form-button-hover-color: #eff1f1;
+    --form-button-focus-border-color: #0036ff;
+    --form-button-focus-box-shadow-color: #6fb5f1;
+
+    --form-button-active-background-color: #d2d6d6;
+    --form-button-active-box-shadow-color: rgba(0, 0, 0, 0.1);
+
+    --required-color: red;
+
+    --table-color: #333333;
+    --table-border-color: #999999;
+
+    --table-header-background-color: #cfe7ed;
+    --table-header-border-color: #a9c6c9;
+
+    --table-body-table-row-nth-odd-color: #fafafa;
+    --table-row-background-color: #f6f8fa;
+
+    --table-node-border-color: #a9c6c9;
+
+    --table-row-hover-background-color: #f6f8fa;
+
+    --footer-color: lightgrey;
+    --footer-background-color: dimgray;
+
+    --blockquote-color: #777777;
+
+    --menu-item-link-color: #a0e0ff;
+
+    /* For in-line code segments of text. */
+    --code-background-color: #f0f0f0;
+    /* For code blocks and pre-formatted blocks. */
+    --code-highlight-color: #f0f0f0; /*#f4f2fa;*/
+
+    /* Fonts. */
+
+    --headline-font-family: "Segoe UI", "Lucida Grande", Tahoma, Verdana,
+    Helvetica, Arial, sans-serif;
+
+    --body-font-family: "Segoe UI", Candara, "Helvetica Neue", "Lucida Grande",
+    Tahoma, Verdana, Helvetica, Arial, sans-serif;
+
+    --fixed-font-family: Consolas, Menlo, Monaco, "Lucida Console",
+    "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
+    "Courier New", monospace, serif;
+
+    --form-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;;
+
+    --tag-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
+    "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+
+    /* Some sizes and spacings. */
+
+    --content-max-width: 70ch;
+    --tag-field-right-margin: 0.2rem;
+    --form-component-max-width: calc(0.3*var(--content-max-width));
+    --tag-field-width: calc((var(--content-max-width)
+    - (4*var(--tag-field-right-margin)))/5);
+}
+
 /* Some typography */
 h1, h2, h3, h4, h5, h6 {
-    background-color: transparent;
-    color: dimgray;
-    font-family: "Segoe UI", "Lucida Grande", Tahoma, Verdana, Helvetica,
-    Arial, sans-serif;
+    background-color: var(--heading-background-color);
+    color: var(--heading-color);
+    font-family: var(--headline-font-family);
     margin-top: 1.25em;
     margin-bottom: 0.8em;
     line-height: 1.25em;
@@ -42,7 +180,7 @@ h1 {
 
 h2 {
     font-size: 1.728em;
-    border-bottom: 1px solid #cccccc;
+    border-bottom: var(--rule-color);
     padding-bottom: 0.3em;
 }
 
@@ -68,11 +206,10 @@ small {
 
 body {
     padding: 0.15em;
-    font-family: "Segoe UI", Candara, "Helvetica Neue", "Lucida Grande",
-    Tahoma, Verdana, Helvetica, Arial, sans-serif;
+    font-family: var(--body-font-family);
     font-weight: normal;
-    color: #111111;
-    background-color: #fafafa;
+    color: var(--body-color);
+    background-color: var(--body-background-color);
     font-size: 1em;
     line-height: 1.5em;
     margin: 0; /*gets rid of white space around body*/
@@ -89,16 +226,16 @@ body {
 
 /* The pieces of the page header. */
 
-.header {
+.page-header {
     margin: 0;
-    padding: 0 0.5em;
+    padding: 0 1em;
     flex: 0 0 auto;
-    background-color: dimgray;
+    background-color: var(--page-header-background-color);
 }
 
 .header-wrapper {
     margin: 0;
-    padding: 1em 0.5em 0;
+    padding: 0.5em 0 0;
     line-height: 0;
     display: flex;
     flex-direction: row;
@@ -111,35 +248,28 @@ body {
     justify-content: space-around;
 }
 
-/* Some color */
-/*.brand-box {
-    background-color: #505e9f;
-    padding: 4px;
-}*/
-
 .brand-title {
     font-size: 1.5em;
     font-weight: bold;
     line-height: 0.8em;
-    color: #cfe7ed;
+    color: var(--brand-title-color);
     margin: 0;
     padding-bottom: 0;
-    /*padding-bottom: 0.6em;*/
 }
 
 .brand-sub-title {
     font-size: 0.8em;
-    color: #cfe7ed;
+    color: var(--brand-sub-title-color);
     padding-top: 0.8em;
 }
 
 .brand-sub-title > a:link {
-    color: #a0e0ff;
+    color: var(--brand-link-color);
     font-weight: bold;
 }
 
 .brand-sub-title > a:visited {
-    color: #cfe7ed;
+    color: var(--brand-link-visited-color);
 }
 
 .brand-sub-title > a:hover:active:focus {
@@ -148,11 +278,11 @@ body {
 
 .hmenu {
     margin: 0;
-    padding: 0.5em;
+    padding: 1.5em 0 0;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    background-color: dimgray;
+    background-color: var(--hmenu-background-color);
 }
 
 .menu-item {
@@ -160,7 +290,103 @@ body {
     font-weight: bold;
     margin: 0;
     padding: 0 0.5em;
-    color: #cfe7ed;
+    color: var(--menu-item-color);
+}
+
+/* Styles for the "More" dropdown. */
+
+.menu-item ul {
+    list-style: none;
+    padding: 0;
+    margin-left: -2em;
+}
+.menu-item > ul > li {
+    display: inline-block;
+    position: relative;
+}
+.menu-item a {
+}
+.menu-item > ul > li.subNav ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    white-space: nowrap;
+    background: var(--menu-item-subnav-background);
+}
+.menu-item ul li.subNav:hover ul {
+    margin-left: -2em;
+    display: block;
+}
+
+.menu-item ul li.subNav ul li {
+    margin-left: 0;
+    padding-left: 2em;
+    padding-right: 2em;
+    line-height: 1.7em;
+}
+
+/* Styles for the search box. */
+
+.search-container {
+    margin-top: -0.8em;
+    margin-left: 2em;
+}
+
+#searchbox {
+}
+
+#search-text {
+    font-size: 0.8em;
+    color: var(--search-text-color);
+    border: 1px solid var(--active-border-color);
+    border-radius: 4px;
+    box-shadow: inset 0 1px var(--search-text-box-shadow-color);
+    box-sizing: border-box;
+    padding: 3px;
+}
+
+#search-submit {
+    /* font-size: 0.8em; visual size looks too large because
+       of background color. Reduce size to make it look the
+       same as the rest of the nav line. Purely subjective.
+     */
+    font-size: 0.75em;
+    font-weight: bold;
+    color: var(--search-submit-color);
+    background-color: var(--search-submit-background-color);
+    border: 1px solid var(--active-border-color);
+    border-radius: 4px;
+    box-shadow: inset 0 1px var(--search-submit-box-shadow-color);
+    box-sizing: border-box;
+    padding: 3px;
+    margin-left: 3px;
+}
+
+#search-submit:hover {
+    color: var(--search-submit-hover-color);
+    background-color: var(--search-submit-hover-background-color);
+}
+
+#search-submit:focus {
+    color: var(--search-submit-focus-color);
+    border: 1px solid var(--active-border-color);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--search-submit-focus-box-shadow-color);
+    outline: 0;
+}
+
+#search-submit:active {
+    color: var(--search-submit-active-color);
+    border: 1px solid var(--active-border-color);
+    background-color: var(--search-submit-active-background-color);
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
+}
+
+#search-submit:disabled {
+    color: var(--search-submit-disabled-color);
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
 }
 
 /* The sidebar and article is itself a flexbox, but also an element
@@ -179,7 +405,7 @@ inside another flexbox. */
 
 .left-aside h6 {
     font-size: 0.8em;
-    border-bottom: 1px solid #cccccc;
+    border-bottom: 1px solid var(--rule-color);
 }
 
 .left-aside p {
@@ -204,9 +430,11 @@ inside another flexbox. */
 
 .page-content {
     padding: 0.5em 0.5em 0.5em 1.5em;
-    max-width: 70ch;
+    max-width: var(--content-max-width);
     flex: 1 1 auto;
-    border-left: 1px solid #dddddd;
+    border-left: 1px solid var(--rule-color);
+    display: flex;
+    flex-direction: column;
 }
 
 /* content and centered content are used for 404, edit, and create
@@ -214,7 +442,7 @@ pages at the moment.
  */
 
 textarea#content {
-    width: 70ch;
+    width: var(--content-max-width);
     height: 30em;
 }
 
@@ -227,7 +455,7 @@ textarea#content {
 
 .centered-content {
     padding: 0.5em;
-    max-width: 70ch;
+    max-width: var(--content-max-width);
     margin-left: auto; /* center content horizontally */
     margin-right: auto;
     flex: 1 1 auto;
@@ -236,15 +464,15 @@ textarea#content {
 }
 
 .centered-content a:link, .content a:link {
-    color: #a0e0ff;
+    color: var(--content-link-color);
 }
 
 .centered-content a:visited, .content a:visited {
-    color: #5689a9;
+    color: var(--content-link-visited-color);
 }
 
 .centered-content a:hover:active:focus, .content a:hover:active:focus {
-    color: #a0e0ff;
+    color: var(--content-link-active-color);
     text-decoration: underline;
 }
 
@@ -283,6 +511,19 @@ textarea#content {
 .date-text {
 }
 
+.tag-line {
+    text-align: left;
+    margin-bottom: 0;
+    font-size: 0.8em;
+}
+
+.tag-header {
+    font-weight: bold;
+}
+
+.tag-text {
+}
+
 /* Container for horizontal button bars. */
 
 .button-bar-container {
@@ -296,25 +537,53 @@ textarea#content {
     margin-right: 0.5em;
 }
 
+input#new-tag-button {
+    /* For placing svg images on buttons. */
+    /*//http://paulabrown.net/search-button-png-210.png);*/
+    /*height: 89px; /*//* height of image*/
+    /*max-height: 89px;*/
+ /*   width: 24px; /*//* width of image*/
+   /* max-width: 89px;*/
+    width: 29%;
+    padding: 0;
+    border: none; /*// get rid of grey border*/
+    color: transparent; /*// hide the text (without indenting it to hell)*/
+    background: transparent url(/public/img/shrunken-a9c6c9-add-circular-button.svg) no-repeat;
+    outline: none;
+    display: block; /*// Ensure block element to apply this to inline-elements*/
+}
+
 /* Forms */
 
+.editor-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.editor-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
 .cwiki-form {
 }
 
 .form-title {
     font-size: 1.5rem;
     font-weight: bold;
-    color: dimgray;
+    color: var(--form-title-color);
     margin-top: 1rem;
 }
 
 .form-group {
     margin-bottom: 1rem;
+    margin-top: 1rem;
 }
 
-.form-label {
-    background-color: transparent;
-    color: dimgray;
+.form-label, .tag-edit-label {
+    background-color: var(--form-label-background);
+    color: var(--form-label-color);
     margin-top: 2rem;
     font-size: 0.875rem;
     font-weight: bold;
@@ -323,21 +592,48 @@ textarea#content {
 .form-label-div {
 }
 
-.form-text-field {
+.form-title-field {
+    width: var(--content-max-width);
     font-size: 0.9rem;
     padding-top: 0.2rem;
+    padding-left: 0.1rem;
     padding-bottom: 0.3rem;
 }
 
-.form-email-field {
+.form-text-field, .form-email-field {
+    width: var(--form-component-max-width);
     font-size: 0.9rem;
     padding-top: 0.2rem;
+    padding-left: 0.1rem;
     padding-bottom: 0.3rem;
+}
+
+.tag-text-field {
+    font-size: 0.8rem;
+    padding-top: 0.1rem;
+    padding-left: 0.1rem;
+    padding-bottom: 0.1rem;
+    width: var(--tag-field-width);
+    margin-right: var(--tag-field-right-margin);
+    margin-bottom: 0.3rem;
+}
+
+.tag-edit-tag-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.form-text-area {
+    font-size: 0.9rem;
+    padding: 0.2rem 0.1rem 0.3rem;
+    flex: 1;
 }
 
 .form-dropdown {
-    width: 30%;
+    width: var(--form-component-max-width);
     font-size: 0.9rem;
+    background-color: transparent;
     padding-top: 0.2rem;
     padding-bottom: 0.3rem;
 }
@@ -350,10 +646,36 @@ textarea#content {
 }
 
 .form-password-field {
-    width: 30%;
+    width: var(--form-component-max-width);
     font-size: 0.9rem;
     padding-top: 0.2rem;
     padding-bottom: 0.3rem;
+}
+
+/*
+  Special cases for the "file" input element.
+ */
+
+label.cabinet
+{
+    width: 79px;
+    height: 22px;
+    background: url(/public/img/shrunken-a9c6c9-search.svg) 0 0 no-repeat;
+
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+label.cabinet input.file
+{
+    font-size: 16px;
+    position: relative;
+    height: 100%;
+    width: auto;
+    opacity: 0;
+    -moz-opacity: 0;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0);
 }
 
 /*
@@ -361,12 +683,12 @@ textarea#content {
   topcoat css collection at topcoat.io.
  */
 .form-button {
-    background-color: #e5e9e8;
-    border: 1px solid #9daca9;
+    background-color: var(--form-button-background-color);
+    border: 1ps solid var(--active-border-color);
     border-radius: 4px;
-    box-shadow: inset 0 1px #fff;
+    box-shadow: inset 0 1px var(--form-button-box-shadow-color);
     box-sizing: border-box;
-    color: #454545;
+    color: var(--form-button-color);
     cursor: default;
     display: inline-block;
     font: inherit;
@@ -379,25 +701,25 @@ textarea#content {
     position: relative;
     text-decoration: none;
     text-overflow: ellipsis;
-    text-shadow: 0 1px #fff;
+    text-shadow: 0 1px var(--form-button-text-shadow-color);
     vertical-align: top;
     white-space: nowrap;
 }
 
 .form-button:hover {
-    background-color: #eff1f1;
+    background-color: var(--form-button-hover-color);
 }
 
 .form-button:focus {
-    border: 1px solid #0036ff;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px #6fb5f1;
+    border: 1px solid var(--active-border-color);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--form-button-focus-box-shadow-color);
     outline: 0;
 }
 
 .form-button:active {
-    border: 1px solid #9daca9;
-    background-color: #d2d6d6;
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--active-border-color);
+    background-color: var(--form-button-active-background-color);
+    box-shadow: inset 0 1px var(--form-button-active-box-shadow-color);
 }
 
 .form-button:disabled {
@@ -417,41 +739,45 @@ textarea#content {
 }
 
 .required:after, .required-field-hint:after {
-    content:" *";
-    color: red;
+    content: " *";
+    color: var(--required-color);
 }
 
 /* Tables */
 
 table {
     font-size: 0.85em;
-    color: #333333;
-    border: 1px #999999;
+    color: var(--table-color);
+    border: 1px solid var(--table-border-color);
     border-collapse: collapse;
     margin-bottom: 1em;
 }
 
+thead {
+    border: 1px solid var(--table-header-border-color);
+}
+
 th {
-    background-color: #cfe7ed;
+    background-color: var(--table-header-background-color);
     padding: 8px;
-    border: 1px solid #a9c6c9;
+    border: 1px solid var(--table-header-border-color);
 }
 
 tbody tr:nth-child(odd) {
-    background-color: #fafafa;
+    background-color: var(--table-body-table-row-nth-odd-color);
 }
 
 tr {
-    background-color: #f6f8fa;
+    background-color: var(--table-row-background-color);
 }
 
 td {
     padding: 8px;
-    border: 1px solid #a9c6c9;
+    border: 1px solid var(--table-node-border-color);
 }
 
 tr:hover td {
-    background: #fcffc6;
+    background: var(--table-row-hover-background-color);
 }
 
 /* The footer. */
@@ -461,8 +787,8 @@ tr:hover td {
     padding: 0;
     flex: 0 0 auto;
     font-size: 0.825em;
-    color: lightgrey;
-    background-color: dimgray;
+    color: var(--footer-color);
+    background-color: var(--footer-background-color);
 }
 
 .footer-wrapper {
@@ -485,9 +811,9 @@ br {
 }
 
 blockquote {
-    border-left: 4px solid #dddddd;
+    border-left: 4px solid var(--rule-color);
     padding: 0 15px;
-    color: #777777;
+    color:  var(--blockquote-color);
 }
 
 blockquote > :first-child {
@@ -504,7 +830,7 @@ hr {
     overflow: hidden;
     background: transparent;
     border: 0;
-    border-bottom: 1px solid #cccccc;
+    border-bottom: 1px solid var(--rule-color);
 }
 
 li {
@@ -516,95 +842,106 @@ li:last-child {
 }
 
 li:first-child {
-    margin-top: -0.8em;
 }
 
 /* Some link styling. */
 
 a:link {
-    color: #5580ff;
+    color: var(--normal-link-color);
     text-decoration: none;
 }
 
 a:focus {
-    color: #5580ff;
+    color: var(--normal-link-color);
     text-decoration: underline;
 }
 
 a:visited {
-    /*    color: #cfe7ed;*/
-    color: #5580ff;
+    color: var(--normal-link-color);
     text-decoration: none;
 }
 
 a:hover {
-    color: #5580ff;
+    color: var(--normal-link-color);
     text-decoration: underline;
 }
 
 a:active {
-    color: #5580ff;
+    color: var(--normal-link-color);
     text-decoration: underline;
 }
 
+/* Mark external links with the Wikipedia icon for such. */
+a[href ^= 'http']:not([href *= 'yourdomain.']) {
+    background: transparent url(../img/external_link.svg) no-repeat center right;
+    padding-right: 16px;
+}
+
+/* Smart quotes for those fonts where it is available. */
+q {
+    quotes: "“" "”";
+}
+
 .menu-item a {
-    color: #a0e0ff;
+    color: var(--menu-item-link-color);
 }
 
-/* pre and code blocks */
+/* Styles for pre-formatted blocks and code blocks. The order is important. */
+
+/* Both pre-formatted and code blocks get this treatment. This
+   sets up in-line code that is contained in another body of
+   text. */
 pre, code {
-    background-color: #eee;
-    font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace, serif;
-    margin-bottom: 10px;
-    margin-left: 2em;
-    overflow: auto;
-    padding: 5px 5px 20px
-}
-
-code {
-    background-color: rgba(0, 0, 0, 0.05);
-    font-size: 100%;
+    background-color: var(--code-background-color);
+    font-family: var(--fixed-font-family);
+    font-size: 85%;
     margin: 0;
-    padding: .2em 0
+    padding: .2em;
+    overflow: scroll;
 }
 
-del code {
-    text-decoration: inherit
-}
-
-pre > code {
+/* Style code blocks that have a pre-formatted ancestor.  This
+   sets up code listings. */
+pre code {
     background: transparent;
-    border: 0;
     font-size: 100%;
-    margin: 0;
-    padding: 0;
-    white-space: pre
+    overflow: scroll;
+    padding: 0
 }
 
-.highlight {
-    margin-bottom: 16px
-}
+/* This sets up pre-formatted blocks that are not code listings. */
 
 pre {
-    margin-bottom: 0
-}
-
-.highlight pre, pre {
-    background-color: #f6f8fa;
+    background-color: var(--code-highlight-color);
     font-size: 85%;
-    line-height: 1.45;
-    overflow: auto;
-    padding: 16px
+    line-height: 1.4rem;
+    overflow: scroll;
+    margin-bottom: 1ch;
 }
 
-pre code {
-    background-color: transparent;
-    border: 0;
-    display: inline;
-    line-height: inherit;
-    margin: 0;
-    overflow: visible;
-    padding: 0
+/* Styles for building a two-column list page. */
+
+div.two-column-list {
+    max-width: var(--content-max-width);
+    columns: 2;
+    column-gap: 2em;
+    column-rule: 1px solid var(--rule-color);
+}
+
+div.two-column-list li {
+    display:inline-block;
+    margin-left: 0;
+    width: 34ch;
+}
+
+div.one-column-list {
+    max-width: var(--content-max-width);
+}
+
+div.one-column-list li {
+    display:inline-block;
+    margin-left: 0;
+    width: 50ch;
 }
 
 /* Styles for displaying the content of a map. */
