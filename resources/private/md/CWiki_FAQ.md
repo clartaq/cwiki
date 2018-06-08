@@ -1,3 +1,14 @@
+---
+author: CWiki
+title: CWiki FAQ
+date: 2017-10-27T10:21:37.000-04:00
+modified: 2018-05-29T09:41:51.248-04:00
+tags:
+  - cwiki
+  - FAQ
+---
+
+​
 This FAQ answers some common questions about CWiki.
 
 ### Table of Contents ###
@@ -6,6 +17,7 @@ This FAQ answers some common questions about CWiki.
 * [What is CWiki NOT good for?](#What_is_CWiki_NOT_good_for?)
 * [Why Users?](#Why_Users?)
 * [Why Login/Logout?](#Why_Login/Logout?)
+* [Why No Mobile?](#Why_No_Mobile?)
 * [Why Doesn't the Content of a Page Use the Entire Width of the Browser Window?](#Why_Doesn't_the_Content_of_a_Page_Use_the_Entire_Width_of_the_Browser_Window?)
 * [What Version of Markdown Does CWiki Use?](#What_Version_of_Markdown_Does_CWiki_Use?)
 *  [Does CWiki Support Automatic Generation of Tables of Contents?](#Does_CWiki_Support_Automatic_Generation_of_Tables_of_Contents?)
@@ -15,31 +27,35 @@ This FAQ answers some common questions about CWiki.
 * Easily creating and editing attractive content for viewing in any browser.
 * Storage of unstructured knowledge.
 * Documentation.
-	* The ability to easily crosslink information within the same document rather than being forced present information in a linear fashion.
+	* The ability to readily crosslink information within the same document rather than being forced to present information linearly.
 	* Syntax-highlighted programming examples.
-	* Ability to present mathematical algorithms in mathematical notation.
-
+	* Ability to display mathematical algorithms in mathematical notation.
 
 #### What is CWiki NOT good for? <a name="What_is_CWiki_NOT_good_for?"></a> ###
 
-* Huge knowledge collections. The database will not scale to really large data collections. Might be possible if we switch to a DB designed for more "industrial" applications.
-* Collections of images. Not really a good fit for sites containing lots and lots of images.
-* Hosting a knowledge base securely on the open Internet. CWiki probably _can_ be hosted on an Internet facing server, but security characteristics are not well-designed.
+* Huge knowledge collections. The database will not scale to vast data collections. Might be possible if we switch to a DB designed for more "industrial" applications.
+* Collections of images. Not a good fit for sites containing lots and lots of photographs or drawings.
+* Hosting a knowledge base securely on the open Internet. CWiki probably _can_ be hosted on an Internet-facing server, but security characteristics are not well-designed.
 * Languages other than English. It is not internationalized at all.
+* Writing the next Great American (or British, or Australian, or Canadian) novel. At least at present, the editing facilities are too primitive. Maybe in the future.
 
 #### Why Users? <a name="Why_Users?"></a> ####
 
-You may be asking yourself "If CWiki is a personal wiki, why does it allow multiple users?" Well, frankly, when other people see what you can do with it, they will ask "Ooh! Can I sign in and do that too?" When they do, you have the ability to let them create an account of their own. If you don't want anyone else to see or fiddle with what you are writing, you could give them a separate installation of the program.
+You may be asking yourself "If CWiki is a personal wiki, why does it allow multiple users?" Well, frankly, when other people see what you can do with it, they will ask "Ooh! Can I sign in and do that too?" When they do, you can let them create an account of their own. If you don't want anyone else to see or fiddle with what you are writing, you could give them a separate installation of the program.
 
 #### Why Login/Logout? <a name="Why_Login/Logout?"></a> ####
 
 Similar to the "Why Users?" question, it's a matter of keeping things separate when you have more than one user.
 
-It can make initially signing in a bit more of a hassle every time you do it, but you can have your browser remember you login credentials if you want.
+It can make initially signing in a bit more of a hassle every time you do it, but you can have your browser remember your login credentials if you want.
+
+#### Why No Mobile? <a name="Why_No_Mobile?"></a> ####
+
+Just a personal preference on my part. I have a hard time seeing text on phones (tablets are OK), and it's even harder to read longer, detailed articles. So, I haven't put any effort into it. I don't want to deal with the additional complications if I'm not going to use the feature.
 
 #### Why Doesn't the Content of a Page Use the Entire Width of the Browser Window? <a name="Why_Doesn't_the_Content_of_a_Page_Use_the_Entire_Width_of_the_Browser_Window?"></a> ####
 
-This is on purpose. Since CWiki is intended to contain primarily readable content, the content is restricted in width so it is easier to read. Beyond a certain line length, it becomes more difficult to read text. Therefore, CWiki restricts lines to about 70 characters.
+This is on purpose. Since CWiki is intended to contain primarily readable content, the content is restricted in width, so it is easier to read. Beyond a certain line length, it becomes more difficult to read the text. Therefore, CWiki restricts lines to about 70 characters.
 
 #### What Version of Markdown Does CWiki Use? <a name="What_Version_of_Markdown_Does_CWiki_Use?"></a> ####
 
@@ -49,4 +65,4 @@ The "authoritative" guide for the syntax used by CWiki is probably the [[Text Fo
 
 #### Does CWiki Support Automatic Generation of Tables of Contents? <a name="Does_CWiki_Support_Automatic_Generation_of_Tables_of_Contents?"></a> ####
 
-Not exactly. But there is a method that will work with just about any Markdown editor. See [[How to Make a Table of Contents]] for an example. The ToC at the top of this page was created using the technique described.
+Not exactly. But there is a method that will work with just about any Markdown editor. See [[How to Make a Table of Contents]] for an example of how to do it. The ToC at the top of this page was created using the technique described there.

@@ -1,0 +1,187 @@
+/*
+** Styles for elements in the mde editor. In the styles used in program,
+** ids are used to find things. Classes are used to style things. As such,
+** there are no ids referenced here.
+ */
+
+/*
+** The mde container is a column with the toolbar, if present, across the
+** top and the editor and preview in a row below it.
+ */
+.mde-container {
+    /* make this container fill all remaining space in it's (flexbox) parent. */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+   /* border: 1px solid #e0e0e0;*/
+}
+
+/* The editor and preview pane are set up in a row. */
+.mde-editor-and-preview-container {
+    /* Make this container fill all remaining space in it's parent. */
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+}
+
+/*
+** The toolbar, if present, takes up all of the width across the top
+** of the editor and preview pane.
+ */
+.mde-toolbar-class {
+    /* Put the child buttons in a row. */
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.mde-toolbar-button {
+    font-size: 0.9em;
+    background-color: transparent;
+    min-width: 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.mde-toolbar-button:hover {
+    background-color: #333333;
+    color: white;
+}
+
+.mde-toolbar-button:active {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+.mde-toolbar-button-selected {
+    background-color: #e0e0e0;
+}
+
+.mde-title-edit-section {
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    width: 50%;
+}
+
+.mde-form-title-field {
+    width: 98%;
+    font-size: 0.9rem;
+    padding-top: 0.2rem;
+    padding-left: 0.1rem;
+    padding-bottom: 0.3rem;
+}
+
+
+/*
+** The editor uses the default font for text areas.
+ */
+.mde-editor-class {
+    flex: 1;
+    font-size: 1.0rem;
+    line-height: 1.5rem;
+    border: none;
+    outline: none;
+    overflow-y: scroll;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+/*
+** Take away the blue border around the editor when it is being
+** typed in.
+ */
+.mde-editor-class:focus {
+    outline: none;
+    border: none;
+}
+
+.mde-preview-class {
+    flex: 1;
+    font-size: 1.0rem;
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow-y:scroll;
+}
+
+/*
+** Tag area styling.
+ */
+
+.mde-tag-edit-list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    margin: -0.1rem 0 0 -0.1rem;
+}
+
+.mde-tag-text-field {
+    font-size: 0.8rem;
+    padding-top: 0.2rem;
+    padding-left: 0.1rem;
+    padding-bottom: 0.1rem;
+    margin: 0.1rem 0 0 0.1rem;
+    width: calc(100% * (1/5) - 0.1rem - 6px);
+}
+
+/*
+** Some misc. tweaks.
+ */
+
+.mde-content-label-div {
+    margin-top: 0.75rem;
+}
+
+.mde-button-bar-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+}
+.mde-button-bar-item {
+    margin-right: 0.5em;
+}
+
+/*
+** Additional formatting for list items. Shift them right to get the
+** bullets to show.
+ */
+li {
+    margin-left: 2em;
+}
+
+li:last-child {
+    padding-bottom: 1em;
+}
+
+li:first-child {
+}
+
+/*
+** These are some nice css settings for code taken from the answer to this
+** StackOverflow question:
+** https://stackoverflow.com/questions/22997589/github-like-inline-code-styling
+*/
+
+pre {
+    border-radius: 5px;
+    border: 1px solid #BCBEC0;
+    background: #F1F3F5;
+    font:12px Monaco,Consolas,"Andale  Mono","DejaVu Sans Mono",monospace
+}
+
+code {
+    border-radius: 5px;
+    border: 1px solid #BCBEC0;
+    padding: 2px;
+    font:12px Monaco,Consolas,"Andale  Mono","DejaVu Sans Mono",monospace
+}
+
+pre code {
+    border-radius: 0;
+    border: 0;
+    padding: 2px;
+    font:12px Monaco,Consolas,"Andale  Mono","DejaVu Sans Mono",monospace
+}

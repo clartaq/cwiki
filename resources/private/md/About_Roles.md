@@ -1,3 +1,13 @@
+---
+title: About Roles
+author: CWiki
+date: 11/15/2017 9:10:33 AM
+updated: 1/8/2018 5:11:44 PM 
+tags:
+  - about
+  - roles
+---
+
 CWiki supports different roles for different users. The different roles have different capabilities in terms of what the user is allowed to do.
 
 ## Reader ##
