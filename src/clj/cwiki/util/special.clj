@@ -1,7 +1,12 @@
 (ns cwiki.util.special
-  (:gen-class))
+  (:gen-class)
+  (:require [clojure.string :as string]))
 
-(def special-pages
+(def ^{:private true} special-prefixes
+  [{:name "All Pages with Tag" :editable? nil :deletable? nil :generated? true}
+   {:name "All Pages Attributed to User" :editable? nil :deletable? nil :generated? true}])
+
+(def ^{:private true} special-pages
   [{:name "Front Page" :editable? true :deletable? nil :generated? nil}
    {:name "Special Pages" :editable? nil :deletable? nil :generated? nil}
    {:name "All Pages" :editable? nil :deletable? nil :generated? true}
@@ -19,11 +24,12 @@
    {:name "delete-user" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "reset-password" :editable? nil :deletable? nil :generated? true :admin-only? true}])
 
-(defn find-first-with-name
+(defn- find-first-with-name
   "Return the map for the 'special' page with the name
   page-name, nil otherwise."
   [page-name]
-  (some #(when (= (:name %) page-name) %) special-pages))
+  (or (some #(when (= (:name %) page-name) %) special-pages)
+      (some #(when (string/starts-with? page-name (:name %)) %) special-prefixes)))
 
 (defn is-special?
   "Return true if the page-name represent a 'special' page

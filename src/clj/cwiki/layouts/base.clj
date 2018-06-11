@@ -706,7 +706,7 @@
   [user-name req]
   (let [query-results (db/get-titles-of-all-pages-with-user user-name)
         content (process-title-set query-results)
-        post-map (db/create-new-post-map (str "All pages attributed to user \""
+        post-map (db/create-new-post-map (str "All Pages Attributed to User \""
                                               user-name "\"")
                                          content)]
     (view-list-page post-map query-results req)))
