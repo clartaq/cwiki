@@ -3,6 +3,10 @@
             ;[cwiki-mde.core :as core]
             ))
 
-(deftest fake-test
-  (testing "fake description"
+(deftest fake-failing-test
+  (testing "fake failing description"
     (is (= 1 2))))
+
+(deftest fake-passing-test
+  (testing "fake passing description"
+    (is (= 3 (+ 1 2)))))
