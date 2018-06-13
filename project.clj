@@ -17,10 +17,10 @@
                  [clj-time "0.14.4"]
                  [com.taoensso/sente "1.12.0"]
                  [com.taoensso/timbre "4.10.0"]
-                 [com.vladsch.flexmark/flexmark "0.32.24"]
-                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.32.24"]
-                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.32.24"]
-                 [com.vladsch.flexmark/flexmark-ext-tables "0.32.24"]
+                 [com.vladsch.flexmark/flexmark "0.34.0"]
+                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.0"]
+                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.0"]
+                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.0"]
                  [compojure "1.6.1"]
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
@@ -60,7 +60,7 @@
               :dependencies [[ring/ring-mock "0.3.2"]]}
              :dev
              {:dependencies [[binaryage/devtools "0.9.10"]
-                             [cider/piggieback "0.3.5"]
+                             [cider/piggieback "0.3.6"]
                              [figwheel-sidecar "0.5.16"]
                              [ring/ring-mock "0.3.2"]
                              [ring/ring-devel "1.6.3"]]
