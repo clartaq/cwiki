@@ -1,3 +1,8 @@
+;;;
+;;; A namespace that encapulates knowledge about "special" pages in the
+;;; wiki.
+;;;
+
 (ns cwiki.util.special
   (:gen-class)
   (:require [clojure.string :as string]))
@@ -24,12 +29,14 @@
    {:name "delete-user" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "reset-password" :editable? nil :deletable? nil :generated? true :admin-only? true}])
 
-(defn- find-first-with-name
+(defn- real-find-first-with-name
   "Return the map for the 'special' page with the name
   page-name, nil otherwise."
   [page-name]
   (or (some #(when (= (:name %) page-name) %) special-pages)
       (some #(when (string/starts-with? page-name (:name %)) %) special-prefixes)))
+
+(def ^{:private true} find-first-with-name (memoize real-find-first-with-name))
 
 (defn is-special?
   "Return true if the page-name represent a 'special' page
