@@ -1,8 +1,6 @@
 syntax: glob
 .idea/**
 target/**
-*.jar
-*.xml
 .lein-*
 .nrepl-port
 resources/public/db/**
@@ -12,6 +10,4 @@ doo-index.html
 figwheel_server.log
 cwiki.iml
 .rebel_readline_history
-/resources/public/db/database.db.mv.db
-test/data/db/**
-
+/test/data/db/testdatabase.db.mv.db
