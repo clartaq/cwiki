@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-06-11T16:31:20.062-04:00
+modified: 2018-06-14T10:07:23.496-04:00
 tags:
   - architecture
   - bugs
@@ -21,6 +21,10 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 * [Process](#process). Changes to the way things get done that are more systematic, informative and less error-prone.
 
 ### Bugs <a name="bugs"></a>
+
+* There is some sort of version incompatibility in the project dependencies that requires spurious dependency inclusion to get the uberjar target to compile successfully.
+
+* The editor is largely compatible with the Grammarly tool, but the hints provided usually show up in the wrong place. Finding whatever they refer to can be difficult without starting up the Grammarly editor.
 
 *  There is a nasty bug that will crash the program and pollute the database if you try to enter a page title or tag containing an apostrophe. Should also check if other characters cause similar problems.
     * This issue ([#1](https://bitbucket.org/David_Clark/cwiki/issues/1/characters-that-are-invalid-in-sql)) was **resolved** in commit [1de736b](https://bitbucket.org/David_Clark/cwiki/commits/1de736b).
