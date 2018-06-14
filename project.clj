@@ -55,16 +55,19 @@
               :omit-source true
               :hooks       []
               :prep-tasks  ["clean" "compile" ["cljsbuild" "once" "min"]]
-              ; This really shouldn't be required. Need to move the REPL
-              ; stuff out of the uberjar build.
-              :dependencies [[ring/ring-mock "0.3.2"]]}
+              ; This really shouldn't be required. There is some sort of
+              ; dependency version incompatibility somewhere that needs
+              ; to be fixed..
+              :dependencies [[ring/ring-mock "0.3.2"]]
+              }
              :dev
-             {:dependencies [[binaryage/devtools "0.9.10"]
+             {:main user
+              :dependencies [[binaryage/devtools "0.9.10"]
                              [cider/piggieback "0.3.6"]
                              [figwheel-sidecar "0.5.16"]
                              [ring/ring-mock "0.3.2"]
                              [ring/ring-devel "1.6.3"]]
-              :source-paths ["src/cljs"]
+              :source-paths ["dev" "src/cljs"]
               :plugins      [[lein-doo "0.1.10"]
                              [lein-figwheel "0.5.16"]]
               :test-paths   ["test/cljs"]}}
