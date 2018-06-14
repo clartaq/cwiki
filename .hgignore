@@ -8,6 +8,6 @@ resources/public/js/compiled/**
 research/**
 doo-index.html
 figwheel_server.log
-cwiki.iml
+cwiki-wiki.iml
 .rebel_readline_history
 /test/data/db/testdatabase.db.mv.db
