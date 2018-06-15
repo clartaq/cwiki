@@ -9,7 +9,62 @@
             [cwiki.models.wiki-db :as db]
             [hiccup.form :refer [drop-down email-field form-to hidden-field
                                  password-field
-                                 submit-button text-field]]))
+                                 submit-button text-field]])
+  (:import (java.net URLDecoder URL)))
+
+;;;
+;;; Functions related to saving a seed page.
+;;;
+
+(defn confirm-save-seed-page
+  "Return a page stating that the file has been saved."
+  [page-name file-name referer]
+  (base/short-message-return-to-referer
+    "Save Complete"
+    (str "Page \"" page-name "\" has been saved to \"" file-name "\".") referer))
+
+
+(defn compose-save-seed-page
+  "Compose and return a page that allows the user to save a seed page."
+  [req]
+  (let [referer (get (:headers req) "referer")
+        ; First figure out if they are trying to export the Front Page or
+        ; a 'regular' page.
+        file-name (.getFile (URL. referer))
+        page-title (if (= "/" file-name)
+                     "Front Page"
+                     (let [snip (.substring ^String referer
+                                            (inc (s/last-index-of referer "/")))]
+                       (URLDecoder/decode snip "UTF-8")))
+        page-id (db/title->page-id page-title)]
+    (if (nil? page-id)
+      (base/short-message-return-to-referer
+        "Page Name Translation Error"
+        (str "There was a problem getting the page name from the referring URL: \""
+             referer "\".")
+        referer)
+      (base/short-form-template
+        [:div {:class "cwiki-form"}
+         (form-to {:enctype      "multipart/form-data"
+                   :autocomplete "off"}
+                  [:post "save-seed-page"]
+                  (hidden-field "page-id" page-id)
+                  (hidden-field "referer" referer)
+                  [:p {:class "form-title"} "Save Seed Page"]
+                  [:div {:class "form-group"}
+                   [:div {:class "form-label-div"}
+                    [:label {:class "form-label"
+                             :for   "filename"} (str "Save and overwrite existing seed page \"" page-title "\"?")]]]
+                  [:div {:class "button-bar-container"}
+                   (submit-button {:id    "save-seed-button"
+                                   :class "form-button button-bar-item"}
+                                  "Save")
+                   [:input {:type      "button" :name "cancel-button"
+                            :value     "Cancel"
+                            :class     "form-button button-bar-item"
+                            :autofocus "autofocus"
+                            :onclick   "window.history.back();"}]])]))))
+
 
 ;;
 ;; Functions related to creating a new user.

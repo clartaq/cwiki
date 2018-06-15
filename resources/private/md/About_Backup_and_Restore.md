@@ -1,8 +1,8 @@
 ---
-title: About Backup and Restore
 author: CWiki
-date: 12/03/2017 10:12:36 AM
-updated: 1/8/2018 4:34:17 PM 
+title: About Backup and Restore
+date: 2017-12-03T10:12:36.000-05:00
+modified: 2018-06-15T16:34:13.025-04:00
 tags:
   - about
   - admin
@@ -11,15 +11,16 @@ tags:
   - special pages
 ---
 
+
 Backing up and restoring the database file is pretty easy and can be accomplished in different ways.
 
 ## Manual Method ##
 
 ### Backup ###
 
-The database file is called `database.db` and is located in the `resources\public\db` directory relative to the location where the program is running. To manually backup the file, just copy it to a safe location.
+The database file is called `database.db` and resides in the `resources\public\db` directory relative to the location where the program is running. To manually back up the file, copy it to a safe place.
 
-This is only safe if there is no one else running the program when you make the copy. Since CWiki is intended as a personal wiki, that is believed to be the usual case. You can copy it to a remote location like [Dropbox](https://www.dropbox.com/) or anywhere else. It's just a file.
+Backup is only safe if there is no one else running the program when you make the copy. Since CWiki is intended as a personal wiki, that is believed to be the usual case. You can copy it to a remote location like [Dropbox](https://www.dropbox.com/) or anywhere else. It's just a file.
 
 ### Restore ###
 
@@ -31,10 +32,12 @@ Don't do this while CWiki is running.
 
 ## Automated Method ##
 
+### NOTE: None of this works yet. ###
+
 Using the automated method has the advantage that it can be accomplished while CWiki is running.
 
 If you are an administrator, you have access to two tasks for backup and restore. Links to those tasks are shown in the default [[Sidebar]] and on the [[Admin]] page. 
 
-These commands will make copies of the database and store them in the `resources\private\db` directory. If you would prefer additional safety, you can copy the saved file to a different location, perhaps off site.
+These commands will make copies of the database and store them in the `resources\private\db` directory. If you would prefer additional safety, you can copy the saved file to a different location, perhaps off-site​.
 
 The [[restore|Restore]] link will retrieve the `database.db` file and move it to the active database directory `resources\public\db`.

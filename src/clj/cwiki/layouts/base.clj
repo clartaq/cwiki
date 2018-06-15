@@ -11,6 +11,7 @@
             [clojure.string :as s]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.authorization :as ath]
+            [cwiki.util.files :refer [is-seed-page?]]
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :as special]
             [cwiki.util.wikilinks :refer [replace-wikilinks
@@ -116,13 +117,16 @@
        [:a "More  ▾"]
        [:ul
         (when (db/find-post-by-title "About")
-          [:li [:a {:href "/about"} "About"]])
+          [:li [:a {:href "/About"} "About"]])
         (when-not (ri/is-reader-user? req)
           [:li [:a {:href "/import"} "Import"]])
         (when-not (or (special/is-generated? page-title)
                       (:editing options))
           [:li [:a {:href "/export"} "Export"]])
         [:li [:a {:href "/export-all"} "Export All"]]
+        (when (and (ri/is-admin-user? req)
+                   (is-seed-page? (:page_title post-map)))
+          [:li [:a {:href "/save-seed-page"} "Save Seed"]])
         (when (ri/is-admin-user? req)
           [:li [:a {:href "/Admin"} "Admin"]])
         [:li [:a {:href "/logout"} "Sign Out"]]]]]]))

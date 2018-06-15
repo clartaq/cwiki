@@ -8,6 +8,7 @@
             [cwiki.layouts.admin :as admin-layout]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
+            [cwiki.util.files :as files]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]))
 
@@ -19,6 +20,42 @@
    (-> (response/render body req)
        (status stat)
        (assoc :body body))))
+
+;;;
+;;; Functions related to saving a seed page.
+;;;
+
+(defn- get-save-seed-page
+  [req]
+  (admin-layout/compose-save-seed-page req))
+
+(defn- get-params-for-save
+  "Based on the page name, get the page-map and tags required to do the
+  export."
+  [page-name]
+  (let [page-map (db/find-post-by-title page-name)
+        author-name (db/page-map->author page-map)
+        page-id (db/page-map->id page-map)
+        tags (db/get-tag-names-for-page page-id)]
+    {:page-map page-map :author-name author-name :tags tags}))
+
+(defn- post-save-seed-page
+  "Save a single page from the wiki to a Markdown file."
+  [req]
+  (let [params (:multipart-params req)
+        referer (get params "referer")
+        page-id-str (get params "page-id")
+        page-id (Integer. ^String (re-find #"\d+" page-id-str))
+        page-name (db/page-id->title page-id)
+        param-map (get-params-for-save page-name)]
+    (let [res (files/export-seed-page (:page-map param-map) (:author-name param-map)
+                                 (:tags param-map))]
+      (if res
+        (admin-layout/confirm-save-seed-page page-name res referer)
+        (layout/short-message-return-to-referer
+          "There was a Problem"
+          "The page was not saved correctly."
+          referer)))))
 
 ;;
 ;; Functions related to creating a new user.
@@ -198,6 +235,8 @@
         (build-response (admin-layout/cannot-find-user req) req 500)))))
 
 (defroutes admin-routes
+           (GET "/save-seed-page" request (get-save-seed-page request))
+           (POST "/save-seed-page" [] post-save-seed-page)
            (GET "/compress" [] (layout/compose-not-yet-view "compress"))
            (GET "/backup" [] (layout/compose-not-yet-view "backup"))
            (GET "/restore" [] (layout/compose-not-yet-view "restore"))
