@@ -191,18 +191,36 @@
   []
   (.getCanonicalPath (File. ".")))
 
-(defn export-page
-  "Export the page described in the page-map to a file."
-  [page-map author-name tags]
+(defn- get-private-resource-directory
+  "Return the canonical path to where the private Markdown resources are
+  saved."
+  []
+  (.getCanonicalPath (File. (str "." sep "resources" sep "private" sep "md"))))
+
+(defn- save-page
+  "Save the page described in the page-map to a file."
+  [page-map author-name tags dir]
   (let [page-name (:page_title page-map)
         sanitized-name (sanitize-page-name page-name)]
     (if (empty? sanitized-name)
       (println "Problem with translating the page name")
-      (let [path (str (get-execution-directory) sep
-                      (sanitize-page-name page-name) ".md")
+      (let [path (str dir sep sanitized-name ".md")
             content (:page_content page-map)]
         (spit path (str (build-yaml page-map author-name tags) content))
         path))))
+
+;; The only difference between exporting a "normal" page and a "seed" page
+;; is the directory that they end up in.
+
+(defn export-page
+  "Export the page described in the page-map to a file."
+  [page-map author-name tags]
+  (save-page page-map author-name tags (get-execution-directory)))
+
+(defn export-seed-page
+  "Save the seed page described in the page-map to a file."
+  [page-map author-name tags]
+  (save-page page-map author-name tags (get-private-resource-directory)))
 
 (defn- filter-predicate
   "Return true if the line is not empty and does not start with a semi-colon"
@@ -222,3 +240,12 @@
                       (vec))
         filtered-lines (filterv filter-predicate raw-lines)]
     filtered-lines))
+
+(defn- real-is-seed-page?
+  "Return true if the input names a seed page, nil otherwise."
+  [name]
+  (let [seeds (load-initial-page-list)
+        sanitized-name (str (sanitize-page-name name) ".md")]
+    (some #(= sanitized-name %) seeds)))
+
+(def is-seed-page? (memoize real-is-seed-page?))

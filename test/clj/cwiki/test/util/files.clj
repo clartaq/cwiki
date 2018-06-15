@@ -180,3 +180,10 @@
     (is nil? (in? "zinger" "finger"))
     (is true? (in? 32 #{1 3 5 32 95 891234789}))
     (is nil? (in? 32 #{1 3 5 432 95 891234789}))))
+
+(deftest is-seed-page?-test
+  (testing "The is-seed-page? function."
+    (is (nil? (is-seed-page? "bufar floqwar")))
+    (is (true? (is-seed-page? "About")))
+    (is (true? (is-seed-page? "Front Page")))
+    (is (true? (is-seed-page? "To Do - Old")))))

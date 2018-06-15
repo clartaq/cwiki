@@ -240,7 +240,7 @@
 
 (defroutes home-routes
            (GET "/" request (home request))
-           (GET "/about" request (about request))
+           ;(GET "/about" request (about request))
            (GET "/export" request (get-export-page request))
            (POST "/export" request (post-export-page request))
            (GET "/export-all" request (get-export-all-pages request))
