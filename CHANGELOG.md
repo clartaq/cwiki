@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added ###
 - Added licensing description to the project file.
 - Added this changelog.
-- Moved some dev-only functions the the "dev" source tree.
+- Moved some dev-only functions to the "dev" source tree.
 - Added the ability for an admin user to save revisions to "seed" pages directly into the directory where seed pages are stored in the repository. This resolved issue [#16 "Let Admin Save Seed Pages"](https://bitbucket.org/David_Clark/cwiki/issues/16/let-admin-save-seed-pages) in commit [72e6644](https://bitbucket.org/David_Clark/cwiki/commits/72e6644b6215ac44713fa56cddd51f497283de6d).
 
 ### Changed ###
@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Removed contents of the "Research" directory that should never have been in the repository in the first place. Things in this directory included some example CSS files and some examples of other Markdown editors.
 
 ### Fixed ###
-- Resolved issue [#1, "Characters that are invalid in SQL statements.="](https://bitbucket.org/David_Clark/cwiki/issues/1/characters-that-are-invalid-in-sql) in commit [1de736b](https://bitbucket.org/David_Clark/cwiki/commits/1de736b).
+- Resolved issue [#1, "Characters that are invalid in SQL statements"](https://bitbucket.org/David_Clark/cwiki/issues/1/characters-that-are-invalid-in-sql) in commit [1de736b](https://bitbucket.org/David_Clark/cwiki/commits/1de736b).
 - Resolved issue [#2, "Program-Generated Pages Should Not Be Editable"](https://bitbucket.org/David_Clark/cwiki/issues/2/program-generated-pages-should-not-be) in commit [80e6ab0](https://bitbucket.org/David_Clark/cwiki/commits/80e6ab0)
 
 ## [0.0.9] - 2018-06-03
