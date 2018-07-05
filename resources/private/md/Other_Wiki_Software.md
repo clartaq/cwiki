@@ -1,16 +1,17 @@
 ---
-title: Other Wiki Software
 author: CWiki
-date: 10/10/2017 1:20:24 PM 
-updated: 12/26/2017 1:49:20 PM   
+title: Other Wiki Software
+date: 2017-10-10T13:20:24.000-04:00
+modified: 2018-06-28T18:02:19.450-04:00
 tags:
   - alternatives
   - wiki software
 ---
 
+
 Here are some other wikis that I find interesting. Some of these are quite mature and very polished. Each has an opinionated approach to information management that works very smoothly when used as intended. Of course, each is missing something that I want. Otherwise, I would not have found it necessary to write CWiki.
 
-These wiki programs are all open source and under active development as this is written (Autumn 2017). I encourage you to visit the home page of each of these projects and see what you think.
+These wiki programs are all open source and under active development, as this is written (Autumn 2017). I encourage you to visit the home page of each of these projects and see what you think.
 
 ## TiddlyWiki ##
 
@@ -24,16 +25,16 @@ I have used [TiddlyWiki](http://tiddlywiki.com/) for many years, over a decade. 
 
 ### Pros ###
 
-- Data is stored in a human-readable format.
+- Stores data in a human-readable format.
 - Comfortable interface.
-- Nice WYSIWIG editor.
+- Nice WYSIWYG editor.
 - Very flexible and customizable.
-- Tons of very good documentation.
+- There are tons of excellent documentation.
 
 ### Cons ###
 
-- Can get very slow with a large collection of data.
-- Seems like the user community is shrinking.
+- Can get very slow with an extensive collection of data.
+- It seems like the user community is shrinking.
 
 ## WikidPad ##
 
@@ -44,9 +45,9 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 ### Features ###
 
 - Written in Python.
-- Standalone program. Doesn't need a browser.
+- Standalone program. It doesn't need a browser.
 - Cross-platform.
-- Content can be arranged in a tree.
+- You can organize content in a tree structure.
 
 ### Pros ###
 
@@ -54,8 +55,8 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 
 ### Cons ###
 
-- Frankly, it's kind of ugly.
-- The editor is neither plain text or wysiwig. It is distracting. It actually makes things difficult to read. And there is no page format just for reading without the clutter.
+- Frankly, it's ugly.
+- The editor is neither plain text or WYSIWYG. It is distracting. It makes things difficult to read. And there is no page format just for reading without the clutter.
 - Following links is un-intuitive.
 
 ## CherryTree ##
@@ -65,24 +66,24 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 ### Features ###
 
 - Written in Python.
-- Has code execution features.
+- It has code execution features.
 - [More](http://www.giuspen.com/cherrytree/#features) from the program web page.
 
 ### Pros ###
 
-- Lots of internationalization.
+- There is of internationalization.
 - Attractive interface.
 - Hierarchical note-taking.
-- It has a very nice, if somewhat dated, manual written by a third party.
+- It has a lovely, if somewhat dated, user manual written by a third party.
 
 ### Cons ###
 
 - It's open source, but you can only download the source as a `tar.xz` file. It would be nice if it were on a public repository site where you could browse the source.
-- It is not clear that truly large knowledge stores can be effectively organized in a visual tree.
+- It is not clear that vast knowledge stores can be effectively organized in a visual tree.
 
 ## TreeSheets ##
 
-[TreeSheets](http://strlen.com/treesheets/) takes a somewhat different approach to organizing your data. It is free form in that it lets you arrange you data freely on a page, moving tables and text blocks wherever you like. Any number of "sheets" can be created and open at one time. Each can be arranged as you like in two dimensions.
+[TreeSheets](http://strlen.com/treesheets/) takes a somewhat different approach to organizing your data. It is free form in that it lets you arrange your data freely on a page, moving tables and text blocks wherever you like. Any number of "sheets" can be created and open at one time. Each can be arranged as you want in two dimensions.
 
 ### Features ###
 
@@ -91,26 +92,26 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 
 ### Pros ###
 
-- Combines many of the features of a spreadsheet, mind mapper, outliner, and text editor.
+- It combines many of the features of a spreadsheet, mind mapper, outliner, and text editor.
  
 ### Cons ###
 
 - A zillion more keystroke commands to memorize.
-- The build process is not too easy.
+- The build process is not simple.
 
 ## MediaWiki ##
 
-[MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) is the 800 pound gorilla of wikis. This is largely due to the fact that it is so well-known, being the wiki upon which [Wikipedia](https://www.wikipedia.org/) is based. I like it a lot -- some of the features of CWiki are designed to imitate MediaWiki -- but it is overkill for what I want.
+[MediaWiki](https://www.mediawiki.org/wiki/MediaWiki) is the 800-pound gorilla of wikis. This is mostly because it is so well-known, being the wiki upon which [Wikipedia](https://www.wikipedia.org/) is based. I like it a lot -- some of the features of CWiki are designed to imitate MediaWiki -- but it is overkill for what I want.
 
 ### Features ###
 
 - Written in PHP.
 - Very robust.
-- Supports version control of pages.
+- It supports version control of pages.
 
 ### Pros ###
 
-- Incredible amounts of documentation.
+- There are incredible amounts of documentation.
 - Very flexible and extensible.
 
 ### Cons ###
@@ -126,7 +127,7 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 ### Features ###
 
 - Written in Java
-- Supports version control of pages.
+- It supports version control of pages.
 - Includes a wiki, blog, file manager, forums, extensions, ...
 
 ### Pros ###
@@ -137,7 +138,7 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 ### Cons ###
 
 - Huge installation.
-- Complicated administration in my opinion.
+- Administration is complicated in my opinion.
 
 ## Boostnote ##
 
@@ -159,5 +160,32 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 - Has some problems with $\rm\TeX$, like not being able to render $\rm\TeX$ correctly. (It uses the Katex parser/renderer.)
 - Not really a wiki. It's a note-taking app. No support for within-wiki linking that I can find.
 
+## Joplin ##
 
-Each of these has pluses and minuses. Obviously, or I wouldn't have written CWiki.
+[Joplin](https://joplin.cozic.net) is another note-taking app, but with very extensive features. In fact, if it only managed to handle wiki links, I probably would not have written CWiki.
+
+### Features ###
+
+* Cross-platform, including mobile and desktop apps.
+* Can use several cloud storage platforms for synchronization, like [NextCloud](https://nextcloud.com).
+* Plenty of localizations.
+* Very good import of Evernote notes.
+* Content can be divided among any number of notebooks and sub-notebooks.
+* Notes can be encrypted.
+* It is possible to create links to other notes, even though it is somewhat clumsy.
+
+### Pros ###
+
+* Markdown, $\rm\TeX$, and To-Do support with checkboxes.
+* Very active and responsive development.
+
+### Cons ###
+
+* Another Electron app.
+* Not capable of wiki linking within its database of notes.
+* Doesn't seem to support the ​creation of Tables of Contents in Markdown in the usual way.
+* It doesn't seem possible to change the layout of the application's main page. When notes have long names, they can be truncated in the column that lists the notes in the open notebook.​
+* It does not seem possible to change the layout of the list of notebooks. For example, you cannot move one notebook higher in the list.
+* It would be nice if the application retained a "history" of notes visited such that you could move backward and forward through the list of notes already viewed, like you can with a browser.
+
+Each of these alternative applications has pluses and minuses. Obviously, or I wouldn't have written CWiki.

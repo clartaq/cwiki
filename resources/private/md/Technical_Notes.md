@@ -1,13 +1,14 @@
 ---
 author: CWiki
 title: Technical Notes
-date: 10/01/2017 5:45:07 PM
-updated: 2018-03-11T10:16:25.891920-04:00
+date: 2017-10-01T17:45:07.000-04:00
+modified: 2018-06-18T10:28:20.814-04:00
 tags:
   - how it works
   - motivation
   - technical note
 ---
+
 
 These are some technical notes about CWiki. If you are only interested in using the wiki, you can ignore this stuff. If you want to know how CWiki works or why it works the way it does or how to build and modify your own version, the information here might be useful.
 
@@ -24,9 +25,8 @@ Almost no software is written without dependencies these days -- programs are ju
 
 ### Java Stuff ###
 
-* Developed and tested on late versions of Java 8 and early versions of Java 9.
+* Developed and tested on late versions of Java 8 and Java 9.
 * [Flexmark](https://github.com/vsch/flexmark-java) is used for the Markdown parser and renderer.
-* [Jetty](http://www.eclipse.org/jetty/) is used as the server software.
 * [H2](http://h2database.com/html/main.html) is used for database functions.
 
 ### Clojure Stuff ###
@@ -37,6 +37,7 @@ Almost no software is written without dependencies these days -- programs are ju
 * [clj-yaml](https://github.com/circleci/clj-yaml) (the maintained fork) is used to parse YAML front matter when pages are imported from files.
 * [Compojure](https://github.com/weavejester/compojure) is used for routing.
 * [Hiccup](https://github.com/weavejester/hiccup) is used for "lispy" creation of HTML.
+* [http-kit](http://www.http-kit.org) is used as the server software.
 * [Ring](https://github.com/ring-clojure/ring) is the web applications library.
 * [url](https://github.com/cemerick/url) is used for manipulating URLs.
 
@@ -54,7 +55,7 @@ Right now, the editor is just an HTML text field. I want to change to [Writing](
 
 #### CSS ####
 
-At this point, the CSS used is just plain ol' [CSS3](https://www.w3schools.com/css/css3_intro.asp). I strongly considered using [SCSS](http://sass-lang.com/), but did not want the additional dependency on [Ruby](https://www.ruby-lang.org/en/) to build the project. This may change in the future.
+At this point, the CSS used is just plain old [CSS3](https://www.w3schools.com/css/css3_intro.asp). I strongly considered using [SCSS](http://sass-lang.com/), but did not want the additional dependency on [Ruby](https://www.ruby-lang.org/en/) to build the project. This may change in the future.
 
 You can use the CSS file to re-style CWiki to your liking.
 
@@ -69,7 +70,7 @@ There really isn't any.
 * Don't put anything in CWiki that you wouldn't want someone else to see. 
 * Don't put CWiki on a remote server. It could be hacked easily to steal your information or post someone else's.
 
-Authentication is session based requiring a user name and password.
+Authentication is session based requiring a username and password.
 
 Authorization is home-grown and based on the roles users have been assigned. See [[About Roles]] for more information.
 
@@ -79,7 +80,7 @@ The pages in CWiki are a mashup of [Markdown](https://daringfireball.net/project
 
 1. First, all of the WikiLinks are located and translated to HTML-style links. These links point to pages within the CWiki database. If there is no such page, the link is displayed in red.
 2. The Markdown content, including the translated WikiLinks, are converted to HTML. Since Markdown parsers pass HTML through unaltered, the translated WikiLinks are left intact.
-3. Finally, the HTML is passed to MathJax to translate any $\rm\TeX$ into something that can be displayed in a web page. The reprsentation is usually common HTML, but you can change that if needed.
+3. Finally, the HTML is passed to MathJax to translate any $\rm\TeX$ into something that can be displayed in a web page. The representation is usually common HTML, but you can change that if needed.
 4. That big chunk of HTML is plugged into the `<body>` section of a web page containing the header and footer for the page as well as the `<head>` section required for well-formed HTML5
 5. That page is then served by a web-server built into CWiki (Jetty, mentioned above) and rendered by your browser.
 
@@ -93,7 +94,7 @@ Originally, CWiki was envisioned as a private wiki for use by a single person. H
 
 Of course, they could have set up their own instances, but they wanted to use the same one I was using. So... the capability for multiple users on the same wiki was added. See the sections on authentication and authorization for details.
 
-But, CWiki is by no means "multi-user" in the sense of multiple users running the program simultaneously. There is really nothing to prevent it, but there are no facilities to guarantee exclusive access to the database or pages in those circumstances.
+But, CWiki is by no means "multi-user" in the sense of multiple users running the program simultaneously. There is nothing to prevent it, but there are no facilities to guarantee exclusive access to the database or pages in those circumstances.
 
 ### Namespaces ###
 
@@ -113,7 +114,7 @@ Markdown by itself is a great way to write some things. It is intended to be sim
 
 But Markdown cannot handle some use cases that are very common, like producing tables. As a result, lots of "extensions" have developed over the years to help fill some of those needs.
 
-Also, Markdown syntax as originally laid down by [John Gruber](https://en.wikipedia.org/wiki/John_Gruber) is ambiguous so various implementations have diverged causing users to sometimes be surprised when the same document produces different results in different programs.
+Also, Markdown syntax as initially laid down by [John Gruber](https://en.wikipedia.org/wiki/John_Gruber) is ambiguous, so various implementations have diverged causing users sometimes to be surprised when the same document produces different results in different programs.
 
 Developers, including myself, have been forced to improvise. To get what I want most -- simple formatting, multi-line code listings, and math formatting -- I've put together yet another Frankenstein version of Markdown that includes those things. So, starting with basic Markdown, I've added:
 
@@ -131,13 +132,13 @@ Deleting a user from a wiki is a pretty extreme measure. Then there is the quest
 
 The approach taken by CWiki is to go ahead and delete the account, but make no effort to find and remove anything they have worked on. When pages that the deleted user authored are viewed, the author will be listed as "Unknown". The work of all deleted users will be shown with an "Unknown" author. There is no attempt to differentiate which deleted user may have authored something. It is up to the admin or an editor to revise or delete any material the deleted user may have created.
 
-Deleting a user like this loses attribution for any work they may have done. This is generally not a good thing. Another, gentler approach would be for an admin to simple change the password for the deleted user such that they could no longer access their (former) account. That way the attribution remains, but the deleted user no longer has rights to create new content. (They can always sign in on the "guest" account to view anything in the wiki.)
+Deleting a user like this loses attribution for any work they may have done. This is generally not a good thing. Another, gentler approach would be for an admin to simply change the password for the deleted user such that they could no longer access their (former) account. That way the attribution remains, but the deleted user no longer has rights to create new content. (They can always sign in on the "guest" account to view anything in the wiki.)
 
 ### Handling Images ###
 
-Essentially, I punted on this one. Since CWiki is at heart a single-user, private wiki, it would make sense to put embedded images in the database. There are safety and reliability benefits from doing this.
+Mainly, I punted on this one. Since CWiki is at heart a single-user, private wiki, it would make sense to put embedded images in the database. There are safety and reliability benefits from doing this.
 
-At the moment though,  images can be embedded by links to online resources or to the file system.
+At the moment though,  images can be embedded by links to online resources or the file system.
 
 See [[About Images]].
 
@@ -155,18 +156,18 @@ However, the strategy I have been using has just been using regular expressions 
 
 Doing it that way causes examples of wikilinks embedded in a quoted section to be replaced anyway. Need to handle it differently.
 
-It seems like there are 4 possible approaches.
+It seems like there are four possible approaches.
 
 1. Do nothing and warn users "don't do that". Least desirable.
 2. Try to refine the regular expression-based approach I'm using now. Regular expressions are not a good way (even a possible way?) to handle embedded HTML.
 3. Write a small parser to handle pages looking for quoted blocks. I think this would require me to re-work the dataflow from several passes over the text to one that does the translation in a single pass.
 4. Since I'm using flexmark-java as my Markdown to HTML processor, look into the Wikilinks extension. I'm not sure how to handle special formatting for special cases like graying admin pages and making links to non-existent pages red. I'm not sure how extensible it is if I want to add things like namespaces either.
 
-I filed an issue with the flexmark developers and they pointed me to this example:
+I filed an issue with the flexmark developers, and they pointed me to this example:
 
 ### Enforcing Foreign Key Constraints with SQLite and clojure.java.jdbc ###
 
-I'm working on a wiki program and using SQLite as the database. I want to create a many-to-many relationship between wiki pages and tags describing those pages. I'm using  `clojure.java.jdbc` to handle the database operations. I would like to enforce foreign key constraints in the page-to-tags cross-reference table. I looked at the information about foreign keys on the SQLite site (https://www.sqlite.org/foreignkeys.html) and believe something like this is what I want;
+I'm working on a wiki program and using SQLite as the database. I want to create a many-to-many relationship between wiki pages and tags describing those pages. I'm using  `clojure.java.jdbc` to handle the database operations. I would like to enforce foreign key constraints in the page-to-tags cross-reference table. I looked at the information about foreign keys on the SQLite site (https://www.sqlite.org/foreignkeys.html) and believed something like this is what I want;
 
 ```clojure
 (def the-db-name "the.db")
@@ -214,9 +215,9 @@ Just trying to turn the pragma on and check for effect:
 
 The results indicate that the library (org.xerial/sqlite-jdbc "3.21.0.1") was compiled to support foreign keys since there were no errors, but trying to set the pragma has no effect.
 
-I found [this](https://dev.clojure.org/jira/browse/JDBC-38) in the JIRA for the clojure JDBC back in 2012. The described changes have been implemented since then, but the code still has no effect.
+I found [this](https://dev.clojure.org/jira/browse/JDBC-38) in the JIRA for the Clojure JDBC back in 2012. The described changes have been implemented since then, but the code still has no effect.
 
-Finally found [this answer](https://stackoverflow.com/questions/13348843/in-clojure-what-happens-when-you-call-sql-with-connection-within-another-sql-wi) to a Stackoverflow question that pointed to [this post](https://code-know-how.blogspot.ru/2011/10/how-to-enable-foreign-keys-in-sqlite3.html) back in 2011. That allowed me to cobble together something that did seem to set the pragma. The code below depends on creating a specially configured `Connection`.
+Finally found [this answer](https://stackoverflow.com/questions/13348843/in-clojure-what-happens-when-you-call-sql-with-connection-within-another-sql-wi) to a StackOverflow question that pointed to [this post](https://code-know-how.blogspot.ru/2011/10/how-to-enable-foreign-keys-in-sqlite3.html) back in 2011. That allowed me to cobble together something that did seem to set the pragma. The code below depends on creating a specially configured `Connection`.
 
 
 ```clojure
@@ -295,7 +296,7 @@ Based on the above, I rewrote the table creation code above as:
                  (.close conn))))))
 ```
 
-The tables are created as expected. Some of the `clojure.java.jdbc` functions still don't seem to work as desired though. (See the `jdbc/query` call in the middle of the listing.) Getting things to always work as expected seems very "manual" having to fall back on java interop. And it seems like every interaction with the database requires using the specially configured `Connection` returned by the `get-connection` function.
+The tables are created as expected. Some of the `clojure.java.jdbc` functions still don't seem to work as desired though. (See the `jdbc/query` call in the middle of the listing.) Getting things always to work​ as expected seems very "manual" having to fall back on Java interop. And it seems like every interaction with the database requires using the specially configured `Connection` returned by the `get-connection` function.
 
 Is there a better way to enforce foreign key constraints in SQLite in Clojure?
  

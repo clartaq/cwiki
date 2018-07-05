@@ -5,6 +5,7 @@
 
 (ns cwiki-mde.core
   (:require [clojure.string :refer [blank?]]
+            [cljs.pprint :as pprint]
             [cwiki-mde.ws :as ws]
             [reagent.core :as reagent]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
@@ -84,12 +85,14 @@
 
 (defn editor-message-handler
   [{:keys [?data]}]
-  (tracef "Editor: Message received!")
+  (trace "Editor: Message received!")
   (let [message-id (first ?data)]
     (tracef "message-id: %s" message-id)
     (cond
       (= message-id :hey-editor/here-is-the-document) (when-let [the-data (second ?data)]
-                                                        (tracef "the-data: %s" the-data)
+                                                        (tracef "the-data: %s"
+                                                               (with-out-str
+                                                                 (pprint/pprint the-data)))
                                                         (reset! the-page-map the-data)
                                                         (reset! the-doc-content (:page_content @the-page-map)))
       (= message-id :hey-editor/shutdown-after-save) (let [new-location (str "/" (:page_title @the-page-map))]
@@ -148,7 +151,12 @@
    [:input {:type      "text" :class "mde-form-title-field"
             :name      "page-title"
             :value     (if-let [title (:page_title @page-map-atom)]
-                         title
+                         (do
+                           (info title)
+                           (when (= title "favicon.ico")
+                             (infof "Saw funky title: \n%s"
+                                    (with-out-str (pprint/pprint-map @page-map-atom))))
+                         title)
                          "Enter a Title for the Page")
             :on-change (fn [arg]
                          (let [new-title (-> arg .-target .-value)]
@@ -163,6 +171,7 @@
   []
   (ws/start-router! editor-handshake-handler editor-state-handler
                     editor-message-handler)
+  (info "the-editor-container")
   (fn []
     [:div {:class "mde-container"}
      (make-title-input-element the-page-map)

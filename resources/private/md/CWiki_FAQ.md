@@ -2,11 +2,12 @@
 author: CWiki
 title: CWiki FAQ
 date: 2017-10-27T10:21:37.000-04:00
-modified: 2018-05-29T09:41:51.248-04:00
+modified: 2018-06-18T10:04:28.344-04:00
 tags:
   - cwiki
   - FAQ
 ---
+
 
 ​
 This FAQ answers some common questions about CWiki.
@@ -33,9 +34,9 @@ This FAQ answers some common questions about CWiki.
 
 #### What is CWiki NOT good for? <a name="What_is_CWiki_NOT_good_for?"></a> ###
 
-* Huge knowledge collections. The database will not scale to vast data collections. Might be possible if we switch to a DB designed for more "industrial" applications.
+* Huge knowledge collections. The database will not scale to vast data collections. It might be possible if we switch to a DB designed for more "industrial" applications.
 * Collections of images. Not a good fit for sites containing lots and lots of photographs or drawings.
-* Hosting a knowledge base securely on the open Internet. CWiki probably _can_ be hosted on an Internet-facing server, but security characteristics are not well-designed.
+* Hosting a knowledge-base securely on the open Internet. CWiki probably _can_ be hosted on an Internet-facing server, but security characteristics are not well-designed.
 * Languages other than English. It is not internationalized at all.
 * Writing the next Great American (or British, or Australian, or Canadian) novel. At least at present, the editing facilities are too primitive. Maybe in the future.
 
@@ -55,7 +56,7 @@ Just a personal preference on my part. I have a hard time seeing text on phones 
 
 #### Why Doesn't the Content of a Page Use the Entire Width of the Browser Window? <a name="Why_Doesn't_the_Content_of_a_Page_Use_the_Entire_Width_of_the_Browser_Window?"></a> ####
 
-This is on purpose. Since CWiki is intended to contain primarily readable content, the content is restricted in width, so it is easier to read. Beyond a certain line length, it becomes more difficult to read the text. Therefore, CWiki restricts lines to about 70 characters.
+This is on purpose. Since CWiki is intended to contain primarily _readable_​ content, the content is restricted in width, so it is easier to read. Beyond a certain line length, it becomes more difficult to read the text. Therefore, CWiki restricts lines to about 70 characters.
 
 #### What Version of Markdown Does CWiki Use? <a name="What_Version_of_Markdown_Does_CWiki_Use?"></a> ####
 

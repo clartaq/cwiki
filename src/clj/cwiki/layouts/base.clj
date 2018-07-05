@@ -15,7 +15,7 @@
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :as special]
             [cwiki.util.wikilinks :refer [replace-wikilinks
-                                          get-edit-link-for-existing-page
+                                          ;get-edit-link-for-existing-page
                                           get-delete-link-for-existing-page
                                           get-mde-edit-link-for-existing-page]]
             [hiccup.page :refer [html5 include-css include-js]]
@@ -157,10 +157,10 @@
    (let [allow-editing (not (:editing options))
          title (db/page-map->title post-map)
          can-edit-and-delete (ath/can-edit-and-delete? req title)
-         edit-link (and post-map
-                        allow-editing
-                        can-edit-and-delete
-                        (get-edit-link-for-existing-page post-map req))
+         ;edit-link (and post-map
+         ;               allow-editing
+         ;               can-edit-and-delete
+         ;               (get-edit-link-for-existing-page post-map req))
          mde-link (and post-map
                        allow-editing
                        can-edit-and-delete
@@ -176,7 +176,7 @@
       ;  (menu-item-span [:a {:href "/New MDE Page"} "New MDE"]))
       ;(when edit-link
       ;  (menu-item-span edit-link))
-      (when edit-link
+      (when mde-link
         (menu-item-span mde-link)) ;[:a {:href "/mde"} "mde"]))
       (when delete-link
         (menu-item-span delete-link))

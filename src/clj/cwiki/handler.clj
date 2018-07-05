@@ -20,7 +20,8 @@
             [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.util.response :refer [redirect status]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]))
+                                     trace debug info warn error]]
+            [cwiki.util.pp :as pp]))
 
 (def backend (backends/session))
 
@@ -61,8 +62,12 @@
 
       (s/ends-with? title "/mde-edit") (let [title-only (s/replace title "/mde-edit" "")]
                                          (if (ath/can-edit-and-delete? request title-only)
-                                           (let [new-body (layout-editor/layout-editor-page
-                                                            (db/find-post-by-title title-only) request)
+                                           (let [post (db/find-post-by-title title-only)
+                                                 _ (println "post: \n" (pp/pp-map post))
+                                                 new-body (layout-editor/layout-editor-page
+                                                            post
+                                                            ;(db/find-post-by-title title-only)
+                                                            request)
                                                  response (build-response new-body request)]
                                              response)
                                            ;else

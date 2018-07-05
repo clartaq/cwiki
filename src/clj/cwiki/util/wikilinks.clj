@@ -51,6 +51,7 @@
       {:title-part clean-link :display-part clean-link})))
 
 (defn get-mde-edit-link-for-existing-page
+  "Return a link to be used with a button or menu."
   [post-map req]
   (let [page-title (db/page-map->title post-map)]
     (when (special/is-editable? page-title)

@@ -1,19 +1,20 @@
 ---
-title: About Front Matter
 author: CWiki
-date: 2017-12-24T17:15:16.000000-05:00
-updated: 2018-03-11T10:34:00.301051-04:00
+title: About Front Matter
+date: 2017-12-24T17:15:16.000-05:00
+modified: 2018-06-19T09:58:53.242-04:00
 tags:
   - about
   - front matter
-  - meta data
+  - metadata
 ---
 
-The information is relevant only if you use the [[About Import/Export|Import/Export]] capabilities of CWiki to read and save posts to and from disk.
 
-Front matter is meta-information you can include in your post file in a special section of text at the top of a Markdown file. CWiki supports front matter in the [YAML](http://yaml.org/) format as supported by the [Hugo](https://gohugo.io) or [Jekyll](https://github.com/jekyll/jekyll) static blog generator. (CWiki does not support templating like either Hugo or Jekyll does.)
+This information is relevant only if you use the [[About Import/Export|Import/Export]] capabilities of CWiki to read and save posts to and from disk.
 
-CWiki handles a very small subset of what YAML can do. It just looks for a few different tags to use in wiki page descriptions. For example, the front matter for this document consists of:
+Front matter is meta-information you can include in your post file in a special section of text at the top of a Markdown file. CWiki supports front matter in the [YAML](http://yaml.org/) format as supported by the [Hugo](https://gohugo.io) or [Jekyll](https://github.com/jekyll/jekyll) static blog generators. (CWiki does not support templating as both Hugo and Jekyll do.)
+
+CWiki handles a minimal subset of what YAML can do. It just looks for a few different tags to use in wiki page descriptions. For example, the front matter for this document consists of:
 
 ```yaml
 ---
@@ -24,7 +25,7 @@ updated: 2018-03-11T10:20:12.235913-04:00
 tags:
   - about
   - front matter
-  - meta data
+  - metadata
 ---
 ```
 
@@ -50,11 +51,11 @@ If no title is present, a really ugly, random title will be created and used. Th
 ### The author must already be known to CWiki ###
 If the author does not already exist in the database, the contents of the file will not be added to the database.
 
-This is not as difficult a restriction as you might think. You can always use "CWiki" as the author and the file will be accepted. This is the same mechanism the program uses to populate the initial database right after the database tables are created. (The built-in "guest" account cannot be used since it is not authorized to add new content to the wiki.)
+This is not as difficult a restriction as you might think. You can always use "CWiki" as the author, and the file will be accepted. This is the same mechanism the program uses to populate the initial database right after the database tables are created. (The built-in "guest" account cannot be used since it is not authorized to add new content to the wiki.)
 
 Because of this, **this is in no way a security feature**.
 
-### The date time must be in exactly the format shown ###
+### The date-time must be in precisely​ the format shown ###
 
 Any other date time format will cause the program to crash. I realize this is extremely fragile and will likely change in future.
 
@@ -67,4 +68,3 @@ The creation date and time will be shown as the date and time that the file was 
 
 ### If there is no modification date, the creation date and time will be used ###
 The creation and modification date/time will be the same in this case.
-
