@@ -2,7 +2,7 @@
 author: Unknown
 title: About Seed Pages
 date: 2018-06-16T09:45:14.557-04:00
-modified: 2018-06-16T10:18:01.343-04:00
+modified: 2018-06-16T10:35:21.722-04:00
 tags:
   - about
   - cwiki
@@ -24,7 +24,7 @@ Within that particular directory there a many Markdown files, the text for the s
 
 Anyone with the "editor" or "admin" role can change the contents of the seed pages just like any other page in the wiki. As you edit and save pages, the contents are updated in the database.
 
-If you are an "admin" for the wiki, you can also make use of the "Save Seed" item in the "More" drop-down menu at the top of the page. This will write the changes over the existing file in the resource directory. This way, you can delete the database and re-run the program to create an initial database with the content you want in the seed pages.
+If you are an "admin" for the wiki, you can also make use of the "Save Seed" item in the "More" drop-down menu at the top of the page. This will write the changes over the existing file in the resource directory. This way, you can delete the database and re-run the program to create an initial database with the content you want in the seed pages. **This only makes sense if you are a developer.**
 
 ### Changing the Seed Page List ###
 
@@ -32,4 +32,4 @@ If you want a different list of pages when building the initial database, you ca
 
 The only restriction is that there must be a page with the title "Front Page". It's the "go to"​ page to display when starting the program or some weird error occurs. This may change in the future. You may eventually be able to specify the home page in the program options. But not yet.
 
-Of course,​ to change the file list, you probably have to be a developer who can regenerate the program's jar file.
+**Of course,​ to change the file list, you have to be a developer who can regenerate the program's jar file. You cannot save revisions back to the jar file.**

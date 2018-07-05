@@ -6,7 +6,8 @@
             [clojure.string :as s]
             [cwiki.util.files :as files]
             [cwiki.util.special :as special]
-            [cwiki.util.datetime :as dt])
+            [cwiki.util.datetime :as dt]
+            [environ.core :refer [env]])
   (:import (java.io File)
            (java.util UUID)
            (org.h2.jdbc JdbcClob)))
@@ -731,6 +732,7 @@
   "Initialize the database. Will create the database and
   tables if needed."
   []
+  (println "db: " (env :db))
   (when-not (db-exists? db-file-name-long)
     (println "Creating initial database.")
     (io/make-parents db-file-name)

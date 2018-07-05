@@ -5,9 +5,9 @@
             :url "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/clojurescript "1.10.238"]
+                 [org.clojure/clojurescript "1.10.339"]
                  [org.clojure/core.async "0.4.474"]
-                 [org.clojure/java.jdbc "0.7.6"]
+                 [org.clojure/java.jdbc "0.7.7"]
 
                  [buddy/buddy-auth "2.1.0"]
                  [buddy/buddy-hashers "1.3.0"]
@@ -17,11 +17,12 @@
                  [clj-time "0.14.4"]
                  [com.taoensso/sente "1.12.0"]
                  [com.taoensso/timbre "4.10.0"]
-                 [com.vladsch.flexmark/flexmark "0.34.0"]
-                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.0"]
-                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.0"]
-                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.0"]
+                 [com.vladsch.flexmark/flexmark "0.34.4"]
+                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.4"]
+                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.4"]
+                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.4"]
                  [compojure "1.6.1"]
+                 [environ "1.1.0"]
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
                  [javax.xml.bind/jaxb-api "2.3.0"]
@@ -42,6 +43,7 @@
             "start-prod" ["do" "clean," "cljsbuild" "once" "min," "run"]}
 
   :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
+            [lein-environ "1.1.0"]
             [lein-ring "0.12.1"]]
 
   :ring {:handler cwiki.handler/app
@@ -62,7 +64,9 @@
               }
              :dev
              {:main user
-              :dependencies [[binaryage/devtools "0.9.10"]
+              :env {:db "dev-db"
+                    :reloading-middleware true}
+              :dependencies [;[binaryage/devtools "0.9.10"] I don't use chrome
                              [cider/piggieback "0.3.6"]
                              [figwheel-sidecar "0.5.16"]
                              [ring/ring-mock "0.3.2"]

@@ -1,14 +1,15 @@
 ---
-title: Wikilinks
 author: CWiki
-date: 12/08/2017 5:36:19 PM 
-updated: 1/8/2018 4:08:27 PM 
+title: Wikilinks
+date: 2017-12-08T17:36:19.000-05:00
+modified: 2018-06-18T17:43:21.073-04:00
 tags:
-  - wikilinks
   - links
+  - wikilinks
 ---
 
-Wikilinks are simply internal links within the wiki. That is, they just point to different pages within the wiki. They do not point to locations external to the wiki.
+
+Wikilinks are internal links within the wiki. That is, they point to different pages within the wiki. They do not lead​ to locations external to the wiki.
 
 However, just as with most wikis, CWiki supports HTML links which can point to other sites on the Internet.
 

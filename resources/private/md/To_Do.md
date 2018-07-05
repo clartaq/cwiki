@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-06-15T17:20:20.057-04:00
+modified: 2018-07-05T17:17:56.535-04:00
 tags:
   - architecture
   - bugs
@@ -41,6 +41,8 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 * After going to the [[All Tags]] page and selecting a particular tag to search for, the program shows a clickable list of all pages with that tag. However, on this list of pages, the header menu shows an "Edit" and "Delete" selection,​ which is something you cannot do on a program-generated page.
     * This issue ([#2](https://bitbucket.org/David_Clark/cwiki/issues/2/program-generated-pages-should-not-be)) was **resolved** in commit [80e6ab0](https://bitbucket.org/David_Clark/cwiki/commits/80e6ab0).
 
+* When you create a new post, the program no longer picks up the name of the currently logged in user as the author of the post.
+
 ### Enhancements <a name="enhancements"></a>
 
 * Synchronize scrolling between the editing and preview panes of the editor.
@@ -75,6 +77,8 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 
 * Just a convenience for me, but since I do a lot of editing of the seed pages, it would be nice to save them to the same location as the seed files used to create a new database rather than my current practice of exporting them, then moving them into place manually.
     * This ssue [#16](https://bitbucket.org/David_Clark/cwiki/issues/16/let-admin-save-seed-pages) was resolved in commit [72e6644](https://bitbucket.org/David_Clark/cwiki/commits/72e6644b6215ac44713fa56cddd51f497283de6d).
+
+* It sure would be nice if the tags interface during editing provided some ​autocompletion or hints so you could see which tags already exist. (Is it "bug" or "bugs" for this type of post?)
 
 ### Architecture <a name="architecture"></a>
 
