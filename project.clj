@@ -27,9 +27,17 @@
                  [http-kit "2.3.0"]
                  [javax.xml.bind/jaxb-api "2.3.0"]
                  [reagent "0.8.1"]
+                 [ring/ring-devel "1.6.3"]
                  [ring/ring-defaults "0.3.2"]]
 
+  :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
+            [lein-environ "1.1.0"]
+            [lein-ring "0.12.1"]
+            [lein-asset-minifier "0.2.7" :exclusions [org.clojure/clojure]]]
+
   :main cwiki.main
+
+  :uberjar-name "cwiki.jar"
 
   :source-paths ["src/clj"]
 
@@ -39,12 +47,13 @@
                                     "target"
                                     "test/js/compiled"]
 
+  :minify-assets {:assets
+                  {"resources/public/css/styles.min.css" "resources/public/css/styles.css"
+                   "resources/public/css/mde.min.css" "resources/public/css/mde.css"
+                   "resources/public/css/editor-styles.min.css" "resources/public/css/editor-styles.css"}}
+
   :aliases {"test-cljs"  ["doo" "slimer" "test" "auto"]
             "start-prod" ["do" "clean," "cljsbuild" "once" "min," "run"]}
-
-  :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
-            [lein-environ "1.1.0"]
-            [lein-ring "0.12.1"]]
 
   :ring {:handler cwiki.handler/app
          :init    cwiki.handler/init
@@ -52,19 +61,10 @@
 
   :figwheel {:css-dirs ["resources/public/css"]}
 
-  :profiles {:uberjar
-             {:aot         :all
-              :omit-source true
-              :hooks       []
-              :prep-tasks  ["clean" "compile" ["cljsbuild" "once" "min"]]
-              ; This really shouldn't be required. There is some sort of
-              ; dependency version incompatibility somewhere that needs
-              ; to be fixed..
-              :dependencies [[ring/ring-mock "0.3.2"]]
-              }
-             :dev
+  :profiles {:dev
              {:main user
               :env {:db "dev-db"
+                    :dev true
                     :reloading-middleware true}
               :dependencies [;[binaryage/devtools "0.9.10"] I don't use chrome
                              [cider/piggieback "0.3.6"]
@@ -74,7 +74,18 @@
               :source-paths ["dev" "src/cljs"]
               :plugins      [[lein-doo "0.1.10"]
                              [lein-figwheel "0.5.16"]]
-              :test-paths   ["test/cljs"]}}
+              :test-paths   ["test/cljs"]}
+             :uberjar
+             {:aot         :all
+              :omit-source true
+              :hooks        [minify-assets.plugin/hooks]
+              :prep-tasks  ["clean" "compile" ["cljsbuild" "once" "min"]]
+              ; This really shouldn't be required. There is some sort of
+              ; dependency version incompatibility somewhere that needs
+              ; to be fixed..
+              :dependencies [[ring/ring-mock "0.3.2"]]
+              :env          {:production true}}
+             }
 
   :cljsbuild {:builds
               [{:id           "dev"
