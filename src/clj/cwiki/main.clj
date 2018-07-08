@@ -3,12 +3,12 @@
   (:require [cwiki.handler :refer [app init destroy]]
             [cwiki.models.wiki-db :as db]
             [cwiki.routes.ws :as ws]
+            [environ.core :refer [env]]
             [org.httpkit.server :as http-kit]
             [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.file-info :refer [wrap-file-info]]
+            [ring.middleware.reload :refer [wrap-reload]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf]]))
-
-; [ring.middleware.reload :as reload]
 
 (defonce server (atom nil))
 
@@ -23,23 +23,21 @@
       ; Content-Type, Content-Length, and Last Modified headers for files in body.
       (wrap-file-info)))
 
-;(def in-dev? true)
-
 (defonce ^{:private true} web-server_ (atom nil))
 
 (defn- stop-web-server! []
-  (when-let [stop-fn @web-server_] (stop-fn)))
+  (when-let [stop-fn @web-server_]
+    (stop-fn)))
 
 (defn- start-web-server! [& [port]]
   (stop-web-server!)
   (let [port (or port 1350)
-        ring-handler ;(if in-dev?
-        ;(reload/wrap-reload (get-handler))
-        (get-handler)
-        ;)
-        [port stop-fn] (let [stop-fn (http-kit/run-server ring-handler {:port port})]
+        ring-handler (if (true? (env :dev))
+                       (wrap-reload (get-handler))
+                       (get-handler))
+        [port-used stop-fn] (let [stop-fn (http-kit/run-server ring-handler {:port port})]
                          [(:local-port (meta stop-fn)) (fn [] (stop-fn :timeout 100))])
-        uri (format "http://localhost:%s/" port)]
+        uri (format "http://localhost:%s/" port-used)]
 
     (infof "Web server is running at `%s`" uri)
     (try

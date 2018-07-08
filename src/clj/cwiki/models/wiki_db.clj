@@ -733,6 +733,8 @@
   tables if needed."
   []
   (println "db: " (env :db))
+  (println "(env :dev): " (env :dev))
+  (println "(env :production): " (env :production))
   (when-not (db-exists? db-file-name-long)
     (println "Creating initial database.")
     (io/make-parents db-file-name)
