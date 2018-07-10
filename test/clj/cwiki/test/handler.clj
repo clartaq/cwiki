@@ -1,7 +1,7 @@
 (ns cwiki.test.handler
-  (:use clojure.test
-        ring.mock.request
-        cwiki.handler))
+  (:require [clojure.test :refer [deftest testing is]]
+            [cwiki.handler :refer [app]]
+            [ring.mock.request :refer [request]]))
 
 (deftest test-app
   (testing "main route"

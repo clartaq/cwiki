@@ -1,35 +1,23 @@
 (ns cwiki.handler
-  (:require [buddy.auth.backends :as backends]
-            [buddy.auth.middleware :refer [wrap-authentication]]
-            [cemerick.url :as u]
+  (:require [cemerick.url :as u]
             [clojure.string :as s]
             [compojure.core :refer [defroutes routes]]
-            [compojure.handler :as handler]
             [compojure.response :as response]
             [compojure.route :as route]
             [cwiki.layouts.base :as layout]
             [cwiki.layouts.editor :as layout-editor]
+            [cwiki.middleware :as middleware]
             [cwiki.models.wiki-db :as db]
             [cwiki.routes.admin :refer [admin-routes]]
             [cwiki.routes.home :refer [home-routes]]
             [cwiki.routes.ws :refer [websocket-routes]]
             [cwiki.routes.login :refer [login-routes]]
             [cwiki.util.authorization :as ath]
+            [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
-            [hiccup.middleware :refer [wrap-base-url]]
-            [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
             [ring.util.response :refer [redirect status]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]
-            [cwiki.util.pp :as pp]))
-
-(def backend (backends/session))
-
-(defn init []
-  (println "CWiki is starting"))
-
-(defn destroy []
-  (println "CWiki is shutting down"))
+                                     trace debug info warn error]]))
 
 (defn- build-response
   ([body req]
@@ -131,10 +119,7 @@
            (page-finder-route)
            (route/not-found (layout/compose-404-page)))
 
-(def app
-  (-> (routes admin-routes home-routes login-routes websocket-routes app-routes)
-      (wrap-authentication backend)
-      (handler/site)
-      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-      (wrap-base-url)))
+(def all-routes (routes admin-routes home-routes login-routes websocket-routes app-routes))
+
+(def app (middleware/wrap-middleware all-routes))
 

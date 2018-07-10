@@ -79,11 +79,6 @@
   (when bad-string
     (s/replace bad-string "'" "''")))
 
-;(defn unescape-apostrophes
-;  [bad-string]
-;  (when bad-string
-;    (s/replace bad-string "''" "'")))
-
 (defn user-name->user-id
   ([name]
    (user-name->user-id name h2-db))
@@ -728,10 +723,11 @@
   [db-name]
   (.exists ^File (clojure.java.io/as-file db-name)))
 
-(defn init-db!
+(defn start-db!
   "Initialize the database. Will create the database and
   tables if needed."
   []
+  (println "Starting database.")
   (println "db: " (env :db))
   (println "(env :dev): " (env :dev))
   (println "(env :production): " (env :production))
@@ -740,3 +736,6 @@
     (io/make-parents db-file-name)
     (create-db h2-db)))
 
+(defn stop-db!
+  []
+  (println "Stopping database."))

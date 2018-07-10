@@ -95,18 +95,18 @@
 
 (defonce router_ (atom nil))
 
-(defn stop-router!
+(defn stop-ws-router!
   "Stop the websocket router."
   []
-  (trace "Stopping websocket router.")
+  (info "Stopping websocket router.")
   (when-let [stop-fn @router_]
     (stop-fn)))
 
-(defn start-router!
+(defn start-ws-router!
   "Start the websocket router."
   []
-  (trace "Starting websocket router.")
-  (stop-router!)
+  (stop-ws-router!)
+  (info "Starting websocket router.")
   (reset! router_
           (sente/start-server-chsk-router!
             ch-chsk handle-message!)))

@@ -1,19 +1,20 @@
 ---
-title: Code Formatting and Highlighting
 author: CWiki
-date: 2018-03-07T17:40:28-05:00
-modified: 2018-03-11T09:43:02.090476-04:00
+title: Code Formatting and Highlighting
+date: 2018-03-07T17:40:28.000-05:00
+modified: 2018-07-10T17:34:25.050-04:00
 tags:
+  - cwiki
   - technical note
   - text formatting
-  - cwiki
 ---
 
-Markdown has a few ways to format code built in. In order to get it to look right, you probably have to fiddle with the CSS of the site. It isn't a perfectly straightforward problem.
+
+Markdown has a few ways to format code built in. To get it to look right, you probably have to fiddle with the CSS of the site. It isn't a perfectly straightforward problem.
 
 ## Methods of Formatting Code ##
 
-You can use the backtick ("\`", also known formally as a "grave accent") to format `code inline` like that. For blocks of code, you can simply indent each line with four spaces.
+You can use the backtick ("\`", also known formally as a "grave accent") to format `code inline` like that. For blocks of code, you can merely indent each line with four spaces.
 
     (defn ex
       [an-arg]
@@ -49,7 +50,7 @@ A lovely sunset.
 
 CSS for `<pre>` tags should not assume that there will be a code block within the tags unless it includes some special class that handles it.
 
-[GFM](https://github.github.com/gfm/), which CWiki emulates, offers the convenience of what it calls "fenced code blocks" using a triple backtick ("\`\`\`") before and after the code block -- no indenting is required.
+Github Flavored Markdown ([GFM](https://github.github.com/gfm/)), which CWiki emulates, offers the convenience of what it calls "fenced code blocks" using a triple backtick ("\`\`\`") before and after the code block -- no indenting is required.
 
 ```
 (defn ex
@@ -80,7 +81,7 @@ In the end, I decided to use [highlight.js](https://highlightjs.org).
 * It works with lots of languages.
 * It's themable.
 
-The package used in CWiki is a custom download that includes most of the languages I have ever used or am interested in. So it's a little smaller than the complete package, but larger than that available over CDN.
+The package used in CWiki is a custom download that includes most of the languages I have ever used or am interested in. So it's a little smaller than the complete package but larger than that available over CDN.
 
 ## Use Cases ##
 
@@ -100,7 +101,7 @@ The CSS used for these situations must look nice and handle the interactions gra
 
 The inline backticks are pretty easy. The get transformed to `<code></code>` tags surrounding the included text. CSS for the `<code>` tag will take care of the formatting of the inline code.
 
-For this, I use CSS to select from a family of fixed-width fonts, give it a size, color, and background color. Adust margins and padding so it doesn't mess up the line spacing for "normal" text surrounding it. You can see the results in the paragraph above.
+For this, I use CSS to select from a family of fixed-width fonts, give it a size, color, and background color. Adjust margins and padding, so it doesn't mess up the line spacing for "normal" text surrounding it. You can see the results in the paragraph above.
 
 ### Pre-formatted Text ###
 
@@ -174,9 +175,8 @@ will give something like
 => 17
 ```
 
-which looks a little better. The code class it uses in this case is `<code class="language-clojure hljs">.`
+which looks a little better. The code class it uses, in this case, is `<code class="language-clojure hljs">.`
 
-This is a useful tactic if your code block is to short for `highlight.js` to do a reliable recognition. It also precludes just using indenting the block by four spaces. If you only indent, the language will not be recognized correctly and the wrong highlighting will be applied.
+This is a useful tactic if your code block is to short for `highlight.js` to do a reliable recognition. It also precludes just using indenting the block by four spaces. If you only indent, the language will not be recognized correctly, ​and the wrong highlighting will be applied.
 
 [^1]: [This haiku was written by Basho Matsuo (1644-1694) and copied from "Examples of Haiku Poems" on steemit.com](http://examples.yourdictionary.com/examples-of-haiku-poems.html)
-
