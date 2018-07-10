@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-07-05T17:17:56.535-04:00
+modified: 2018-07-08T10:24:42.450-04:00
 tags:
   - architecture
   - bugs
@@ -11,6 +11,7 @@ tags:
   - process
   - technical note
 ---
+
 
 ​
 An ever-evolving list of things to be fixed and improved. These fall into the following categories:
@@ -79,6 +80,8 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
     * This ssue [#16](https://bitbucket.org/David_Clark/cwiki/issues/16/let-admin-save-seed-pages) was resolved in commit [72e6644](https://bitbucket.org/David_Clark/cwiki/commits/72e6644b6215ac44713fa56cddd51f497283de6d).
 
 * It sure would be nice if the tags interface during editing provided some ​autocompletion or hints so you could see which tags already exist. (Is it "bug" or "bugs" for this type of post?)
+
+* There should be a better separation between the stuff required for development (dependencies, plugins, middleware) and the stuff required for a production build. Might even cut down on the uberjar size.
 
 ### Architecture <a name="architecture"></a>
 

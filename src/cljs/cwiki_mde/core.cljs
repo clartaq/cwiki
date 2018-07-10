@@ -169,8 +169,8 @@
   "Starts the websocket router and returns a function that lays out
   the editor and preview area side-by-side."
   []
-  (ws/start-router! editor-handshake-handler editor-state-handler
-                    editor-message-handler)
+ ; (ws/start-router! editor-handshake-handler editor-state-handler
+ ;                   editor-message-handler)
   (info "the-editor-container")
   (fn []
     [:div {:class "mde-container"}
@@ -209,4 +209,9 @@
   (reagent/render [the-editor-container] (.getElementById js/document "editor-container")))
 
 (defn ^:export main []
+  (reload))
+
+(defn init! []
+  (ws/start-router! editor-handshake-handler editor-state-handler
+                    editor-message-handler)
   (reload))
