@@ -48,27 +48,18 @@
       (= title "Orphans") (let [new-body (layout/compose-not-yet-view "Orphans")]
                             (build-response new-body request))
 
-      (s/ends-with? title "/mde-edit") (let [title-only (s/replace title "/mde-edit" "")]
-                                         (if (ath/can-edit-and-delete? request title-only)
-                                           (let [post (db/find-post-by-title title-only)
-                                                 _ (println "post: \n" (pp/pp-map post))
-                                                 new-body (layout-editor/layout-editor-page
-                                                            post
-                                                            ;(db/find-post-by-title title-only)
-                                                            request)
-                                                 response (build-response new-body request)]
-                                             response)
-                                           ;else
-                                           (build-response (layout/compose-403-page) request 403)))
-
       (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")]
                                      (if (ath/can-edit-and-delete? request title-only)
-                                       (let [new-body (layout/compose-create-or-edit-page
-                                                        (db/find-post-by-title title-only) request)
+                                       (let [post (db/find-post-by-title title-only)
+                                             ;_ (println "existing post: \n" (pp/pp-map post))
+                                             new-body (layout-editor/layout-editor-page
+                                                        post
+                                                        request)
                                              response (build-response new-body request)]
                                          response)
                                        ;else
                                        (build-response (layout/compose-403-page) request 403)))
+
       (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")]
                                        (if (ath/can-edit-and-delete? request title-only)
                                          (let [new-body (layout/view-wiki-page
@@ -83,29 +74,22 @@
       (s/ends-with? title "/as-tag") (let [tag-only (s/replace title "/as-tag" "")
                                            new-body (layout/compose-all-pages-with-tag tag-only request)]
                                        (build-response new-body request))
-      :else (let [title-only (s/replace title "/mde-edit" "")]
+      ; This is the fall through case. We make the assumption that if the page
+      ; doesn't already exist, the user wants to create it.
+      :else (let [title-only (s/replace title "/edit" "")]
               (if (ath/can-edit-and-delete? request title-only)
-                (let [new-body (layout-editor/layout-editor-page
-                                 (db/create-new-post-map
-                                   title-only
-                                   ""
-                                   (ri/req->user-id request)) request)
-                      ;(db/find-post-by-title title-only) request)
+                (let [new-post (db/create-new-post-map
+                                 title-only
+                                 ""
+                                 (ri/req->user-id request))
+                      ;_ (println "new post: \n" (pp/pp-map new-post))
+                      new-body (layout-editor/layout-editor-page
+                                 new-post
+                                 request)
                       response (build-response new-body request)]
                   response)
                 ;else
-                (build-response (layout/compose-403-page) request 403)))
-      ;(if (ath/can-create? request)
-      ;  (let [title-only (s/replace title "/create" "")
-      ;        new-body (layout/compose-create-or-edit-page
-      ;                   (db/create-new-post-map
-      ;                     title-only
-      ;                     ""
-      ;                     (ri/req->user-id request)) request)]
-      ;    (build-response new-body request))
-      ;  ;else
-      ;  (build-response (layout/compose-403-page) request 403))
-      )))
+                (build-response (layout/compose-403-page) request 403))))))
 
 (defn page-finder-route
   []

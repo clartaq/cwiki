@@ -15,9 +15,8 @@
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :as special]
             [cwiki.util.wikilinks :refer [replace-wikilinks
-                                          ;get-edit-link-for-existing-page
                                           get-delete-link-for-existing-page
-                                          get-mde-edit-link-for-existing-page]]
+                                          get-edit-link-for-page]]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [drop-down email-field form-to hidden-field
                                  password-field select-options
@@ -160,11 +159,11 @@
          ;edit-link (and post-map
          ;               allow-editing
          ;               can-edit-and-delete
-         ;               (get-edit-link-for-existing-page post-map req))
+         ;               (get-edit-link-for-page post-map req))
          mde-link (and post-map
                        allow-editing
                        can-edit-and-delete
-                       (get-mde-edit-link-for-existing-page post-map req))
+                       (get-edit-link-for-page post-map req))
          delete-link (and post-map
                           allow-editing
                           can-edit-and-delete
