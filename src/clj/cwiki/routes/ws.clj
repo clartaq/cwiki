@@ -32,17 +32,15 @@
 (defn- save-doc!
   "Save new, edited content."
   [websocket-data]
-  ;(infof "save-doc!: websocket-data: %s" websocket-data)
+  (tracef "save-doc!: websocket-data: %s" websocket-data)
   (let [post-map (:data websocket-data)
         id (db/page-map->id post-map)
         title (db/page-map->title post-map)
         content (db/page-map->content post-map)
         tags (:tags post-map)]
-    (tracef "save-doc!:\n  id: %s\n  title: %s\n  tags: %s\n  content: %s"
-           id title tags (str (take 20 content)))
     (if id
       (db/update-page-title-and-content! id title (set tags) content)
-      (save-new-doc! title content tags (:author_id post-map)))))
+      (save-new-doc! title content tags (:page_author post-map)))))
 
 (defn send-document-to-editor
   "Get the post to be edited and send it to the editor."
