@@ -1,6 +1,5 @@
 (ns cwiki.repl
   (:require [cwiki.main :as main]
-            ;[cwiki.handler :as handler]
     ; Just so all the functions are available in the repl.
             [figwheel-sidecar.repl-api :refer :all]))
 
