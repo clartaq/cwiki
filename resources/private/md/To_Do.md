@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-07-08T10:24:42.450-04:00
+modified: 2018-07-11T17:30:34.140-04:00
 tags:
   - architecture
   - bugs
@@ -11,6 +11,7 @@ tags:
   - process
   - technical note
 ---
+
 
 
 ​
@@ -43,6 +44,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
     * This issue ([#2](https://bitbucket.org/David_Clark/cwiki/issues/2/program-generated-pages-should-not-be)) was **resolved** in commit [80e6ab0](https://bitbucket.org/David_Clark/cwiki/commits/80e6ab0).
 
 * When you create a new post, the program no longer picks up the name of the currently logged in user as the author of the post.
+   * This issue ([#17](https://bitbucket.org/David_Clark/cwiki/issues/17/page-author-not-correctly-assigned-for-new)) was **resolved** in commit [c14bce0](https://bitbucket.org/David_Clark/cwiki/commits/c14bce00feffac5bdd6793c2ed6c5287b6a7f3a3).
 
 ### Enhancements <a name="enhancements"></a>
 
