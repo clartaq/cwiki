@@ -508,6 +508,7 @@
   ([title content tags]
    (insert-new-page! title content tags (get-cwiki-user-id)))
   ([title content tags author-id]
+   (tracef "insert-new-page!: title: %s, tags: %s, author-id: %s" title tags author-id)
    (let [db h2-db                                           ; ****
          post-map (create-new-post-map title content author-id)]
      (jdbc/insert! db :pages post-map)
