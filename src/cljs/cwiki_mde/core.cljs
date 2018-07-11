@@ -85,12 +85,11 @@
 
 (defn editor-message-handler
   [{:keys [?data]}]
-  (trace "Editor: Message received!")
   (let [message-id (first ?data)]
-    (tracef "message-id: %s" message-id)
+    (tracef "editor-message-handler: message-id: %s" message-id)
     (cond
       (= message-id :hey-editor/here-is-the-document) (when-let [the-data (second ?data)]
-                                                        (tracef "the-data: %s"
+                                                        (tracef "editor-message-handler: the-data: %s"
                                                                (with-out-str
                                                                  (pprint/pprint the-data)))
                                                         (reset! the-page-map the-data)
@@ -134,7 +133,7 @@
 (defn make-tag-list-input-component
   "Build and return the piece of the page allowing tags to be edited."
   [page-map-atom]
-  (tracef "tags %s" (:tags @page-map-atom))
+  (tracef "make-tag-list-input-component: tags %s" (:tags @page-map-atom))
   [:div {:class "tag-edit-container tag-edit-section"}
    [:label {:class "tag-edit-label"} "Tags"]
    [:div {:class "mde-tag-edit-list" :id "mde-tag-edit-list"}
@@ -152,7 +151,7 @@
             :name      "page-title"
             :value     (if-let [title (:page_title @page-map-atom)]
                          (do
-                           (info title)
+                           (tracef "make-title-input-element: title: %s" title)
                            (when (= title "favicon.ico")
                              (infof "Saw funky title: \n%s"
                                     (with-out-str (pprint/pprint-map @page-map-atom))))
@@ -173,9 +172,9 @@
  ;                   editor-message-handler)
   (info "the-editor-container")
   (fn []
+    (tracef "the-editor-container: @the-page-map: %s" @the-page-map)
     [:div {:class "mde-container"}
      (make-title-input-element the-page-map)
-     (tracef "the tags: %s" (:tags @the-page-map))
      (make-tag-list-input-component the-page-map)
      [:div {:class "mde-content-label-div"}
       [:label {:class "form-label"
