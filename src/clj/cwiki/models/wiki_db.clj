@@ -7,7 +7,9 @@
             [cwiki.util.files :as files]
             [cwiki.util.special :as special]
             [cwiki.util.datetime :as dt]
-            [environ.core :refer [env]])
+            [environ.core :refer [env]]
+            [taoensso.timbre :refer [trace debug info warn error
+                                     tracef debugf infof warnf errorf]])
   (:import (java.io File)
            (java.util UUID)
            (org.h2.jdbc JdbcClob)))
@@ -727,7 +729,7 @@
   "Initialize the database. Will create the database and
   tables if needed."
   []
-  (println "Starting database.")
+  (info "Starting database.")
   (println "db: " (env :db))
   (println "(env :dev): " (env :dev))
   (println "(env :production): " (env :production))
@@ -738,4 +740,4 @@
 
 (defn stop-db!
   []
-  (println "Stopping database."))
+  (info "Stopping database."))
