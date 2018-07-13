@@ -42,7 +42,7 @@
 
 (defn insert-test-data
   [title content tags]
-  (let [new-id (:page_id (insert-new-page! title content tags))]
+  (let [new-id (:page_id (insert-new-page! title content tags (get-cwiki-user-id)))]
     new-id))
 
 (deftest delete-page-by-id-test
