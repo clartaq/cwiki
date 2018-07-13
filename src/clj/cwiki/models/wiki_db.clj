@@ -499,18 +499,16 @@
                  ["page_id=?" id])
    (update-tags-for-page tag-set id db)))
 
-;!!! PROBLEM -- Assumes use of the default wiki database.
 (defn insert-new-page!
   "Insert a new page into the database given a title, tags and content.
   Return the post map for the new page (including id and dates).
   If the arguments do not include an author id, use the CWiki
   author id (same as CWiki user id)."
-  ([title content tags]
-   (insert-new-page! title content tags (get-cwiki-user-id)))
   ([title content tags author-id]
+   (insert-new-page! title content tags author-id h2-db))
+  ([title content tags author-id db]
    (tracef "insert-new-page!: title: %s, tags: %s, author-id: %s" title tags author-id)
-   (let [db h2-db                                           ; ****
-         post-map (create-new-post-map title content author-id)]
+   (let [post-map (create-new-post-map title content author-id)]
      (jdbc/insert! db :pages post-map)
      (let [pm (find-post-by-title title db)
            id (page-map->id pm)]
