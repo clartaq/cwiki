@@ -11,16 +11,17 @@
 
                  [buddy/buddy-auth "2.1.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [buddy/buddy-hashers "1.3.0"]
-                 [com.cemerick/url "0.1.1"]
-                 [com.h2database/h2 "1.4.197"]
                  [circleci/clj-yaml "0.5.6"]
                  [clj-time "0.14.4"]
+                 [com.cemerick/url "0.1.1"]
+                 [com.h2database/h2 "1.4.197"]
+                 [com.stuartsierra/component "0.3.2"]
                  [com.taoensso/sente "1.12.0"]
                  [com.taoensso/timbre "4.10.0"]
-                 [com.vladsch.flexmark/flexmark "0.34.6"]
-                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.6"]
-                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.6"]
-                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.6"]
+                 [com.vladsch.flexmark/flexmark "0.34.10"]
+                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.10"]
+                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.10"]
+                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.10"]
                  [compojure "1.6.1" :exclusions [clout instaparse]]
                  [environ "1.1.0"]
                  [hiccup "1.0.5"]
@@ -60,25 +61,34 @@
 
   :figwheel {:css-dirs ["resources/public/css"]}
 
- ; :uberjar-exclusions [#"cwiki.test.*" #"cwiki-test.*" #"cwiki.test.handler.clj"]
+  ; :uberjar-exclusions [#"cwiki.test.*" #"cwiki-test.*" #"cwiki.test.handler.clj"]
 
   :profiles {:dev     {:repl-options {:init-ns          cwiki.repl
                                       :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
 
                        :dependencies [[binaryage/devtools "0.9.10"]
                                       [cider/piggieback "0.3.6"]
-                                      [figwheel-sidecar "0.5.16":exclusions [org.clojure/tools.nrepl]]
+                                      [com.stuartsierra/component.repl "0.2.0"]
+                                      [figwheel-sidecar "0.5.16" :exclusions [org.clojure/tools.nrepl]]
+                                      [org.clojure/tools.namespace "0.2.11"]
                                       [prone "1.6.0"]
                                       [ring/ring-mock "0.3.2"]
-                                      [ring/ring-devel "1.6.3"]]
+                                      ;[ring/ring-devel "1.6.3"]
+                                      ]
 
-                       :source-paths ["env/dev/clj"]
+                       :source-paths ["env/dev/clj" "dev"]
 
                        :plugins      [[lein-doo "0.1.10"]
                                       [lein-figwheel "0.5.16"]]
                        ; Leave this alone. IntelliJ has issues otherwise.
                        :test-paths   ["test/cljs"]
-                       :env          {:dev "true"}}
+                       :env          {:build-type   "dev"
+                                      :db-file-path "resources/public/db/coojydatabase.db"
+                                      :server-port  "1355"}}
+
+             :test    {:env {:build-type   "test"
+                             :db-file-path "test/data/db/testdatabase.db"
+                             :server-port  "1355"}}
 
              :uberjar {:aot          :all
                        :omit-source  true
@@ -89,7 +99,9 @@
                        ; dependency version incompatibility somewhere that needs
                        ; to be fixed..
                        :dependencies [[ring/ring-mock "0.3.2"]]
-                       :env          {:production "true"}}
+                       :env          {:build-type   "production"
+                                      :db-file-path "resources/public/db/coojydatabase.db"
+                                      :server-port  "1355"}}
              }
 
   :cljsbuild {:builds

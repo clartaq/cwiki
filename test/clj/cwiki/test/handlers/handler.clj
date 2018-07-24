@@ -1,6 +1,6 @@
-(ns cwiki.test.handler
+(ns cwiki.test.handlers.handler
   (:require [clojure.test :refer [deftest testing is]]
-            [cwiki.handler :refer [app]]
+            [cwiki.handlers.handler :refer [app]]
             [ring.mock.request :refer [request]]))
 
 (deftest test-app

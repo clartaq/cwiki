@@ -1,9 +1,10 @@
-(ns cwiki.handler
+(ns cwiki.handlers.handler
   (:require [cemerick.url :as u]
             [clojure.string :as s]
             [compojure.core :refer [defroutes routes]]
             [compojure.response :as response]
             [compojure.route :as route]
+            [cwiki.components.socket-server :refer [sente-routes]]
             [cwiki.layouts.base :as layout]
             [cwiki.layouts.editor :as layout-editor]
             [cwiki.middleware :as middleware]
@@ -103,7 +104,10 @@
            (page-finder-route)
            (route/not-found (layout/compose-404-page)))
 
-(def all-routes (routes admin-routes home-routes login-routes websocket-routes app-routes))
+(def all-routes (routes admin-routes home-routes login-routes
+                        (sente-routes)
+                        ;websocket-routes
+                        app-routes))
 
 (def app (middleware/wrap-middleware all-routes))
 
