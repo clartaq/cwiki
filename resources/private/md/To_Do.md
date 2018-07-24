@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-07-11T17:30:34.140-04:00
+modified: 2018-07-19T13:59:27.898-04:00
 tags:
   - architecture
   - bugs
@@ -14,7 +14,7 @@ tags:
 
 
 
-​
+
 An ever-evolving list of things to be fixed and improved. These fall into the following categories:
 
 * [Bugs](#bugs). These are things that are flat out wrong and must be fixed.
@@ -84,6 +84,8 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 * It sure would be nice if the tags interface during editing provided some ​autocompletion or hints so you could see which tags already exist. (Is it "bug" or "bugs" for this type of post?)
 
 * There should be a better separation between the stuff required for development (dependencies, plugins, middleware) and the stuff required for a production build. Might even cut down on the uberjar size.
+
+* Consider adding a "special" wikilink `[[toc]]` that will replace the link with a table of contents for the page. Plugins exist for various Markdown parsers/renderers that do this.​
 
 ### Architecture <a name="architecture"></a>
 

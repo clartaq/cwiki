@@ -1,5 +1,8 @@
 (ns cwiki.repl
   (:require [cwiki.main :as main]
+            [cwiki.system :refer :all]
+    ; Just so we can refer to it in the repl.
+            [com.stuartsierra.component :as component]
     ; Just so all the functions are available in the repl.
             [figwheel-sidecar.repl-api :refer :all]))
 

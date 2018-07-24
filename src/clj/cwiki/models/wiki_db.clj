@@ -291,7 +291,7 @@
      (reduce #(conj %1 (:page_title %2))
              (special/get-all-special-page-names) title-array))))
 
-(defn case-insensitive-comparator
+(defn- case-insensitive-comparator
   "Case-insensitive string comparator."
   [^String s1 ^String s2]
   (.compareToIgnoreCase s1 s2))
@@ -729,9 +729,8 @@
   tables if needed."
   []
   (info "Starting database.")
-  (println "db: " (env :db))
-  (println "(env :dev): " (env :dev))
-  (println "(env :production): " (env :production))
+  (println "build-type: " (env :build-type))
+  (println "db-file: " (env :db-file-path))
   (when-not (db-exists? db-file-name-long)
     (println "Creating initial database.")
     (io/make-parents db-file-name)

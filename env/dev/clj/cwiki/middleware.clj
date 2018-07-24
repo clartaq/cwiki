@@ -5,7 +5,8 @@
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
             [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.file-info :refer [wrap-file-info]]
-            [ring.middleware.reload :refer [wrap-reload]]))
+            ;[ring.middleware.reload :refer [wrap-reload]]
+            ))
 
 (println "wrapping dev middleware")
 
@@ -20,7 +21,8 @@
       ; Content-Type, Content-Length, and Last Modified headers for files in body.
       wrap-file-info
       wrap-exceptions
-      wrap-reload))
+      ;wrap-reload
+      ))
 
 ;(def app
 ;  (-> (routes admin-routes home-routes login-routes websocket-routes app-routes)

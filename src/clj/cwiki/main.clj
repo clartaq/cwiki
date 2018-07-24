@@ -1,6 +1,6 @@
 (ns cwiki.main
   (:gen-class)
-  (:require [cwiki.handler :refer [app]]
+  (:require [cwiki.handlers.handler :refer [app]]
             [cwiki.models.wiki-db :as db]
             [cwiki.routes.ws :as ws]
             [org.httpkit.server :as http-kit]
