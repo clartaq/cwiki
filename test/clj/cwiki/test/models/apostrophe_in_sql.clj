@@ -50,12 +50,11 @@
   "Read the pages used for testing from files and add them to the test database."
   [db]
   (info "Adding test pages.")
-  (letfn [(with-db [x] (add-test-page-from-file! x db))]
-    (mapv #(add-test-page-from-file! % db) ["A_Dummy_Test_Page.md"
-                                            "NoContentHere.md"
-                                            "NoDatesOrTags.md"
-                                            "NoMeta.md"
-                                            "Test_Page_for_Tags.md"]))
+  (mapv #(add-test-page-from-file! % db) ["A_Dummy_Test_Page.md"
+                                          "NoContentHere.md"
+                                          "NoDatesOrTags.md"
+                                          "NoMeta.md"
+                                          "Test_Page_for_Tags.md"])
   (info "Done!"))
 
 (defn- create-test-db
