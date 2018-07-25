@@ -105,7 +105,7 @@
            (route/not-found (layout/compose-404-page)))
 
 (def all-routes (routes admin-routes home-routes login-routes
-                        (sente-routes)
+                        (sente-routes nil) ; !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                         ;websocket-routes
                         app-routes))
 
