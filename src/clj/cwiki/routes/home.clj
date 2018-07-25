@@ -68,7 +68,7 @@
     (db/update-page-title-and-content! actual-id new-title tags new-content)
     (let [escaped-title (url/url-encode new-title)]
       ; Important! We redirect here so that functions which use the
-      ; refering page get the page itself and not the editing page.
+      ; referring page get the page itself and not the editing page.
       (redirect (str "/" escaped-title)))))
 
 (defn- save-and-view-page
