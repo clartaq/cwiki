@@ -18,17 +18,22 @@
 
 ; The kerfuffle here is to get the directory from which the program
 ; is running and create an absolute path as required for the H2 database.
-(def db-file-name (str (-> (File. ".")
-                           .getAbsolutePath
-                           (files/remove-from-end "."))
-                       "resources/public/db/database.db"))
-; Because H2 seems to append this to the name above.
-(def db-file-name-long (str db-file-name ".mv.db"))
 
-(def h2-db {:classname   "org.h2.Driver"
-            :subprotocol "h2:file"
-            :subname     db-file-name
-            :make-pool?  true})
+(defn get-db-file-name []
+  (str (-> (File. ".")
+           .getAbsolutePath
+           (files/remove-from-end "."))
+       "resources/public/db/database.db"))
+
+; Because H2 seems to append this to the name above.
+(defn get-db-file-name-long []
+  (str (get-db-file-name) ".mv.db"))
+
+(defn get-h2-db-spec []
+  {:classname   "org.h2.Driver"
+   :subprotocol "h2:file"
+   :subname     (get-db-file-name)
+   :make-pool?  true})
 
 (defn create-new-post-map
   "Return a new post map with the information provided."
@@ -43,38 +48,39 @@
     :page_title    title
     :page_content  content}))
 
-(def valid-roles ["cwiki" "admin" "editor" "writer" "reader"])
+(defn get-valid-roles [] ["cwiki" "admin" "editor" "writer" "reader"])
 
-(def initial-users [{:user_name              "CWiki"
-                     :user_role              "cwiki"
-                     :user_password          (hashers/derive (str (UUID/randomUUID)))
-                     :user_new_password      nil
-                     :user_new_password_time nil
-                     :user_email             ""
-                     :user_email_token       0
-                     :user_email_expires     nil
-                     :user_touched           (dt/sql-now)
-                     :user_registration      (dt/sql-now)}
-                    {:user_name              "admin"
-                     :user_role              "admin"
-                     :user_password          (hashers/derive "admin")
-                     :user_new_password      nil
-                     :user_new_password_time nil
-                     :user_email             ""
-                     :user_email_token       0
-                     :user_email_expires     nil
-                     :user_touched           (dt/sql-now)
-                     :user_registration      (dt/sql-now)}
-                    {:user_name              "guest"
-                     :user_role              "reader"
-                     :user_password          (hashers/derive "guest")
-                     :user_new_password      nil
-                     :user_new_password_time nil
-                     :user_email             ""
-                     :user_email_token       0
-                     :user_email_expires     nil
-                     :user_touched           (dt/sql-now)
-                     :user_registration      (dt/sql-now)}])
+(defn get-initial-users []
+  [{:user_name              "CWiki"
+     :user_role              "cwiki"
+     :user_password          (hashers/derive (str (UUID/randomUUID)))
+     :user_new_password      nil
+     :user_new_password_time nil
+     :user_email             ""
+     :user_email_token       0
+     :user_email_expires     nil
+     :user_touched           (dt/sql-now)
+     :user_registration      (dt/sql-now)}
+    {:user_name              "admin"
+     :user_role              "admin"
+     :user_password          (hashers/derive "admin")
+     :user_new_password      nil
+     :user_new_password_time nil
+     :user_email             ""
+     :user_email_token       0
+     :user_email_expires     nil
+     :user_touched           (dt/sql-now)
+     :user_registration      (dt/sql-now)}
+    {:user_name              "guest"
+     :user_role              "reader"
+     :user_password          (hashers/derive "guest")
+     :user_new_password      nil
+     :user_new_password_time nil
+     :user_email             ""
+     :user_email_token       0
+     :user_email_expires     nil
+     :user_touched           (dt/sql-now)
+     :user_registration      (dt/sql-now)}])
 
 (defn escape-apostrophes
   [bad-string]
@@ -83,7 +89,7 @@
 
 (defn user-name->user-id
   ([name]
-   (user-name->user-id name h2-db))
+   (user-name->user-id name (get-h2-db-spec)))
   ([name db]
    (:user_id (first (jdbc/query
                       db
@@ -93,7 +99,7 @@
   "Return the user role (a keyword) assigned to the named user. If the
   user does not exist, return nil."
   ([name]
-   (user-name->user-role name h2-db))
+   (user-name->user-role name (get-h2-db-spec)))
   ([name db]
    (let [string-role (:user_role
                        (first
@@ -111,7 +117,7 @@
 (defn user-id->user-name
   "Given a user id, return a human-readable user name."
   ([id]
-   (user-id->user-name id h2-db))
+   (user-id->user-name id (get-h2-db-spec)))
   ([id db]
    (:user_name (first (jdbc/query
                         db
@@ -121,7 +127,7 @@
   "Look up the user in the database and return the map of user attributes
   for a matching entry. If no match, return nil."
   ([name]
-   (find-user-by-name name h2-db))
+   (find-user-by-name name (get-h2-db-spec)))
   ([name db]
    (let [user-map (first (jdbc/query
                            db
@@ -132,7 +138,7 @@
   "Look up the user in the database using a case-insensitive search for the
   username. Return the matching entry, if any. Otherwise, return nil."
   ([name]
-   (find-user-by-case-insensitive-name name h2-db))
+   (find-user-by-case-insensitive-name name (get-h2-db-spec)))
   ([name db]
    (let [user-map (first (jdbc/query
                            db
@@ -143,7 +149,8 @@
 (defn get-user-by-username-and-password
   "Look up a user and verify that the password is a match. If so,
   return the user record, otherwise return nil."
-  ([username password] (get-user-by-username-and-password username password h2-db))
+  ([username password] (get-user-by-username-and-password
+                         username password (get-h2-db-spec)))
   ([username password db]
    (let [result (find-user-by-name username db)
          pw-hash (:user_password result)]
@@ -156,7 +163,7 @@
   cannot be found or the password doesn't match, return nil. Otherwise,
   return a copy of the user record with the password digest dissociated
   from it."
-  ([username password] (lookup-user username password h2-db))
+  ([username password] (lookup-user username password (get-h2-db-spec)))
   ([username password db]
    (when-let [user (find-user-by-name username db)]
      (let [pw (get user :user_password)]
@@ -166,7 +173,7 @@
 (defn update-user
   "Update the database entry for the user with the given id to the
   information included in the map."
-  ([user_id user-map] (update-user user_id user-map h2-db))
+  ([user_id user-map] (update-user user_id user-map (get-h2-db-spec)))
   ([user_id user-map db]
    (jdbc/update! db :users user-map ["user_id=?" user_id])))
 
@@ -193,7 +200,7 @@
 (defn find-post-by-title
   "Look up a post in the database with the given title. Return the page
   map for the post if found; nil otherwise. The lookup is case-insensitive."
-  ([title] (find-post-by-title title h2-db))
+  ([title] (find-post-by-title title (get-h2-db-spec)))
   ([title db]
    (let [search-title (escape-apostrophes title)
          sql-str (str "select * from pages where page_title like '" search-title "'")
@@ -201,20 +208,20 @@
      res)))
 
 (defn title->user-id
-  ([title] (title->user-id title h2-db))
+  ([title] (title->user-id title (get-h2-db-spec)))
   ([title db]
    (:page_author
      (first (jdbc/query db
                         ["select page_author from pages where page_title=?" title])))))
 
 (defn page-id->title
-  ([id] (page-id->title id h2-db))
+  ([id] (page-id->title id (get-h2-db-spec)))
   ([id db]
    (let [sql-str (str "select page_title from pages where page_id=" id)]
      (:page_title (first (jdbc/query db sql-str))))))
 
 (defn title->page-id
-  ([title] (title->page-id title h2-db))
+  ([title] (title->page-id title (get-h2-db-spec)))
   ([title db]
    (:page_id (first (jdbc/query
                       db
@@ -227,7 +234,7 @@
       (clob->string raw-content))))
 
 (defn page-id->content
-  ([id] (page-id->content id h2-db))
+  ([id] (page-id->content id (get-h2-db-spec)))
   ([id db]
    (let [sql-str (str "select page_content from pages where page_id=" id)
          res (jdbc/query db sql-str {:result-set-fn to-content-helper})]
@@ -249,7 +256,7 @@
   (:page_content m))
 
 (defn page-map->author
-  ([m] (page-map->author m h2-db))
+  ([m] (page-map->author m (get-h2-db-spec)))
   ([m db]
    (let [author-id (:page_author m)
          result (jdbc/query db ["select user_name from users where user_id=?" author-id])
@@ -276,7 +283,7 @@
   "Return a collection of page name maps with all of the page names
   in the db (as opposed to any generated pages.)"
   ([]
-   (get-all-page-names-in-db h2-db))
+   (get-all-page-names-in-db (get-h2-db-spec)))
   ([db]
    (let [title-array (jdbc/query db ["select page_title from pages"])]
      title-array)))
@@ -285,7 +292,7 @@
   "Return a sorted set of all of the page titles in the wiki,
   including all of the 'special' pages."
   ([]
-   (get-all-page-names h2-db))
+   (get-all-page-names (get-h2-db-spec)))
   ([db]
    (when-let [title-array (get-all-page-names-in-db db)]
      (reduce #(conj %1 (:page_title %2))
@@ -299,7 +306,7 @@
 (defn get-all-users
   "Return a sorted set of all of the user names known to the wiki."
   ([]
-   (get-all-users h2-db))
+   (get-all-users (get-h2-db-spec)))
   ([db]
    (when-let [user-array (jdbc/query db ["select user_name from users"])]
      (into (sorted-set-by case-insensitive-comparator)
@@ -318,7 +325,7 @@
 (defn get-all-tag-names
   "Return a case-insensitive sorted set of all of the tags in the wiki."
   ([]
-   (get-all-tag-names h2-db))
+   (get-all-tag-names (get-h2-db-spec)))
   ([db]
    (when-let [tag-array (jdbc/query db ["select tag_name from tags"])]
      (reduce
@@ -349,7 +356,7 @@
   "Returns a case-insensitive sorted-set of tag names associated with the page.
   If there are no such tags (it's nil or an empty seq), returns an empty set."
   ([page-id]
-   (get-tag-names-for-page page-id h2-db))
+   (get-tag-names-for-page page-id (get-h2-db-spec)))
   ([page-id db]
    (let [tag-ids (filterv (complement nil?) (get-tag-ids-for-page page-id db))]
      (if (or (nil? tag-ids) (empty? tag-ids))
@@ -461,7 +468,7 @@
   "Return a case-insensitive sorted-set of all of the titles of all
   of the pages that have this tag."
   ([tag-name]
-   (get-titles-of-all-pages-with-tag tag-name h2-db))
+   (get-titles-of-all-pages-with-tag tag-name (get-h2-db-spec)))
   ([tag-name db]
    (let [page-ids (get-ids-of-all-pages-with-tag tag-name db)]
      (reduce #(conj %1 (page-id->title %2 db))
@@ -483,7 +490,7 @@
 (defn get-titles-of-all-pages-with-user
   "Return a case-insensitive sorted-set of all of the titles of all
   of the pages that have this user name."
-  ([user-name] (get-titles-of-all-pages-with-user user-name h2-db))
+  ([user-name] (get-titles-of-all-pages-with-user user-name (get-h2-db-spec)))
   ([user-name db]
    (let [page-ids (get-ids-of-all-pages-with-user user-name db)]
      (reduce #(conj %1 (page-id->title %2 db))
@@ -491,7 +498,7 @@
 
 (defn update-page-title-and-content!
   ([id title tag-set content]
-   (update-page-title-and-content! id title tag-set content h2-db))
+   (update-page-title-and-content! id title tag-set content (get-h2-db-spec)))
   ([id title tag-set content db]
    (jdbc/update! db :pages {:page_title    title
                             :page_content  content
@@ -505,7 +512,7 @@
   If the arguments do not include an author id, use the CWiki
   author id (same as CWiki user id)."
   ([title content tags author-id]
-   (insert-new-page! title content tags author-id h2-db))
+   (insert-new-page! title content tags author-id (get-h2-db-spec)))
   ([title content tags author-id db]
    (tracef "insert-new-page!: title: %s, tags: %s, author-id: %s" title tags author-id)
    (let [post-map (create-new-post-map title content author-id)]
@@ -517,7 +524,7 @@
 
 (defn delete-page-by-id!
   "Remove the page and related data from the database."
-  ([page-id] (delete-page-by-id! page-id h2-db))
+  ([page-id] (delete-page-by-id! page-id (get-h2-db-spec)))
   ([page-id db]
    (when page-id
      (let [tags (get-tag-ids-for-page page-id db)]
@@ -543,7 +550,7 @@
   argument is used. If there is no title, a random title is created.
   Return the title of the imported page."
   ([m default-author]
-   (add-page-from-map m default-author h2-db))
+   (add-page-from-map m default-author (get-h2-db-spec)))
   ([m default-author db]
    (let [meta (:meta m)
          author-id (get-author-from-import-meta-data meta default-author db)
@@ -589,7 +596,7 @@
   "Add a user to the system with the given user name and password. Optionally,
   add an email address for password recovery."
   ([user-name user-password user-role email]
-   (add-user user-name user-password user-role email h2-db))
+   (add-user user-name user-password user-role email (get-h2-db-spec)))
   ([user-name user-password user-role user-email db]
    (let [role user-role
          usr {:user_name              user-name
@@ -607,7 +614,7 @@
 (defn delete-user
   "Delete the user with the give id."
   ([user-id]
-   (delete-user user-id h2-db))
+   (delete-user user-id (get-h2-db-spec)))
   ([user-id db]
    (jdbc/delete! db :users ["user_id=?" user-id])))
 
@@ -618,7 +625,7 @@
   "Return true if the admin has ever logged in; nil otherwise."
   []
   (let [result (jdbc/query
-                 h2-db
+                 (get-h2-db-spec)
                  ["select admin_has_logged_in from admin where admin_id=?" 1])]
     (:admin_has_logged_in (first result))))
 
@@ -627,7 +634,7 @@
   "Note that the admin user has logged in at least once and record it
   in the database."
   ([b]
-   (set-admin-has-logged-in b h2-db))
+   (set-admin-has-logged-in b (get-h2-db-spec)))
   ([b db]
    (jdbc/update! db :admin {:admin_has_logged_in b}
                  ["admin_id=?" 1])))
@@ -640,29 +647,29 @@
 
 (defn add-initial-users!
   [db]
-  (println "Adding initial users.")
-  (mapv #(insert-user! % db) initial-users)
-  (println "Done!"))
+  (info "Adding initial users.")
+  (mapv #(insert-user! % db) (get-initial-users))
+  (info "Done!"))
 
 
 (defn- add-initial-pages!
   "Add the initial pages to the wiki database."
   [db]
-  (println "Adding initial pages.")
+  (info "Adding initial pages.")
   (mapv #(add-page-with-meta-from-file! % db) (files/load-initial-page-list))
-  (println "Done!"))
+  (info "Done!"))
 
 (defn add-initial-roles!
   "Add the available roles to the wiki database."
   [db]
-  (println "Adding roles.")
-  (mapv #(jdbc/insert! db :roles {:role_name %}) valid-roles)
-  (println "Done!"))
+  (info "Adding roles.")
+  (mapv #(jdbc/insert! db :roles {:role_name %}) (get-valid-roles))
+  (info "Done!"))
 
 (defn create-tables
   "Create the database tables for the application."
   [db]
-  (println "Creating the tables.")
+  (info "Creating the tables.")
   (try (jdbc/db-do-commands
          db false
          [(jdbc/create-table-ddl :users
@@ -684,7 +691,6 @@
                                  [[:page_id :integer :auto_increment :primary :key]
                                   [:page_created :datetime]
                                   [:page_modified :datetime]
-                                  ;[:page_tags :varchar]
                                   [:page_author :integer]
                                   [:page_title :varchar]
                                   [:page_content :text]])
@@ -707,7 +713,7 @@
                                   [:page_id :integer]])])
        (jdbc/execute! db "alter table tags_x_pages add foreign key (tag_id) references public.tags(tag_id);")
        (catch Exception e (println e)))
-  (println "Done!"))
+  (info "Done!"))
 
 (defn- create-db
   "Create the database tables and initialize them with content for
@@ -729,13 +735,10 @@
   tables if needed."
   []
   (info "Starting database.")
-  (println "db: " (env :db))
-  (println "(env :dev): " (env :dev))
-  (println "(env :production): " (env :production))
-  (when-not (db-exists? db-file-name-long)
-    (println "Creating initial database.")
-    (io/make-parents db-file-name)
-    (create-db h2-db)))
+  (when-not (db-exists? (get-db-file-name-long))
+    (info "Creating initial database.")
+    (io/make-parents (get-db-file-name))
+    (create-db (get-h2-db-spec))))
 
 (defn stop-db!
   []
