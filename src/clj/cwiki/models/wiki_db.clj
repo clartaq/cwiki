@@ -9,7 +9,9 @@
             [cwiki.util.datetime :as dt]
             [environ.core :refer [env]]
             [taoensso.timbre :refer [trace debug info warn error
-                                     tracef debugf infof warnf errorf]])
+                                     tracef debugf infof warnf errorf]]
+            [clojure.pprint :as pp]
+            [clojure.edn :as edn])
   (:import (java.io File)
            (java.util UUID)
            (org.h2.jdbc JdbcClob)))
@@ -52,40 +54,84 @@
 
 (defn get-initial-users []
   [{:user_name              "CWiki"
-     :user_role              "cwiki"
-     :user_password          (hashers/derive (str (UUID/randomUUID)))
-     :user_new_password      nil
-     :user_new_password_time nil
-     :user_email             ""
-     :user_email_token       0
-     :user_email_expires     nil
-     :user_touched           (dt/sql-now)
-     :user_registration      (dt/sql-now)}
-    {:user_name              "admin"
-     :user_role              "admin"
-     :user_password          (hashers/derive "admin")
-     :user_new_password      nil
-     :user_new_password_time nil
-     :user_email             ""
-     :user_email_token       0
-     :user_email_expires     nil
-     :user_touched           (dt/sql-now)
-     :user_registration      (dt/sql-now)}
-    {:user_name              "guest"
-     :user_role              "reader"
-     :user_password          (hashers/derive "guest")
-     :user_new_password      nil
-     :user_new_password_time nil
-     :user_email             ""
-     :user_email_token       0
-     :user_email_expires     nil
-     :user_touched           (dt/sql-now)
-     :user_registration      (dt/sql-now)}])
+    :user_role              "cwiki"
+    :user_password          (hashers/derive (str (UUID/randomUUID)))
+    :user_new_password      nil
+    :user_new_password_time nil
+    :user_email             ""
+    :user_email_token       0
+    :user_email_expires     nil
+    :user_touched           (dt/sql-now)
+    :user_registration      (dt/sql-now)}
+   {:user_name              "admin"
+    :user_role              "admin"
+    :user_password          (hashers/derive "admin")
+    :user_new_password      nil
+    :user_new_password_time nil
+    :user_email             ""
+    :user_email_token       0
+    :user_email_expires     nil
+    :user_touched           (dt/sql-now)
+    :user_registration      (dt/sql-now)}
+   {:user_name              "guest"
+    :user_role              "reader"
+    :user_password          (hashers/derive "guest")
+    :user_new_password      nil
+    :user_new_password_time nil
+    :user_email             ""
+    :user_email_token       0
+    :user_email_expires     nil
+    :user_touched           (dt/sql-now)
+    :user_registration      (dt/sql-now)}])
 
 (defn escape-apostrophes
   [bad-string]
   (when bad-string
     (s/replace bad-string "'" "''")))
+
+;-------------------------------------------------------------------------------
+; Handling options.
+
+; All of the options are stored in a single map in a single row of the options
+; table. They are read in their entirety every time any value is requested and
+; are written every time any value is changed.
+
+(defn get-initial-options []
+  {:editor_autosave_interval    300
+   :editor_send_every_keystroke true
+   :root_page                   "Front Page"
+   :wiki_name                   "CWiki"
+   :editor_editing_font         "Calibri"
+   :confirm_page_deletions      true
+   :editor_use_WYSIWYG_editor   false})
+
+(defn- update-options-in-db
+  "Update the database with the new map of options."
+  [m db]
+  (let [opt-str (with-out-str (pp/pprint m))]
+    (jdbc/update! db :options {:options_edn opt-str} ["options_id = ?" 1])))
+
+(defn- get-options-from-db
+  "Retrieve the map of options from the database."
+  [db]
+  (-> (first (jdbc/query db ["select options_edn from options where options_id=1"]))
+      (:options_edn)
+      (edn/read-string)))
+
+(defn get-option-value
+  "Return the value of the option associated with the key or nil if there is
+  no such key in the options table."
+  [k db]
+  (k (get-options-from-db db)))
+
+(defn set-option-value
+  "Update the options in the database to include the key/value given,
+  whether the key existed in the options map before or not."
+  [k v db]
+  (update-options-in-db (merge (get-options-from-db db) {k v}) db))
+
+;-------------------------------------------------------------------------------
+; user-id/user-name related functions.
 
 (defn user-name->user-id
   ([name]
@@ -176,6 +222,8 @@
   ([user_id user-map] (update-user user_id user-map (get-h2-db-spec)))
   ([user_id user-map db]
    (jdbc/update! db :users user-map ["user_id=?" user_id])))
+
+;-------------------------------------------------------------------------------
 
 (defn- clob->string
   "Return a string created by translating and H2 Clob."
@@ -629,7 +677,6 @@
                  ["select admin_has_logged_in from admin where admin_id=?" 1])]
     (:admin_has_logged_in (first result))))
 
-;!!! PROBLEM -- This function still requires two versions of the argument list.
 (defn set-admin-has-logged-in
   "Note that the admin user has logged in at least once and record it
   in the database."
@@ -666,6 +713,14 @@
   (mapv #(jdbc/insert! db :roles {:role_name %}) (get-valid-roles))
   (info "Done!"))
 
+(defn add-initial-options!
+  [db]
+  (info "Adding options.")
+  (let [opts (get-initial-options)
+        opts-str (with-out-str (pp/pprint opts))]
+    (jdbc/insert! db :options {:options_edn opts-str}))
+  (info "Done!"))
+
 (defn create-tables
   "Create the database tables for the application."
   [db]
@@ -700,6 +755,9 @@
           (jdbc/create-table-ddl :roles
                                  [[:role_id :integer :auto_increment :primary :key]
                                   [:role_name :varchar]])
+          (jdbc/create-table-ddl :options
+                                 [[:options_id :integer :auto_increment :primary :key]
+                                  [:options_edn :varchar]])
           (jdbc/create-table-ddl :tags
                                  [[:tag_id :integer :auto_increment :primary :key]
                                   [:tag_name :varchar "NOT NULL"]])
@@ -723,7 +781,8 @@
   (init-admin-table! db)
   (add-initial-users! db)
   (add-initial-pages! db)
-  (add-initial-roles! db))
+  (add-initial-roles! db)
+  (add-initial-options! db))
 
 (defn- db-exists?
   "Return true if the wiki database already exists."

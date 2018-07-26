@@ -1,12 +1,10 @@
 ;;;
-;;; This namespace contains tests related to the use of apostrophes in
-;;; various parts of the database like page titles, tags, etc.
+;;; This namespace contains tests related to the use of options/preferences.
 ;;;
 
-(ns cwiki.test.models.apostrophe-in-sql
+(ns cwiki.test.models.options
   (:require [clojure.test :refer :all]
             [clojure.java.io :as io]
-            [clojure.set :as set]
             [cwiki.models.wiki-db :refer :all]
             [cwiki.util.files :as files]
             [taoensso.timbre :refer [trace debug info warn error
@@ -40,10 +38,8 @@
   "Add a page to the database based on the information in a Markdown file
   containing YAML front matter."
   [file-name db]
-  ;(println "add-page-with-meta-from-file!: file-name: " file-name)
   (let [file (File. (str "test/data/" file-name))
         m (files/load-markdown-from-file file)]
-    ;(println "  m: " m)
     (add-page-from-map m "CWiki" db)))
 
 (defn add-test-pages!
@@ -121,70 +117,20 @@
 ; Tests
 ;-------------------------------------------------------------------------------
 
-; Some of these tests just assure that we have built the test database
-; correctly.
+(deftest get-option-value-test
+  (testing "Testing the get-option-value function."
+    (let [db-spec (get-test-db-spec)]
+      (is (nil? (get-option-value :random_value db-spec)))
+      (is (true? (get-option-value :confirm_page_deletions db-spec)))
+      (is (= "Front Page" (get-option-value :root_page db-spec)))
+      (is (= 300 (get-option-value :editor_autosave_interval db-spec))))))
 
-(deftest find-user-by-name-test
-  (testing "Whether the expected users were added to the database."
-    (is (nil? (find-user-by-name "blofeld" (get-test-db-spec))))
-    (is (not (nil? (find-user-by-name "guest" (get-test-db-spec)))))))
-
-(deftest find-expected-article
-  (testing "Whether the test data page was added to the database."
-    (let [res (find-post-by-title "No Content Here" (get-test-db-spec))]
-      (is (seq res)))
-    (is (nil? (find-post-by-title "frambooly title")))))
-
-(deftest escape-apostrophes-test
-  (testing "The escape-apostrophes function"
-    (is (nil? (escape-apostrophes nil)))
-    (is (empty? (escape-apostrophes "")))
-    (is (= "A String" (escape-apostrophes "A String")))
-    (is (= "A String''s String" (escape-apostrophes "A String's String")))
-    (is (= "A''s and B''s String" (escape-apostrophes "A's and B's String")))))
-
-;(deftest unescape-apostrophes-test
-;  (testing "The unescape-apostrophes function"
-;    (is (nil? (unescape-apostrophes nil)))
-;    (is (empty? (unescape-apostrophes "")))
-;    (is (= "A String" (unescape-apostrophes "A String")))
-;    (is (= "A String's String" (unescape-apostrophes "A String''s String")))
-;    (is (= "A's and B's String" (unescape-apostrophes "A''s and B''s String")))))
-
-(deftest apostrophe-in-title-test
-  (testing "That changes to the title including invalid characters don't crash"
-    (let [new-title "Joe's Title"
-          m (find-post-by-title "A Dummy Test Page" (get-test-db-spec))
-          page-id (page-map->id m)
-          content (page-map->content m)
-          tag-set (get-tag-names-for-page page-id (get-test-db-spec))]
-      (update-page-title-and-content!
-        page-id
-        new-title
-        tag-set
-        content
-        (get-test-db-spec))
-      (is (= new-title (:page_title (find-post-by-title "Joe's Title" (get-test-db-spec))))))))
-
-(deftest apostrophe-in-tag-test
-  (testing "The apostropes can be added to tags and the tags can be retrieved."
-    (let [test-page-name "Test Page for Tags"
-          test-tag "Joe's Tag"
-          m (find-post-by-title test-page-name (get-test-db-spec))
-          page-id (page-map->id m)
-          original-tag-set (get-tag-names-for-page page-id (get-test-db-spec))
-          new-tag-set (set/union original-tag-set #{test-tag})]
-
-      ; Add the funny tag.
-      (update-tags-for-page new-tag-set page-id (get-test-db-spec))
-      (is (seq (get-tag-names-for-page page-id (get-test-db-spec))))
-      (is (= (count (get-tag-names-for-page page-id (get-test-db-spec)))
-             (+ 1 (count original-tag-set))))
-      (is (seq (get-all-tag-names (get-test-db-spec))))
-      (is (contains? (get-all-tag-names (get-test-db-spec)) test-tag))
-      (is (contains? (get-titles-of-all-pages-with-tag test-tag (get-test-db-spec)) test-page-name))
-
-      ; Now remove it.
-      (update-tags-for-page original-tag-set page-id (get-test-db-spec))
-      (is (= original-tag-set (get-tag-names-for-page page-id (get-test-db-spec))))
-      (is (empty? (get-titles-of-all-pages-with-tag test-tag (get-test-db-spec)))))))
+(deftest set-option-value-test
+  (testing "Testing the set-option-value function."
+    (let [db-spec (get-test-db-spec)
+          scal-str "Scralubrious"
+          scal-key (keyword scal-str)]
+      (set-option-value :wiki_name "ClajWIKI" db-spec)
+      (is (= "ClajWIKI" (get-option-value :wiki_name  db-spec)))
+      (set-option-value scal-key scal-str db-spec)
+      (is (= scal-str (get-option-value scal-key db-spec))))))
