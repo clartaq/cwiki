@@ -23,6 +23,7 @@ CWiki_FAQ.md
 CWiki_Name.md
 Description_of_an_Import_Bug.md
 Design_of_Import_Export.md
+Design_of_the_Options_System.md
 Features.md
 How_to_Make_a_Table_of_Contents.md
 Limits.md
