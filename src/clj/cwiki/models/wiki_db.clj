@@ -96,7 +96,10 @@
 ; table. They are read in their entirety every time any value is requested and
 ; are written every time any value is changed.
 
-(defn get-initial-options []
+(defn get-initial-options
+  "Return a map of the default option values used the first time the
+  program starts."
+  []
   {:editor_autosave_interval    300
    :editor_send_every_keystroke true
    :root_page                   "Front Page"
@@ -105,16 +108,18 @@
    :confirm_page_deletions      true
    :editor_use_WYSIWYG_editor   false})
 
-(defn- update-options-in-db
+(defn- update-option-map
   "Update the database with the new map of options."
   [m db]
   (let [opt-str (with-out-str (pp/pprint m))]
     (jdbc/update! db :options {:options_edn opt-str} ["options_id = ?" 1])))
 
-(defn- get-options-from-db
-  "Retrieve the map of options from the database."
+(defn get-option-map
+  "Return the entire options map from the database."
   [db]
-  (-> (first (jdbc/query db ["select options_edn from options where options_id=1"]))
+  (-> db
+      (jdbc/query ["select options_edn from options where options_id=1"])
+      (first)
       (:options_edn)
       (edn/read-string)))
 
@@ -122,13 +127,16 @@
   "Return the value of the option associated with the key or nil if there is
   no such key in the options table."
   [k db]
-  (k (get-options-from-db db)))
+  (k (get-option-map db)))
 
 (defn set-option-value
   "Update the options in the database to include the key/value given,
-  whether the key existed in the options map before or not."
+  whether the key existed in the options map before or not, that is,
+  a previous k/v pair that was not already in the options will be added."
   [k v db]
-  (update-options-in-db (merge (get-options-from-db db) {k v}) db))
+  (let [m (get-option-map db)
+        nm (merge m {k v})]
+    (update-option-map nm db)))
 
 ;-------------------------------------------------------------------------------
 ; user-id/user-name related functions.
