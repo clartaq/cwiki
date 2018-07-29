@@ -57,10 +57,10 @@
 
 (defn preview
   "The preview div."
-  [the-page-map-atom] ;content]
+  [the-page-map-atom]
   [:div {:class "mde-preview-class" :id "mde-preview-id"}
-   (when (not-empty (:page_content @the-page-map-atom)) ;@content) !!!!!!!!!!!!!!!!! WHEN-LET
-     (markdown-component (:page_content @the-page-map-atom)))])
+   (when-let [content (:page_content @the-page-map-atom)]
+     (markdown-component content))])
 
 ;;
 ;; Websocket messages handlers to work with the server.
