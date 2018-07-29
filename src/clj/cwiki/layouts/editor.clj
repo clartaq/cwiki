@@ -69,8 +69,11 @@
   [post-map req]
   (reset! post-map-for-editing post-map)
   (let [id (db/page-map->id @post-map-for-editing)
-        tags (vec (db/get-tag-names-for-page id))]
+        tags (vec (db/get-tag-names-for-page id))
+        options (db/get-option-map)]
+    ;; The tags and options are attached to the page map here.
     (swap! post-map-for-editing assoc :tags tags)
+    (swap! post-map-for-editing assoc :options options)
     (html5
       {:ng-app "CWiki" :lang "en"}
       (standard-head (get-post-map-for-editing))
