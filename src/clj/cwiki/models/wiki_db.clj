@@ -116,12 +116,13 @@
 
 (defn get-option-map
   "Return the entire options map from the database."
-  [db]
-  (-> db
-      (jdbc/query ["select options_edn from options where options_id=1"])
-      (first)
-      (:options_edn)
-      (edn/read-string)))
+  ([] (get-option-map (get-h2-db-spec)))
+  ([db]
+   (-> db
+       (jdbc/query ["select options_edn from options where options_id=1"])
+       (first)
+       (:options_edn)
+       (edn/read-string))))
 
 (defn get-option-value
   "Return the value of the option associated with the key or nil if there is
