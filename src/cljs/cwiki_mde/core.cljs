@@ -11,8 +11,6 @@
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
 
-(def options {:send-every-keystroke true})
-
 (defn highlight-code
   "Highlights any <pre><code></code></pre> blocks in the html."
   [html-node]
@@ -45,30 +43,29 @@
 (defn editor
   "This is the editing area, just a textarea. It sends an update
   message over the websocket to the server."
-  [content]
+  [the-page-map-atom]
   [:textarea
    {:class     "mde-editor-class"
-    :value     @content
+    :value     (:page_content @the-page-map-atom)
     :on-change (fn [arg]
                  (let [new-content (-> arg .-target .-value)]
-                   (reset! content new-content)
-                   (when (:send-every-keystroke options)
+                   (swap! the-page-map-atom assoc :page_content new-content)
+                   (when (get-in @the-page-map-atom [:options :send-every-keystroke])
                      (ws/send-message! [:hey-server/content-updated
                                         {:?data new-content}]))
                    new-content))}])
 
 (defn preview
   "The preview div."
-  [content]
+  [the-page-map-atom] ;content]
   [:div {:class "mde-preview-class" :id "mde-preview-id"}
-   (when (not-empty @content)
-     (markdown-component @content))])
+   (when (not-empty (:page_content @the-page-map-atom)) ;@content) !!!!!!!!!!!!!!!!! WHEN-LET
+     (markdown-component (:page_content @the-page-map-atom)))])
 
 ;;
 ;; Websocket messages handlers to work with the server.
 ;;
 
-(def the-doc-content (reagent/atom nil))
 (def the-page-map (reagent/atom nil))
 
 (defn editor-handshake-handler
@@ -90,10 +87,9 @@
     (cond
       (= message-id :hey-editor/here-is-the-document) (when-let [the-data (second ?data)]
                                                         (tracef "editor-message-handler: the-data: %s"
-                                                               (with-out-str
-                                                                 (pprint/pprint the-data)))
-                                                        (reset! the-page-map the-data)
-                                                        (reset! the-doc-content (:page_content @the-page-map)))
+                                                                (with-out-str
+                                                                  (pprint/pprint the-data)))
+                                                        (reset! the-page-map the-data))
       (= message-id :hey-editor/shutdown-after-save) (let [new-location (str "/" (:page_title @the-page-map))]
                                                        (tracef "The new location is: %s" new-location)
                                                        (ws/stop-router!)
@@ -116,7 +112,7 @@
                                    (subvec old-tag-vec (inc n))))]
           (swap! page-map-atom assoc :tags new-vec))
         (swap! page-map-atom assoc-in [:tags n] new-tag))
-      (when (:send-every-keystroke options)
+      (when (get-in @page-map-atom [:options :send-every-keystroke])
         (ws/send-message! [:hey-server/content-updated
                            {:?data @page-map-atom}])))))
 
@@ -155,12 +151,12 @@
                            (when (= title "favicon.ico")
                              (infof "Saw funky title: \n%s"
                                     (with-out-str (pprint/pprint-map @page-map-atom))))
-                         title)
+                           title)
                          "Enter a Title for the Page")
             :on-change (fn [arg]
                          (let [new-title (-> arg .-target .-value)]
                            (swap! page-map-atom assoc :page_title new-title)
-                           (when (:send-every-keystroke options)
+                           (when (get-in @page-map-atom [:options :send-every-keystroke])
                              (ws/send-message! [:hey-server/content-updated
                                                 {:?data @page-map-atom}]))))}]])
 
@@ -168,8 +164,6 @@
   "Starts the websocket router and returns a function that lays out
   the editor and preview area side-by-side."
   []
- ; (ws/start-router! editor-handshake-handler editor-state-handler
- ;                   editor-message-handler)
   (info "the-editor-container")
   (fn []
     (tracef "the-editor-container: @the-page-map: %s" @the-page-map)
@@ -181,8 +175,8 @@
                :for   "content"} "Page Content"]]
 
      [:div {:class "mde-editor-and-preview-container"}
-      [editor the-doc-content]
-      [preview the-doc-content]]
+      [editor the-page-map]
+      [preview the-page-map]]
 
      [:div {:class "mde-button-bar-container"}
       [:input {:type    "button"
@@ -192,7 +186,6 @@
                :class   "form-button button-bar-item"
                :onClick #(do
                            (trace "Saw Click on Save Button!")
-                           (swap! the-page-map assoc :page_content @the-doc-content)
                            (ws/send-message! [:hey-server/save-edited-document
                                               {:data @the-page-map}]))}]
       [:input {:type    "button"
