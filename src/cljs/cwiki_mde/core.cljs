@@ -11,6 +11,29 @@
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
 
+;-------------------------------------------------------------------------------
+; Auto-save-related functions.
+
+(def delay-handle (atom nil))
+
+(defn clear-autosave-delay!
+  []
+  (.clearTimeout js/window @delay-handle))
+
+(defn start-autosave-delay!
+  [doc-save-fn delay-ms page-map-atom]
+  (reset! delay-handle (.setTimeout js/window doc-save-fn delay-ms page-map-atom)))
+
+(defn change-watcher!
+  [doc-save-fn page-map-atom]
+  (let [delay (get-in @page-map-atom [:options :editor_autosave_interval])]
+    (when (pos? delay)
+      (clear-autosave-delay!)
+      (start-autosave-delay! doc-save-fn delay page-map-atom))))
+
+;-------------------------------------------------------------------------------
+; The editor components.
+
 (defn highlight-code
   "Highlights any <pre><code></code></pre> blocks in the html."
   [html-node]
@@ -40,17 +63,20 @@
           (typeset-latex node)
           (highlight-code node)))})])
 
+(declare doc-save-function)
+
 (defn editor
   "This is the editing area, just a textarea. It sends an update
   message over the websocket to the server."
-  [the-page-map-atom]
+  [page-map-atom]
   [:textarea
    {:class     "mde-editor-class"
-    :value     (:page_content @the-page-map-atom)
+    :value     (:page_content @page-map-atom)
     :on-change (fn [arg]
                  (let [new-content (-> arg .-target .-value)]
-                   (swap! the-page-map-atom assoc :page_content new-content)
-                   (when (get-in @the-page-map-atom [:options :send-every-keystroke])
+                   (swap! page-map-atom assoc :page_content new-content)
+                   (change-watcher! doc-save-function page-map-atom)
+                   (when (get-in @page-map-atom [:options :send-every-keystroke])
                      (ws/send-message! [:hey-server/content-updated
                                         {:?data new-content}]))
                    new-content))}])
@@ -67,6 +93,11 @@
 ;;
 
 (def the-page-map (reagent/atom nil))
+
+(defn doc-save-function
+  "Send a message to the server to save the document."
+  [page-map-atom]
+  (ws/send-message! [:hey-server/save-doc {:data @page-map-atom}]))
 
 (defn editor-handshake-handler
   "Handle the handshake event between the server and client. This function
@@ -106,6 +137,7 @@
   [page-map-atom n]
   (fn [arg]
     (let [new-tag (-> arg .-target .-value)]
+      (change-watcher! doc-save-function page-map-atom)
       (if (blank? new-tag)
         (let [old-tag-vec (:tags @page-map-atom)
               new-vec (vec (concat (subvec old-tag-vec 0 n)
@@ -155,6 +187,7 @@
                          "Enter a Title for the Page")
             :on-change (fn [arg]
                          (let [new-title (-> arg .-target .-value)]
+                           (change-watcher! doc-save-function page-map-atom)
                            (swap! page-map-atom assoc :page_title new-title)
                            (when (get-in @page-map-atom [:options :send-every-keystroke])
                              (ws/send-message! [:hey-server/content-updated
@@ -186,7 +219,7 @@
                :class   "form-button button-bar-item"
                :onClick #(do
                            (trace "Saw Click on Save Button!")
-                           (ws/send-message! [:hey-server/save-edited-document
+                           (ws/send-message! [:hey-server/save-doc-and-quit
                                               {:data @the-page-map}]))}]
       [:input {:type    "button"
                :id      "Cancel Button"
