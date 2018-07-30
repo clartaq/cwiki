@@ -30,26 +30,26 @@
   (db/insert-new-page! title content tags author-id))
 
 (defn- save-doc!
-  "Save new, edited content."
+  "Save new or edited content."
   [websocket-data]
   (tracef "save-doc!: websocket-data: %s" websocket-data)
-  (let [post-map (:data websocket-data)
-        id (db/page-map->id post-map)
-        title (db/page-map->title post-map)
-        content (db/page-map->content post-map)
-        tags (:tags post-map)]
-    (if id
-      (db/update-page-title-and-content! id title (set tags) content)
-      (save-new-doc! title content tags (:page_author post-map)))))
+  (when-let [post-map (and websocket-data (:data websocket-data))]
+    (let [id (db/page-map->id post-map)
+          title (db/page-map->title post-map)
+          content (db/page-map->content post-map)
+          tags (:tags post-map)]
+      (if id
+        (db/update-page-title-and-content! id title (set tags) content)
+        (save-new-doc! title content tags (:page_author post-map))))))
 
-(defn send-document-to-editor
+(defn- send-document-to-editor
   "Get the post to be edited and send it to the editor."
   [client-id]
   (trace "server sending document")
   (chsk-send! client-id [:hey-editor/here-is-the-document
                          (editor-layout/get-post-map-for-editing)]))
 
-(defn content-updated
+(defn- content-updated
   "When the content of the post being edited changes, do something with it
   here if desired."
   [?data]
@@ -57,15 +57,14 @@
   (when ?data
     (editor-layout/update-content-for-websocket ?data)))
 
-(defn save-edited-document
+(defn- save-doc-and-quit!
   "Save the edited post and ask the client to shut itself down."
   [client-id ?data]
   (trace "Editor asked to save edited document.")
-  (when ?data
-    (save-doc! ?data))
+  (save-doc! ?data)
   (chsk-send! client-id [:hey-editor/shutdown-after-save]))
 
-(defn cancel-editing
+(defn- cancel-editing
   "Stop editing the post and ask the client to shut itself down."
   [client-id]
   (trace "Editor asked to cancel editing.")
@@ -79,7 +78,8 @@
   (cond
     (= id :hey-server/send-document-to-editor) (send-document-to-editor client-id)
     (= id :hey-server/content-updated) (content-updated ?data)
-    (= id :hey-server/save-edited-document) (save-edited-document client-id ?data)
+    (= id :hey-server/save-doc) (save-doc! ?data)
+    (= id :hey-server/save-doc-and-quit) (save-doc-and-quit! client-id ?data)
     (= id :hey-server/cancel-editing) (cancel-editing client-id)
     (= id :chsk/uidport-open) (trace ":chsk/uidport-open")
     (= id :chsk/uidport-close) (trace ":chsk/uidport-close")
