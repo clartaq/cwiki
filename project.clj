@@ -17,10 +17,10 @@
                  [clj-time "0.14.4"]
                  [com.taoensso/sente "1.12.0"]
                  [com.taoensso/timbre "4.10.0"]
-                 [com.vladsch.flexmark/flexmark "0.34.10"]
-                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.10"]
-                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.10"]
-                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.10"]
+                 [com.vladsch.flexmark/flexmark "0.34.12"]
+                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.12"]
+                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.12"]
+                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.12"]
                  [compojure "1.6.1" :exclusions [clout instaparse]]
                  [environ "1.1.0"]
                  [hiccup "1.0.5"]
@@ -66,7 +66,7 @@
                                       :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
 
                        :dependencies [[binaryage/devtools "0.9.10"]
-                                      [cider/piggieback "0.3.6"]
+                                      [cider/piggieback "0.3.1"]
                                       [figwheel-sidecar "0.5.16":exclusions [org.clojure/tools.nrepl]]
                                       [prone "1.6.0"]
                                       [ring/ring-mock "0.3.2"]
