@@ -100,7 +100,7 @@
   "Return a map of the default option values used the first time the
   program starts."
   []
-  {:editor_autosave_interval    300
+  {:editor_autosave_interval    0
    :editor_send_every_keystroke true
    :root_page                   "Front Page"
    :wiki_name                   "CWiki"
