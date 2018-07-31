@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added the ability for an admin user to save revisions to "seed" pages directly into the directory where seed pages are stored in the repository. This resolved issue [#16 "Let Admin Save Seed Pages"](https://bitbucket.org/David_Clark/cwiki/issues/16/let-admin-save-seed-pages) in commit [72e6644](https://bitbucket.org/David_Clark/cwiki/commits/72e6644b6215ac44713fa56cddd51f497283de6d).
 - The exact middleware used during a build is determined by the environment: "dev" or "prod".
 - More consistent use of logging. Removing `println` in favor of the [timbre](https://github.com/ptaoussanis/timbre) library.
+- Auto-save functionality.
 
 ### Changed ###
 - Lots of additions and revisions to the pages used to initialize the database on first time use.

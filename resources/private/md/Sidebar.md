@@ -1,12 +1,13 @@
 ---
-title: Sidebar
 author: CWiki
-date: 06/11/2017 1:32:19 PM  
-updated: 1/8/2018 10:51:39 AM            
+title: Sidebar
+date: 2017-06-11T13:32:19.000-04:00
+modified: 2018-07-31T17:39:44.476-04:00
 tags:
-  - special pages
   - sidebar
+  - special pages
 ---
+
 
 Here's your [[Sidebar]]. You can edit this page just like any other to put useful stuff here. Things like reminders of how to do things or useful links. See the [[About the Sidebar]] page for tips and information. Then, go ahead and edit it.
 
@@ -15,7 +16,6 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 * [[All Pages]]
 * [[All Users]]
 * [[All Tags]]
-* [[Preferences]]
 * [[Special Pages]]
 * [[Orphans]]
 * [[To Do]]
@@ -23,6 +23,7 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 
 ###### Maintenance ######
 
+* [[preferences|Preferences]]
 * [[compress|Compress]]
 * [[backup|Backup]]
 * [[restore|Restore]]
@@ -30,4 +31,3 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 * [[select-profile|Edit User Profile]]
 * [[delete-user|Delete User]]
 * [[reset-password|Reset Password]]
-

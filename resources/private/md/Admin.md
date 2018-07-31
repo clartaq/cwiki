@@ -10,6 +10,7 @@ tags:
 
 This page is basically just a menu pointing to admin maintenance pages.
 
+* [[preferences|Preferences]] let's you change some settings used by the wiki.
 * [[compress|Compress]] and clean the database.
 * [[backup|Backup]] the database.
 * [[restore|Restore]] a saved database.

@@ -2,16 +2,18 @@
 author: CWiki
 title: About Admin Pages
 date: 2017-11-20T13:51:44.000-05:00
-modified: 2018-06-16T10:33:13.600-04:00
+modified: 2018-07-31T17:43:57.198-04:00
 tags:
   - about
   - admin
   - special pages
 ---
 
+
 ​​
 Only a user in the admin role can accomplish administrative tasks. There should be at least one "admin" user created the first time the wiki is started and viewed. That user can also create other admin users if they so desire. If you are using CWiki strictly as a personal wiki and you are the only user, then you are the admin user. (If you can click any of the following links, you are an admin user. If the links are "grayed out" and not clickable, you are not an admin user.)
 
+* **Preferences**: A page to let you changes some settings controlling how the program operates. See also [[About Preferences]].
 * **Database Compression**: As the program operates, the database is continuously updated with new material or has existing material removed. In the course of normal operations, the database program may take some "shortcuts" to keep database performance speedy. These shortcuts may allow unused space to accumulate in the database. The [[compress|Compress]] page will let you spend a few moments removing this accrued cruft and restoring performance while reducing database size. See [[About Compressing the Database]] for a little more information.
 * **Database Backup**: The [[backup|Backup]] page will let you make a copy of the database and store it somewhere safe. See the [[About Backup and Restore]] page for more information.
 * **Restore A Saved Database**: If the database gets screwed up or erased somehow, you can use the [[restore|Restore]] page to re-create it from a previously saved backup. [[About Backup and Restore]] page for more information

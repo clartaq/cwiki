@@ -608,6 +608,14 @@ input#new-tag-button {
     padding-bottom: 0.3rem;
 }
 
+.long-form-text-field {
+    width: var(--content-max-width);
+    font-size: 0.9rem;
+    padding-top: 0.2rem;
+    padding-left: 0.1rem;
+    padding-bottom: 0.3rem;
+}
+
 .tag-text-field {
     font-size: 0.8rem;
     padding-top: 0.1rem;
@@ -732,6 +740,13 @@ label.cabinet input.file
     width: 30%;
     font-size: 0.75rem;
     line-height: 1.0rem;
+}
+
+.hint-field {
+    padding-top: 1.0rem;
+    font-size: 0.95rem;
+    line-height: 1.2rem;
+    width: var(--content-max-width);
 }
 
 .required-field-hint {
