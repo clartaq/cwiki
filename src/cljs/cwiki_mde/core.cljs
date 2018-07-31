@@ -26,7 +26,7 @@
 
 (defn change-watcher!
   [doc-save-fn page-map-atom]
-  (let [delay (get-in @page-map-atom [:options :editor_autosave_interval])]
+  (let [delay (* 1000 (get-in @page-map-atom [:options :editor_autosave_interval]))]
     (when (pos? delay)
       (clear-autosave-delay!)
       (start-autosave-delay! doc-save-fn delay page-map-atom))))
