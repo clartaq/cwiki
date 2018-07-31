@@ -176,7 +176,7 @@
       ;(when edit-link
       ;  (menu-item-span edit-link))
       (when mde-link
-        (menu-item-span mde-link)) ;[:a {:href "/mde"} "mde"]))
+        (menu-item-span mde-link))                          ;[:a {:href "/mde"} "mde"]))
       (when delete-link
         (menu-item-span delete-link))
       (menu-item-span [:a {:href "/"} "Home"])
@@ -731,3 +731,50 @@
                    (str "All Pages with Tag \"" tag "\"") content)]
     (view-list-page post-map query-results req)))
 
+;;
+;; Pages and utilities that allow the user to change option/preference settings.
+;;
+
+(defn compose-get-options-age
+  [req]
+  (let [delay (db/get-option-value :editor_autosave_interval)]
+    (short-form-template
+      [:div {:class "cwiki-form"}
+       (form-to {:enctype      "multipart/form-data"
+                 :autocomplete "off"}
+                [:post "preferences"]
+                (hidden-field "referer" (get (:headers req) "referer"))
+                [:p {:class "form-title"} "Change Preferences"]
+                [:div {:class "form-group"}
+                 [:div {:class "form-label-div"}
+                  [:label {:class "form-label"
+                           :for   "autosave-interval"}
+                   "Autosave Interval (seconds)"]]
+                 (text-field {:class       "form-text-field"
+                              :autofocus   "autofocus"
+                              :placeholder "Enter the autosave interval in seconds"
+                              :value       (str delay)}
+                             "autosave-interval")
+                 [:p {:class "hint-field"}
+                  "Enter an integer representing the number of seconds after the last
+                  keypress before saving the edits to a document. The default value
+                  of zero (0) indicates that there should not be any automatic saving."]
+                 [:p {:class "hint-field"}
+                  "A setting of zero is recommended since autosaving nullifys the effect
+                  of the \"Cancel\" button. That is, when autosave is turned on,
+                  pressing the \"Cancen\" button will only restore the document to the
+                  state it was in at the time of the last autosave."]]
+                [:div {:class "button-bar-container"}
+                 (submit-button {:id    "save-options-button"
+                                 :class "form-button button-bar-item"} "Save")
+                 [:input {:type    "button" :name "cancel-button"
+                          :value   "Cancel"
+                          :class   "form-button button-bar-item"
+                          :onclick "window.history.back();"}]])])))
+
+(defn confirm-saved-options
+  "Return a page stating that the preferences have been saved."
+  [referer]
+  (short-message-return-to-referer
+    "Preferences Saved"
+    "All changes to the preferences have been saved." referer))

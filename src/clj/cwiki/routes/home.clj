@@ -238,6 +238,39 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defn- safe-parse-int
+  "Convert a string to an integer. Return -1 on exception."
+  [x]
+  (try (Integer/parseInt x)
+       (catch Exception e
+         -1)))
+
+(defn get-preferences
+  "Put up a page asking the user to edit any options/preferences."
+  [req]
+  (layout/compose-get-options-age req))
+
+(defn post-preferences
+  "Validate and save any changes to the options/preferences."
+  [req]
+  (let [params (:multipart-params req)
+        referer (get params "referer")
+        interval (get params "autosave-interval")
+        result (safe-parse-int interval)]
+    (if (>= result 0)
+      (do
+        (db/set-option-value :editor_autosave_interval result)
+        (layout/short-message-return-to-referer
+          "Preferences Saved"
+          "All changes to the preferences have been saved." referer))
+      (layout/short-message-return-to-referer
+        "Problem with the Autosave Interval!"
+        "The autosave interval must be a positive integer number of seconds.
+        No new values have been saved."
+        referer))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defroutes home-routes
            (GET "/" request (home request))
            ;(GET "/about" request (about request))
@@ -247,6 +280,8 @@
            (POST "/export-all" request (post-export-all-pages request))
            (GET "/import" request (get-import-file request))
            (POST "/import" request (post-import-page request))
+           (GET "/preferences" request (get-preferences request))
+           (POST "/preferences" request (post-preferences request))
            (POST "/proceed-with-import" request (post-proceed-with-import request))
            (POST "/save-edits" request
              (let [params (request :multipart-params)]

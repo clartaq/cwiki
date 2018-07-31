@@ -127,17 +127,19 @@
 (defn get-option-value
   "Return the value of the option associated with the key or nil if there is
   no such key in the options table."
-  [k db]
-  (k (get-option-map db)))
+  ([k] (get-option-value k (get-h2-db-spec)))
+  ([k db]
+   (k (get-option-map db))))
 
 (defn set-option-value
   "Update the options in the database to include the key/value given,
   whether the key existed in the options map before or not, that is,
   a previous k/v pair that was not already in the options will be added."
-  [k v db]
-  (let [m (get-option-map db)
-        nm (merge m {k v})]
-    (update-option-map nm db)))
+  ([k v] (set-option-value k v (get-h2-db-spec)))
+  ([k v db]
+   (let [m (get-option-map db)
+         nm (merge m {k v})]
+     (update-option-map nm db))))
 
 ;-------------------------------------------------------------------------------
 ; user-id/user-name related functions.
