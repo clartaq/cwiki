@@ -1,4 +1,4 @@
-(defproject cwiki "0.0.10"
+(defproject cwiki "0.0.11-SNAPSHOT"
   :description "A personal wiki written in Clojure and Clojurescript."
   :url "https://bitbucket.org/David_Clark/cwiki"
   :license {:name         "Simplfied BSD"
@@ -37,7 +37,7 @@
 
   :main cwiki.main
 
-  ;:uberjar-name "cwiki.jar"
+  :uberjar-name "cwiki.jar"
 
   :source-paths ["src/clj"]
 
