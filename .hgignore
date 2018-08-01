@@ -11,3 +11,6 @@ figwheel_server.log
 cwiki.iml
 .rebel_readline_history
 /test/data/db/testdatabase.db.mv.db
+/resources/public/css/mde.min.css
+/resources/public/css/styles.min.css
+/resources/public/css/editor-styles.min.css
