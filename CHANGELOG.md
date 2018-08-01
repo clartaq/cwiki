@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased 0.0.10-SNAPSHOT]
+## [0.0.10] - 2018-08-01
 ### Added ###
 - Added licensing description to the project file.
 - Added this changelog.
@@ -16,8 +16,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Auto-save functionality.
 
 ### Changed ###
-- Lots of additions and revisions to the pages used to initialize the database on first time use.
-- Closed all remaining (inactive) branches. Just tidying up so there is now a single repository head.
+- Lots of additions and revisions to the pages used to initialize the database on first-time use.
+- Closed all remaining (inactive) branches. Just tidying up, so there is now a single repository head.
 - Removed contents of the "Research" directory that should never have been in the repository in the first place. Things in this directory included some example CSS files and some examples of other Markdown editors.
 - Multiple updates of project dependencies.
 
@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Resolved issue [#1, "Characters that are invalid in SQL statements"](https://bitbucket.org/David_Clark/cwiki/issues/1/characters-that-are-invalid-in-sql) in commit [1de736b](https://bitbucket.org/David_Clark/cwiki/commits/1de736b).
 - Resolved issue [#2, "Program-Generated Pages Should Not Be Editable"](https://bitbucket.org/David_Clark/cwiki/issues/2/program-generated-pages-should-not-be) in commit [80e6ab0](https://bitbucket.org/David_Clark/cwiki/commits/80e6ab0)
 - Resolved issue [#17](https://bitbucket.org/David_Clark/cwiki/issues/17/page-author-not-correctly-assigned-for-new) "Page Author not Correctly Assigned for New Pages" in commit [c14bce0](https://bitbucket.org/David_Clark/cwiki/commits/c14bce00feffac5bdd6793c2ed6c5287b6a7f3a3).
+- Resolved issue [#11, "Make Program Options Usable"](https://bitbucket.org/David_Clark/cwiki/issues/11/make-program-options-usable) in commit [6eb603f](https://bitbucket.org/David_Clark/cwiki/commits/6eb603f84c79ff1cbf4c5928059d0830e35df737).
 
 ## [0.0.9] - 2018-06-03
 ### Added ###
@@ -36,7 +37,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Syntax highlighting on wiki pages is now done with highlightjs.
 - Updated project dependencies.
 - YAML frontmatter can now use ISO 8601 format dates.
-- Varius CSS tweaks.
+- Various CSS tweaks.
 - Moved to Clojure 1.9 for development.
 
 ## [0.0.8] - 2018-02-18 
@@ -57,7 +58,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Switched from using SQLite for the database to H2.
 - Changed initial database creation to use a list of files stored in a file instead of hardcoding the list of files to import.
 - Added YAML frontmatter to all initial pages.
-- Content of initial pages updated.
+- The content of initial pages updated.
 - Updated copyright years.
 - Eliminated infrastructure for wiki namespaces.
 - Moved less frequently used commands to a new drop-down menu in the page header.
@@ -74,7 +75,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed ###
 - MathJax configuration.
-- Made sorting of page name, users, tags case-insensitive in generated pages.
+- Made sorting of page names, users, tags case-insensitive in generated pages.
 - More content.
 
 ### Fixed ###
@@ -87,7 +88,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed ###
 - Refinements to button styling.
-- Revisions and updates to content of initial pages.
+- Revisions and updates to the content of seed pages.
 - Updated dependencies.
 
 ## [0.0.4] - 2017-11-23
@@ -99,7 +100,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Revisions, updates and additions to content.
 
 ### Fixed ###
-- Bug in ordering of link CSS.
+- Bug in the ordering of link CSS.
 
 ## [0.0.3] - 2017-11-20
 ### Added ###
@@ -110,7 +111,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Login capability.
 
 ### Changed ###
-- Content of README.md file expanded.
+- The content of README.md file expanded.
 - Refactored database structure.
 - Dependencies
 
@@ -127,11 +128,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed ###
 - Lots of messin' with styles.
-- Consistent use of "CWiki" rather than a mixture of "cwiki" and "CWiki".
+- Consistent use of "CWiki" rather than a mixture of "cwiki" and "CWiki."
 - Dependencies.
 
 ### Fixed ###
-- Canceling the editing of a new page now returns the user to the same page where they clicked the "New" menu item.
+- Canceling the editing of a new page now returns the user to the same page where they clicked on the "New" menu item.
 
 ## [0.0.1] - 2017-10-24
 ### Added ###
@@ -141,9 +142,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed ###
 - Information in pages used at initial startup.
 - Revisions to routes.
-- Refactored creation of initial database.
+- Refactored creation of the initial database.
 
 ## [Initial Commit] - 2017-10-16
 ### Added ###
 - Everything.
-

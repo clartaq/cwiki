@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-07-11T17:30:34.140-04:00
+modified: 2018-08-01T09:46:04.973-04:00
 tags:
   - architecture
   - bugs
@@ -11,6 +11,7 @@ tags:
   - process
   - technical note
 ---
+
 
 
 
@@ -76,7 +77,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
     * Issue [#12](https://bitbucket.org/David_Clark/cwiki/issues/12/improve-styling-of-inline-code) was created.
 
 * Make the options usable.
-    * Issue [#11](https://bitbucket.org/David_Clark/cwiki/issues/11/make-program-options-usable) was created.
+    * Issue [#11](https://bitbucket.org/David_Clark/cwiki/issues/11/make-program-options-usable) was created. The initial implementation appeared in commit [6eb603f](https://bitbucket.org/David_Clark/cwiki/commits/6eb603f84c79ff1cbf4c5928059d0830e35df737).
 
 * Just a convenience for me, but since I do a lot of editing of the seed pages, it would be nice to save them to the same location as the seed files used to create a new database rather than my current practice of exporting them, then moving them into place manually.
     * This ssue [#16](https://bitbucket.org/David_Clark/cwiki/issues/16/let-admin-save-seed-pages) was resolved in commit [72e6644](https://bitbucket.org/David_Clark/cwiki/commits/72e6644b6215ac44713fa56cddd51f497283de6d).

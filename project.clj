@@ -1,4 +1,4 @@
-(defproject cwiki "0.0.10-SNAPSHOT"
+(defproject cwiki "0.0.10"
   :description "A personal wiki written in Clojure and Clojurescript."
   :url "https://bitbucket.org/David_Clark/cwiki"
   :license {:name         "Simplfied BSD"
@@ -37,7 +37,7 @@
 
   :main cwiki.main
 
-  :uberjar-name "cwiki.jar"
+  ;:uberjar-name "cwiki.jar"
 
   :source-paths ["src/clj"]
 
@@ -59,8 +59,6 @@
   :ring {:handler cwiki.handler/app}
 
   :figwheel {:css-dirs ["resources/public/css"]}
-
- ; :uberjar-exclusions [#"cwiki.test.*" #"cwiki-test.*" #"cwiki.test.handler.clj"]
 
   :profiles {:dev     {:repl-options {:init-ns          cwiki.repl
                                       :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
