@@ -16,8 +16,7 @@
 
 (def delay-handle (atom nil))
 
-(defn clear-autosave-delay!
-  []
+(defn clear-autosave-delay! []
   (.clearTimeout js/window @delay-handle))
 
 (defn start-autosave-delay!
