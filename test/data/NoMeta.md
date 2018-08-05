@@ -1,1 +1,1 @@
-A Markdown file without any metadata.
+A plain text file without any metadata.

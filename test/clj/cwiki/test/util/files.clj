@@ -137,19 +137,19 @@
     (let [file (File. "test/data/NoMeta.md")
           m (load-markdown-from-file file)]
       (is (empty? (:meta m)))
-      (is (= "A Markdown file without any metadata." (:body m))))
+      (is (= "A plain text file without any metadata." (:body m))))
     (let [file (File. "test/data/NoDatesOrTags.md")
           m (load-markdown-from-file file)
           meta (:meta m)]
       (is (= "Someone" (:author meta)))
-      (is (= "A Crazy Title" (:title meta)))
+      (is (= "A Remarkable Title" (:title meta)))
       (is (nil? (and (:date meta)
                      (:created meta))))
       (is (nil? (and (:updated meta)
                      (:changed meta)
                      (:modified meta))))
       (is (nil? (:tags meta)))
-      (is (= "\nA Markdown file without dates or tags in the metadata." (:body m)))
+      (is (= "\nA Markdown file without dates or tags in the metadata.\nBut it does have a remarkable title. It is remarkable\nin that is uses the word remarkable several times.\nRemarkable!\n" (:body m)))
       )))
 
 (deftest trim-leading-and-trailing-underscores-test
