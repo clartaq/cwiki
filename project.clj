@@ -26,6 +26,7 @@
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
                  [javax.xml.bind/jaxb-api "2.3.0"]
+                 [org.apache.lucene/lucene-core "3.6.2"]
                  [reagent "0.8.1"]
                  [ring/ring-devel "1.6.3"]
                  [ring/ring-defaults "0.3.2"]]
