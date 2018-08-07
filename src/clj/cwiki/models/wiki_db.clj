@@ -899,13 +899,19 @@
 (defn- create-db
   "Create the database tables and initialize them with content for
   first-time use."
-  [db]
-  (create-tables db)
-  (init-admin-table! db)
-  (add-initial-users! db)
-  (add-initial-pages! db)
-  (add-initial-roles! db)
-  (add-initial-options! db))
+  [db-spec]
+  (create-tables db-spec)
+  ; The magic incanations to get full text search to work.
+  (jdbc/execute! db-spec
+                 ["CREATE ALIAS IF NOT EXISTS FTL_INIT FOR \"org.h2.fulltext.FullTextLucene.init\""])
+  (jdbc/execute! db-spec ["CALL FTL_INIT()"])
+  (jdbc/execute! db-spec ["CALL FTL_CREATE_INDEX('PUBLIC', 'PAGES', 'PAGE_CONTENT')"])
+  ; End incantations.
+  (init-admin-table! db-spec)
+  (add-initial-users! db-spec)
+  (add-initial-pages! db-spec)
+  (add-initial-roles! db-spec)
+  (add-initial-options! db-spec))
 
 (defn- db-exists?
   "Return true if the wiki database already exists."
