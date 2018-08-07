@@ -15,3 +15,4 @@ cwiki.iml
 /resources/public/css/styles.min.css
 /resources/public/css/editor-styles.min.css
 /test/data/db/testdatabase.db.trace.db
+/resources/public/db/
