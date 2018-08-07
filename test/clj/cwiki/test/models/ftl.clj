@@ -127,14 +127,6 @@
 ; The tests.
 ;-------------------------------------------------------------------------------
 
-;(defn int-at-end
-;  "Return the (base 10) integer at the end of the string or nil if there isn't one."
-;  [s]
-;  (when s
-;    (let [dig-str (re-find #"-?\d*$" s)]
-;      (when (and dig-str (seq dig-str))
-;        (Integer/parseInt dig-str)))))
-;
 (deftest int-at-end-test
   (testing "The int-at-end function."
     (is (nil? (int-at-end nil)))
@@ -145,59 +137,6 @@
     (is (nil? (int-at-end "abc45def")))
     (is (= -37 (int-at-end "abc-37")))))
 
-;(defn rs->result-vector
-;  "Take a result set list and turn it into a vector."
-;  [rs]
-;  (let [result (vec rs)]
-;    result))
-;
-;(defn rm->id-score-map
-;  "Take a result map {:query string :id string} and turn it into a score map
-;  where the id has been converted to an integer."
-;  [result-map]
-;  (let [query (:query result-map)
-;        id (int-at-end query)]
-;    {:id id :score (:score result-map)}))
-;
-;(defn rv->id-score-vector
-;  "Take a vector of result maps and return a vector of id/score maps where
-;  the id is an integer."
-;  [rv]
-;  (mapv rm->id-score-map rv))
-;
-;(defn case-insensitive-title-comparator
-;  "Case-insensitive title comparator."
-;  [m1 m2]
-;  (.compareToIgnoreCase (:title m1) (:title m2)))
-;
-;(defn reverse-case-insensitive-title-comparator
-;  "Reverse order case-insensitive title comparator"
-;  [m1 m2]
-;  (case-insensitive-title-comparator m2 m1))
-;
-;(defn lo-to-hi-score-comparator
-;  "Numeric comparator for low to high sorting."
-;  [s1 s2]
-;  (compare (:score s1) (:score s2)))
-;
-;(defn hi-to-lo-score-comparator
-;  "Numeric comparator for high to low sorting."
-;  [s1 s2]
-;  (compare (:score s2) (:score s1)))
-;
-;(defn sort-search-results
-;  "Sort the vector of results according to the type of sort requested and
-;  return a sorted vector."
-;  [v sort-type]
-;  (when (and v sort-type)
-;    (cond
-;      (= sort-type :none) v
-;      (= sort-type :alphanum-natural) (sort case-insensitive-title-comparator v)
-;      (= sort-type :alphanum-reverse) (sort reverse-case-insensitive-title-comparator v)
-;      (= sort-type :score-hi-to-lo) (sort hi-to-lo-score-comparator v)
-;      (= sort-type :score-lo-to-hi) (sort lo-to-hi-score-comparator v)
-;      :else (errorf "ACK! Don't know how to sort by %s " sort-type))))
-;
 (def sort-test-data
   [{:score 0.753 :title "Bogus Title"}
    {:title "Zimbabwe Title" :score 1.294}
@@ -220,52 +159,6 @@
     (is (= ["Crazy Title" "A New Title" "Bogus Title" "Zimbabwe Title" "Wamsutta Towels" "aardvark Title"]
            (reduce #(conj %1 (:title %2)) [] (sort-search-results sort-test-data :score-lo-to-hi))))))
 
-;(defn id-score-map->title-score-map
-;  [m db-spec]
-;  "Take a map containing a page id under the :id key and return a map
-;  containing the page title under the key :title."
-;  (let [title (page-id->title (:id m) db-spec)]
-;    (merge {:title title} m)))
-;
-;(defn iv->title-score-vector
-;  "Take a vector of maps containing the keys :id and :score, and return a
-;  vector of maps where the page titles have been added under the key :title."
-;  [id-score-vector db-spec]
-;  (mapv #(id-score-map->title-score-map % db-spec) id-score-vector))
-;
-;(defn search-results->title-score-vector
-;  "Take the result set for a search, along with a map of options, and return
-;  a vector of maps containing :title :id and :scores, with the vector sorted
-;  according to the options. Sorting defaults to :score-hi-to-lo so that the
-;  most relevant results are first."
-;  [srv options]
-;  (let [db-spec (or (:db-spec options) (get-test-db-spec))
-;        sort-type (or (:sort-type options) :score-hi-to-lo)
-;        tsv (-> srv
-;                rs->result-vector
-;                rv->id-score-vector
-;                (iv->title-score-vector db-spec)
-;                (sort-search-results sort-type))]
-;    tsv))
-;
-;(defn search-content
-;  "Search the content of all pages in the database for the given text.
-;  Return a vector of maps. Each map has a page title, page id, and relevance
-;  score for a page that matches the search criteria. A map of options can
-;  be used to specify the maximum number of results to return (:max-results,
-;  defaults to 1000), the offset to use (:offset, defaults to 0), the
-;  database to search (:db-spec, defaults to the production database),
-;  and how the output vector should be sorted (:sort-type, defaults to
-;  :score-hi-to-low)."
-;  [txt options]
-;  (let [max-results (or (:max-results options) 1000)
-;        offset (or (:offset options) 0)
-;        db-spec (or (:db-spec options) (get-h2-db-spec))
-;        search-str (str "SELECT * FROM FTL_SEARCH('" txt "', " max-results ", " offset ")")
-;        rs (jdbc/query db-spec [search-str])
-;        tsv (search-results->title-score-vector rs options)]
-;    tsv))
-;
 (deftest find-word-missing-test
   (testing "Searching for docs containing the word 'missing'."
     (let [tsv (search-content "missing" {:db-spec (get-test-db-spec)})]
