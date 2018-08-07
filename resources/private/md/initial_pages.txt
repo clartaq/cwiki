@@ -33,7 +33,6 @@ Motivation.md
 Other_Wiki_Software.md
 Pages_Primer.md
 Path_to_Release.md
-Preferences.md
 Sidebar.md
 Special_Pages.md
 Tag_Design.md
