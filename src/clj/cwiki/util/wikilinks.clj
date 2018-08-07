@@ -21,7 +21,8 @@
 (defn find-wikilinks
   "Return a collection of all of the wikilinks in the text."
   [txt]
-  (re-seq pattern txt))
+  (when (and pattern txt)
+    (re-seq pattern txt)))
 
 (defn article-is-present?
   "Return true if an article with the given title
