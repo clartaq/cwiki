@@ -156,14 +156,10 @@
    (let [allow-editing (not (:editing options))
          title (db/page-map->title post-map)
          can-edit-and-delete (ath/can-edit-and-delete? req title)
-         ;edit-link (and post-map
-         ;               allow-editing
-         ;               can-edit-and-delete
-         ;               (get-edit-link-for-page post-map req))
-         mde-link (and post-map
-                       allow-editing
-                       can-edit-and-delete
-                       (get-edit-link-for-page post-map req))
+         edit-link (and post-map
+                        allow-editing
+                        can-edit-and-delete
+                        (get-edit-link-for-page post-map req))
          delete-link (and post-map
                           allow-editing
                           can-edit-and-delete
@@ -171,12 +167,8 @@
      [:nav {:class "hmenu"}
       (when (ath/can-create? req)
         (menu-item-span [:a {:href "/New Page"} "New"]))
-      ;(when (ath/can-create? req)
-      ;  (menu-item-span [:a {:href "/New MDE Page"} "New MDE"]))
-      ;(when edit-link
-      ;  (menu-item-span edit-link))
-      (when mde-link
-        (menu-item-span mde-link))                          ;[:a {:href "/mde"} "mde"]))
+      (when edit-link
+        (menu-item-span edit-link))
       (when delete-link
         (menu-item-span delete-link))
       (menu-item-span [:a {:href "/"} "Home"])
@@ -695,6 +687,13 @@
         content (process-title-set query-results)
         post-map (db/create-new-post-map "All Pages" content)]
     (view-list-page post-map query-results req)))
+
+(defn compose-search-results-page
+  [search-results req]
+  (let [titles (reduce #(conj %1 (:title %2)) [] search-results)
+        content (process-title-set titles)
+        post-map (db/create-new-post-map "Search Results" content)]
+    (view-list-page post-map titles req)))
 
 (defn compose-all-users-page
   "Return a page listing all of the users known to the wiki."
