@@ -34,10 +34,10 @@
   "Search the content of the wiki pages for the search text and
   return a new pages with links to the relevant pages."
   [search-text req]
+  (println "do-search: search-text: " search-text)
   (if (ri/is-authenticated-user? req)
-    (do
-      (println "do-search: saw search-text:" search-text)
-      (layout/compose-not-yet-view "search"))
+    (let [sr (db/search-content search-text {})]
+      (layout/compose-search-results-page sr req))
     (redirect "/login")))
 
 (defn- get-tag-set-from-req
@@ -242,7 +242,7 @@
   "Convert a string to an integer. Return -1 on exception."
   [x]
   (try (Integer/parseInt x)
-       (catch Exception e
+       (catch Exception _
          -1)))
 
 (defn get-preferences
@@ -273,7 +273,6 @@
 
 (defroutes home-routes
            (GET "/" request (home request))
-           ;(GET "/about" request (about request))
            (GET "/export" request (get-export-page request))
            (POST "/export" request (post-export-page request))
            (GET "/export-all" request (get-export-all-pages request))
