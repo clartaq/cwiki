@@ -138,8 +138,9 @@
            :enctype "multipart/form-data"}
     [:input {:type        "text" :id "search-text" :name "search-text"
              :placeholder "Enter search terms here..."}]
-    [:input {:type  "submit" :id "search-submit" :name "search-submit"
-             :value "Search"}]]])
+    ;[:input {:type  "submit" :id "search-submit" :name "search-submit"
+    ;         :value "Search"}]
+    ]])
 
 (defn- menu-item-span
   "Return a span with CSS class 'menu-item' around the given content."
