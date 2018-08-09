@@ -2,7 +2,7 @@
 author: CWiki
 title: Technical Notes
 date: 2017-10-01T17:45:07.000-04:00
-modified: 2018-06-18T10:28:20.814-04:00
+modified: 2018-08-09T16:16:35.081-04:00
 tags:
   - how it works
   - motivation
@@ -28,6 +28,7 @@ Almost no software is written without dependencies these days -- programs are ju
 * Developed and tested on late versions of Java 8 and Java 9.
 * [Flexmark](https://github.com/vsch/flexmark-java) is used for the Markdown parser and renderer.
 * [H2](http://h2database.com/html/main.html) is used for database functions.
+* Full text search is done with [Lucene](https://lucene.apache.org/core/).
 
 ### Clojure Stuff ###
 
@@ -51,7 +52,7 @@ Earlier in development, the program used [SQLite](https://sqlite.org/). However,
 
 #### Editor ####
 
-Right now, the editor is just an HTML text field. I want to change to [Writing](https://github.com/josephernest/Writing/) once I can figure out how to embed it in my pages with my CSS.
+The editor used to be just an HTML text field. After seeing some examples of simple editors written in JavaScript (like [Writing](https://github.com/josephernest/Writing/) by Joseph Ernest), and notably, the [Markdown editor](https://github.com/lacarmen/reagent-markdown-editor)​ written by Carmen La as an example of React, I wrote my own in ClojureScript. Now it's what I use it for just about everything even though it is quite primitive.
 
 #### CSS ####
 
