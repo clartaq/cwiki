@@ -32,7 +32,7 @@
            (java.net URL URLDecoder)
            (java.util ArrayList)))
 
-(def program-name-and-version "CWiki v0.0.10-SNAPSHOT")
+(def program-name-and-version "CWiki v0.0.11-SNAPSHOT")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.
@@ -689,6 +689,7 @@
     (view-list-page post-map query-results req)))
 
 (defn compose-search-results-page
+  "Return a page listing the page titles in the search results as links."
   [search-results req]
   (let [titles (reduce #(conj %1 (:title %2)) [] search-results)
         content (process-title-set titles)
