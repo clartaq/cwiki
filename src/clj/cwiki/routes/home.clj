@@ -34,11 +34,11 @@
   "Search the content of the wiki pages for the search text and
   return a new pages with links to the relevant pages."
   [search-text req]
-  (println "do-search: search-text: " search-text)
-  (if (ri/is-authenticated-user? req)
-    (let [sr (db/search-content search-text {})]
-      (layout/compose-search-results-page sr req))
-    (redirect "/login")))
+  (when (and search-text (pos? (count search-text)))
+    (if (ri/is-authenticated-user? req)
+      (let [sr (db/search-content search-text {})]
+        (layout/compose-search-results-page sr req))
+      (redirect "/login"))))
 
 (defn- get-tag-set-from-req
   "Retrieve a set of tags from the request and return them."
