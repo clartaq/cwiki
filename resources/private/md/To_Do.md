@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-08-01T09:46:04.973-04:00
+modified: 2018-08-10T15:56:29.060-04:00
 tags:
   - architecture
   - bugs
@@ -11,6 +11,7 @@ tags:
   - process
   - technical note
 ---
+
 
 
 
@@ -46,6 +47,16 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 
 * When you create a new post, the program no longer picks up the name of the currently logged in user as the author of the post.
    * This issue ([#17](https://bitbucket.org/David_Clark/cwiki/issues/17/page-author-not-correctly-assigned-for-new)) was **resolved** in commit [c14bce0](https://bitbucket.org/David_Clark/cwiki/commits/c14bce00feffac5bdd6793c2ed6c5287b6a7f3a3).
+
+* After entering search terms in the "Search" text entry area at the top of the page, pressing the "Tab" button should move the focus to the "Search" button.
+     
+   This actually seems to be an error in the design of the search area itself. The user should not have to move to or click a button to initiate a search. They should only need to hit the return key. Since a text area will perform a submit when the enter key is tapped, we should just remove the "Search" button.
+
+   * Issue [#18](https://bitbucket.org/David_Clark/cwiki/issues/18/need-sensible-tab-behavior) was **resolved** in commit [12ccd43](https://bitbucket.org/David_Clark/cwiki/commits/12ccd4320dd02434f3fa679fd7a57a92cf4d7a71).
+
+* Search should do nothing when given empty search terms. It should not create a search results page with no results.
+
+   * Issue [#19](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) was created.
 
 ### Enhancements <a name="enhancements"></a>
 
