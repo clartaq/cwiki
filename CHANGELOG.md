@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.0.11] - 2018-08-14
 ### Added ###
 - Full text search. This resolved issue [#13: Implement Full-Text Wiki Search"](https://bitbucket.org/David_Clark/cwiki/issues/13/implement-full-text-wiki-search) in commit [81cfa20](https://bitbucket.org/David_Clark/cwiki/commits/81cfa2006dcd6eed768d329b70727c3c3f792938)
 - Ability to run CWiki as an uberjar located in an arbitrary directory.
