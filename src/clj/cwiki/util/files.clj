@@ -1,12 +1,17 @@
 (ns cwiki.util.files
   (:require [clj-yaml.core :as yaml]
             [clojure.java.io :as io]
-            [clojure.string :as st]
             [clojure.string :as s]
             [cwiki.util.datetime :as dt])
   (:import (java.io BufferedReader InputStreamReader File)))
 
 (def ^:const sep (File/separator))
+
+(defn file-name-from-parts
+  "Return a file name built from the parts in v using the
+  os-specific separator sep."
+  [v]
+  (s/join sep v))
 
 (defn remove-from-end
   "Remove any instance of 'end' from the end of string s
@@ -25,7 +30,7 @@
                    (when-let [s (seq coll)]
                      (when (pred (first s))
                        (cons (first s) (take-chars-while pred (rest s))))))]
-    (st/join (funkshun pred coll))))
+    (s/join (funkshun pred coll))))
 
 (defn drop-lines-while
   "While the lines at the beginning of the collection satisfy the
@@ -42,7 +47,7 @@
   [coll]
   (drop-lines-while
     (fn [line] (or (empty? line)
-                   (st/blank? line))) coll))
+                   (s/blank? line))) coll))
 
 (defn split-front-matter-from-body
   "Given a collection of text lines, split any front matter from the body
@@ -80,9 +85,9 @@
         (when contents
           (let [parts (split-front-matter-from-body contents)]
             (when (not-empty (:front parts))
-              (let [meta (yaml->map (st/join "\n" (:front parts)))]
+              (let [meta (yaml->map (s/join "\n" (:front parts)))]
                 (reset! result (assoc @result :meta meta))))
-            (reset! result (assoc @result :body (st/join "\n" (:body parts))))))))
+            (reset! result (assoc @result :body (s/join "\n" (:body parts))))))))
     @result))
 
 (defn load-markdown-from-resource
@@ -108,7 +113,7 @@
 (def ^:const illegal-chars [\newline, \space, \tab, \formfeed, \backspace,
                             \return \/ \\ \u0000 \` \' \" \? \| \* \< \> \:])
 
-; Device names that are reserved on some operating system. From
+; Device names that are reserved on some operating systems. From
 ; org.eclipse.core.resources.IWorkspace.validateName(String, int)
 (def ^:const reserved-dev-names ["aux" "clock$ " "com1" "com2" "com3" "com4"
                                  "com5" "com6" "com7" "com8" "com9" "con"
@@ -120,8 +125,8 @@
   underscores have been removed."
   [s]
   (when s
-    (st/replace
-      (st/replace-first s (re-pattern "^\\_+") "")
+    (s/replace
+      (s/replace-first s (re-pattern "^\\_+") "")
       (re-pattern "\\_+$")
       "")))
 
@@ -195,7 +200,8 @@
   "Return the canonical path to where the private Markdown resources are
   saved."
   []
-  (.getCanonicalPath (File. (str "." sep "resources" sep "private" sep "md"))))
+  (.getCanonicalPath (File. ^String (file-name-from-parts
+                                      ["." "resources" "private" "md"]))))
 
 (defn- save-page
   "Save the page described in the page-map to a file."
@@ -206,6 +212,8 @@
       (println "Problem with translating the page name")
       (let [path (str dir sep sanitized-name ".md")
             content (:page_content page-map)]
+        ; Needed when saving seed pages while running from an uberjar.
+        (io/make-parents path)
         (spit path (str (build-yaml page-map author-name tags) content))
         path))))
 
