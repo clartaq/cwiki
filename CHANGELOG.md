@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added ###
 - Full text search. This resolved issue [#13: Implement Full-Text Wiki Search"](https://bitbucket.org/David_Clark/cwiki/issues/13/implement-full-text-wiki-search) in commit [81cfa20](https://bitbucket.org/David_Clark/cwiki/commits/81cfa2006dcd6eed768d329b70727c3c3f792938)
+- Ability to run CWiki as an uberjar located in an arbitrary directory.
+- Demonstrated that CWiki can run from a VPS. 
 
 ### Changed ###
 - Lots of updates to the seed pages.
