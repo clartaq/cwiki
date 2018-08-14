@@ -2,13 +2,12 @@
 author: CWiki
 title: About Front Matter
 date: 2017-12-24T17:15:16.000-05:00
-modified: 2018-06-19T09:58:53.242-04:00
+modified: 2018-08-14T13:51:36.795-04:00
 tags:
   - about
   - front matter
   - metadata
 ---
-
 
 This information is relevant only if you use the [[About Import/Export|Import/Export]] capabilities of CWiki to read and save posts to and from disk.
 
@@ -46,7 +45,7 @@ These may change in the future, so keep your eyes on this page.
 ## Some Important Notes ##
 
 ### There must be a title ###
-If no title is present, a really ugly, random title will be created and used. The ugliness is to make it easier for you to spot in the [[All Pages]] page.
+If no title is present, an ugly, random title will be created and used. The ugliness is to make it easier for you to spot in the [[All Pages]] page.
 
 ### The author must already be known to CWiki ###
 If the author does not already exist in the database, the contents of the file will not be added to the database.
@@ -57,7 +56,7 @@ Because of this, **this is in no way a security feature**.
 
 ### The date-time must be in precisely​ the format shown ###
 
-Any other date time format will cause the program to crash. I realize this is extremely fragile and will likely change in future.
+Any other date time format will cause the program to crash. I realize this is extremely fragile and will likely change in the ​future.
 
 I use a keyboard macro to generate it when creating a page. See [[A Timestamp Plugin for Sublime Text 3]] for details.
 
