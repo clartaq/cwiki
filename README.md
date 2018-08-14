@@ -14,6 +14,7 @@ CWiki is pre-alpha software. It does useful things, but many planned features ar
 * Since it uses H2 as the database, there is no DB administration needed.
 * Uses [Markdown](https://daringfireball.net/projects/markdown/syntax) to write and markup pages in the wiki.
 * Uses [MathJax](https://www.mathjax.org/) to produce nicely formatted mathematics. (Requires an active link to the internet at the moment.)
+* Full text search is done using [Lucene](https://lucene.apache.org).
 * Includes a straightforward editor with live preview.
 * Your content can be exported at any time as Markdown with [YAML](http://yaml.org) front-matter. There is no lock-in.
 * The program is so simple, even I can understand it -- most of the time.
@@ -31,12 +32,14 @@ To create a stand-alone program, execute `lein uberjar`.
 After the build process finishes, you can run the program from the command line with
 
 ```
-java -jar target\cwiki-0.0.10-SNAPSHOT-standalone.jar
+java -jar target/cwiki-0.0.11-SNAPSHOT-standalone.jar
 ```
 
 Your version number may be different.
 
-You can also download one of the pre-built versions in the [download area](https://bitbucket.org/David_Clark/cwiki/downloads/).
+You can also download one of the pre-built versions in the [download area](https://bitbucket.org/David_Clark/cwiki/downloads/). Note that early versions
+may only work when launched within the directory structure of the project, not
+from any random directory on you system.
 
  When running for the very first time, there will be a pause of several seconds as the database containing the initial wiki content is created. The program will start a local web server and start up your default web browser to display the initial content of the wiki.
 
