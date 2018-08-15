@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-08-14T14:18:44.888-04:00
+modified: 2018-08-15T11:02:03.725-04:00
 tags:
   - architecture
   - bugs
@@ -11,6 +11,7 @@ tags:
   - process
   - technical note
 ---
+
 
 
 
@@ -76,7 +77,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 * Create a function that will update the existing database with new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
 
 * Implement within-wiki search.
-    * This iIssue ([#13](https://bitbucket.org/David_Clark/cwiki/issues/13/implement-full-text-wiki-search)) was **resolved** in commit [81cfa20](https://bitbucket.org/David_Clark/cwiki/commits/81cfa20).
+    * This issue ([#13](https://bitbucket.org/David_Clark/cwiki/issues/13/implement-full-text-wiki-search)) was **resolved** in commit [81cfa20](https://bitbucket.org/David_Clark/cwiki/commits/81cfa20).
 
 * Any maintenance tasks like database compression, backup and restore, for example.
     * Issue [#15](https://bitbucket.org/David_Clark/cwiki/issues/15/implement-maintenance-tasks) was created.
