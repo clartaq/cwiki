@@ -32,9 +32,11 @@ Links_Primer.md
 Motivation.md
 Other_Wiki_Software.md
 Pages_Primer.md
+Running_on_a_VPS.md
 Path_to_Release_0.1.0.md
 Sidebar.md
 Special_Pages.md
+Stuart_Sierras_Component_System.md
 Tag_Design.md
 Text_Formatting.md
 Technical_Notes.md

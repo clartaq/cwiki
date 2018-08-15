@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-08-10T15:56:29.060-04:00
+modified: 2018-08-14T14:18:44.888-04:00
 tags:
   - architecture
   - bugs
@@ -11,6 +11,7 @@ tags:
   - process
   - technical note
 ---
+
 
 
 
@@ -52,7 +53,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
      
    This actually seems to be an error in the design of the search area itself. The user should not have to move to or click a button to initiate a search. They should only need to hit the return key. Since a text area will perform a submit when the enter key is tapped, we should just remove the "Search" button.
 
-   * Issue [#18](https://bitbucket.org/David_Clark/cwiki/issues/18/need-sensible-tab-behavior) was **resolved** in commit [12ccd43](https://bitbucket.org/David_Clark/cwiki/commits/12ccd4320dd02434f3fa679fd7a57a92cf4d7a71).
+   * This issue ([#18](https://bitbucket.org/David_Clark/cwiki/issues/18/need-sensible-tab-behavior)) was **resolved** in commit [12ccd43](https://bitbucket.org/David_Clark/cwiki/commits/12ccd4320dd02434f3fa679fd7a57a92cf4d7a71).
 
 * Search should do nothing when given empty search terms. It should not create a search results page with no results.
 
@@ -75,7 +76,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 * Create a function that will update the existing database with new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
 
 * Implement within-wiki search.
-    * Issue [#13](https://bitbucket.org/David_Clark/cwiki/issues/13/implement-full-text-wiki-search) was created.
+    * This iIssue ([#13](https://bitbucket.org/David_Clark/cwiki/issues/13/implement-full-text-wiki-search)) was **resolved** in commit [81cfa20](https://bitbucket.org/David_Clark/cwiki/commits/81cfa20).
 
 * Any maintenance tasks like database compression, backup and restore, for example.
     * Issue [#15](https://bitbucket.org/David_Clark/cwiki/issues/15/implement-maintenance-tasks) was created.
@@ -91,7 +92,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
     * Issue [#11](https://bitbucket.org/David_Clark/cwiki/issues/11/make-program-options-usable) was created. The initial implementation appeared in commit [6eb603f](https://bitbucket.org/David_Clark/cwiki/commits/6eb603f84c79ff1cbf4c5928059d0830e35df737).
 
 * Just a convenience for me, but since I do a lot of editing of the seed pages, it would be nice to save them to the same location as the seed files used to create a new database rather than my current practice of exporting them, then moving them into place manually.
-    * This ssue [#16](https://bitbucket.org/David_Clark/cwiki/issues/16/let-admin-save-seed-pages) was resolved in commit [72e6644](https://bitbucket.org/David_Clark/cwiki/commits/72e6644b6215ac44713fa56cddd51f497283de6d).
+    * This issue ([#16](https://bitbucket.org/David_Clark/cwiki/issues/16/let-admin-save-seed-pages)) was resolved in commit [72e6644](https://bitbucket.org/David_Clark/cwiki/commits/72e6644b6215ac44713fa56cddd51f497283de6d).
 
 * It sure would be nice if the tags interface during editing provided some ​autocompletion or hints so you could see which tags already exist. (Is it "bug" or "bugs" for this type of post?)
 
