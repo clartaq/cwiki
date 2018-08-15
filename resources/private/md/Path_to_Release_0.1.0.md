@@ -2,12 +2,13 @@
 author: CWiki
 title: Path to Release 0.1.0
 date: 2018-01-01T10:43:10.000-05:00
-modified: 2018-08-09T16:18:13.417-04:00
+modified: 2018-08-15T10:15:31.314-04:00
 tags:
   - cwiki
   - releases
   - technical note
 ---
+
 
 
 Things to accomplish before release 0.1.0:
@@ -19,5 +20,5 @@ Things to accomplish before release 0.1.0:
 - ~~Make contents of "All Users" and "All Tags" pages clickable links.~~ Done.
 - ~~Integrate Writing Markdown editor.~~ Done. Actually wrote a simple editor in ClojureScript.
 - ~~Rationalize CSS, particularly for code listings.~~ Done. Now needs to be done again.
-- Test operation when installed on a server.
+- ~~Test operation when installed on a server.~~ Done.
 - Complete documentation pages.
