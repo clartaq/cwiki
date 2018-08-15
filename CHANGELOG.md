@@ -5,16 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.0.11] - 2018-08-14
 ### Added ###
-- Full text search.
+- Full text search. This resolved issue [#13: Implement Full-Text Wiki Search"](https://bitbucket.org/David_Clark/cwiki/issues/13/implement-full-text-wiki-search) in commit [81cfa20](https://bitbucket.org/David_Clark/cwiki/commits/81cfa2006dcd6eed768d329b70727c3c3f792938)
+- Ability to run CWiki as an uberjar located in an arbitrary directory.
+- Demonstrated that CWiki can run from a VPS. 
+
+### Changed ###
+- Lots of updates to the seed pages.
+- Updates to the project dependencies.
+
+### Fixed ###
+- Resolved issue [#18: "Need Sensible Tab Behavior"](https://bitbucket.org/David_Clark/cwiki/issues/18/need-sensible-tab-behavior) in commit [12ccd43](https://bitbucket.org/David_Clark/cwiki/commits/12ccd4320dd0).
+- Resolved issue [#19: "Search should do nothing when given empty search terms"](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) in commit [64ef8b9](https://bitbucket.org/David_Clark/cwiki/commits/64ef8b9d7aa9).
 
 ## [0.0.10] - 2018-08-01
 ### Added ###
 - Added licensing description to the project file.
-- Added this changelog.
+- Added this changelog, which resolved issue [#3: "Should Maintain a Changelog"](https://bitbucket.org/David_Clark/cwiki/issues/3/should-maintain-a-changelog) in commit [6b7b22a](https://bitbucket.org/David_Clark/cwiki/commits/6b7b22a).
 - Moved some dev-only functions to the "dev" source tree.
-- Added the ability for an admin user to save revisions to "seed" pages directly into the directory where seed pages are stored in the repository. This resolved issue [#16 "Let Admin Save Seed Pages"](https://bitbucket.org/David_Clark/cwiki/issues/16/let-admin-save-seed-pages) in commit [72e6644](https://bitbucket.org/David_Clark/cwiki/commits/72e6644b6215ac44713fa56cddd51f497283de6d).
+- Added the ability for an admin user to save revisions to "seed" pages directly into the directory where seed pages are stored in the repository. This resolved issue [#16: "Let Admin Save Seed Pages"](https://bitbucket.org/David_Clark/cwiki/issues/16/let-admin-save-seed-pages) in commit [72e6644](https://bitbucket.org/David_Clark/cwiki/commits/72e6644b6215ac44713fa56cddd51f497283de6d).
 - The exact middleware used during a build is determined by the environment: "dev" or "prod".
 - More consistent use of logging. Removing `println` in favor of the [timbre](https://github.com/ptaoussanis/timbre) library.
 - Auto-save functionality.
@@ -26,10 +36,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Multiple updates of project dependencies.
 
 ### Fixed ###
-- Resolved issue [#1, "Characters that are invalid in SQL statements"](https://bitbucket.org/David_Clark/cwiki/issues/1/characters-that-are-invalid-in-sql) in commit [1de736b](https://bitbucket.org/David_Clark/cwiki/commits/1de736b).
-- Resolved issue [#2, "Program-Generated Pages Should Not Be Editable"](https://bitbucket.org/David_Clark/cwiki/issues/2/program-generated-pages-should-not-be) in commit [80e6ab0](https://bitbucket.org/David_Clark/cwiki/commits/80e6ab0)
-- Resolved issue [#17](https://bitbucket.org/David_Clark/cwiki/issues/17/page-author-not-correctly-assigned-for-new) "Page Author not Correctly Assigned for New Pages" in commit [c14bce0](https://bitbucket.org/David_Clark/cwiki/commits/c14bce00feffac5bdd6793c2ed6c5287b6a7f3a3).
-- Resolved issue [#11, "Make Program Options Usable"](https://bitbucket.org/David_Clark/cwiki/issues/11/make-program-options-usable) in commit [6eb603f](https://bitbucket.org/David_Clark/cwiki/commits/6eb603f84c79ff1cbf4c5928059d0830e35df737).
+- Resolved issue [#1: "Characters that are invalid in SQL statements"](https://bitbucket.org/David_Clark/cwiki/issues/1/characters-that-are-invalid-in-sql) in commit [1de736b](https://bitbucket.org/David_Clark/cwiki/commits/1de736b).
+- Resolved issue [#2: "Program-Generated Pages Should Not Be Editable"](https://bitbucket.org/David_Clark/cwiki/issues/2/program-generated-pages-should-not-be) in commit [80e6ab0](https://bitbucket.org/David_Clark/cwiki/commits/80e6ab0)
+- Resolved issue [#17: "Page Author not Correctly Assigned for New Pages"](https://bitbucket.org/David_Clark/cwiki/issues/17/page-author-not-correctly-assigned-for-new) in commit [c14bce0](https://bitbucket.org/David_Clark/cwiki/commits/c14bce00feffac5bdd6793c2ed6c5287b6a7f3a3).
+- Resolved issue [#11: "Make Program Options Usable"](https://bitbucket.org/David_Clark/cwiki/issues/11/make-program-options-usable) in commit [6eb603f](https://bitbucket.org/David_Clark/cwiki/commits/6eb603f84c79ff1cbf4c5928059d0830e35df737).
 
 ## [0.0.9] - 2018-06-03
 ### Added ###

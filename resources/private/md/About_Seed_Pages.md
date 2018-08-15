@@ -1,8 +1,8 @@
 ---
-author: Unknown
+author: CWiki
 title: About Seed Pages
 date: 2018-06-16T09:45:14.557-04:00
-modified: 2018-06-16T10:35:21.722-04:00
+modified: 2018-08-14T13:31:54.938-04:00
 tags:
   - about
   - cwiki
@@ -10,6 +10,8 @@ tags:
   - pages
 ---
 
+
+​
 "Seed" pages, also known as "Initial" pages, are the wiki pages used to construct the database the first time the program starts.
 
 If you are the [[About Roles|admin]] for the wiki, you can change them. They are pages just like any other except for their role in building the initial wiki database.
@@ -22,7 +24,7 @@ Within that particular directory there a many Markdown files, the text for the s
 
 ### Making Changes to Seed Pages ###
 
-Anyone with the "editor" or "admin" role can change the contents of the seed pages just like any other page in the wiki. As you edit and save pages, the contents are updated in the database.
+Anyone with the "editor" or "admin" role can change the contents of the seed pages just like any other page in the wiki. As you edit and save pages, the materials are updated in the database.
 
 If you are an "admin" for the wiki, you can also make use of the "Save Seed" item in the "More" drop-down menu at the top of the page. This will write the changes over the existing file in the resource directory. This way, you can delete the database and re-run the program to create an initial database with the content you want in the seed pages. **This only makes sense if you are a developer.**
 
@@ -30,6 +32,10 @@ If you are an "admin" for the wiki, you can also make use of the "Save Seed" ite
 
 If you want a different list of pages when building the initial database, you can edit the contents of the `initial_pages.txt` file to include or exclude any files you want.
 
-The only restriction is that there must be a page with the title "Front Page". It's the "go to"​ page to display when starting the program or some weird error occurs. This may change in the future. You may eventually be able to specify the home page in the program options. But not yet.
+The only restriction is that there must be a page with the title "Front Page." It's the "go to"​ page to display when starting the program or some weird error occurs. This may change in the future. You may eventually be able to specify the home page in the program options. But not yet.
 
 **Of course,​ to change the file list, you have to be a developer who can regenerate the program's jar file. You cannot save revisions back to the jar file.**
+
+### When Running from the Uberjar ###
+
+If you are running the program _via_ the uberjar, you can still save seed pages, they just won't be used to reconstruct the database when the uberjar is rebuilt. Since the uberjar is running in a different location, it will create the same directory structure and save the seed page where it would be in the repository.
