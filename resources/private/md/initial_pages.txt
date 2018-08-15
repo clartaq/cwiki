@@ -13,6 +13,7 @@ About_Images.md
 About_Import_Export.md
 About_Preferences.md
 About_Roles.md
+About_Search.md
 About_Seed_Pages.md
 About_Tags.md
 About_TeX.md
