@@ -14,10 +14,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updates to content of seed pages.
 
 ### Fixed ###
+- Resolved issue [#19: "Search should do nothing when given empty search terms"](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) in commit [1c92442](https://bitbucket.org/David_Clark/cwiki/commits/1c92442096e60162f16da1d37821c0d892c1203c).
+- Resolved issue [#20: "Name of Front Page can be Changed"](https://bitbucket.org/David_Clark/cwiki/issues/20/name-of-front-page-can-be-changed) in commit [4febb84](https://bitbucket.org/David_Clark/cwiki/commits/4febb84773c8).
 
 ## [0.0.11] - 2018-08-14
 ### Added ###
-- Full text search. This resolved issue [#13: Implement Full-Text Wiki Search"](https://bitbucket.org/David_Clark/cwiki/issues/13/implement-full-text-wiki-search) in commit [81cfa20](https://bitbucket.org/David_Clark/cwiki/commits/81cfa2006dcd6eed768d329b70727c3c3f792938)
+- Full text search. This resolved issue [#13: "Implement Full-Text Wiki Search"](https://bitbucket.org/David_Clark/cwiki/issues/13/implement-full-text-wiki-search) in commit [81cfa20](https://bitbucket.org/David_Clark/cwiki/commits/81cfa2006dcd6eed768d329b70727c3c3f792938).
 - Ability to run CWiki as an uberjar located in an arbitrary directory.
 - Demonstrated that CWiki can run from a VPS. 
 
