@@ -196,7 +196,7 @@
   "Starts the websocket router and returns a function that lays out
   the editor and preview area side-by-side."
   []
-  (info "the-editor-container")
+  (debug "the-editor-container")
   (fn []
     (tracef "the-editor-container: @the-page-map: %s" @the-page-map)
     [:div {:class "mde-container"}
