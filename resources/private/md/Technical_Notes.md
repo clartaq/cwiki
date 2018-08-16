@@ -2,12 +2,13 @@
 author: CWiki
 title: Technical Notes
 date: 2017-10-01T17:45:07.000-04:00
-modified: 2018-08-09T16:16:35.081-04:00
+modified: 2018-08-16T16:40:17.863-04:00
 tags:
   - how it works
   - motivation
   - technical note
 ---
+
 
 
 These are some technical notes about CWiki. If you are only interested in using the wiki, you can ignore this stuff. If you want to know how CWiki works or why it works the way it does or how to build and modify your own version, the information here might be useful.
@@ -32,7 +33,7 @@ Almost no software is written without dependencies these days -- programs are ju
 
 ### Clojure Stuff ###
 
-* Developed and tested with Clojure 1.8. (May move to 1.9 once I understand the "spec" stuff.)
+* Developed and tested with Clojure 1.8 and 1.9.
 * [Buddy](https://github.com/funcool/buddy) is used for authentication.
 * [clj-time](https://github.com/clj-time/clj-time) is used for formatting and handling time-related things.
 * [clj-yaml](https://github.com/circleci/clj-yaml) (the maintained fork) is used to parse YAML front matter when pages are imported from files.
@@ -58,7 +59,7 @@ The editor used to be just an HTML text field. After seeing some examples of sim
 
 At this point, the CSS used is just plain old [CSS3](https://www.w3schools.com/css/css3_intro.asp). I strongly considered using [SCSS](http://sass-lang.com/), but did not want the additional dependency on [Ruby](https://www.ruby-lang.org/en/) to build the project. This may change in the future.
 
-You can use the CSS file to re-style CWiki to your liking.
+You can use the CSS files to re-style CWiki to your liking.
 
 ## Tests ##
 
@@ -79,11 +80,11 @@ Authorization is home-grown and based on the roles users have been assigned. See
 
 The pages in CWiki are a mashup of [Markdown](https://daringfireball.net/projects/markdown/syntax), [[Wikilinks]], and [[About TeX|$\rm\TeX$]]. No single parser/HTML generator handles all of those pieces. So rendering a page happens in several stages.
 
-1. First, all of the WikiLinks are located and translated to HTML-style links. These links point to pages within the CWiki database. If there is no such page, the link is displayed in red.
+1. First, all of the WikiLinks are located and translated to HTML-style links. These links point to pages within the CWiki database. If there is no such page, the link is displayed in red. Clicking on a red link will open an empty page in the editor ready for creation.
 2. The Markdown content, including the translated WikiLinks, are converted to HTML. Since Markdown parsers pass HTML through unaltered, the translated WikiLinks are left intact.
 3. Finally, the HTML is passed to MathJax to translate any $\rm\TeX$ into something that can be displayed in a web page. The representation is usually common HTML, but you can change that if needed.
 4. That big chunk of HTML is plugged into the `<body>` section of a web page containing the header and footer for the page as well as the `<head>` section required for well-formed HTML5
-5. That page is then served by a web-server built into CWiki (Jetty, mentioned above) and rendered by your browser.
+5. That page is then served by a web-server built into CWiki (http-kit, mentioned above) and rendered by your browser.
 
 Note that, as this is written, wikilinks cannot be included in code listings since the link resolver is unaware of those boundaries.
 
@@ -164,140 +165,4 @@ It seems like there are four possible approaches.
 3. Write a small parser to handle pages looking for quoted blocks. I think this would require me to re-work the dataflow from several passes over the text to one that does the translation in a single pass.
 4. Since I'm using flexmark-java as my Markdown to HTML processor, look into the Wikilinks extension. I'm not sure how to handle special formatting for special cases like graying admin pages and making links to non-existent pages red. I'm not sure how extensible it is if I want to add things like namespaces either.
 
-I filed an issue with the flexmark developers, and they pointed me to this example:
-
-### Enforcing Foreign Key Constraints with SQLite and clojure.java.jdbc ###
-
-I'm working on a wiki program and using SQLite as the database. I want to create a many-to-many relationship between wiki pages and tags describing those pages. I'm using  `clojure.java.jdbc` to handle the database operations. I would like to enforce foreign key constraints in the page-to-tags cross-reference table. I looked at the information about foreign keys on the SQLite site (https://www.sqlite.org/foreignkeys.html) and believed something like this is what I want;
-
-```clojure
-(def the-db-name "the.db")
-(def the-db {:classname   "org.sqlite.JDBC"
-             :subprotocol "sqlite"
-             :subname     the-db-name})
-
-(defn create-some-tables
-  "Create some tables and a cross-reference table with foreign key constraints."
-  []
-  (try (jdbc/db-do-commands
-         the-db false
-         ["PRAGMA foreign_keys = ON;"
-          (jdbc/create-table-ddl :pages
-                                 [[:page_id :integer :primary :key]
-                                  ;...
-                                  [:page_content :text]])
-          (jdbc/create-table-ddl :tags
-                                 [[:tag_id :integer :primary :key]
-                                  [:tag_name :text "NOT NULL"]])
-          (jdbc/create-table-ddl :tags_x_pages
-                                 [[:x_ref_id :integer :primary :key]
-                                  [:tag_id :integer]
-                                  [:page_id :integer]
-                                  ["FOREIGN KEY(tag_id) REFERENCES tags(tag_id)"]
-                                  ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
-
-       (catch Exception e (println e))))
-```
-But attempting to turn the pragma on has no effect.
-
-Just trying to turn the pragma on and check for effect:
-
-```clojure
-(println "Check before:" (jdbc/query the-db ["PRAGMA foreign_keys;"]))
-; Transactions on or off makes no difference.
-(println "Result of execute!:" (jdbc/execute! the-db
-                                              ["PRAGMA foreign_keys = ON;"]))
-(println "Check after:" (jdbc/query the-db ["PRAGMA foreign_keys;"]))
-
-;=> Check before: ({:foreign_keys 0})
-;=> Result of execute!: [0]
-;=> Check after: ({:foreign_keys 0})
-```
-
-The results indicate that the library (org.xerial/sqlite-jdbc "3.21.0.1") was compiled to support foreign keys since there were no errors, but trying to set the pragma has no effect.
-
-I found [this](https://dev.clojure.org/jira/browse/JDBC-38) in the JIRA for the Clojure JDBC back in 2012. The described changes have been implemented since then, but the code still has no effect.
-
-Finally found [this answer](https://stackoverflow.com/questions/13348843/in-clojure-what-happens-when-you-call-sql-with-connection-within-another-sql-wi) to a StackOverflow question that pointed to [this post](https://code-know-how.blogspot.ru/2011/10/how-to-enable-foreign-keys-in-sqlite3.html) back in 2011. That allowed me to cobble together something that did seem to set the pragma. The code below depends on creating a specially configured `Connection`.
-
-
-```clojure
-(ns example
-  (:require [clojure.java.jdbc :as jdbc])
-  (:import (java.sql Connection DriverManager)
-           (org.sqlite SQLiteConfig)))
-
-(def the-db-name "the.db")
-(def the-db {:classname   "org.sqlite.JDBC"
-             :subprotocol "sqlite"
-             :subname     the-db-name})
-
-(defn ^Connection get-connection
-  "Return a connection to a SQLite database that
-  enforces foreign key constraints."
-  [db]
-  (Class/forName (:classname db))
-  (let [config (SQLiteConfig.)]
-    (.enforceForeignKeys config true)
-    (let [connection (DriverManager/getConnection
-                       (str "jdbc:sqlite:" (:subname db))
-                       (.toProperties config))]
-      connection)))
-
-(defn exec-foreign-keys-pragma-statement
-  [db]
-  (let [con ^Connection (get-connection db)
-        statement (.createStatement con)]
-    (println "exec-foreign-keys-pragma-statement:"
-             (.execute statement "PRAGMA foreign_keys;"))))
-```
-
-Based on the above, I rewrote the table creation code above as:
-
-```clojure
-(defn create-some-tables
-  "Create some tables and a cross-reference table with foreign key constraints"
-  []
-  (when-let [conn (get-connection the-db)]
-    (try
-      (jdbc/with-db-connection
-        [conn the-db]
-        ; Creating the tables with the foreign key constraints works.
-        (try (jdbc/db-do-commands
-               the-db false
-               [(jdbc/create-table-ddl :pages
-                                       [[:page_id :integer :primary :key]
-                                        [:page_content :text]])
-                (jdbc/create-table-ddl :tags
-                                       [[:tag_id :integer :primary :key]
-                                        [:tag_name :text "NOT NULL"]])
-                (jdbc/create-table-ddl :tags_x_pages
-                                       [[:x_ref_id :integer :primary :key]
-                                         [:tag_id :integer]
-                                        [:page_id :integer]
-                                        ["FOREIGN KEY(tag_id) REFERENCES tags()"]
-                                        ["FOREIGN KEY(page_id) REFERENCES pages(page_id)"]])])
-    
-             ; This still doesn't work.
-             (println "After table creation:"
-                      (jdbc/query the-db "PRAGMA foreign_keys;"))
-
-             (catch Exception e (println e))))
-
-      ; This returns the expected results.
-      (when-let [statement (.createStatement conn)]
-        (try
-          (println "After creating some tables: PRAGMA foreign_keys =>"
-                   (.execute statement "PRAGMA foreign_keys;"))
-          (catch Exception e (println e))
-          (finally (when statement
-                     (.close statement)))))
-      (catch Exception e (println e))
-      (finally (when conn
-                 (.close conn))))))
-```
-
-The tables are created as expected. Some of the `clojure.java.jdbc` functions still don't seem to work as desired though. (See the `jdbc/query` call in the middle of the listing.) Getting things always to work​ as expected seems very "manual" having to fall back on Java interop. And it seems like every interaction with the database requires using the specially configured `Connection` returned by the `get-connection` function.
-
-Is there a better way to enforce foreign key constraints in SQLite in Clojure?
- 
+I filed an issue with the flexmark developers, and they pointed me to [this issue and discussion](https://github.com/vsch/flexmark-java/issues/30).

@@ -2,7 +2,7 @@
 author: CWiki
 title: Links Primer
 date: 2017-10-24T08:55:54.000-04:00
-modified: 2018-06-18T17:49:18.142-04:00
+modified: 2018-08-15T17:55:47.732-04:00
 tags:
   - about
   - help
@@ -18,7 +18,7 @@ The use of HTML links in Markdown (like CWiki) has already been well described. 
 
 ## Wikilinks ##
 
-The wikilinks used in CWiki are modeled after those in [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki). You can surround a page name with double square brackets like this "\[\[" and this "\]\]" and CWiki will create an internal link to the page.
+The wikilinks used in CWiki are modeled after those in [MediaWiki](https://www.mediawiki.org/wiki/MediaWiki). You can surround a page name with double square brackets like this "\[\[" and this "\]\]," and CWiki will create an internal link to the page.
 
 That is, this "\[\[Front Page\]\]" becomes [[Front Page]].
 

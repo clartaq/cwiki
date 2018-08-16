@@ -46,7 +46,7 @@ The [[About]] page can be used to record some information about the wiki in gene
 
 ### Sidebar ###
 
-This is a special area off to the left of the main display area. It can be used as a special place to put links that are useful from anywhere in the wiki. The list of links can be broken into sections to group links with related functionality. See [[Sidebar|The Sidebar]] for details on changing the content of this area.
+This is a special area off to the left of the main display area. It can be used as a special place to put links that are useful from anywhere in the wiki. The list of links can be broken into sections to group links with related functionality. See [[About the Sidebar]] for details on changing the content of this area.
 
 - **Editable**: True  
 - **Deletable**: False
@@ -54,7 +54,7 @@ This is a special area off to the left of the main display area. It can be used 
 
 ### Preferences ###
 
-You can use the [[Preferences]] page to change some of the settings that control how the program operates. Be very careful in editing this page. If the program cannot understand the content of the edited page, it will reset everything to the defaults that were used when the program first started.
+You can use the [[preferences|Preferences]] page to change some of the settings that control how the program operates. Be very careful in editing this page. If the program cannot understand the content of the edited page, it will reset everything to the defaults that were used when the program first started.
 
 - **Editable**: True  
 - **Deletable**: False

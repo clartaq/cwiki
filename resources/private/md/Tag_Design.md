@@ -1,14 +1,15 @@
 ---
-title: Tag Design
 author: CWiki
-date: 1/13/2018 10:21:29 AM 
-updated: 2018-03-11T17:39:52.796556-04:00
+title: Tag Design
+date: 2018-01-13T10:21:29.000-05:00
+modified: 2018-03-11T17:39:52.797-04:00
 tags:
-  - technical note
-  - tags
   - design
   - how it works
+  - tags
+  - technical note
 ---
+
 
 Tags are a convenience that lets users classify their information in some (hopefully) systematic way. They are a pain to deal with from a programming perspective, but I wouldn't want to use a system without them.
 
