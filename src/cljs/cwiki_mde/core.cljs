@@ -169,28 +169,36 @@
 
 (defn make-title-input-element
   "Build and return an element for displaying/editing the post title"
+  ; *** DOES A SPECIAL SEARCH FOR "Front Page" ***
   [page-map-atom]
-  [:div {:class "mde-title-edit-section"}
-   [:div {:class "form-label-div"}
-    [:label {:class "form-label required"
-             :for   "title"} "Page Title"]]
-   [:input {:type      "text" :class "mde-form-title-field"
-            :name      "page-title"
-            :value     (if-let [title (:page_title @page-map-atom)]
-                         (do
-                           (tracef "make-title-input-element: title: %s" title)
-                           (when (= title "favicon.ico")
-                             (infof "Saw funky title: \n%s"
-                                    (with-out-str (pprint/pprint-map @page-map-atom))))
-                           title)
-                         "Enter a Title for the Page")
-            :on-change (fn [arg]
-                         (let [new-title (-> arg .-target .-value)]
-                           (change-watcher! doc-save-function page-map-atom)
-                           (swap! page-map-atom assoc :page_title new-title)
-                           (when (get-in @page-map-atom [:options :send-every-keystroke])
-                             (ws/send-message! [:hey-server/content-updated
-                                                {:?data @page-map-atom}]))))}]])
+  (let [pm @page-map-atom
+        ro (if (= "Front Page" (:page_title pm))
+             {:readonly "readOnly"}
+             {})
+        inp (merge ro
+                   {:type      "text"
+                    :class     "mde-form-title-field"
+                    :name      "page-title"
+                    :value     (if-let [title (:page_title pm)]
+                                 (do
+                                   (tracef "make-title-input-element: title: %s" title)
+                                   (when (= title "favicon.ico")
+                                     (infof "Saw funky title: \n%s"
+                                            (with-out-str (pprint/pprint-map pm))))
+                                   title)
+                                 "Enter a Title for the Page")
+                    :on-change (fn [arg]
+                                 (let [new-title (-> arg .-target .-value)]
+                                   (change-watcher! doc-save-function page-map-atom)
+                                   (swap! page-map-atom assoc :page_title new-title)
+                                   (when (get-in pm [:options :send-every-keystroke])
+                                     (ws/send-message! [:hey-server/content-updated
+                                                        {:?data pm}]))))})]
+    [:div {:class "mde-title-edit-section"}
+     [:div {:class "form-label-div"}
+      [:label {:class "form-label required"
+               :for   "title"} "Page Title"]]
+     [:input inp]]))
 
 (defn the-editor-container
   "Starts the websocket router and returns a function that lays out
