@@ -2,12 +2,13 @@
 author: CWiki
 title: Front Page
 date: 2017-10-01T17:45:07.000-04:00
-modified: 2018-06-19T10:07:45.301-04:00
+modified: 2018-08-15T14:53:13.291-04:00
 tags:
   - about
   - front page
   - help
 ---
+
 
 This is the **Front Page** of your new [wiki](https://en.wikipedia.org/wiki/Wiki). This particular wiki goes by the name of [[About CWiki|CWiki]].
 
@@ -23,7 +24,7 @@ If you are the **admin** for the wiki, read [[About Admin Pages]] for some backg
 
 ### Read Some of What's Already Here ###
 
-Over on the left, in the [[About the Sidebar|Sidebar]] you will see a section titled "Useful Links". There's a link to [[All Pages]]. Clicking it will show you all the pages in the wiki. That link creates the page whenever you click it, so it will always show you an up-to-date list of pages.
+Over on the left, in the [[About the Sidebar|Sidebar]] you will see a section titled "Useful Links". There's a link to [[All Pages]]. Clicking it will show you all the pages in the wiki. The [[All Pages]] link creates the page whenever you click it, so it will always show you an up-to-date list of pages.
 
 Take a look.
 

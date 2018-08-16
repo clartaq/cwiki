@@ -2,13 +2,14 @@
 author: CWiki
 title: About Seed Pages
 date: 2018-06-16T09:45:14.557-04:00
-modified: 2018-08-14T13:31:54.938-04:00
+modified: 2018-08-15T16:47:13.825-04:00
 tags:
   - about
   - cwiki
   - database
   - pages
 ---
+
 
 
 ​
@@ -18,7 +19,7 @@ If you are the [[About Roles|admin]] for the wiki, you can change them. They are
 
 ### How They Work ###
 
-In the code repository for the project, there is a "special" directory with all of the seed pages. It's at `resources/private/md` relative to the base project directory.
+In the code repository for the project, there is a "special" directory with all of the seed pages. It's at `resources/private/md` relative to the base of the project directory.
 
 Within that particular directory there a many Markdown files, the text for the seed pages, and one plain old text file called `initial_pages.txt`. The `initial_pages.txt` file contains a list of the files to include when the wiki database is constructed. Usually (but not always) the file name of a seed page is the same as that created by the [[About Import/Export|export]] function since many of the pages were built that way.
 
@@ -34,8 +35,10 @@ If you want a different list of pages when building the initial database, you ca
 
 The only restriction is that there must be a page with the title "Front Page." It's the "go to"​ page to display when starting the program or some weird error occurs. This may change in the future. You may eventually be able to specify the home page in the program options. But not yet.
 
-**Of course,​ to change the file list, you have to be a developer who can regenerate the program's jar file. You cannot save revisions back to the jar file.**
+**Of course,​ to change the file list, you have to be a developer who can regenerate the program's jar file. You cannot save revisions to the seed pages directly in the jar file.**
 
 ### When Running from the Uberjar ###
 
-If you are running the program _via_ the uberjar, you can still save seed pages, they just won't be used to reconstruct the database when the uberjar is rebuilt. Since the uberjar is running in a different location, it will create the same directory structure and save the seed page where it would be in the repository.
+If you are running the program _via_ the uberjar, you can still save seed pages, but they might not be used to reconstruct the database when the uberjar is rebuilt. If you are running the uberjar from the project directory, things will work just fine. 
+
+If you are running the uberjar from some other directory, the program will create the same directory structure as used in the project directory and save the seed page where it would be in the project directory. To use the revised seed page, you would have to copy it back to the correct location in the project directory.

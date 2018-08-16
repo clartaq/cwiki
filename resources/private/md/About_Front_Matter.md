@@ -2,18 +2,19 @@
 author: CWiki
 title: About Front Matter
 date: 2017-12-24T17:15:16.000-05:00
-modified: 2018-08-14T13:51:36.795-04:00
+modified: 2018-08-15T15:39:23.951-04:00
 tags:
   - about
   - front matter
   - metadata
 ---
 
+
 This information is relevant only if you use the [[About Import/Export|Import/Export]] capabilities of CWiki to read and save posts to and from disk.
 
 Front matter is meta-information you can include in your post file in a special section of text at the top of a Markdown file. CWiki supports front matter in the [YAML](http://yaml.org/) format as supported by the [Hugo](https://gohugo.io) or [Jekyll](https://github.com/jekyll/jekyll) static blog generators. (CWiki does not support templating as both Hugo and Jekyll do.)
 
-CWiki handles a minimal subset of what YAML can do. It just looks for a few different tags to use in wiki page descriptions. For example, the front matter for this document consists of:
+CWiki handles a minimal subset of what YAML can do. It just looks for a few different tags to use in wiki page descriptions. For example, the front matter for this page consists of:
 
 ```yaml
 ---
@@ -28,9 +29,9 @@ tags:
 ---
 ```
 
-Note that the section starts and ends with three hyphen characters. This section is not included in the wiki posts that you view. In fact, after loading a file, the front matter is discarded.
+Note that the section starts and ends with three hyphen characters. This section is not shown​ in the wiki posts that you view. In fact, after loading a file, the front matter is discarded.
 
-The tags that CWiki understands include
+The tags that CWiki understands include:
 
  | Tags  |  Description |
  |--------|:------------|
@@ -40,25 +41,23 @@ The tags that CWiki understands include
  | `updated` or `changed`  or `modified`| The date (and possibly time) that the post was last updated. |
  | `tags` | One or more tags for the page. Note that if you have only one tag, it can be on the same line as the `tags` tag.|
 
-These may change in the future, so keep your eyes on this page.
+You can see how these items are used and laid out at the top of this page. These may change in the future, so keep your eyes on this page.
 
-## Some Important Notes ##
+## Important Notes About Importing Files ##
+
+The metadata does not *have* to be present when you import a file. You can even import plain text files if you like. The program will make up some items of the metadata if needed.
 
 ### There must be a title ###
-If no title is present, an ugly, random title will be created and used. The ugliness is to make it easier for you to spot in the [[All Pages]] page.
+If no title is present when you import an existing file, an ugly, random title will be created and used. The ugliness is to make it easier for you to spot in the [[All Pages]] page.
 
 ### The author must already be known to CWiki ###
-If the author does not already exist in the database, the contents of the file will not be added to the database.
-
-This is not as difficult a restriction as you might think. You can always use "CWiki" as the author, and the file will be accepted. This is the same mechanism the program uses to populate the initial database right after the database tables are created. (The built-in "guest" account cannot be used since it is not authorized to add new content to the wiki.)
-
-Because of this, **this is in no way a security feature**.
+If the author does not already exist in the database, CWiki will be listed as the author.
 
 ### The date-time must be in precisely​ the format shown ###
 
 Any other date time format will cause the program to crash. I realize this is extremely fragile and will likely change in the ​future.
 
-I use a keyboard macro to generate it when creating a page. See [[A Timestamp Plugin for Sublime Text 3]] for details.
+I use a keyboard macro to generate timestamps when creating or modifying pages outside of CWiki. See [[A Timestamp Plugin for Sublime Text 3]] for details.
 
 If you do all of your editing in CWiki, the details are taken care of for you.
 

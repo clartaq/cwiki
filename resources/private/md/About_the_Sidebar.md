@@ -2,13 +2,14 @@
 author: CWiki
 title: About the Sidebar
 date: 2017-06-11T16:39:37.000-04:00
-modified: 2018-07-31T17:40:21.230-04:00
+modified: 2018-08-15T17:23:26.910-04:00
 tags:
   - about
   - help
   - sidebar
   - special pages
 ---
+
 
 
 The [[Sidebar]] is a special location on the screen and one of the [[Special Pages]] used in this wiki. It's on the left side of the browser window. Things there look a little smaller than the page view where you're reading this.
@@ -21,4 +22,4 @@ Once you are in the editing window, you can make the modifications you want.
 
 As mentioned above, the contents of the Sidebar are styled a little differently than the central area. It's designed to handle plain text, a header style (the sixth level header), and links. If you stick to those, you should be okay. Using other styles, like listings or math might produce some truly ugly or unusable results.
 
-So think of the things you think are most useful and stick links to them in the Sidebar.
+So think of the things that you believe are most useful and stick links to them in the Sidebar.

@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-08-15T11:02:03.725-04:00
+modified: 2018-08-16T15:37:22.055-04:00
 tags:
   - architecture
   - bugs
@@ -12,13 +12,6 @@ tags:
   - technical note
 ---
 
-
-
-
-
-
-
-​
 An ever-evolving list of things to be fixed and improved. These fall into the following categories:
 
 * [Bugs](#bugs). These are things that are flat out wrong and must be fixed.
@@ -58,7 +51,11 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 
 * Search should do nothing when given empty search terms. It should not create a search results page with no results.
 
-   * Issue [#19](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) was created.
+   * This issue [#19](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) was **resolved** by commit [1c92442](https://bitbucket.org/David_Clark/cwiki/commits/1c92442096e60162f16da1d37821c0d892c1203c).
+
+* Despite what the documentation says, editing the Front Page allows the user to change it's name. After that, trying to load the home page (Front Page) causes a crash.
+
+   * This issue [#20](https://bitbucket.org/David_Clark/cwiki/issues/20/name-of-front-page-can-be-changed) was **resolved** in commit [4febb84](https://bitbucket.org/David_Clark/cwiki/commits/4febb84773c8e8721a01bf5833b579cf46b04c1f).
 
 ### Enhancements <a name="enhancements"></a>
 

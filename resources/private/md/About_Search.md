@@ -1,19 +1,20 @@
 ---
-author: david
+author: CWiki
 title: About Search
 date: 2018-08-07T17:47:35.761-04:00
-modified: 2018-08-08T17:36:52.535-04:00
+modified: 2018-08-15T16:38:02.056-04:00
 tags:
   - About
   - Search
   - Special Pages
 ---
 
+
 ​CWiki supports some basic search functionality.
 
 ### Authors ###
 
-You can see all of the authors known to the wiki by going to the [[All Users]] link. That link is usually listed on the [[Sidebar]]. From that page, you can click the name of the user (author) to see all of the pages attributed to that user.
+You can see all of the authors known to the wiki by go​ing to the [[All Users]] link. That link is usually listed on the [[Sidebar]]. From that page, you can click the name of the user (author) to see all of the pages attributed to that user.
 
 ### Tags ###
 

@@ -2,7 +2,7 @@
 author: CWiki
 title: Code Formatting and Highlighting
 date: 2018-03-07T17:40:28.000-05:00
-modified: 2018-07-10T17:34:25.050-04:00
+modified: 2018-08-15T17:38:07.289-04:00
 tags:
   - cwiki
   - technical note
@@ -107,9 +107,9 @@ For this, I use CSS to select from a family of fixed-width fonts, give it a size
 
 Items wrapped in the `<pre></pre>` tags should be left pretty much alone. Just apply the same formatting as inline code, but for a block. We don't want it to contrast with indented code blocks though. So, we give it a background the same color as the background provided by the syntax highlighter theme.
 
-### Indented Code Blocks ###
+### Indented Code Blocks ###​
 
-The code blocks that are indented four spaces get surrounded by `<pre><code></code></pre>` tags. GFM fenced code blocks produce the same HTML. So a CSS descendant selector of the form 
+The code blocks that are indented four spaces get surrounded by `<pre><code></code></pre>` tags. GFM fenced code blocks produce the same HTML. So a CSS descendant selector of the form:
 
     pre code {
         ...
@@ -177,6 +177,6 @@ will give something like
 
 which looks a little better. The code class it uses, in this case, is `<code class="language-clojure hljs">.`
 
-This is a useful tactic if your code block is to short for `highlight.js` to do a reliable recognition. It also precludes just using indenting the block by four spaces. If you only indent, the language will not be recognized correctly, ​and the wrong highlighting will be applied.
+This is a useful tactic if your code block is too short for `highlight.js` to do a reliable recognition. It also precludes just using indenting the block by four spaces. If you only indent, the language will not be recognized correctly, ​and the wrong highlighting will be applied.
 
 [^1]: [This haiku was written by Basho Matsuo (1644-1694) and copied from "Examples of Haiku Poems" on steemit.com](http://examples.yourdictionary.com/examples-of-haiku-poems.html)

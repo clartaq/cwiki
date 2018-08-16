@@ -1,14 +1,15 @@
 ---
-title: Text Formatting
 author: CWiki
-date: 10/24/2017 8:57:33 AM 
-updated: 2018-05-08T15:42:02.818426-04:00
+title: Text Formatting
+date: 2017-10-24T08:57:33.000-04:00
+modified: 2018-08-16T16:14:56.668-04:00
 tags:
   - formatting
   - Markdown
   - MathJax
   - TeX
 ---
+
 
 Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, especially some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
 
@@ -55,13 +56,15 @@ produces:
 
 CWiki uses [highlight.js](https://highlightjs.org) to do syntax highlighting. It attempts to auto-recognize the language used, but on short samples, like those above, it can make an error. In the snippet below, it will not recognize that the language is Clojure. You can tell it which language to highlight by putting a hint in like so:
 
-  ```clojure
-    (defn f [x]
-      "A comment at the beginning."
-      (let [my-x x]
-        (println "my-x: " my-x) ; a line comment.
-        (+ 2 my-x)))
-  ```
+````text
+    ```clojure
+        (defn f [x]
+          "A comment at the beginning."
+          (let [my-x x]
+            (println "my-x: " my-x) ; a line comment.
+            (+ 2 my-x)))
+    ```
+````
 
 The markup above will render as:
 

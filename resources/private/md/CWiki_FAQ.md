@@ -2,11 +2,12 @@
 author: CWiki
 title: CWiki FAQ
 date: 2017-10-27T10:21:37.000-04:00
-modified: 2018-06-18T10:04:28.344-04:00
+modified: 2018-08-15T14:48:09.288-04:00
 tags:
   - cwiki
   - FAQ
 ---
+
 
 
 ​
@@ -56,7 +57,7 @@ Just a personal preference on my part. I have a hard time seeing text on phones 
 
 #### Why Doesn't the Content of a Page Use the Entire Width of the Browser Window? <a name="Why_Doesn't_the_Content_of_a_Page_Use_the_Entire_Width_of_the_Browser_Window?"></a> ####
 
-This is on purpose. Since CWiki is intended to contain primarily _readable_​ content, the content is restricted in width, so it is easier to read. Beyond a certain line length, it becomes more difficult to read the text. Therefore, CWiki restricts lines to about 70 characters.
+This is on purpose. Since CWiki is intended to contain primarily *readable*​ content, the content is restricted in width, so it is easier to read. Beyond a certain line length, it becomes more difficult to read the text. Therefore, CWiki restricts lines to about 70 characters.
 
 #### What Version of Markdown Does CWiki Use? <a name="What_Version_of_Markdown_Does_CWiki_Use?"></a> ####
 
