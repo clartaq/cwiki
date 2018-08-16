@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed ###
 - Resolved issue [#18: "Need Sensible Tab Behavior"](https://bitbucket.org/David_Clark/cwiki/issues/18/need-sensible-tab-behavior) in commit [12ccd43](https://bitbucket.org/David_Clark/cwiki/commits/12ccd4320dd0).
-- Resolved issue [#19: "Search should do nothing when given empty search terms"](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) in commit [64ef8b9](https://bitbucket.org/David_Clark/cwiki/commits/64ef8b9d7aa9).
+- ~~Resolved issue [#19: "Search should do nothing when given empty search terms"](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) in commit [64ef8b9](https://bitbucket.org/David_Clark/cwiki/commits/64ef8b9d7aa9).~~ **UPDATE**: Apparently this issue was not completely fixed by this fix.
 
 ## [0.0.10] - 2018-08-01
 ### Added ###
