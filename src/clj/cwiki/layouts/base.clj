@@ -18,10 +18,10 @@
                                           get-delete-link-for-existing-page
                                           get-edit-link-for-page]]
             [hiccup.page :refer [html5 include-css include-js]]
-            [hiccup.form :refer [drop-down email-field form-to hidden-field
-                                 password-field select-options
-                                 submit-button text-area text-field]]
-            [hiccup.element :refer [link-to]])
+            [hiccup.form :refer [form-to hidden-field submit-button text-area
+                                 text-field]]
+            ;[hiccup.element :refer [link-to]]
+            )
   (:import (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
            (com.vladsch.flexmark.ext.footnotes FootnoteExtension)
@@ -54,8 +54,8 @@
                                             (TablesExtension/create)
                                             (FootnoteExtension/create)]))))
 
-(def parser (.build (Parser/builder options)))
-(def renderer (.build (HtmlRenderer/builder options)))
+(def parser (.build ^com.vladsch.flexmark.parser.Parser$Builder (Parser/builder options)))
+(def renderer (.build ^com.vladsch.flexmark.html.HtmlRenderer$Builder (HtmlRenderer/builder options)))
 
 (defn- convert-markdown-to-html
   "Convert the markdown formatted input string to html
