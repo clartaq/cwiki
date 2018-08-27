@@ -173,7 +173,7 @@
   [page-map-atom]
   (let [pm @page-map-atom
         ro (if (= "Front Page" (:page_title pm))
-             {:readonly "readOnly"}
+             {:readOnly "readOnly"}
              {})
         inp (merge ro
                    {:type      "text"
