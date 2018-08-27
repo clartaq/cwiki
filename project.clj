@@ -15,7 +15,7 @@
                  [com.h2database/h2 "1.4.197"]
                  [circleci/clj-yaml "0.5.6"]
                  [clj-time "0.14.4"]
-                 [com.taoensso/sente "1.13.0"]
+                 [com.taoensso/sente "1.13.1"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.vladsch.flexmark/flexmark "0.34.18"]
                  [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.18"]
