@@ -6,6 +6,7 @@
   (:require [compojure.core :refer :all]
             [cwiki.models.wiki-db :as db]
             [cwiki.layouts.login :as login-layout]
+            [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect]]))
 
 (defn get-login
@@ -25,6 +26,7 @@
     (let [identity (dissoc user :user_password)
           new-session (assoc (redirect "/")
                         :session (assoc session :identity identity))]
+      (ri/set-user-role! new-session)
       new-session)
 
     ; Otherwise
@@ -38,8 +40,10 @@
 (defn post-logout
   "Log out the current user."
   [{session :session}]
-  (assoc (redirect "/login")
-    :session (dissoc session :identity)))
+  (let [new-session (assoc (redirect "/login")
+    :session (dissoc session :identity))]
+    (ri/set-user-role! new-session)
+    new-session))
 
 (defroutes login-routes
            (GET "/login" [] get-login)
