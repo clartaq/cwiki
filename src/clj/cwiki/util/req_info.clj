@@ -52,13 +52,12 @@
 ;; extension in order to style links based on the current user's role.
 ;;
 
-(def ^{:private true} role-of-logged-in-user (atom nil))
+(def ^{:private true} session-info (atom nil))
 
-(defn set-user-role! [req]
-  (let [the-role (req->user-role req)]
-    (println "set-user-role: the-role: " the-role)
-    (reset! role-of-logged-in-user the-role)))
+(defn save-session-info
+  [session]
+  (reset! session-info session))
 
-(defn get-user-role []
-  @role-of-logged-in-user)
+(defn retrieve-session-info []
+  @session-info)
 
