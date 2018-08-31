@@ -46,4 +46,19 @@
   [req]
   (= "cwiki" (req->user-role req)))
 
+;;
+;; This is a DIRTY, ROTTEN, EVIL HACK that I couldn't think of a better
+;; way to do. Something like this is needed by the wikilink attribute
+;; extension in order to style links based on the current user's role.
+;;
+
+(def ^{:private true} role-of-logged-in-user (atom nil))
+
+(defn set-user-role! [req]
+  (let [the-role (req->user-role req)]
+    (println "set-user-role: the-role: " the-role)
+    (reset! role-of-logged-in-user the-role)))
+
+(defn get-user-role []
+  @role-of-logged-in-user)
 
