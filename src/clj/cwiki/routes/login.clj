@@ -27,7 +27,6 @@
           new-session (assoc (redirect "/")
                         :session (assoc session :identity identity))]
       (ri/save-session-info new-session)
-      ;(ri/set-user-role! new-session)
       new-session)
 
     ; Otherwise
@@ -44,7 +43,6 @@
   (let [new-session (assoc (redirect "/login")
     :session (dissoc session :identity))]
     (ri/save-session-info new-session)
-    ;(ri/set-user-role! new-session)
     new-session))
 
 (defroutes login-routes
