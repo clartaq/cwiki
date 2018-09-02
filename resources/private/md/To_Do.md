@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-08-16T15:37:22.055-04:00
+modified: 2018-08-28T16:11:51.679-04:00
 tags:
   - architecture
   - bugs
@@ -11,6 +11,7 @@ tags:
   - process
   - technical note
 ---
+
 
 An ever-evolving list of things to be fixed and improved. These fall into the following categories:
 
@@ -51,11 +52,11 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 
 * Search should do nothing when given empty search terms. It should not create a search results page with no results.
 
-   * This issue [#19](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) was **resolved** by commit [1c92442](https://bitbucket.org/David_Clark/cwiki/commits/1c92442096e60162f16da1d37821c0d892c1203c).
+   * This issue ([#19](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty)) was **resolved** by commit [1c92442](https://bitbucket.org/David_Clark/cwiki/commits/1c92442096e60162f16da1d37821c0d892c1203c).
 
 * Despite what the documentation says, editing the Front Page allows the user to change it's name. After that, trying to load the home page (Front Page) causes a crash.
 
-   * This issue [#20](https://bitbucket.org/David_Clark/cwiki/issues/20/name-of-front-page-can-be-changed) was **resolved** in commit [4febb84](https://bitbucket.org/David_Clark/cwiki/commits/4febb84773c8e8721a01bf5833b579cf46b04c1f).
+   * This issue ([#20](https://bitbucket.org/David_Clark/cwiki/issues/20/name-of-front-page-can-be-changed)) was **resolved** in commit [cc6dbc7](https://bitbucket.org/David_Clark/cwiki/commits/cc6dbc7c9dae93d688487ee2ae02d36edf75da50).
 
 ### Enhancements <a name="enhancements"></a>
 
@@ -69,7 +70,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
     * Issue [#10](https://bitbucket.org/David_Clark/cwiki/issues/10/add-keyboard-shortcuts-to-editor) was created.
 
 * Creation of wikilinks needs to understand in-line code spans, `<code></code>`, and `<pre></pre>` so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
-    * Issue [#14](https://bitbucket.org/David_Clark/cwiki/issues/14/markdown-parsers-need-to-understand-wiki) was created.
+    * This issue ([#14](https://bitbucket.org/David_Clark/cwiki/issues/14/markdown-parsers-need-to-understand-wiki)) was **resolved** in commit [c82b0ad](https://bitbucket.org/David_Clark/cwiki/commits/c82b0add3d1e9c6b4933de0a007e4f39701b8696).
 
 * Create a function that will update the existing database with new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
 

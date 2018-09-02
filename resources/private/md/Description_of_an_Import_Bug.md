@@ -2,12 +2,13 @@
 author: CWiki
 title: Description of an Import Bug
 date: 2018-02-08T10:16:18.000-05:00
-modified: 2018-06-19T10:07:05.871-04:00
+modified: 2018-09-02T10:31:37.242-04:00
 tags:
-  - bug
+  - bugs
   - import
   - technical note
 ---
+
 
 
 During development, a bug was noticed in the import function in that after deleting a page and then re-importing it; it would not show up in the [[All Pages]] page.
