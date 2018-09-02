@@ -12,6 +12,7 @@
             [cwiki.models.wiki-db :as db]
             [cwiki.util.authorization :as ath]
             [cwiki.util.files :refer [is-seed-page?]]
+            ;[cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :as special]
             [cwiki.util.wikilinks :refer [replace-wikilinks
@@ -19,12 +20,12 @@
                                           get-edit-link-for-page]]
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to hidden-field submit-button text-area
-                                 text-field]]
-            ;[hiccup.element :refer [link-to]]
-            )
-  (:import (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
+                                 text-field]])
+  (:import ;(cwiki.util WikiLinkAttributeExtension)
+           (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
            (com.vladsch.flexmark.ext.footnotes FootnoteExtension)
+           ;(com.vladsch.flexmark.ext.wikilink WikiLinkExtension)
            (com.vladsch.flexmark.html HtmlRenderer)
            (com.vladsch.flexmark.parser Parser)
            (com.vladsch.flexmark.util KeepType)
@@ -38,7 +39,7 @@
 ;; Markdown translation functions.
 ;;------------------------------------------------------------------------------
 
-(def options (-> (MutableDataSet.)
+ (def options (-> (MutableDataSet.)
                  (.set Parser/REFERENCES_KEEP KeepType/LAST)
                  (.set HtmlRenderer/INDENT_SIZE (Integer. 2))
                  (.set HtmlRenderer/PERCENT_ENCODE_URLS true)
@@ -49,10 +50,14 @@
                  (.set TablesExtension/DISCARD_EXTRA_COLUMNS true)
                  (.set TablesExtension/WITH_CAPTION false)
                  (.set TablesExtension/HEADER_SEPARATOR_COLUMN_MATCH true)
+                 ;      (.set WikiLinkExtension/LINK_FIRST_SYNTAX true)
+                 ;      (.set WikiLinkExtension/LINK_ESCAPE_CHARS "")
                  (.set Parser/EXTENSIONS (ArrayList.
-                                           [(StrikethroughExtension/create)
-                                            (TablesExtension/create)
-                                            (FootnoteExtension/create)]))))
+                                           [(FootnoteExtension/create)
+                                            (StrikethroughExtension/create)
+                                            ; (WikiLinkExtension/create)
+                                            ; (WikiLinkAttributeExtension/create)
+                                            (TablesExtension/create)]))))
 
 (def parser (.build ^com.vladsch.flexmark.parser.Parser$Builder (Parser/builder options)))
 (def renderer (.build ^com.vladsch.flexmark.html.HtmlRenderer$Builder (HtmlRenderer/builder options)))
@@ -236,7 +241,10 @@
   [:div
    (if content
      (let [txt-with-links (replace-wikilinks (first content) req)]
-       (convert-markdown-to-html txt-with-links))
+        (convert-markdown-to-html txt-with-links))
+     ; Comment out above and uncomment below to use
+     ; WikiLinkAttributeExtension.
+     ; (convert-markdown-to-html (first content))
      [:p error-span "There is not centered content for this page."])])
 
 (defn footer-component
