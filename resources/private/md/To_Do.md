@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-08-28T16:11:51.679-04:00
+modified: 2018-09-02T17:50:50.332-04:00
 tags:
   - architecture
   - bugs
@@ -70,7 +70,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
     * Issue [#10](https://bitbucket.org/David_Clark/cwiki/issues/10/add-keyboard-shortcuts-to-editor) was created.
 
 * Creation of wikilinks needs to understand in-line code spans, `<code></code>`, and `<pre></pre>` so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
-    * This issue ([#14](https://bitbucket.org/David_Clark/cwiki/issues/14/markdown-parsers-need-to-understand-wiki)) was **resolved** in commit [c82b0ad](https://bitbucket.org/David_Clark/cwiki/commits/c82b0add3d1e9c6b4933de0a007e4f39701b8696).
+    * Issue [#14](https://bitbucket.org/David_Clark/cwiki/issues/14/markdown-parsers-need-to-understand-wiki) was created.
 
 * Create a function that will update the existing database with new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
 
