@@ -21,6 +21,7 @@
                  [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.18"]
                  [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.18"]
                  [com.vladsch.flexmark/flexmark-ext-tables "0.34.18"]
+                 [com.vladsch.flexmark/flexmark-ext-wikilink "0.34.18"]
                  [compojure "1.6.1" :exclusions [clout instaparse]]
                  [environ "1.1.0"]
                  [hiccup "1.0.5"]
@@ -72,6 +73,8 @@
                                       [ring/ring-devel "1.6.3"]]
 
                        :source-paths ["env/dev/clj"]
+
+                       :prep-tasks [["compile" "cwiki.util.wikilink-attributes"]]
 
                        :plugins      [[lein-doo "0.1.10"]
                                       [lein-figwheel "0.5.16"]]
