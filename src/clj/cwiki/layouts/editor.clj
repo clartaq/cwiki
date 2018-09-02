@@ -84,5 +84,5 @@
          [:section {:class "editor-section"}
           [:div {:id "editor-container" :class "editor-container"}
            [:p "The stuff from the ClojureScript editor should show up here."]]])
-       (base/footer-component)
+       ;(base/footer-component)
        (standard-end-of-body)])))

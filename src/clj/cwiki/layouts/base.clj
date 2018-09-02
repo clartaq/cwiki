@@ -90,7 +90,7 @@
     (str "CWiki: " (db/page-map->title post-map))
     "CWiki"))
 
-(def debugging-css false)
+(def debugging-css true)
 
 (defn standard-head
   "Return the standard html head section for the wiki html pages."
@@ -291,7 +291,7 @@
      (sidebar-and-article
        (no-content-aside)
        content)
-     (footer-component)
+     ;(footer-component)
      (standard-end-of-body)]))
 
 (defn short-message
@@ -516,75 +516,75 @@
 ;; Functions related to viewing or editing wiki pages.
 ;;
 
-(defn- tag-editor-list-component
-  [tags]
-  (let [tv (vec tags)]
-    [:div {:class "tag-edit-container"}
-     [:label {:class "tag-edit-label"} "Tags"]
-     [:div {:class "tag-edit-tag-list"}
-      (text-field {:class "tag-text-field"} "tag0" (nth tv 0 ""))
-      (text-field {:class "tag-text-field"} "tag1" (nth tv 1 ""))
-      (text-field {:class "tag-text-field"} "tag2" (nth tv 2 ""))
-      (text-field {:class "tag-text-field"} "tag3" (nth tv 3 ""))
-      (text-field {:class "tag-text-field"} "tag4" (nth tv 4 ""))
-      (text-field {:class "tag-text-field"} "tag5" (nth tv 5 ""))
-      (text-field {:class "tag-text-field"} "tag6" (nth tv 6 ""))
-      (text-field {:class "tag-text-field"} "tag7" (nth tv 7 ""))
-      (text-field {:class "tag-text-field"} "tag8" (nth tv 8 ""))
-      (text-field {:class "tag-text-field"} "tag9" (nth tv 9 ""))]]))
+;(defn- tag-editor-list-component
+;  [tags]
+;  (let [tv (vec tags)]
+;    [:div {:class "tag-edit-container"}
+;     [:label {:class "tag-edit-label"} "Tags"]
+;     [:div {:class "tag-edit-tag-list"}
+;      (text-field {:class "tag-text-field"} "tag0" (nth tv 0 ""))
+;      (text-field {:class "tag-text-field"} "tag1" (nth tv 1 ""))
+;      (text-field {:class "tag-text-field"} "tag2" (nth tv 2 ""))
+;      (text-field {:class "tag-text-field"} "tag3" (nth tv 3 ""))
+;      (text-field {:class "tag-text-field"} "tag4" (nth tv 4 ""))
+;      (text-field {:class "tag-text-field"} "tag5" (nth tv 5 ""))
+;      (text-field {:class "tag-text-field"} "tag6" (nth tv 6 ""))
+;      (text-field {:class "tag-text-field"} "tag7" (nth tv 7 ""))
+;      (text-field {:class "tag-text-field"} "tag8" (nth tv 8 ""))
+;      (text-field {:class "tag-text-field"} "tag9" (nth tv 9 ""))]]))
 
-(defn compose-create-or-edit-page
-  "Will compose a page to create or edit a page in the wiki. The
-  difference is based on whether or not the post-map passed as
-  argument has a nil entry for the :post_id key in the map -- nil causes
-  creation, non-nil is an edit."
-  [post-map req]
-  (let [id (db/page-map->id post-map)
-        title (db/page-map->title post-map)
-        content (db/page-map->content post-map)
-        tags (db/get-tag-names-for-page id)]
-    (html5
-      {:lang "en"}
-      (standard-head post-map)
-      [:body {:class "page"}
-       (wiki-header-component post-map req {:editing true})
-       (sidebar-and-article
-         (sidebar-aside req)
-         [:div {:class "editor-container"}
-          (form-to {:enctype "multipart/form-data" :class "editor-form"}
-                   (if id
-                     [:post "save-edits"]
-                     [:post "save-new-page"])
-                   (when id
-                     (hidden-field :page-id id))
-                   [:div {:class "form-group"}
-                    [:div {:class "form-label-div"}
-                     [:label {:class "form-label required"
-                              :for   "title"} "Page Title"]]
-                    (text-field {:class     "form-title-field"
-                                 :autofocus "autofocus"} "title" title)]
-                   (tag-editor-list-component tags)
-                   ; KEEP THIS FOR NOW
-                   ;[:div {:class "form-group"}
-                   ; [:div {:class "form-label-div"}
-                   ;  [:label {:class "form-label"
-                   ;           :for   "tags"} "Tags"]]
-                   ; [:input {:type "submit" :id "new-tag-button"}]]
-                   [:div {:class "form-group"}
-                    [:div {:class "form-label-div"}
-                     [:label {:class "form-label"
-                              :for   "content"} "Page Content"]]
-                    (text-area {:class "form-text-area"} "content" content)]
-                   [:div {:class "button-bar-container"}
-                    (submit-button {:id    "Save Button"
-                                    :class "form-button button-bar-item"}
-                                   "Save Changes")
-                    [:input {:type    "button" :name "cancel-button"
-                             :value   "Cancel"
-                             :class   "form-button button-bar-item"
-                             :onclick "window.history.back();"}]])])
-       (footer-component)
-       (standard-end-of-body)])))
+;(defn compose-create-or-edit-page
+;  "Will compose a page to create or edit a page in the wiki. The
+;  difference is based on whether or not the post-map passed as
+;  argument has a nil entry for the :post_id key in the map -- nil causes
+;  creation, non-nil is an edit."
+;  [post-map req]
+;  (let [id (db/page-map->id post-map)
+;        title (db/page-map->title post-map)
+;        content (db/page-map->content post-map)
+;        tags (db/get-tag-names-for-page id)]
+;    (html5
+;      {:lang "en"}
+;      (standard-head post-map)
+;      [:body {:class "page"}
+;       (wiki-header-component post-map req {:editing true})
+;       (sidebar-and-article
+;         (sidebar-aside req)
+;         [:div {:class "editor-container"}
+;          (form-to {:enctype "multipart/form-data" :class "editor-form"}
+;                   (if id
+;                     [:post "save-edits"]
+;                     [:post "save-new-page"])
+;                   (when id
+;                     (hidden-field :page-id id))
+;                   [:div {:class "form-group"}
+;                    [:div {:class "form-label-div"}
+;                     [:label {:class "form-label required"
+;                              :for   "title"} "Page Title"]]
+;                    (text-field {:class     "form-title-field"
+;                                 :autofocus "autofocus"} "title" title)]
+;                   (tag-editor-list-component tags)
+;                   ; KEEP THIS FOR NOW
+;                   ;[:div {:class "form-group"}
+;                   ; [:div {:class "form-label-div"}
+;                   ;  [:label {:class "form-label"
+;                   ;           :for   "tags"} "Tags"]]
+;                   ; [:input {:type "submit" :id "new-tag-button"}]]
+;                   [:div {:class "form-group"}
+;                    [:div {:class "form-label-div"}
+;                     [:label {:class "form-label"
+;                              :for   "content"} "Page Content"]]
+;                    (text-area {:class "form-text-area"} "content" content)]
+;                   [:div {:class "button-bar-container"}
+;                    (submit-button {:id    "Save Button"
+;                                    :class "form-button button-bar-item"}
+;                                   "Save Changes")
+;                    [:input {:type    "button" :name "cancel-button"
+;                             :value   "Cancel"
+;                             :class   "form-button button-bar-item"
+;                             :onclick "window.history.back();"}]])])
+;       ;(footer-component)
+;       (standard-end-of-body)])))
 
 (defn view-wiki-page
   "Return a 'regular' wiki page view."
@@ -599,7 +599,7 @@
          (sidebar-aside req)
          [:div (limited-width-title-component post-map)
           (limited-width-content-component req content)])
-       (footer-component)
+       ;(footer-component)
        (standard-end-of-body)]
       (include-js "/js/onload.js"))))
 
@@ -621,7 +621,7 @@
          [:div (limited-width-title-component post-map)
           [:div {:class class-to-use}
            (limited-width-content-component req content)]])
-       (footer-component)
+       ;(footer-component)
        (standard-end-of-body)])))
 
 ;;
