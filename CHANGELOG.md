@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Fixed ###
 - Resolved issue [#19: "Search should do nothing when given empty search terms"](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) in commit [1c92442](https://bitbucket.org/David_Clark/cwiki/commits/1c92442096e60162f16da1d37821c0d892c1203c).
-- Resolved issue [#20: "Name of Front Page can be Changed"](https://bitbucket.org/David_Clark/cwiki/issues/20/name-of-front-page-can-be-changed) in commit [4febb84](https://bitbucket.org/David_Clark/cwiki/commits/4febb84773c8).
+- Resolved issue [#20: "Name of Front Page can be Changed"](https://bitbucket.org/David_Clark/cwiki/issues/20/name-of-front-page-can-be-changed) in commit [cc6dbc7](https://bitbucket.org/David_Clark/cwiki/commits/cc6dbc7c9dae93d688487ee2ae02d36edf75da50).
 
 ## [0.0.11] - 2018-08-14
 ### Added ###
