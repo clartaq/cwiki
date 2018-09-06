@@ -29,7 +29,7 @@ And a code block:
   (+ 1 x))
 ```
 
-Here's a [link](example.com).
+Here's a [link](https://google.com).
 
 Here's a [[wikilink]] to a page that doesn't exist.
 
