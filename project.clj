@@ -17,11 +17,11 @@
                  [clj-time "0.14.4"]
                  [com.taoensso/sente "1.13.1"]
                  [com.taoensso/timbre "4.10.0"]
-                 [com.vladsch.flexmark/flexmark "0.34.22"]
-                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.22"]
-                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.22"]
-                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.22"]
-                 [com.vladsch.flexmark/flexmark-ext-wikilink "0.34.22"]
+                 [com.vladsch.flexmark/flexmark "0.34.24"]
+                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.24"]
+                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.24"]
+                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.24"]
+                 [com.vladsch.flexmark/flexmark-ext-wikilink "0.34.24"]
                  [compojure "1.6.1" :exclusions [clout instaparse]]
                  [environ "1.1.0"]
                  [hiccup "1.0.5"]
@@ -86,7 +86,10 @@
                        :omit-source  true
                        :source-paths ["env/prod/clj"]
                        :hooks        [minify-assets.plugin/hooks]
-                       :prep-tasks   ["clean" "compile" ["cljsbuild" "once" "min"]]
+                       :prep-tasks   ["clean"
+                                      ["compile" "cwiki.util.wikilink-attributes"]
+                                      "compile"
+                                      ["cljsbuild" "once" "min"]]
                        ; This really shouldn't be required. There is some sort of
                        ; dependency version incompatibility somewhere that needs
                        ; to be fixed..
