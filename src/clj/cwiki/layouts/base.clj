@@ -12,7 +12,7 @@
             [cwiki.models.wiki-db :as db]
             [cwiki.util.authorization :as ath]
             [cwiki.util.files :refer [is-seed-page?]]
-            ;[cwiki.util.pp :as pp]
+    ;[cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :as special]
             [cwiki.util.wikilinks :refer [replace-wikilinks
@@ -39,7 +39,7 @@
 ;; Markdown translation functions.
 ;;------------------------------------------------------------------------------
 
- (def options (-> (MutableDataSet.)
+(def options (-> (MutableDataSet.)
                  (.set Parser/REFERENCES_KEEP KeepType/LAST)
                  (.set HtmlRenderer/INDENT_SIZE (Integer. 2))
                  (.set HtmlRenderer/PERCENT_ENCODE_URLS true)
@@ -50,13 +50,13 @@
                  (.set TablesExtension/DISCARD_EXTRA_COLUMNS true)
                  (.set TablesExtension/WITH_CAPTION false)
                  (.set TablesExtension/HEADER_SEPARATOR_COLUMN_MATCH true)
-                       (.set WikiLinkExtension/LINK_FIRST_SYNTAX true)
-                       (.set WikiLinkExtension/LINK_ESCAPE_CHARS "")
+                 (.set WikiLinkExtension/LINK_FIRST_SYNTAX true)
+                 (.set WikiLinkExtension/LINK_ESCAPE_CHARS "")
                  (.set Parser/EXTENSIONS (ArrayList.
                                            [(FootnoteExtension/create)
                                             (StrikethroughExtension/create)
-                                             (WikiLinkExtension/create)
-                                             (WikiLinkAttributeExtension/create)
+                                            (WikiLinkExtension/create)
+                                            (WikiLinkAttributeExtension/create)
                                             (TablesExtension/create)]))))
 
 (def parser (.build ^com.vladsch.flexmark.parser.Parser$Builder (Parser/builder options)))
@@ -244,7 +244,7 @@
      ;   (convert-markdown-to-html txt-with-links))
      ; Comment out above and uncomment below to use
      ; WikiLinkAttributeExtension.
-      (convert-markdown-to-html (first content))
+     (convert-markdown-to-html (first content))
      [:p error-span "There is not centered content for this page."])])
 
 (defn footer-component
@@ -574,47 +574,40 @@
                           (.append (first t))
                           (.append "]]"))))))
 
+(defn- process-item-set-to-list-of-wikilinks
+  "Process a set of items into a Markdown-formatted list of items and return it."
+  [items uri-and-query]
+  (if (zero? (count items))
+    ""
+    (let [leadin-str (str "\n- [[" uri-and-query)]
+      (loop [t items
+             sb (StringBuilder.)]
+        (if (empty? t)
+          (-> sb
+              (.append "\n")
+              (.toString))
+          (let [item (first t)]
+            (recur (rest t) (-> sb
+                                (.append leadin-str)
+                                (.append item)
+                                (.append "|")
+                                (.append item)
+                                (.append "]]")))))))))
+
 (defn- process-tag-set
   "Process a sorted set of tag names into a Markdown-formatted
   unordered list and return it. Individual tag names are placed
   in links that will generate a list of all pages containing
   the tag."
   [tags]
-  (if (zero? (count tags))
-    ""
-    (loop [t tags
-           sb (StringBuilder.)]
-      (if (empty? t)
-        (-> sb
-            (.append "\n")
-            (.toString))
-        (let [tag (first t)]
-          (recur (rest t) (-> sb
-                              (.append "\n- [[/as-tag?tag=")
-                              (.append tag)
-                              (.append "|")
-                              (.append tag)
-                              (.append "]]"))))))))
+  (process-item-set-to-list-of-wikilinks tags "/as-tag?tag="))
 
 (defn- process-name-set
   "Process a sorted set of names into a Markdown-formatted
   unordered list and return it. If the set of names is empty,
   return an empty string."
   [names]
-  (if (zero? (count names))
-    ""
-    (loop [t names
-           sb (StringBuilder.)]
-      (if (empty? t)
-        (-> sb
-            (.append "\n")
-            (.toString))
-        (recur (rest t) (-> sb
-                            (.append "\n- [[/as-user?user=")
-                            (.append (first t))
-                            (.append "|")
-                            (.append (first t))
-                            (.append "]]")))))))
+  (process-item-set-to-list-of-wikilinks names "/as-user?user="))
 
 (defn compose-all-pages-page
   "Return a page listing all of the pages in the wiki."
