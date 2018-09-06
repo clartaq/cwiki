@@ -13,13 +13,14 @@
             [cwiki.routes.ws :refer [websocket-routes]]
             [cwiki.routes.login :refer [login-routes]]
             [cwiki.util.authorization :as ath]
-            [cwiki.util.pp :as pp]
+    ;[cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
 
 (defn- build-response
+  "A helper to build and return a response to a request."
   ([body req]
    (build-response body req 200))
   ([body req stat]
@@ -28,6 +29,8 @@
        (assoc :body body))))
 
 (defn respond-to-page-request
+  "Deal with a request for a page in the wiki, including some special
+  pages and pages that may not even exist yet."
   [request]
   (let [raw-title (u/url-decode (:uri request))
         title (s/replace-first raw-title "/" "")
@@ -51,7 +54,6 @@
       (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")]
                                      (if (ath/can-edit-and-delete? request title-only)
                                        (let [post (db/find-post-by-title title-only)
-                                             ;_ (println "existing post: \n" (pp/pp-map post))
                                              new-body (layout-editor/layout-editor-page
                                                         post
                                                         request)
@@ -68,12 +70,12 @@
                                            (build-response new-body request))
                                          ;else
                                          (build-response (layout/compose-403-page) request 403)))
-      (s/ends-with? title "/as-user") (let [author-only (s/replace title "/as-user" "")
-                                            new-body (layout/compose-all-pages-with-user author-only request)]
-                                        (build-response new-body request))
-      (s/ends-with? title "/as-tag") (let [tag-only (s/replace title "/as-tag" "")
-                                           new-body (layout/compose-all-pages-with-tag tag-only request)]
-                                       (build-response new-body request))
+      (= raw-title "/as-user") (let [author (get-in request [:params :user])
+                                     new-body (layout/compose-all-pages-with-user author request)]
+                                 (build-response new-body request))
+      (= raw-title "/as-tag") (let [tag (get-in request [:params :tag])
+                                    new-body (layout/compose-all-pages-with-tag tag request)]
+                                (build-response new-body request))
       ; This is the fall through case. We make the assumption that if the page
       ; doesn't already exist, the user wants to create it.
       :else (let [title-only (s/replace title "/edit" "")]
@@ -82,7 +84,6 @@
                                  title-only
                                  ""
                                  (ri/req->user-id request))
-                      ;_ (println "new post: \n" (pp/pp-map new-post))
                       new-body (layout-editor/layout-editor-page
                                  new-post
                                  request)
