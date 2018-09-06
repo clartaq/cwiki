@@ -34,7 +34,7 @@
 ;-------------------------------------------------------------------------------
 
 ; The style used for "normal" links.
-(def ok-to-link-style nil)                                  ;"color:green;")
+(def ok-to-link-style nil)                                  ;"color:green;") ;just for testing
 ; The style used for links to non-existent pages. Triggers page creation.
 (def non-existent-link-style "color:red;")
 ; This is the style used for disabled links in wikilinks.clj
@@ -75,13 +75,13 @@
   "Handle the special case when a link points to a tag. Used to build
   the All Tags page."
   [title]
-  (s/ends-with? title "/as-tag"))
+  (s/starts-with? title "/as-tag"))
 
 (defn- as-user?
   "Handle the special case when a link points to a user. Used to build
   the All Users page."
   [title]
-  (s/ends-with? title "/as-user"))
+  (s/starts-with? title "/as-user"))
 
 (defn- title->link-style
   "Given a map containing a (possibly identical) page title for
@@ -119,7 +119,6 @@
 (defn ^AttributeProviderFactory -Factory []
   (proxy [IndependentAttributeProviderFactory] []
     (create [^LinkResolverContext context]
-      ;; noinspection ReturnOfInnerClass
       (cwiki.util.WikiLinkAttributeProvider.))))
 
 ;-------------------------------------------------------------------------------
