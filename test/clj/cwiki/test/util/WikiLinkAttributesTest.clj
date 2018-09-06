@@ -9,7 +9,7 @@
            (java.util ArrayList)))
 
 ;-------------------------------------------------------------------------------
-; Tests
+; Helpers
 ;-------------------------------------------------------------------------------
 
 (defn wiki-markdown->html
@@ -24,6 +24,10 @@
         document (.parse ^Parser parser ^String markdown)
         renderer (.build ^HtmlRenderer$Builder (HtmlRenderer/builder options))]
     (.render renderer document)))
+
+;-------------------------------------------------------------------------------
+; Tests
+;-------------------------------------------------------------------------------
 
 (deftest cwiki-attribute-provider-test
   (testing "The ability to parse and attributize wikilinks."
