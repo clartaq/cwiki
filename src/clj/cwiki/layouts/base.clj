@@ -21,11 +21,11 @@
             [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to hidden-field submit-button text-area
                                  text-field]])
-  (:import ;(cwiki.util WikiLinkAttributeExtension)
+  (:import (cwiki.util WikiLinkAttributeExtension)
            (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
            (com.vladsch.flexmark.ext.footnotes FootnoteExtension)
-           ;(com.vladsch.flexmark.ext.wikilink WikiLinkExtension)
+           (com.vladsch.flexmark.ext.wikilink WikiLinkExtension)
            (com.vladsch.flexmark.html HtmlRenderer)
            (com.vladsch.flexmark.parser Parser)
            (com.vladsch.flexmark.util KeepType)
@@ -50,13 +50,13 @@
                  (.set TablesExtension/DISCARD_EXTRA_COLUMNS true)
                  (.set TablesExtension/WITH_CAPTION false)
                  (.set TablesExtension/HEADER_SEPARATOR_COLUMN_MATCH true)
-                 ;      (.set WikiLinkExtension/LINK_FIRST_SYNTAX true)
-                 ;      (.set WikiLinkExtension/LINK_ESCAPE_CHARS "")
+                       (.set WikiLinkExtension/LINK_FIRST_SYNTAX true)
+                       (.set WikiLinkExtension/LINK_ESCAPE_CHARS "")
                  (.set Parser/EXTENSIONS (ArrayList.
                                            [(FootnoteExtension/create)
                                             (StrikethroughExtension/create)
-                                            ; (WikiLinkExtension/create)
-                                            ; (WikiLinkAttributeExtension/create)
+                                             (WikiLinkExtension/create)
+                                             (WikiLinkAttributeExtension/create)
                                             (TablesExtension/create)]))))
 
 (def parser (.build ^com.vladsch.flexmark.parser.Parser$Builder (Parser/builder options)))
@@ -240,11 +240,11 @@
   [req & content]
   [:div
    (if content
-     (let [txt-with-links (replace-wikilinks (first content) req)]
-        (convert-markdown-to-html txt-with-links))
+     ;(let [txt-with-links (replace-wikilinks (first content) req)]
+     ;   (convert-markdown-to-html txt-with-links))
      ; Comment out above and uncomment below to use
      ; WikiLinkAttributeExtension.
-     ; (convert-markdown-to-html (first content))
+      (convert-markdown-to-html (first content))
      [:p error-span "There is not centered content for this page."])])
 
 (defn footer-component
@@ -660,9 +660,9 @@
             (.toString))
         (let [tag (first t)]
           (recur (rest t) (-> sb
-                              (.append "\n- [[")
+                              (.append "\n- [[/as-tag?tag=")
                               (.append tag)
-                              (.append "/as-tag|")
+                              (.append "|")
                               (.append tag)
                               (.append "]]"))))))))
 
@@ -680,9 +680,9 @@
             (.append "\n")
             (.toString))
         (recur (rest t) (-> sb
-                            (.append "\n- [[")
+                            (.append "\n- [[/as-user?user=")
                             (.append (first t))
-                            (.append "/as-user|")
+                            (.append "|")
                             (.append (first t))
                             (.append "]]")))))))
 
