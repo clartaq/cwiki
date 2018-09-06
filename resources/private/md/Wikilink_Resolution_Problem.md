@@ -2,12 +2,12 @@
 author: david
 title: Wikilink Resolution Problem
 date: 2018-09-01T11:04:58.627-04:00
-modified: 2018-09-02T10:32:19.720-04:00
+modified: 2018-09-06T17:20:54.112-04:00
 tags:
   - bugs
   - debugging
   - technical note
-  - wikilink
+  - wikilinks
 ---
 
 Having a problem switching from the existing wikilink resolver in CWiki to one based on an extension to flexmark.
