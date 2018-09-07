@@ -15,7 +15,7 @@
     ;[cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :as special]
-            [cwiki.util.wikilinks :refer [replace-wikilinks
+            [cwiki.util.wikilinks :refer [;replace-wikilinks
                                           get-delete-link-for-existing-page
                                           get-edit-link-for-page]]
             [hiccup.page :refer [html5 include-css include-js]]
@@ -559,21 +559,6 @@
 ;; page names or users.
 ;;
 
-(defn- process-title-set
-  "Process a sorted set of page titles into a Markdown-formatted
-  unordered list and return it"
-  [titles]
-  (loop [t titles
-         sb (StringBuilder.)]
-    (if (empty? t)
-      (-> sb
-          (.append "\n")
-          (.toString))
-      (recur (rest t) (-> sb
-                          (.append "\n- [[")
-                          (.append (first t))
-                          (.append "]]"))))))
-
 (defn- process-item-set-to-list-of-wikilinks
   "Process a set of items into a Markdown-formatted list of items and return it."
   [items uri-and-query]
@@ -593,6 +578,14 @@
                                 (.append "|")
                                 (.append item)
                                 (.append "]]")))))))))
+
+(defn- process-title-set
+  "Process a sorted set of page titles into a Markdown-formatted
+  unordered list and return it"
+  [titles]
+  ; This builds bigger links than strictly necessary since it duplicates
+  ; the page name in the link, but it uses a well-tested function to do it.
+  (process-item-set-to-list-of-wikilinks titles ""))
 
 (defn- process-tag-set
   "Process a sorted set of tag names into a Markdown-formatted
