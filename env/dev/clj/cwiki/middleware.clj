@@ -21,12 +21,3 @@
       wrap-file-info
       wrap-exceptions
       wrap-reload))
-
-;(def app
-;  (-> (routes admin-routes home-routes login-routes websocket-routes app-routes)
-;      (wrap-authentication backend)
-;     ** (handler/site)
-;      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-;      (wrap-base-url)))
-;[buddy.auth.backends :as backends]
-;[buddy.auth.middleware :refer [wrap-authentication]]
