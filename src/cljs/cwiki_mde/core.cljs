@@ -68,6 +68,7 @@
   "This is the editing area, just a textarea. It sends an update
   message over the websocket to the server."
   [page-map-atom]
+  (trace "enter editor")
   [:textarea
    {:class     "mde-editor-class"
     :value     (:page_content @page-map-atom)
@@ -181,7 +182,7 @@
                     :name      "page-title"
                     :value     (if-let [title (:page_title pm)]
                                  (do
-                                   (tracef "make-title-input-element: title: %s" title)
+                                   (debugf "make-title-input-element: title: %s" title)
                                    (when (= title "favicon.ico")
                                      (infof "Saw funky title: \n%s"
                                             (with-out-str (pprint/pprint-map pm))))
@@ -204,7 +205,7 @@
   "Starts the websocket router and returns a function that lays out
   the editor and preview area side-by-side."
   []
-  (debug "the-editor-container")
+  (trace "the-editor-container")
   (fn []
     (tracef "the-editor-container: @the-page-map: %s" @the-page-map)
     [:div {:class "mde-container"}
