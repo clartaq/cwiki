@@ -37,7 +37,7 @@
 (def ok-to-link-style nil)                                  ;"color:green;") ;just for testing
 ; The style used for links to non-existent pages. Triggers page creation.
 (def non-existent-link-style "color:red;")
-; This is the style used for disabled links in wikilinks.clj
+; This is the style used for disabled links.
 (def disabled-link-style "pointer-events:none;cursor:default;color:lightgray;")
 
 (defn- article-is-present?
