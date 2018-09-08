@@ -51,24 +51,24 @@
 ;      (get-different-parts clean-link)
 ;      {:title-part clean-link :display-part clean-link})))
 
-(defn get-edit-link-for-page
-  "Return a link to be used with a button or menu."
-  [post-map req]
-  (let [page-title (db/page-map->title post-map)]
-    (when (special/is-editable? page-title)
-      (let [uri (u/url-encode (str page-title "/edit"))
-            h (hc/html (link-to uri "Edit"))]
-        h))))
-
-(defn get-delete-link-for-existing-page
-  "Return a link to be used with a button or menu. If the page
-  is special and cannot be deleted, return nil."
-  [post-map req]
-  (let [page-title (db/page-map->title post-map)]
-    (when (special/is-deletable? page-title)
-      (let [uri (u/url-encode (str page-title "/delete"))
-            h (hc/html (link-to uri "Delete"))]
-        h))))
+;(defn get-edit-link-for-page
+;  "Return a link to be used with a button or menu."
+;  [post-map req]
+;  (let [page-title (db/page-map->title post-map)]
+;    (when (special/is-editable? page-title)
+;      (let [uri (u/url-encode (str page-title "/edit"))
+;            h (hc/html (link-to uri "Edit"))]
+;        h))))
+;
+;(defn get-delete-link-for-existing-page
+;  "Return a link to be used with a button or menu. If the page
+;  is special and cannot be deleted, return nil."
+;  [post-map req]
+;  (let [page-title (db/page-map->title post-map)]
+;    (when (special/is-deletable? page-title)
+;      (let [uri (u/url-encode (str page-title "/delete"))
+;            h (hc/html (link-to uri "Delete"))]
+;        h))))
 
 ;(defn- get-view-link-for-existing-page
 ;  "Return a link to be displayed in an existing page. As such, it
