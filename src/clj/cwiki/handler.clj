@@ -13,11 +13,19 @@
             [cwiki.routes.ws :refer [websocket-routes]]
             [cwiki.routes.login :refer [login-routes]]
             [cwiki.util.authorization :as ath]
-    ;[cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
+
+(defn- wanna? [request key]
+  (= "true" (get-in request [:params key])))
+
+(defn- wanna-delete? [request]
+  (wanna? request :delete))
+
+(defn- wanna-edit? [request]
+  (wanna? request :edit))
 
 (defn- build-response
   "A helper to build and return a response to a request."
@@ -28,16 +36,33 @@
        (status stat)
        (assoc :body body))))
 
+(defn- return-403-page [request]
+  (build-response (layout/compose-403-page) request 403))
+
 (defn respond-to-page-request
   "Deal with a request for a page in the wiki, including some special
   pages and pages that may not even exist yet."
   [request]
-  (let [raw-title (u/url-decode (:uri request))
-        title (s/replace-first raw-title "/" "")
+  (let [title (s/replace-first (u/url-decode (:uri request)) "/" "")
         raw-post (db/find-post-by-title title)]
     (cond
-      raw-post (let [new-page (layout/view-wiki-page raw-post request)]
-                 (build-response new-page request))
+      (wanna-delete? request) (if (ath/can-edit-and-delete? request title)
+                                (let [new-body (layout/view-wiki-page
+                                                 (db/find-post-by-title "Front Page")
+                                                 request)]
+                                  (db/delete-page-by-id! (db/title->page-id title))
+                                  (build-response new-body request))
+                                ;else
+                                (return-403-page request))
+
+      (wanna-edit? request) (if (ath/can-edit-and-delete? request title)
+                              (let [new-body (layout-editor/layout-editor-page
+                                               raw-post
+                                               request)
+                                    response (build-response new-body request)]
+                                response)
+                              ;else
+                              (return-403-page request))
 
       (= title "All Pages") (let [new-body (layout/compose-all-pages-page request)]
                               (build-response new-body request))
@@ -51,46 +76,30 @@
       (= title "Orphans") (let [new-body (layout/compose-not-yet-view "Orphans")]
                             (build-response new-body request))
 
-      (s/ends-with? title "/edit") (let [title-only (s/replace title "/edit" "")]
-                                     (if (ath/can-edit-and-delete? request title-only)
-                                       (let [post (db/find-post-by-title title-only)
-                                             new-body (layout-editor/layout-editor-page
-                                                        post
-                                                        request)
-                                             response (build-response new-body request)]
-                                         response)
-                                       ;else
-                                       (build-response (layout/compose-403-page) request 403)))
+      (= title "as-user") (let [author (get-in request [:params :user])
+                                new-body (layout/compose-all-pages-with-user author request)]
+                            (build-response new-body request))
+      (= title "as-tag") (let [tag (get-in request [:params :tag])
+                               new-body (layout/compose-all-pages-with-tag tag request)]
+                           (build-response new-body request))
 
-      (s/ends-with? title "/delete") (let [title-only (s/replace title "/delete" "")]
-                                       (if (ath/can-edit-and-delete? request title-only)
-                                         (let [new-body (layout/view-wiki-page
-                                                          (db/find-post-by-title "Front Page") request)]
-                                           (db/delete-page-by-id! (db/title->page-id title-only))
-                                           (build-response new-body request))
-                                         ;else
-                                         (build-response (layout/compose-403-page) request 403)))
-      (= raw-title "/as-user") (let [author (get-in request [:params :user])
-                                     new-body (layout/compose-all-pages-with-user author request)]
-                                 (build-response new-body request))
-      (= raw-title "/as-tag") (let [tag (get-in request [:params :tag])
-                                    new-body (layout/compose-all-pages-with-tag tag request)]
-                                (build-response new-body request))
+      raw-post (let [new-page (layout/view-wiki-page raw-post request)]
+                 (build-response new-page request))
+
       ; This is the fall through case. We make the assumption that if the page
       ; doesn't already exist, the user wants to create it.
-      :else (let [title-only (s/replace title "/edit" "")]
-              (if (ath/can-edit-and-delete? request title-only)
-                (let [new-post (db/create-new-post-map
-                                 title-only
-                                 ""
-                                 (ri/req->user-id request))
-                      new-body (layout-editor/layout-editor-page
-                                 new-post
-                                 request)
-                      response (build-response new-body request)]
-                  response)
-                ;else
-                (build-response (layout/compose-403-page) request 403))))))
+      :else (if (ath/can-edit-and-delete? request title)
+              (let [new-post (db/create-new-post-map
+                               title
+                               ""
+                               (ri/req->user-id request))
+                    new-body (layout-editor/layout-editor-page
+                               new-post
+                               request)
+                    response (build-response new-body request)]
+                response)
+              ;else
+              (return-403-page request)))))
 
 (defn page-finder-route
   []
