@@ -13,17 +13,13 @@
             [cwiki.models.wiki-db :as db]
             [cwiki.util.authorization :as ath]
             [cwiki.util.files :refer [is-seed-page?]]
-    ;[cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :as special]
-    ; [cwiki.util.wikilinks :refer [;replace-wikilinks
-    ;                               get-delete-link-for-existing-page
-    ;                               get-edit-link-for-page]]
             [hiccup.core :as hc]
             [hiccup.element :refer [link-to]]
-            [hiccup.page :refer [html5 include-css include-js]]
             [hiccup.form :refer [form-to hidden-field submit-button text-area
-                                 text-field]])
+                                 text-field]]
+            [hiccup.page :refer [html5 include-css include-js]])
   (:import (cwiki.util WikiLinkAttributeExtension)
            (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
@@ -98,7 +94,7 @@
   [post-map req]
   (let [page-title (db/page-map->title post-map)]
     (when (special/is-editable? page-title)
-      (let [uri (u/url-encode (str page-title "/edit"))
+      (let [uri (str (u/url-encode page-title) "?edit=true")
             h (hc/html (link-to uri "Edit"))]
         h))))
 
@@ -108,7 +104,7 @@
   [post-map req]
   (let [page-title (db/page-map->title post-map)]
     (when (special/is-deletable? page-title)
-      (let [uri (u/url-encode (str page-title "/delete"))
+      (let [uri (str (u/url-encode page-title) "?delete=true")
             h (hc/html (link-to uri "Delete"))]
         h))))
 
