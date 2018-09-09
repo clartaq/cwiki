@@ -8,14 +8,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added ###
 - Additional seed pages.
+- An extension to the Markdown parser that understands and colorizes wikilinks just like the old one did. This means that code spans and blocks can now include wikilinks without having them converted to links. It should make writing examples that contain wikilinks easier.
 
 ### Changed ###
 - Updates to project dependencies.
 - Updates to content of seed pages.
+- Mechanism used to build links on "All Users" and "All Tags" pages corrected to be more web-standard compliant.
 
 ### Fixed ###
 - Resolved issue [#19: "Search should do nothing when given empty search terms"](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) in commit [1c92442](https://bitbucket.org/David_Clark/cwiki/commits/1c92442096e60162f16da1d37821c0d892c1203c).
 - Resolved issue [#20: "Name of Front Page can be Changed"](https://bitbucket.org/David_Clark/cwiki/issues/20/name-of-front-page-can-be-changed) in commit [cc6dbc7](https://bitbucket.org/David_Clark/cwiki/commits/cc6dbc7c9dae93d688487ee2ae02d36edf75da50).
+- Finally **really** resolved issue [#20: Markdown Parsers Need to Understand Wiki Links](https://bitbucket.org/David_Clark/cwiki/issues/14/markdown-parsers-need-to-understand-wiki) in commit [bc4eb80](https://bitbucket.org/David_Clark/cwiki/commits/bc4eb803d50bd3e6d1c8a5b9436f25c464a0fb27).
 
 ## [0.0.11] - 2018-08-14
 ### Added ###

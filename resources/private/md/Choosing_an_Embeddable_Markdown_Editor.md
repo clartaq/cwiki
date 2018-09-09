@@ -2,12 +2,13 @@
 author: CWiki
 title: Choosing an Embeddable Markdown Editor
 date: 2018-02-24T15:08:39.000-05:00
-modified: 2018-06-18T10:38:32.439-04:00
+modified: 2018-09-09T17:57:24.846-04:00
 tags:
   - cwiki
   - Markdown
   - technical note
 ---
+
 
 ​
 Since it is so involved with writing and manipulating text with Markdown
@@ -39,7 +40,7 @@ Another option to follow was the [Minimalist Online Markdown Editor](https://git
 
 I also looked at Jared Reich's [Pell](https://github.com/jaredreich/pell) editor on GitHub and was blown away by how much could be done with such a small program.
 
-In fact, I took his approach and translated it into ClojureScript, producing [Clich](https://bitbucket.org/David_Clark/clich) is a straightforward, small, in-browser [Rich Text](https://en.wikipedia.org/wiki/Rich_Text_Format) Editor written in [ClojureScript](https://clojurescript.org).
+In fact, I took his approach and translated it into ClojureScript, producing [Clich](https://bitbucket.org/David_Clark/clich). Clich is a straightforward, small, in-browser [Rich Text](https://en.wikipedia.org/wiki/Rich_Text_Format) Editor written in [ClojureScript](https://clojurescript.org).
 
 But Pell and Clich are Rich Text Editors, not Markdown. For a tiny Markdown editor with live preview, have a look at Carmen La's [Reagent Markdown Editor](http://carmen.la/blog/2015-06-23-reagent-live-markdown-editor/).
 
@@ -48,7 +49,7 @@ It is
 * written in ClojureScript
 * has a nice tutorial article (linked above) that explains it's construction
 * embeddable
-* using the marked Markdown parser may make using wikilinks possible.
+* using the [marked](https://github.com/markedjs/marked) Markdown parser may make using wikilinks possible.
 * compatible with [Grammarly](https://www.grammarly.com/). But Grammarly doesn't put its markup in the correct location. You have to open their overlay editor to figure out what it's talking about.
 
 It also has some problems to overcome for my use.
@@ -59,3 +60,7 @@ It also has some problems to overcome for my use.
 * Moving data across the server/client barrier might be hard or slow.
 
 So these are all things to investigate.
+
+### Update ###
+
+This has been resolved. A simple editor based on Carmen La's Reagent Markdown Editor was written and included in CWiki. It is now the default editor modifying and editing new pages. Needs more bells and whistles, but it works pretty well now.

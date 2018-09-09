@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do - Old
 date: 2017-10-24T09:17:04.000-04:00
-modified: 2018-06-04T16:25:01.595-04:00
+modified: 2018-09-09T17:49:18.321-04:00
 tags:
   - cwiki
   - history
@@ -10,13 +10,14 @@ tags:
   - technical note
 ---
 
-**This list is no longer maintained.** It is kept here for historical reasons only.
+
+**This list is no longer maintained.** It is kept here for historical reasons only. The information about what is and is not fixed is inaccurate.
 
 This is an ever-evolving list of things that need doing.
 
 * When editing really long pages, like the [[Technical Notes]] page, the `Save` and `Cancel` buttons sometimes get pushed below the bottom of the view and can't be scrolled into view.
 * There is a nasty bug that will crash the program and pollute the database if you try to enter a page title or tag containing an apostrophe. Should also check if other characters cause similar problems.
-* Creation of wikilinks needs to understand in-line code spans, `<code></code>`, and `<pre></pre>` so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.
+* ~~Creation of wikilinks needs to understand in-line code spans, `<code></code>`, and `<pre></pre>` so it doesn't translate examples of wikilinks in those spans. Makes it hard to show examples of wikilinks.~~
 * Create a function that will update the existing database new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
 * Implement within-wiki search.
 * Any maintenance tasks like database compression, backup and restore, for example.

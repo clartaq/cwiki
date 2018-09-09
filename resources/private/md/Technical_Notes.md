@@ -2,13 +2,12 @@
 author: CWiki
 title: Technical Notes
 date: 2017-10-01T17:45:07.000-04:00
-modified: 2018-08-16T16:40:17.863-04:00
+modified: 2018-09-09T17:45:26.061-04:00
 tags:
   - how it works
   - motivation
   - technical note
 ---
-
 
 
 These are some technical notes about CWiki. If you are only interested in using the wiki, you can ignore this stuff. If you want to know how CWiki works or why it works the way it does or how to build and modify your own version, the information here might be useful.
@@ -85,8 +84,6 @@ The pages in CWiki are a mashup of [Markdown](https://daringfireball.net/project
 3. Finally, the HTML is passed to MathJax to translate any $\rm\TeX$ into something that can be displayed in a web page. The representation is usually common HTML, but you can change that if needed.
 4. That big chunk of HTML is plugged into the `<body>` section of a web page containing the header and footer for the page as well as the `<head>` section required for well-formed HTML5
 5. That page is then served by a web-server built into CWiki (http-kit, mentioned above) and rendered by your browser.
-
-Note that, as this is written, wikilinks cannot be included in code listings since the link resolver is unaware of those boundaries.
 
 ## Other Issues ##
 
@@ -166,3 +163,9 @@ It seems like there are four possible approaches.
 4. Since I'm using flexmark-java as my Markdown to HTML processor, look into the Wikilinks extension. I'm not sure how to handle special formatting for special cases like graying admin pages and making links to non-existent pages red. I'm not sure how extensible it is if I want to add things like namespaces either.
 
 I filed an issue with the flexmark developers, and they pointed me to [this issue and discussion](https://github.com/vsch/flexmark-java/issues/30).
+
+#### Resolved ####
+
+This issue was actually fixed by creating a custom `WikiLinkAttributeProvider` and extension. It styles (colors) the links just like always but is done in the Markdown parser rather than using a regular expression to match and resolve links. It did point out a flaw in the way I was constructing the links on the "All Users" and "All Tags" pages. Now they are built using the more standard query string syntax rather than my previous _ad hoc_ method.
+
+There was a pre-existing extension to handle wikilinks within the flexmark parser. All I had to do was include it and write the attribute provider mentioned above.​
