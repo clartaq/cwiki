@@ -39,6 +39,16 @@
 (defn- return-403-page [request]
   (build-response (layout/compose-403-page) request 403))
 
+(defn- edit-existing-post [post-map request]
+  (-> post-map
+      (layout-editor/layout-editor-page request)
+      (build-response request)))
+
+(defn- edit-new-post [title request]
+  (-> title
+      (db/create-new-post-map "" (ri/req->user-id request))
+      (edit-existing-post request)))
+
 (defn respond-to-page-request
   "Deal with a request for a page in the wiki, including some special
   pages and pages that may not even exist yet."
@@ -56,12 +66,7 @@
                                 (return-403-page request))
 
       (wanna-edit? request) (if (ath/can-edit-and-delete? request title)
-                              (let [new-body (layout-editor/layout-editor-page
-                                               raw-post
-                                               request)
-                                    response (build-response new-body request)]
-                                response)
-                              ;else
+                              (edit-existing-post raw-post request)
                               (return-403-page request))
 
       (= title "All Pages") (let [new-body (layout/compose-all-pages-page request)]
@@ -89,16 +94,7 @@
       ; This is the fall through case. We make the assumption that if the page
       ; doesn't already exist, the user wants to create it.
       :else (if (ath/can-edit-and-delete? request title)
-              (let [new-post (db/create-new-post-map
-                               title
-                               ""
-                               (ri/req->user-id request))
-                    new-body (layout-editor/layout-editor-page
-                               new-post
-                               request)
-                    response (build-response new-body request)]
-                response)
-              ;else
+              (edit-new-post title request)
               (return-403-page request)))))
 
 (defn page-finder-route
