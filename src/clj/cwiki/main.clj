@@ -1,3 +1,7 @@
+;;;
+;;; Main entry point to the application.
+;;;
+
 (ns cwiki.main
   (:gen-class)
   (:require [cwiki.handler :refer [app]]
@@ -8,19 +12,6 @@
             [ring.middleware.file-info :refer [wrap-file-info]]
             [taoensso.timbre :refer [trace debug info warn error
                                      tracef debugf infof warnf errorf]]))
-
-;(defonce server (atom nil))
-
-;(defn get-handler []
-;  ;; #'app expands to (var app) so that when we reload our code,
-;  ;; the server is forced to re-resolve the symbol in the var
-;  ;; rather than having its own copy. When the root binding
-;  ;; changes, the server picks it up without having to restart.
-;  (-> #'app
-;      ; Makes static assets in $PROJECT_DIR/resources/public/ available.
-;      (wrap-file "resources")
-;      ; Content-Type, Content-Length, and Last Modified headers for files in body.
-;      (wrap-file-info)))
 
 (defonce ^{:private true} web-server_ (atom nil))
 

@@ -21,9 +21,9 @@
        (status stat)
        (assoc :body body))))
 
-;;;
-;;; Functions related to saving a seed page.
-;;;
+;;
+;; Functions related to saving a seed page.
+;;
 
 (defn- get-save-seed-page
   [req]
