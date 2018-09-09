@@ -258,10 +258,6 @@
   [req & content]
   [:div
    (if content
-     ;(let [txt-with-links (replace-wikilinks (first content) req)]
-     ;   (convert-markdown-to-html txt-with-links))
-     ; Comment out above and uncomment below to use
-     ; WikiLinkAttributeExtension.
      (convert-markdown-to-html (first content))
      [:p error-span "There is not centered content for this page."])])
 
