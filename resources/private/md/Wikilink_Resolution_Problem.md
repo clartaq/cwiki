@@ -2,7 +2,7 @@
 author: david
 title: Wikilink Resolution Problem
 date: 2018-09-01T11:04:58.627-04:00
-modified: 2018-09-06T17:20:54.112-04:00
+modified: 2018-09-08T17:39:17.726-04:00
 tags:
   - bugs
   - debugging
@@ -16,7 +16,7 @@ It doesn't seem to be due to a difference in the resolver that I can find -- the
 
 ## The Problem ##
 
-After some of the "All ..." pages, clicking on the links produced fails because the URL is malformed. Things work Ok on the [[All Pages]] links, but the links on the [[All Users]] and [All Tags]] are messed up. For example, "All Users"->"CWiki"->"About" links produces an URL:
+After some of the "All ..." pages, clicking on the links produced fails because the URL is malformed. Things work Ok on the [[All Pages]] links, but the links on the [[All Users]] and [[All Tags]] are messed up. For example, "All Users"->"CWiki"->"About" links produces an URL:
 
 `localhost:1350/CWiki/About`
 
@@ -36,4 +36,6 @@ rather than the desired
 
 that would ​work.
 
-Not sure what is happening, but the request that loads the page has a URI​ field with the undesired section.
+## The Solution ##
+
+It turns​ out I was abusing the construction rules for URLs. The solution was to use query strings to indicate that I wanted all tags or all users listed.

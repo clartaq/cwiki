@@ -2,7 +2,7 @@
 author: CWiki
 title: Features
 date: 2017-09-09T09:24:01.000-04:00
-modified: 2018-08-15T14:43:21.949-04:00
+modified: 2018-09-08T17:48:26.235-04:00
 tags:
   - cwiki
   - features
@@ -48,5 +48,5 @@ Math typesetting​ is made possible by using the online  [MathJax](https://www.
 
 * All of the data in the program is stored in a single database file. CWiki uses the [H2](http://h2database.com/html/main.html) database engine to store and maintain your data. It requires no administration on your part.
 * The program is open source and available on [BitBucket](https://bitbucket.org/product) at this [link](https://bitbucket.org/David_Clark/cwiki).
-* The program is written in the [Clojure](https://clojure.org/) programming language with a bit of [ClojreScript](https://clojurescript.org) thrown in. Clojure is a modern [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) dialect that is hosted on the [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) (JVM). ClojureScript is a version of the same language that is cross-compiled to JavaScript.
+* The program is written in the [Clojure](https://clojure.org/) programming language with a bit of [ClojureScript](https://clojurescript.org) thrown in. Clojure is a modern [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) dialect that is hosted on the [Java Virtual Machine](https://en.wikipedia.org/wiki/Java_virtual_machine) (JVM). ClojureScript is a version of the same language that is cross-compiled to JavaScript.
 * The program achieves cross-platform functionality by the use of Clojure, the JVM and using a web server running on your local machine.

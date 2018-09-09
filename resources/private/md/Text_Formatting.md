@@ -2,7 +2,7 @@
 author: CWiki
 title: Text Formatting
 date: 2017-10-24T08:57:33.000-04:00
-modified: 2018-08-16T16:14:56.668-04:00
+modified: 2018-09-08T17:58:21.065-04:00
 tags:
   - formatting
   - Markdown
@@ -127,7 +127,7 @@ The above will render like this:
 
 $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 
-For inline math, use single dollar signs, `$` to surround the math. For example, here is the markup for the same equation as above `$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$` which renders as $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$.
+For inline math, use single dollar signs, `$`, to surround the math. For example, here is the markup for the same equation as above `$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$` which renders as $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$.
 
 ## Tables of Contents <a name="toc"></a> ##
 
