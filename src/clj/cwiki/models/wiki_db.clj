@@ -901,7 +901,7 @@
   first-time use."
   [db-spec]
   (create-tables db-spec)
-  ; The magic incanations to get full text search to work.
+  ; The magic incantations to get full text search to work.
   (jdbc/execute! db-spec
                  ["CREATE ALIAS IF NOT EXISTS FTL_INIT FOR \"org.h2.fulltext.FullTextLucene.init\""])
   (jdbc/execute! db-spec ["CALL FTL_INIT()"])

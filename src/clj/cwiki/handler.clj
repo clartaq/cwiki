@@ -1,3 +1,8 @@
+;;;
+;;; The main handler namespace. All of the smaller route structures are
+;;; consolidated here and wrapped with middleware.
+;;;
+
 (ns cwiki.handler
   (:require [cemerick.url :as u]
             [clojure.string :as s]

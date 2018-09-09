@@ -89,7 +89,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;;;; Sente event router (our `event-msg-handler` loop)
+;; Sente event router (our `event-msg-handler` loop)
 
 (defonce router_ (atom nil))
 

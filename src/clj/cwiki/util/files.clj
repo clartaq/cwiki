@@ -1,3 +1,9 @@
+;;;
+;;; This namespace contains functions related to handling files on the
+;;; server side. It also contains some string-related function for
+;;; historical reasons.
+;;;
+
 (ns cwiki.util.files
   (:require [clj-yaml.core :as yaml]
             [clojure.java.io :as io]
