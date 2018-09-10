@@ -31,8 +31,6 @@ How_to_Make_a_Table_of_Contents.md
 Limits.md
 Links_Primer.md
 Motivation.md
-Multiple_Identity_Records_in_Request.md
-Open_Issues.md
 Other_Wiki_Software.md
 Pages_Primer.md
 Running_on_a_VPS.md
@@ -47,5 +45,4 @@ Text_Formatting.md
 Technical_Notes.md
 To_Do.md
 To_Do_-_Old.md
-Wikilink_Resolution_Problem.md
 Wikilinks.md
