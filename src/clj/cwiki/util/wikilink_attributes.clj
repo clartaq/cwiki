@@ -17,8 +17,8 @@
   (:require [clojure.string :as s]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.req-info :as ri]
-            [cwiki.util.special :refer [is-special?]]
-            [cwiki.util.special :as special])
+            [cwiki.util.special :refer [is-admin-only? is-generated?
+                                        is-special?]])
   (:import (com.vladsch.flexmark.ast Node)
            (com.vladsch.flexmark.ext.wikilink WikiLink)
            (com.vladsch.flexmark.html AttributeProviderFactory
@@ -50,7 +50,7 @@
   "Return a link to be displayed in an existing page. As such, it
   may have separate display and link parts that must be handled."
   [page-title req]
-  (let [is-admin-only (special/is-admin-only? page-title)
+  (let [is-admin-only (is-admin-only? page-title)
         is-admin-user (ri/is-admin-user? req)
         ok-to-link (or is-admin-user
                        (not is-admin-only))
@@ -90,7 +90,7 @@
   [title req]
   (if (or (as-tag? title)
           (as-user? title)
-          (special/is-generated? title)
+          (is-generated? title)
           (article-is-present? title))
     (get-link-style-for-existing-page title req)
     (get-link-style-for-new-page title req)))
