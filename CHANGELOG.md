@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.0.12] - 2018-09-10
 ### Added ###
 - Additional seed pages.
 - An extension to the Markdown parser that understands and colorizes wikilinks just like the old one did. This means that code spans and blocks can now include wikilinks without having them converted to links. It should make writing examples that contain wikilinks easier.
@@ -14,6 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updates to project dependencies.
 - Updates to content of seed pages.
 - Mechanism used to build links on "All Users" and "All Tags" pages corrected to be more web-standard compliant.
+- Removed namespaces that are no longer used now that the wikilink extension to flexmark is working as desired.
 
 ### Fixed ###
 - Resolved issue [#19: "Search should do nothing when given empty search terms"](https://bitbucket.org/David_Clark/cwiki/issues/19/search-should-do-nothing-when-given-empty) in commit [1c92442](https://bitbucket.org/David_Clark/cwiki/commits/1c92442096e60162f16da1d37821c0d892c1203c).
