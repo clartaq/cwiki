@@ -9,6 +9,7 @@
                  [org.clojure/core.async "0.4.474"]
                  [org.clojure/java.jdbc "0.7.8"]
 
+                 [amalloy/ring-gzip-middleware "0.1.3"]
                  [buddy/buddy-auth "2.1.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [buddy/buddy-hashers "1.3.0"]
                  [com.cemerick/url "0.1.1"]
@@ -27,9 +28,10 @@
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
                  [javax.xml.bind/jaxb-api "2.3.0"]
+                 ; We keep this old version to remain compatible with
+                 ; full text search with the H2 database.
                  [org.apache.lucene/lucene-core "3.6.2"]
                  [reagent "0.8.1"]
-                 [ring/ring-devel "1.6.3"]
                  [ring/ring-defaults "0.3.2"]]
 
   :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
@@ -66,11 +68,11 @@
                                       :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
 
                        :dependencies [[binaryage/devtools "0.9.10"]
-                                      [cider/piggieback "0.3.1"]
+                                      [cider/piggieback "0.3.9"]
                                       [figwheel-sidecar "0.5.16":exclusions [org.clojure/tools.nrepl]]
                                       [prone "1.6.0"]
                                       [ring/ring-mock "0.3.2"]
-                                      [ring/ring-devel "1.6.3"]]
+                                      [ring/ring-devel "1.7.0"]]
 
                        :source-paths ["env/dev/clj"]
 
@@ -92,7 +94,7 @@
                                       ["cljsbuild" "once" "min"]]
                        ; This really shouldn't be required. There is some sort of
                        ; dependency version incompatibility somewhere that needs
-                       ; to be fixed..
+                       ; to be fixed.
                        :dependencies [[ring/ring-mock "0.3.2"]]
                        :env          {:production "true"}}
              }
@@ -101,8 +103,7 @@
               [
                {:id           "min"
                 :source-paths ["src/cljs" "env/prod/cljs"]
-                :compiler     {;:main            cwiki-mde.core
-                               :output-to       "resources/public/js/compiled/cwiki-mde.js"
+                :compiler     {:output-to       "resources/public/js/compiled/cwiki-mde.js"
                                :output-dir      "resources/public/js/compiled/min"
                                :elide-asserts   true
                                :closure-defines {goog.DEBUG false}
@@ -113,13 +114,12 @@
                {:id           "dev"
                 :source-paths ["src/cljs" "env/dev/cljs"]
                 :figwheel     {:on-jsload "cwiki-mde.core/reload"}
-                :compiler     {:main          "cwiki.dev"   ;cwiki-mde.core
+                :compiler     {:main          "cwiki.dev"
                                :output-to     "resources/public/js/compiled/cwiki-mde.js"
                                :output-dir    "resources/public/js/compiled/dev"
                                :asset-path    "js/compiled/dev"
                                :source-map    true
                                :optimizations :none
-                               ; :source-map-timestamp true
                                :pretty-print  true
                                :externs       ["externs/syntax.js"]}}
 
