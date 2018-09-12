@@ -21,6 +21,5 @@
       ; Makes static assets in $PROJECT_DIR/resources/public/ available.
       ;(wrap-file "resources")
       ; Content-Type, Content-Length, and Last Modified headers for files in body.
-      (wrap-file-info)
-      (wrap-gzip)))
+      (wrap-file-info)))
 

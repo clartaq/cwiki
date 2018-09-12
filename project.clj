@@ -9,7 +9,6 @@
                  [org.clojure/core.async "0.4.474"]
                  [org.clojure/java.jdbc "0.7.8"]
 
-                 [amalloy/ring-gzip-middleware "0.1.3"]
                  [buddy/buddy-auth "2.1.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [buddy/buddy-hashers "1.3.0"]
                  [com.cemerick/url "0.1.1"]
