@@ -46,38 +46,38 @@ html {
     /* Some colors. */
 
     --heading-background-color: transparent;
-    --heading-color: dimgray;
+    --heading-color: #575757; /*dimgray;*/
 
-    --body-background-color: #fafafa;
+    --body-background-color: #fcfcfc;
     --body-color: #111111;
 
-    --normal-link-color: #5580ff;
+    --normal-link-color: #2b24ff;
 
     /* Color used for Rules, vertical separators, etc. */
     --rule-color: #ccc;
 
     --active-border-color: #9daca9;
 
-    --page-header-background-color: dimgray;
+    --page-header-background-color: #575757; /*dimgray;*/
 
     --brand-title-color: #cfe7ed;
     --brand-sub-title-color: #cfe7ed;
     --brand-link-color: #a0e0ff;
     --brand-link-visited-color: #cfe7ed;
 
-    --hmenu-background-color: dimgray;
+    --hmenu-background-color: #575757; /*dimgray;*/
 
     --menu-item-color: #cfe7ed;
-    --menu-item-subnav-background: dimgray;
+    --menu-item-subnav-background: #575757; /*dimgray;*/
 
-    --search-text-color: dimgray;
+    --search-text-color: #575757; /*dimgray;*/
     --search-text-box-shadow-color: #fff;
 
     --search-submit-color: #a0e0ff;
     --search-submit-background-color: #fafafa;
     --search-submit-box-shadow-color: #fff;
 
-    --search-submit-hover-color: dimgray;
+    --search-submit-hover-color: #575757; /*dimgray;*/
     --search-submit-hover-background-color: #eff1f1;
 
     --search-submit-focus-color: #e5ecf4;
@@ -93,8 +93,8 @@ html {
     --content-link-visited-color: #5689a9;
     --content-link-active-color: #a0e0ff;
 
-    --form-title-color: dimgray;
-    --form-label-color: dimgray;
+    --form-title-color: #575757; /*dimgray;*/
+    --form-label-color: #575757; /*dimgray;*/
     --form-label-background: transparent;
 
     --form-button-background-color: #e5e9e8;
@@ -125,7 +125,7 @@ html {
     --table-row-hover-background-color: #f6f8fa;
 
     --footer-color: lightgrey;
-    --footer-background-color: dimgray;
+    --footer-background-color: #575757; /*dimgray;*/
 
     --blockquote-color: #777777;
 
@@ -231,6 +231,8 @@ body {
     padding: 0 1em;
     flex: 0 0 auto;
     background-color: var(--page-header-background-color);
+   /* position: fixed;
+   /* width: 100%;*/
 }
 
 .header-wrapper {
@@ -395,12 +397,13 @@ inside another flexbox. */
     flex: 1 1 auto;
     display: flex;
     flex-direction: row;
-    overflow-y: auto;
+   /* overflow-y: auto;*/
 }
 
 .left-aside {
     padding: 1.5em;
     flex: 0 0 10em;
+    overflow: auto;
 }
 
 .left-aside h6 {
@@ -435,6 +438,7 @@ inside another flexbox. */
     border-left: 1px solid var(--rule-color);
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 /* content and centered content are used for 404, edit, and create
