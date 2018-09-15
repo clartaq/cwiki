@@ -4,8 +4,7 @@
             ;[clojure.java.io :as io]
             ;[ring.middleware.file :refer [wrap-file]]
             [ring.middleware.file-info :refer [wrap-file-info]]
-            [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
-            [ring.middleware.reload :refer [wrap-reload]]))
+            [ring.middleware.defaults :refer [site-defaults wrap-defaults]]))
 
 (println "wrapping production middleware")
 
