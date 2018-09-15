@@ -2,7 +2,7 @@
 author: CWiki
 title: Text Formatting
 date: 2017-10-24T08:57:33.000-04:00
-modified: 2018-09-08T17:58:21.065-04:00
+modified: 2018-09-15T10:35:38.807-04:00
 tags:
   - formatting
   - Markdown
@@ -100,7 +100,7 @@ that produces this:
 | Plum   | Purple |     Tart    |         1.99 |
 | Orange | Orange | Tangy |      1.29 |
 
-There must be at least three dashes separating each header cell. The outer pipes (|) are optional, and you don't need to make the raw Markdown line up prettily. So, if you are using a proportional font to layout the table, you don't have to worry about trying to get everything to line up correctly from line to line. You can also use inline Markdown to format items within the table cells.
+There must be at least three dashes separating each header cell. The outer pipes ("|") are optional, and you don't need to make the raw Markdown line up prettily. So, if you are using a proportional font to layout the table, you don't have to worry about trying to get everything to line up correctly from line to line. You can also use inline Markdown to format items within the table cells.
 
     Less | Pretty | Markdown
     --- | --- | ---

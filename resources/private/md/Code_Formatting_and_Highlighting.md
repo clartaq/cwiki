@@ -2,7 +2,7 @@
 author: CWiki
 title: Code Formatting and Highlighting
 date: 2018-03-07T17:40:28.000-05:00
-modified: 2018-08-15T17:38:07.289-04:00
+modified: 2018-09-15T10:05:22.765-04:00
 tags:
   - cwiki
   - technical note
@@ -14,7 +14,9 @@ Markdown has a few ways to format code built in. To get it to look right, you pr
 
 ## Methods of Formatting Code ##
 
-You can use the backtick ("\`", also known formally as a "grave accent") to format `code inline` like that. For blocks of code, you can merely indent each line with four spaces.
+You can use the backtick ("\`", also known formally as a "grave accent") to format `code inline` like that.
+
+For blocks of code, you can merely indent each line with four spaces.
 
     (defn ex
       [an-arg]
@@ -40,13 +42,21 @@ You can use the `<pre></pre>` tags directly to do something similar.
 => 17
 </pre>
 
-But the `<pre>` tags by themselves are often used for things other than code blocks. For example, sections of text where you don't want text wrapping to occur, like some CSV data or a haiku[^1].
+But notice that no syntax highlighting is present.
+
+Also, the `<pre>` tags by themselves are often used for things other than code blocks. For example, sections of text where you don't want text wrapping to occur, like some CSV data or a haiku[^1].
 
 <pre>
 In the twilight rain
 these brilliant-hued hibiscus -
 A lovely sunset.
 </pre>
+
+But in cases like this, it might be better to use a blockquote. See [[About Quotations]].
+
+>In the twilight rain<br/>
+>these brilliant-hued hibiscus -<br/>
+>A lovely sunset.<br/><footer>[Basho Matsuo (1644-1694) from "Examples of Haiku Poems"](http://examples.yourdictionary.com/examples-of-haiku-poems.html)</footer>
 
 CSS for `<pre>` tags should not assume that there will be a code block within the tags unless it includes some special class that handles it.
 
@@ -107,7 +117,7 @@ For this, I use CSS to select from a family of fixed-width fonts, give it a size
 
 Items wrapped in the `<pre></pre>` tags should be left pretty much alone. Just apply the same formatting as inline code, but for a block. We don't want it to contrast with indented code blocks though. So, we give it a background the same color as the background provided by the syntax highlighter theme.
 
-### Indented Code Blocks ###​
+### Indented Code Blocks ###
 
 The code blocks that are indented four spaces get surrounded by `<pre><code></code></pre>` tags. GFM fenced code blocks produce the same HTML. So a CSS descendant selector of the form:
 
@@ -148,7 +158,7 @@ This generates a
     <code class="hljs ruby">
         ...
     </code>
-</pre>`
+</pre>
 ```
 
 HTML block.
