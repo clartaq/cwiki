@@ -219,7 +219,7 @@
       [editor the-page-map]
       [preview the-page-map]]
 
-     [:div {:class "mde-button-bar-container"}
+     [:div {:class "button-bar-container"}
       [:input {:type    "button"
                :id      "Save Button"
                :name    "save-button"
