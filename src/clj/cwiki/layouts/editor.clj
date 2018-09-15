@@ -14,23 +14,6 @@
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
 
-(def debugging-css true)
-
-(defn standard-head
-  "Return the standard html head section for the wiki html pages. If the var
-  'debugging-css' is def'ed to true, should reload CSS everytime the page
-  loads."
-  [post-map]
-  (let [q (if debugging-css
-            (str "?" (rand-int 2147483647))
-            "")]
-    [:head
-     [:title (base/get-tab-title post-map)]
-     (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css")
-     (include-css (str "css/styles.css" q))
-     (include-css (str "css/editor-styles.css" q))
-     (include-css (str "css/mde.css" q))]))
-
 (defn standard-end-of-body
   "Returns a div with the standard scripts to include in the page."
   []
@@ -76,7 +59,7 @@
     (swap! post-map-for-editing assoc :options options)
     (html5
       {:ng-app "CWiki" :lang "en"}
-      (standard-head (get-post-map-for-editing))
+      (base/standard-head (get-post-map-for-editing) :editor-highlighter)
       [:body {:class "page-container"}
        (base/wiki-header-component post-map req {:editing true})
        (sidebar-and-editor
@@ -84,5 +67,4 @@
          [:section {:class "editor-section"}
           [:div {:id "editor-container" :class "editor-container"}
            [:p "The stuff from the ClojureScript editor should show up here."]]])
-       ;(base/footer-component)
        (standard-end-of-body)])))
