@@ -7,7 +7,6 @@
             [cwiki.util.files :as files]
             [cwiki.util.special :as special]
             [cwiki.util.datetime :as dt]
-            [environ.core :refer [env]]
             [taoensso.timbre :refer [trace debug info warn error
                                      tracef debugf infof warnf errorf]]
             [clojure.pprint :as pp]
