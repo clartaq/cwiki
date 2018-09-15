@@ -15,6 +15,7 @@
             [cwiki.util.files :refer [is-seed-page?]]
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :as special]
+            [environ.core :refer [env]]
             [hiccup.core :as hc]
             [hiccup.element :refer [link-to]]
             [hiccup.form :refer [form-to hidden-field submit-button text-area
@@ -111,15 +112,24 @@
 (def debugging-css true)
 
 (defn standard-head
-  "Return the standard html head section for the wiki html pages."
-  [post-map]
+  "Return the standard html head section for the wiki html pages. If the var
+  'debugging-css' is def'ed to true, should reload CSS every time the page
+  loads. which-highlighter must be one of :no-highlighter, (for forms and such)
+  :editor-highlighter (for the highlighter used in the editor preview pane)
+  or :page-highlighter for all page views for reading."
+  [post-map which-highlighter]
   (let [q (if debugging-css
             (str "?" (rand-int 2147483647))
             "")]
     [:head
      [:title (get-tab-title post-map)]
-     (include-css (str "/css/styles.css" q))
-     (include-css (str "/js/styles/default.css"))]))
+     (when (= which-highlighter :editor-highlighter)
+       (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css"))
+     (if (env :production)
+         (include-css "/css/styles.min.css")
+         (include-css (str "/css/styles.css" q)))
+     (when (= which-highlighter :page-highlighter)
+       (include-css (str "/js/styles/default.css")))]))
 
 (defn standard-end-of-body
   "Returns a div with the standard scripts to include in the page."
@@ -160,7 +170,8 @@
    [:form {:id      "searchbox" :action "/search" :method "post"
            :enctype "multipart/form-data"}
     [:input {:type        "text" :id "search-text" :name "search-text"
-             :placeholder "Enter search terms here..."}]]])
+             :aria-label  "Search" :class "searchbox"
+             :placeholder "Enter search terms ..."}]]])
 
 (defn- menu-item-span
   "Return a span with CSS class 'menu-item' around the given content."
@@ -218,8 +229,8 @@
     [:hgroup {:class "left-header-wrapper"}
      [:h1 {:class "brand-title"} "CWiki"]
      [:p {:class "brand-sub-title"}
-      "A Personal " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
-                     "Wiki"]]]]])
+      "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
+                   "Wiki"]]]]])
 
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
@@ -299,13 +310,12 @@
   [content]
   (html5
     {:lang "en"}
-    (standard-head nil)
+    (standard-head nil :no-highlighter)
     [:body {:class "page"}
      (no-nav-header-component)
      (sidebar-and-article
        (no-content-aside)
        content)
-     ;(footer-component)
      (standard-end-of-body)]))
 
 (defn short-message
@@ -536,14 +546,13 @@
   (let [content (db/page-map->content post-map)]
     (html5
       {:lang "en"}
-      (standard-head post-map)
+      (standard-head post-map :page-highlighter)
       [:body {:class "page"}
        (wiki-header-component post-map req)
        (sidebar-and-article
          (sidebar-aside req)
          [:div (limited-width-title-component post-map)
           (limited-width-content-component req content)])
-       ;(footer-component)
        (standard-end-of-body)]
       (include-js "/js/onload.js"))))
 
@@ -557,7 +566,7 @@
                        "one-column-list")]
     (html5
       {:lang "en"}
-      (standard-head post-map)
+      (standard-head post-map :no-highlighter)
       [:body {:class "page"}
        (wiki-header-component post-map req)
        (sidebar-and-article
@@ -565,7 +574,6 @@
          [:div (limited-width-title-component post-map)
           [:div {:class class-to-use}
            (limited-width-content-component req content)]])
-       ;(footer-component)
        (standard-end-of-body)])))
 
 ;;
@@ -698,7 +706,7 @@
                  [:p {:class "hint-field"}
                   "A setting of zero is recommended since autosaving nullifys the effect
                   of the \"Cancel\" button. That is, when autosave is turned on,
-                  pressing the \"Cancen\" button will only restore the document to the
+                  pressing the \"Cancel\" button will only restore the document to the
                   state it was in at the time of the last autosave."]]
                 [:div {:class "button-bar-container"}
                  (submit-button {:id    "save-options-button"
