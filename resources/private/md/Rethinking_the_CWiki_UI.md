@@ -2,7 +2,7 @@
 author: david
 title: Rethinking the CWiki UI
 date: 2018-08-31T10:18:51.708-04:00
-modified: 2018-09-15T10:08:03.491-04:00
+modified: 2018-09-17T12:23:49.092-04:00
 tags:
   - cwiki
   - user interface
@@ -18,13 +18,13 @@ It takes up precious vertical space and conveys very little information. The sam
 
 ## The Sidebar Should Not Scroll with the Page View ##
 
-I can't tell you the number of times that I've been reading the bottom of a long page and wanted to access something in the [[About the Sidebar|Sidebar]], but it had scrolled off the top of the page. Instead, it should scroll only if it is too long to fit in the current view and the user initiates scrolling themselves. **FIXED**
+I can't tell you the number of times that I've been reading the bottom of a long page and wanted to access something in the [[About the Sidebar|Sidebar]], but it had scrolled off the top of the page. Instead, it should scroll only if it is too long to fit in the current view and the user initiates scrolling themselves. This is mostly **FIXED** in commit [944be76](https://bitbucket.org/David_Clark/cwiki/commits/944be76cb96417b932e3b9520a070286b37f338c). But it still doesn't work on FireFox.
 
 Both areas should scroll independently, if at all.
 
 ## The Title Bar Should Never Scroll ##
 
-Similar to my experience with the Sidebar, I often find myself viewing the end of a long page and want to access one of the menu items. But it has scrolled off the top of the screen, and I have to go scrolling back to the top to use it. **FIXED**
+Similar to my experience with the Sidebar, I often find myself viewing the end of a long page and want to access one of the menu items. But it has scrolled off the top of the screen, and I have to go scrolling back to the top to use it. This is mostly **FIXED** in commit [944be76](https://bitbucket.org/David_Clark/cwiki/commits/944be76cb96417b932e3b9520a070286b37f338c). But it still doesn't work on FireFox.
 
 ## There Should be an Editing Toolbar at the Top of the Window ##
 

@@ -2,7 +2,7 @@
 author: CWiki
 title: To Do
 date: 2018-06-04T15:38:47.538-04:00
-modified: 2018-09-09T17:53:23.135-04:00
+modified: 2018-09-17T12:28:21.462-04:00
 tags:
   - architecture
   - bugs
@@ -30,7 +30,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
     * This issue ([#1](https://bitbucket.org/David_Clark/cwiki/issues/1/characters-that-are-invalid-in-sql)) was **resolved** in commit [1de736b](https://bitbucket.org/David_Clark/cwiki/commits/1de736b).
 
 * When editing long pages, like the Technical Notes page, the Save and Cancel buttons sometimes get pushed below the bottom of the view and can't be scrolled into view.
-    * Issue [#5](https://bitbucket.org/David_Clark/cwiki/issues/5/save-and-cancel-buttons-can-disappear) created.
+    * This issue [#5](https://bitbucket.org/David_Clark/cwiki/issues/5/save-and-cancel-buttons-can-disappear) was **resolved** [944be76](https://bitbucket.org/David_Clark/cwiki/commits/944be76cb96417b932e3b9520a070286b37f338c).
 
 * When in the editor, removing a tag by highlighting it and deleting​ it does not always eliminate it.
     * Issue [#6](https://bitbucket.org/David_Clark/cwiki/issues/6/deleting-a-highlighted-tag-does-not-always) created.
@@ -85,7 +85,7 @@ An ever-evolving list of things to be fixed and improved. These fall into the fo
 * At some point, we are going to have to stop initializing the database from a bunch of Markdown files and add a pre-built database to the repository. 
 
 * I prefer the styling of inline​ code that used in the editor. It can make things look like buttons. Harmonize the editor preview with the view in the main wiki page.
-    * Issue [#12](https://bitbucket.org/David_Clark/cwiki/issues/12/improve-styling-of-inline-code) was created.
+    * This issue([#12](https://bitbucket.org/David_Clark/cwiki/issues/12/improve-styling-of-inline-code))  was **resolved** [944be76](https://bitbucket.org/David_Clark/cwiki/commits/944be76cb96417b932e3b9520a070286b37f338c).
 
 * Make the options usable.
     * Issue [#11](https://bitbucket.org/David_Clark/cwiki/issues/11/make-program-options-usable) was created. The initial implementation appeared in commit [6eb603f](https://bitbucket.org/David_Clark/cwiki/commits/6eb603f84c79ff1cbf4c5928059d0830e35df737).
