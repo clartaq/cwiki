@@ -371,9 +371,8 @@ body
     margin-left: 2rem;
 }
 
-#searchbox
-{
-    width: 20ch;
+div.search-container input[type=text] {
+    width: 100%;
 }
 
 #search-text
