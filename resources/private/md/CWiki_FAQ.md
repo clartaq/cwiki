@@ -2,7 +2,7 @@
 author: CWiki
 title: CWiki FAQ
 date: 2017-10-27T10:21:37.000-04:00
-modified: 2018-08-15T14:48:09.288-04:00
+modified: 2018-09-17T16:35:53.246-04:00
 tags:
   - cwiki
   - FAQ
@@ -10,7 +10,6 @@ tags:
 
 
 
-​
 This FAQ answers some common questions about CWiki.
 
 ### Table of Contents ###
@@ -19,6 +18,7 @@ This FAQ answers some common questions about CWiki.
 * [What is CWiki NOT good for?](#What_is_CWiki_NOT_good_for?)
 * [Why Users?](#Why_Users?)
 * [Why Login/Logout?](#Why_Login/Logout?)
+* [Can Multiple People Use CWiki at the Same Time?](#Simultaneous_Users?)
 * [Why No Mobile?](#Why_No_Mobile?)
 * [Why Doesn't the Content of a Page Use the Entire Width of the Browser Window?](#Why_Doesn't_the_Content_of_a_Page_Use_the_Entire_Width_of_the_Browser_Window?)
 * [What Version of Markdown Does CWiki Use?](#What_Version_of_Markdown_Does_CWiki_Use?)
@@ -50,6 +50,14 @@ You may be asking yourself "If CWiki is a personal wiki, why does it allow multi
 Similar to the "Why Users?" question, it's a matter of keeping things separate when you have more than one user.
 
 It can make initially signing in a bit more of a hassle every time you do it, but you can have your browser remember your login credentials if you want.
+
+#### Can Multiple People Use CWiki at the Same Time? <a name="Simultaneous_Users?"></a> ####
+
+I really don't know, but I doubt it. That was not the intent when writing the program and it has never been thoroughly tested for that use case.
+
+Multiple people can probably sign in simultaneously and _read_ pages. However, multiple people editing the same page at once will likely not produce what you want. And other views will not update when someone makes edits.​
+
+I would be interested in hearing your experience if you try it, but don't risk anything important (a production database) if you do.
 
 #### Why No Mobile? <a name="Why_No_Mobile?"></a> ####
 
