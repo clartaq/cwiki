@@ -52,9 +52,7 @@
                                     "test/js/compiled"]
 
   :minify-assets {:assets
-                  {"resources/public/css/styles.min.css"        "resources/public/css/styles.css"
-                   "resources/public/css/mde.min.css"           "resources/public/css/mde.css"
-                   "resources/public/css/editor-styles.min.css" "resources/public/css/editor-styles.css"}}
+                  {"resources/public/css/styles.min.css" "resources/public/css/styles.css"}}
 
   :aliases {"test-cljs"  ["doo" "slimer" "test" "auto"]
             "start-prod" ["do" "clean," "cljsbuild" "once" "min," "run"]}
