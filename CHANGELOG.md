@@ -6,6 +6,29 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added ###
+- Scrolling down long pages no longer causes the title bar and menu to scroll out of view at the top of the screen except on FireFox.
+- The sidebar no longer scrolls when the main content area scrolls. So scrolling to the end of a long article no longer causes the sidebar content to scroll out of view except on FireFox.
+- Numerous additions to improve readability.
+    + Font choices are easier to read.
+    + Improved contrast meets accessibility standards.
+    + Code listings are more consistent and easier to see, especially inline code spans.
+- Footer has been removed.
+- When editing, the edit pane and preview pane scroll in a semi-coordinated way.
+- An additinal "About Quotations" page was added to the seed pages.
+
+### Changed ###
+- Updated `ring/ring-devel` to 1.7.0.
+- Updated `cider/piggieback` to 0.3.9
+- Updated `com.vladsch.flexmark/flexmark` and extensions to 0.34.30.
+- CSS is consolidated into a single file.
+- Improvements to blockquote handling.
+- CSS is now minified for production builds (uberjars).
+
+### Fixed ###
+- Resolved issue [#5: "Save and Cancel Buttons can Disappear while Editing"](https://bitbucket.org/David_Clark/cwiki/issues/5/save-and-cancel-buttons-can-disappear) in commit [944be76](https://bitbucket.org/David_Clark/cwiki/commits/944be76cb96417b932e3b9520a070286b37f338c).
+- Resolved issue [#12: "Improve Styling of Inline Code
+Create issue"]() in commit [944be76](https://bitbucket.org/David_Clark/cwiki/commits/944be76cb96417b932e3b9520a070286b37f338c).
 
 ## [0.0.12] - 2018-09-10
 ### Added ###
