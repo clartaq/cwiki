@@ -66,10 +66,9 @@
   "Convert the markdown formatted input string to html
   and return it."
   [mkdn]
-  (let [out (->> mkdn
-                 (.parse parser)
-                 (.render renderer))]
-    out))
+  (->> mkdn
+       (.parse parser)
+       (.render renderer)))
 
 ; Format a DateTime object nicely in the current time zone.
 (def custom-formatter (f/with-zone
@@ -126,8 +125,8 @@
      (when (= which-highlighter :editor-highlighter)
        (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css"))
      (if (env :production)
-         (include-css "/css/styles.min.css")
-         (include-css (str "/css/styles.css" q)))
+       (include-css "/css/styles.min.css")
+       (include-css (str "/css/styles.css" q)))
      (when (= which-highlighter :page-highlighter)
        (include-css (str "/js/styles/default.css")))]))
 
