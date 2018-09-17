@@ -209,6 +209,12 @@
   (.getCanonicalPath (File. ^String (file-name-from-parts
                                       ["." "resources" "private" "md"]))))
 
+(defn- get-exported-page-directory
+  "Return the canonical path to the directory where exported pages are saved."
+  []
+  (.getCanonicalPath (File. ^String (file-name-from-parts
+                                      ["." "exported-pages"]))))
+
 (defn- save-page
   "Save the page described in the page-map to a file."
   [page-map author-name tags dir]
@@ -229,7 +235,7 @@
 (defn export-page
   "Export the page described in the page-map to a file."
   [page-map author-name tags]
-  (save-page page-map author-name tags (get-execution-directory)))
+  (save-page page-map author-name tags (get-exported-page-directory)))
 
 (defn export-seed-page
   "Save the seed page described in the page-map to a file."

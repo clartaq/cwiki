@@ -56,7 +56,7 @@ If the metadata does not include a date and time for the last time it was modifi
 
 When you are viewing a page which you want to export, select the "Export" item from the drop-down menu. You will be asked if you want to do the export. If you confirm your intention, the page will be exported.
 
-Upon success, you will be informed that the export was completed an where the file was stored.
+Upon success, you will be informed that the export was completed and where the file was stored.
 
 ### Exporting All Pages
 
