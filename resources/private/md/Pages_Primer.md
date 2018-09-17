@@ -2,11 +2,12 @@
 author: CWiki
 title: Pages Primer
 date: 2017-10-24T08:48:43.000-04:00
-modified: 2018-06-18T17:55:00.497-04:00
+modified: 2018-09-17T15:46:26.579-04:00
 tags:
   - help
   - pages
 ---
+
 
 
 This "Pages Primer" is a brief introduction to creating, editing, and deleting pages in the wiki.
@@ -42,6 +43,8 @@ A "page" in the wiki consists of a couple of things.
 ### The Title ###
 
 A page must have a title and content.
+
+**WARNING:** Do not use slash characters in the titles of pages for the time being. See [issue #21](https://bitbucket.org/David_Clark/cwiki/issues/21/cant-edit-files-with-slash-character-in) for details and updates.
 
 The title must be unique within the wiki. The comparison for uniqueness is case-insensitive, so the titles "Title" and "title" are considered the same. Using titles that differ only by letter case can be confusing and is not allowed.
 
