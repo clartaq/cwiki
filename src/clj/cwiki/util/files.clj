@@ -209,7 +209,7 @@
   (.getCanonicalPath (File. ^String (file-name-from-parts
                                       ["." "resources" "private" "md"]))))
 
-(defn- get-exported-page-directory
+(defn get-exported-page-directory
   "Return the canonical path to the directory where exported pages are saved."
   []
   (.getCanonicalPath (File. ^String (file-name-from-parts
