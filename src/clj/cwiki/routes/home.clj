@@ -228,7 +228,7 @@
   (let [params (:multipart-params req)
         referer (get params "referer")
         page-names (db/get-all-page-names-in-db)
-        d (files/get-execution-directory)]
+        d (files/get-exported-page-directory)]
     (mapv (fn [name-map]
             (let [title (:page_title name-map)
                   param-map (get-params-for-export title)]
