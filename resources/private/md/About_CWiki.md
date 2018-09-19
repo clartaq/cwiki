@@ -1,8 +1,8 @@
 ---
-title: About CWiki
 author: CWiki
-date: 10/27/2017 9:47:04 AM
-updated: 1/8/2018 4:43:41 PM 
+title: About CWiki
+date: 2017-10-27T09:47:04.000-04:00
+modified: 2018-09-18T17:57:28.263-04:00
 tags:
   - about
   - cwiki
@@ -12,4 +12,3 @@ CWiki is a small personal wiki designed to run in a browser on your local system
 
 * [[CWiki Name]]
 * [[Other Wiki Software]]
-* [[Technical Notes|CWiki Technical Notes]]
