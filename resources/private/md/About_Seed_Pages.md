@@ -2,13 +2,14 @@
 author: CWiki
 title: About Seed Pages
 date: 2018-06-16T09:45:14.557-04:00
-modified: 2018-08-15T16:47:13.825-04:00
+modified: 2018-09-18T18:06:47.669-04:00
 tags:
   - about
   - cwiki
   - database
   - pages
 ---
+
 
 
 
@@ -21,7 +22,7 @@ If you are the [[About Roles|admin]] for the wiki, you can change them. They are
 
 In the code repository for the project, there is a "special" directory with all of the seed pages. It's at `resources/private/md` relative to the base of the project directory.
 
-Within that particular directory there a many Markdown files, the text for the seed pages, and one plain old text file called `initial_pages.txt`. The `initial_pages.txt` file contains a list of the files to include when the wiki database is constructed. Usually (but not always) the file name of a seed page is the same as that created by the [[About Import/Export|export]] function since many of the pages were built that way.
+Within that particular directory there a many Markdown files, the text for the seed pages, and one plain old text file called `initial_pages.txt`. The `initial_pages.txt` file contains a list of the files to include when the wiki database is constructed. Usually (but not always) the file name of a seed page is the same as that created by the [[About Import-Export|export]] function since many of the pages were built that way.
 
 ### Making Changes to Seed Pages ###
 

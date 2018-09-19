@@ -2,7 +2,7 @@
 author: CWiki
 title: About
 date: 2017-10-24T08:46:39.000-04:00
-modified: 2018-09-10T14:56:09.369-04:00
+modified: 2018-09-17T17:17:55.088-04:00
 tags:
   - about
   - special pages
@@ -15,6 +15,6 @@ This is the "About" page for your wiki. It is just like any other page in the wi
 
 It is suggested that you write a statement about the general purpose of your wiki here.
 
-This is CWiki version 0.0.13-SNAPSHOT.
+This is CWiki version 0.1.0.
 
 Copyright © 2017-2018, David D. Clark
