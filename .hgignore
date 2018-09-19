@@ -14,3 +14,5 @@ cwiki.iml
 /resources/public/css/styles.min.css
 /test/data/db/testdatabase.db.trace.db
 /resources/public/db/
+/notes/
+/exported-pages/
