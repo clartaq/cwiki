@@ -83,8 +83,11 @@
       (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
                              (build-response new-body request))
 
-      (= title "Orphans") (let [new-body (layout/compose-not-yet-view "Orphans")]
+      (= title "Orphan Pages") (let [new-body (layout/compose-not-yet-view "Orphan Pages")]
                             (build-response new-body request))
+
+      (= title "Dead Links") (let [new-body (layout/compose-not-yet-view "Dead Links")]
+                                 (build-response new-body request))
 
       (= title "as-user") (let [author (get-in request [:params :user])
                                 new-body (layout/compose-all-pages-with-user author request)]
