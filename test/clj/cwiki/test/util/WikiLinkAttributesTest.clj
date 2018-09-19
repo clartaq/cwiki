@@ -43,9 +43,9 @@
       (is (= test-output
              "<p>The <a href=\"All Pages\">All Pages</a> page is special.</p>\n")))
 
-    (let [test-output (wiki-markdown->html "As is the page that lists [[Orphans|orphan pages]].")]
+    (let [test-output (wiki-markdown->html "As is the page that lists [[Orphan Pages|orphan pages]].")]
       (is (= test-output
-             "<p>As is the page that lists <a href=\"Orphans\">orphan pages</a>.</p>\n")))
+             "<p>As is the page that lists <a href=\"Orphan Pages\">orphan pages</a>.</p>\n")))
 
     (let [test-output (wiki-markdown->html "This is the [[Front Page]] of our wiki.")]
       (is (= test-output

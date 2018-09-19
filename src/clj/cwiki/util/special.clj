@@ -18,7 +18,8 @@
    {:name "All Users" :editable? nil :deletable? nil :generated? true}
    {:name "All Tags" :editable? nil :deletable? nil :generated? true}
    {:name "Sidebar" :editable? true :deletable? nil :generated? nil}
-   {:name "Orphans" :editable? nil :deletable? nil :generated? true}
+   {:name "Orphan Pages" :editable? nil :deletable? nil :generated? true}
+   {:name "Dead Links" :editable? nil :deletable? nil :generated? true}
    {:name "preferences" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "Admin" :editable? true :deletable? true :generated? nil :admin-only? true}
    {:name "compress" :editable? nil :deletable? nil :generated? true :admin-only? true}
