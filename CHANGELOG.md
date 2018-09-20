@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.1.0] - 2018-09-20
 ### Added ###
 - Scrolling down long pages no longer causes the title bar and menu to scroll out of view at the top of the screen except on FireFox.
 - The sidebar no longer scrolls when the main content area scrolls. So scrolling to the end of a long article no longer causes the sidebar content to scroll out of view except on FireFox.
@@ -13,22 +13,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
     + Font choices are easier to read.
     + Improved contrast meets accessibility standards.
     + Code listings are more consistent and easier to see, especially inline code spans.
-- Footer has been removed.
+- The footer has been removed.
 - When editing, the edit pane and preview pane scroll in a semi-coordinated way.
 - An additinal "About Quotations" page was added to the seed pages.
+- An additional "Tools" section was added to the default sidebar. It has two non-functioning links for "Orphan Pages" and "Dead Pages."
 
 ### Changed ###
 - Updated `ring/ring-devel` to 1.7.0.
 - Updated `cider/piggieback` to 0.3.9
 - Updated `com.vladsch.flexmark/flexmark` and extensions to 0.34.30.
-- CSS is consolidated into a single file.
+- CSS is consolidated into a single file. The appearance of the editor preview pane is more consistent with the normal wiki page view.
 - Improvements to blockquote handling.
 - CSS is now minified for production builds (uberjars).
+- Pages are now exported to the `exported-pages` subdirectory of the program execution directory.
+- Removed many of the technical musings from the seed pages for the database.
 
 ### Fixed ###
 - Resolved issue [#5: "Save and Cancel Buttons can Disappear while Editing"](https://bitbucket.org/David_Clark/cwiki/issues/5/save-and-cancel-buttons-can-disappear) in commit [944be76](https://bitbucket.org/David_Clark/cwiki/commits/944be76cb96417b932e3b9520a070286b37f338c).
 - Resolved issue [#12: "Improve Styling of Inline Code
-Create issue"]() in commit [944be76](https://bitbucket.org/David_Clark/cwiki/commits/944be76cb96417b932e3b9520a070286b37f338c).
+Create issue"](https://bitbucket.org/David_Clark/cwiki/issues/12/improve-styling-of-inline-code) in commit [944be76](https://bitbucket.org/David_Clark/cwiki/commits/944be76cb96417b932e3b9520a070286b37f338c).
 
 ## [0.0.12] - 2018-09-10
 ### Added ###
