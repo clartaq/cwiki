@@ -1,4 +1,4 @@
-(defproject cwiki "0.0.13-SNAPSHOT"
+(defproject cwiki "0.1.0"
   :description "A personal wiki written in Clojure and Clojurescript."
   :url "https://bitbucket.org/David_Clark/cwiki"
   :license {:name         "Simplfied BSD"
@@ -66,14 +66,14 @@
 
                        :dependencies [[binaryage/devtools "0.9.10"]
                                       [cider/piggieback "0.3.9"]
-                                      [figwheel-sidecar "0.5.16":exclusions [org.clojure/tools.nrepl]]
+                                      [figwheel-sidecar "0.5.16" :exclusions [org.clojure/tools.nrepl]]
                                       [prone "1.6.0"]
                                       [ring/ring-mock "0.3.2"]
                                       [ring/ring-devel "1.7.0"]]
 
                        :source-paths ["env/dev/clj"]
 
-                       :prep-tasks [["compile" "cwiki.util.wikilink-attributes"]]
+                       :prep-tasks   [["compile" "cwiki.util.wikilink-attributes"]]
 
                        :plugins      [[lein-doo "0.1.10"]
                                       [lein-figwheel "0.5.16"]]
