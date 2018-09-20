@@ -10,6 +10,7 @@
             [clj-time.format :as f]
             [clj-time.coerce :as c]
             [clojure.string :as s]
+            [cwiki.css-source :refer [get-css-path]]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.authorization :as ath]
             [cwiki.util.files :refer [is-seed-page?]]
@@ -33,7 +34,7 @@
            (java.net URL URLDecoder)
            (java.util ArrayList)))
 
-(def program-name-and-version "CWiki v0.0.13-SNAPSHOT")
+(def program-name-and-version "CWiki v0.1.0")
 
 ;;------------------------------------------------------------------------------
 ;; Markdown translation functions.
@@ -108,8 +109,6 @@
             h (hc/html (link-to uri "Delete"))]
         h))))
 
-(def debugging-css true)
-
 (defn standard-head
   "Return the standard html head section for the wiki html pages. If the var
   'debugging-css' is def'ed to true, should reload CSS every time the page
@@ -117,18 +116,13 @@
   :editor-highlighter (for the highlighter used in the editor preview pane)
   or :page-highlighter for all page views for reading."
   [post-map which-highlighter]
-  (let [q (if debugging-css
-            (str "?" (rand-int 2147483647))
-            "")]
     [:head
      [:title (get-tab-title post-map)]
      (when (= which-highlighter :editor-highlighter)
        (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css"))
-     (if (env :production)
-       (include-css "/css/styles.min.css")
-       (include-css (str "/css/styles.css" q)))
+     (include-css (get-css-path))
      (when (= which-highlighter :page-highlighter)
-       (include-css (str "/js/styles/default.css")))]))
+       (include-css (str "/js/styles/default.css")))]);)
 
 (defn standard-end-of-body
   "Returns a div with the standard scripts to include in the page."
