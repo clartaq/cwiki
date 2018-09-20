@@ -1,5 +1,5 @@
 ---
-author: admin
+author: CWiki
 title: About Dead Links
 date: 2018-09-19T10:31:10.700-04:00
 modified: 2018-09-19T10:31:52.852-04:00
