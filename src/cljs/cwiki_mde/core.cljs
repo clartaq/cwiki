@@ -182,7 +182,7 @@
                     :name      "page-title"
                     :value     (if-let [title (:page_title pm)]
                                  (do
-                                   (debugf "make-title-input-element: title: %s" title)
+                                   (tracef "make-title-input-element: title: %s" title)
                                    (when (= title "favicon.ico")
                                      (infof "Saw funky title: \n%s"
                                             (with-out-str (pprint/pprint-map pm))))
