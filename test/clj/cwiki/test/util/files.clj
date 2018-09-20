@@ -186,4 +186,4 @@
     (is (nil? (is-seed-page? "bufar floqwar")))
     (is (true? (is-seed-page? "About")))
     (is (true? (is-seed-page? "Front Page")))
-    (is (true? (is-seed-page? "Road Map")))))
+    (is (true? (is-seed-page? "Roadmap")))))
