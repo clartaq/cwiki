@@ -51,7 +51,7 @@
 (defn start-router!
   "Start the client websocket router."
   [handshake-handler state-handler message-handler]
-  (debug "Trying to start dave router")
+  (trace "Trying to start dave router")
   (stop-router!)
   (reset! router (sente/start-chsk-router!
                    ch-chsk
