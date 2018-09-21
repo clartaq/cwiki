@@ -10,7 +10,9 @@
             [cwiki.models.wiki-db :as db]
             [cwiki.util.files :as files]
             [cwiki.util.req-info :as ri]
-            [ring.util.response :refer [redirect status]]))
+            [ring.util.response :refer [redirect status]]
+            [taoensso.timbre :refer [tracef debugf infof warnf errorf
+                                     trace debug info warn error]]))
 
 (defn- build-response
   "Build a response structure, possibly with a non-200 return code."
@@ -49,7 +51,7 @@
         page-name (db/page-id->title page-id)
         param-map (get-params-for-save page-name)]
     (let [res (files/export-seed-page (:page-map param-map) (:author-name param-map)
-                                 (:tags param-map))]
+                                      (:tags param-map))]
       (if res
         (admin-layout/confirm-save-seed-page page-name res referer)
         (layout/short-message-return-to-referer
@@ -186,7 +188,7 @@
             (when (not= old-name new-name)
               (swap! changes conj {:user_name new-name}))
             (when-let [new-user-role (get-new-role old-role new-role)]
-              (swap! changes conj {:user_role new-user-role}))
+              (swap! changes conj {:user_role (name new-user-role)}))
             (when-let [new-user-email (get-new-email old-email new-email)]
               (swap! changes conj {:user_email new-user-email}))
             (when-let [new-user-password (get-new-password old-password new-password)]
