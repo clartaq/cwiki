@@ -435,9 +435,11 @@ div.search-container input[type=text] {
 inside another flexbox. */
 .sidebar-and-article
 {
-    flex: 1 1 auto;
+    flex-basis: auto;
+
     display: flex;
     flex-direction: row;
+    overflow: auto;
 }
 
 .left-aside
@@ -481,7 +483,6 @@ inside another flexbox. */
 {
     padding: 0.5em 0.5em 0.5em 1.5em;
     max-width: var(--content-max-width);
-    flex: 1 1 auto;
     border-left: 1px solid var(--rule-color);
     display: flex;
     flex-direction: column;
@@ -492,34 +493,41 @@ inside another flexbox. */
 pages at the moment.
  */
 
+/*
 textarea#content
 {
     width: var(--content-max-width);
     height: 30em;
 }
+*/
 
+/*
 .content
 {
     padding: 0.5em;
     flex: 1 1 auto;
     position: relative;
-    /* need this to position inner content */
+    !* need this to position inner content *!
     overflow-y: auto;
 }
+*/
 
+/*
 .centered-content
 {
     padding: 0.5em;
     max-width: var(--content-max-width);
     margin-left: auto;
-    /* center content horizontally */
+    !* center content horizontally *!
     margin-right: auto;
     flex: 1 1 auto;
     position: relative;
-    /* need this to position inner content */
+    !* need this to position inner content *!
     overflow-y: auto;
 }
+*/
 
+/*
 .centered-content a:link, .content a:link
 {
     color: var(--content-link-color);
@@ -535,6 +543,7 @@ textarea#content
     color: var(--content-link-active-color);
     text-decoration: underline;
 }
+*/
 
 /* The page title and meta info at the top of the page content. */
 .page-title-div
@@ -631,20 +640,6 @@ input#new-tag-button
 }
 
 /* Forms */
-
-.editor-container
-{
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.editor-form
-{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
 
 .cwiki-form
 {
@@ -1151,6 +1146,21 @@ div.one-column-list li
 ** there are no ids referenced here.
  */
 
+.editor-container
+{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.editor-form
+{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
 /*
 ** The mde container is a column with the toolbar, if present, across the
 ** top and the editor and preview in a row below it.
@@ -1169,6 +1179,7 @@ div.one-column-list li
     flex: 1;
     display: flex;
     flex-direction: row;
+    height: 100%;
 }
 
 /*
@@ -1236,6 +1247,7 @@ div.one-column-list li
     overflow-y: scroll;
     padding-left: 10px;
     padding-right: 10px;
+    height: 100%;
 }
 
 /*
