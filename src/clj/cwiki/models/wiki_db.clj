@@ -144,24 +144,24 @@
 ; user-id/user-name related functions.
 
 (defn user-name->user-id
-  ([name]
-   (user-name->user-id name (get-h2-db-spec)))
-  ([name db]
+  ([user-name]
+   (user-name->user-id user-name (get-h2-db-spec)))
+  ([user-name db]
    (:user_id (first (jdbc/query
                       db
-                      ["select user_id from users where user_name=?" name])))))
+                      ["select user_id from users where user_name=?" user-name])))))
 
 (defn user-name->user-role
   "Return the user role (a keyword) assigned to the named user. If the
   user does not exist, return nil."
-  ([name]
-   (user-name->user-role name (get-h2-db-spec)))
-  ([name db]
+  ([user-name]
+   (user-name->user-role user-name (get-h2-db-spec)))
+  ([user-name db]
    (let [string-role (:user_role
                        (first
                          (jdbc/query
                            db
-                           ["select user_role from users where user_name=?" name])))]
+                           ["select user_role from users where user_name=?" user-name])))]
      (when string-role
        (let [colon-stripped (s/replace-first string-role ":" "")]
          (keyword colon-stripped))))))
@@ -182,24 +182,24 @@
 (defn find-user-by-name
   "Look up the user in the database and return the map of user attributes
   for a matching entry. If no match, return nil."
-  ([name]
-   (find-user-by-name name (get-h2-db-spec)))
-  ([name db]
+  ([user-name]
+   (find-user-by-name user-name (get-h2-db-spec)))
+  ([user-name db]
    (let [user-map (first (jdbc/query
                            db
-                           ["select * from users where user_name=?" name]))]
+                           ["select * from users where user_name=?" user-name]))]
      user-map)))
 
 (defn find-user-by-case-insensitive-name
   "Look up the user in the database using a case-insensitive search for the
   username. Return the matching entry, if any. Otherwise, return nil."
-  ([name]
-   (find-user-by-case-insensitive-name name (get-h2-db-spec)))
-  ([name db]
+  ([user-name]
+   (find-user-by-case-insensitive-name user-name (get-h2-db-spec)))
+  ([user-name db]
    (let [user-map (first (jdbc/query
                            db
                            [(str "select * from users where user_name like '"
-                                 name "'")]))]
+                                 user-name "'")]))]
      user-map)))
 
 (defn get-user-by-username-and-password
@@ -506,8 +506,8 @@
 (defn- get-tag-id-from-name
   "Given a string containing a tag name, return the id from the tags table
   or nil if a tag with the name has not been recorded."
-  [name db]
-  (let [escaped-name (escape-apostrophes name)
+  [tag-name db]
+  (let [escaped-name (escape-apostrophes tag-name)
         sql (str "select tag_id from tags where tag_name='" escaped-name "';")
         rs (jdbc/query db [sql])]
     (when (seq rs)
@@ -540,8 +540,8 @@
 
 (defn- get-tag-name-set-from-meta
   "Return a case-insensitive sorted-set of tag names contained the meta data."
-  [meta]
-  (reduce conj (sorted-set-by case-insensitive-comparator) (:tags meta)))
+  [meta-data]
+  (reduce conj (sorted-set-by case-insensitive-comparator) (:tags meta-data)))
 
 (defn- get-row-id
   "Return the row id returned as the result of a single insert operation.
@@ -704,8 +704,8 @@
 (defn- get-author-from-import-meta-data
   "Return the author id based on the content of the meta-data. If there is no
   author or they do not have the appropriate role, return the default id."
-  [meta default-author-id db]
-  (let [author-name (:author meta)
+  [meta-data default-author-id db]
+  (let [author-name (:author meta-data)
         author-id (user-name->user-id author-name db)]
     (if (or (nil? author-id)
             (= "reader" (user-name->user-role author-name db)))
