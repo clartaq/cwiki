@@ -64,7 +64,7 @@
   (infof "  new-title: %s" new-title)
   (infof "  new-content: %s ..." (take 20 new-content))
   (infof "  req: %s" (pp/pp-map req))
-  (let [actual-id (Integer. ^String page-id)
+  (let [actual-id (Integer/valueOf ^String page-id)
         tags (get-tag-set-from-req req)]
     (db/update-page-title-and-content! actual-id new-title tags new-content)
     (let [escaped-title (url/url-encode new-title)]
@@ -202,7 +202,7 @@
   (let [params (:multipart-params req)
         referer (get params "referer")
         page-id-str (get params "page-id")
-        page-id (Integer. ^String (re-find #"\d+" page-id-str))
+        page-id (Integer/valueOf ^String (re-find #"\d+" page-id-str))
         page-name (db/page-id->title page-id)
         param-map (get-params-for-export page-name)]
     (let [res (files/export-page (:page-map param-map) (:author-name param-map)
