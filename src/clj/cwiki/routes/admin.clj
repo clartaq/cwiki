@@ -47,7 +47,7 @@
   (let [params (:multipart-params req)
         referer (get params "referer")
         page-id-str (get params "page-id")
-        page-id (Integer. ^String (re-find #"\d+" page-id-str))
+        page-id (Integer/valueOf ^String (re-find #"\d+" page-id-str))
         page-name (db/page-id->title page-id)
         param-map (get-params-for-save page-name)]
     (let [res (files/export-seed-page (:page-map param-map) (:author-name param-map)
