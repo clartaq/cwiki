@@ -89,7 +89,7 @@
                                        "tags: blogging"
                                        ]))]
       (is (= (:title res) "First Light"))
-      (is (= (not (nil? (:date res)))))
+      (is (not (nil? (:date res))))
       (is (= (:tags res) "blogging"))
 
       (let [res (yaml->map (s/join "\n" ["title: Serving HTTPS with Caddy Server"
@@ -149,8 +149,7 @@
                      (:changed meta)
                      (:modified meta))))
       (is (nil? (:tags meta)))
-      (is (= "\nA Markdown file without dates or tags in the metadata.\nBut it does have a remarkable title. It is remarkable\nin that is uses the word remarkable several times.\nRemarkable!\n" (:body m)))
-      )))
+      (is (= "\nA Markdown file without dates or tags in the metadata.\nBut it does have a remarkable title. It is remarkable\nin that is uses the word remarkable several times.\nRemarkable!\n" (:body m))))))
 
 (deftest trim-leading-and-trailing-underscores-test
   (testing "The trim-leading-and-trailing-underscores function."
@@ -168,18 +167,20 @@
 
 (deftest in?-test
   (testing "The in? function."
-    (is nil? (in? nil "x"))
-    (is nil? (in? 32 nil))
-    (is nil? (in? 32 [12 15 40 56]))
-    (is true? (in? 32 [13 939 32 909485]))
-    (is true? (in? \g "finger"))
-    (is nil? (in? \z "finger"))
-    (is nil? (in? 32 '(45 67 9883)))
-    (is true? (in? 32 '(1 3 5 32 95 891234789)))
-    (is true? (in? "in" "finger"))
-    (is nil? (in? "zinger" "finger"))
-    (is true? (in? 32 #{1 3 5 32 95 891234789}))
-    (is nil? (in? 32 #{1 3 5 432 95 891234789}))))
+    (is (nil? (in? nil "x")))
+    (is (nil? (in? 32 nil)))
+    (is (nil? (in? 32 [12 15 40 56])))
+    (is (true? (in? 32 [13 939 32 909485])))
+    (is (true? (in? \g "finger")))
+    (is (nil? (in? \z "finger")))
+    (is (nil? (in? 32 '(45 67 9883))))
+    (is (true? (in? 32 '(1 3 5 32 95 891234789))))
+    (is (true? (in? \n "finger")))
+    (is (nil? (in? \z "finger")))
+    (is (true? (in? \newline "a line\n")))
+    (is (true? (in? \tab "a\tab haha")))
+    (is (true? (in? 32 #{1 3 5 32 95 891234789})))
+    (is (nil? (in? 32 #{1 3 5 432 95 891234789})))))
 
 (deftest is-seed-page?-test
   (testing "The is-seed-page? function."

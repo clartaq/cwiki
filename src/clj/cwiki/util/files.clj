@@ -137,7 +137,8 @@
       "")))
 
 (defn in?
-  "Return true if coll contains elm."
+  "Return true if coll contains elm. Too, works when searching for a character
+  in a string, but not a string within another string."
   [elm coll]
   (some #(= elm %) coll))
 
