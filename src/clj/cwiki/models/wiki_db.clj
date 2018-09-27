@@ -210,7 +210,7 @@
   ([username password db]
    (let [result (find-user-by-name username db)
          pw-hash (:user_password result)]
-     (when (and (= (:user-name result))
+     (when (and (= username (:user_name result))
                 (hashers/check password pw-hash))
        result))))
 
@@ -364,9 +364,9 @@
       :else (errorf "ACK! Don't know how to sort by %s " sort-type))))
 
 (defn- id-score-map->title-score-map
-  [m db-spec]
   "Take a map containing a page id under the :id key and return a map
   containing the page title under the key :title."
+  [m db-spec]
   (let [title (page-id->title (:id m) db-spec)]
     (merge {:title title} m)))
 
@@ -895,22 +895,36 @@
        (catch Exception e (println e)))
   (info "Done!"))
 
+(defn- add-full-text-search!
+  "Add full text search with Lucene."
+  [db-spec]
+  (info "Adding full text search.")
+  (jdbc/execute! db-spec
+                 ["CREATE ALIAS IF NOT EXISTS FTL_INIT FOR \"org.h2.fulltext.FullTextLucene.init\""])
+  (jdbc/execute! db-spec ["CALL FTL_INIT()"])
+  (jdbc/execute! db-spec ["CALL FTL_CREATE_INDEX('PUBLIC', 'PAGES', 'PAGE_CONTENT')"])
+  (info "Done!"))
+
+(defn- add-indices!
+  "Add indices to the database."
+  [db-spec]
+  (info "Adding indices.")
+  (jdbc/execute! db-spec
+                 ["CREATE INDEX IF NOT EXISTS PUBLIC ON PAGES(PAGE_TITLE)"])
+  (info "Done!"))
+
 (defn- create-db
   "Create the database tables and initialize them with content for
   first-time use."
   [db-spec]
   (create-tables db-spec)
-  ; The magic incantations to get full text search to work.
-  (jdbc/execute! db-spec
-                 ["CREATE ALIAS IF NOT EXISTS FTL_INIT FOR \"org.h2.fulltext.FullTextLucene.init\""])
-  (jdbc/execute! db-spec ["CALL FTL_INIT()"])
-  (jdbc/execute! db-spec ["CALL FTL_CREATE_INDEX('PUBLIC', 'PAGES', 'PAGE_CONTENT')"])
-  ; End incantations.
+  (add-full-text-search! db-spec)
   (init-admin-table! db-spec)
   (add-initial-users! db-spec)
   (add-initial-pages! db-spec)
   (add-initial-roles! db-spec)
-  (add-initial-options! db-spec))
+  (add-initial-options! db-spec)
+  (add-indices! db-spec))
 
 (defn- db-exists?
   "Return true if the wiki database already exists."
