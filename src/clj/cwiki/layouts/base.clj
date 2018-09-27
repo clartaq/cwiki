@@ -359,9 +359,9 @@
 (defn compose-not-yet-view
   "Return a page stating that the requested feature
   is not available yet."
-  [name]
+  [the-name]
   (short-message "That's Not Ready"
-                 (str "There is no \"" name \" " route yet.")))
+                 (str "There is no \"" the-name \" " route yet.")))
 
 (defn compose-404-page
   "Return a 'Not Found' page."

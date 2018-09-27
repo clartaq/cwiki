@@ -264,9 +264,9 @@
 
 (defn- real-is-seed-page?
   "Return true if the input names a seed page, nil otherwise."
-  [name]
+  [page-name]
   (let [seeds (load-initial-page-list)
-        sanitized-name (str (sanitize-page-name name) ".md")]
+        sanitized-name (str (sanitize-page-name page-name) ".md")]
     (some #(= sanitized-name %) seeds)))
 
 (def is-seed-page? (memoize real-is-seed-page?))

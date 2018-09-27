@@ -23,8 +23,8 @@
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
 
-(defn- wanna? [request key]
-  (= "true" (get-in request [:params key])))
+(defn- wanna? [request the-key]
+  (= "true" (get-in request [:params the-key])))
 
 (defn- wanna-delete? [request]
   (wanna? request :delete))
