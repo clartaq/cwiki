@@ -118,9 +118,9 @@
   [post-map which-highlighter]
     [:head
      [:title (get-tab-title post-map)]
+     (include-css (get-css-path))
      (when (= which-highlighter :editor-highlighter)
        (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css"))
-     (include-css (get-css-path))
      (when (= which-highlighter :page-highlighter)
        (include-css (str "/js/styles/default.css")))]);)
 
