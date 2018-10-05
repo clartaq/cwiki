@@ -1169,7 +1169,9 @@ div.one-column-list li
     /* make this container fill all remaining space in it's (flexbox) parent. */
     flex-grow: 1;
     display: flex;
-    flex-direction: column;
+    flex-flow: column;
+    /* Also makes the embedded textarea use full available height. */
+    height: 100%
     /* border: 1px solid #e0e0e0;*/
 }
 
@@ -1223,7 +1225,6 @@ div.one-column-list li
 .mde-title-edit-section {
     margin-bottom: 1rem;
     margin-top: 1rem;
-    width: 50%;
 }
 
 .mde-form-title-field {
@@ -1250,10 +1251,6 @@ div.one-column-list li
     padding-right: 10px;
     height: 100%;
     background-color: lightgoldenrodyellow;
-}
-
-.mde-editor-class textarea {
-    flex: 1;
 }
 
 /*
