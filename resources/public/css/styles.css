@@ -491,62 +491,6 @@ inside another flexbox. */
     overflow: auto;
 }
 
-/* content and centered content are used for 404, edit, and create
-pages at the moment.
- */
-
-/*
-textarea#content
-{
-    width: var(--content-max-width);
-    height: 30em;
-}
-*/
-
-/*
-.content
-{
-    padding: 0.5em;
-    flex: 1 1 auto;
-    position: relative;
-    !* need this to position inner content *!
-    overflow-y: auto;
-}
-*/
-
-/*
-.centered-content
-{
-    padding: 0.5em;
-    max-width: var(--content-max-width);
-    margin-left: auto;
-    !* center content horizontally *!
-    margin-right: auto;
-    flex: 1 1 auto;
-    position: relative;
-    !* need this to position inner content *!
-    overflow-y: auto;
-}
-*/
-
-/*
-.centered-content a:link, .content a:link
-{
-    color: var(--content-link-color);
-}
-
-.centered-content a:visited, .content a:visited
-{
-    color: var(--content-link-visited-color);
-}
-
-.centered-content a:hover:active:focus, .content a:hover:active:focus
-{
-    color: var(--content-link-active-color);
-    text-decoration: underline;
-}
-*/
-
 /* The page title and meta info at the top of the page content. */
 .page-title-div
 {
@@ -642,10 +586,6 @@ input#new-tag-button
 }
 
 /* Forms */
-
-.cwiki-form
-{
-}
 
 .form-title
 {
@@ -905,6 +845,7 @@ tr:hover td
 
 /* The footer. */
 
+/*
 .footer
 {
     margin: 0;
@@ -924,6 +865,7 @@ tr:hover td
     flex-direction: row;
     justify-content: space-between;
 }
+*/
 
 /* Block quote-related selectors. */
 
