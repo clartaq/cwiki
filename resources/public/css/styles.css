@@ -1250,7 +1250,6 @@ div.one-column-list li
     padding-left: 10px;
     padding-right: 10px;
     height: 100%;
-    background-color: lightgoldenrodyellow;
 }
 
 /*
@@ -1268,8 +1267,8 @@ div.one-column-list li
     line-height: 1.8rem;
     padding-left: 10px;
     padding-right: 10px;
-    overflow-y:scroll;
-    background-color: lightcyan;
+    height: 100%;
+    overflow-y: scroll;
 }
 
 /*
