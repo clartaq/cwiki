@@ -439,6 +439,7 @@ inside another flexbox. */
 
     display: flex;
     flex-direction: row;
+    height: 100%;
     overflow: auto;
 }
 
@@ -486,6 +487,7 @@ inside another flexbox. */
     border-left: 1px solid var(--rule-color);
     display: flex;
     flex-direction: column;
+    height: 100%;
     overflow: auto;
 }
 
