@@ -92,7 +92,7 @@
 ;; Websocket messages handlers to work with the server.
 ;;
 
-(def the-page-map (reagent/atom nil))
+(def glbl-page-map (reagent/atom nil))
 
 (defn doc-save-function
   "Send a message to the server to save the document."
@@ -113,15 +113,18 @@
 
 (defn editor-message-handler
   [{:keys [?data]}]
+  (when ?data
+    (tracef "?data %s" ?data))
   (let [message-id (first ?data)]
     (tracef "editor-message-handler: message-id: %s" message-id)
     (cond
-      (= message-id :hey-editor/here-is-the-document) (when-let [the-data (second ?data)]
+      (= message-id :hey-editor/here-is-the-document) (when-let [page-map (second ?data)]
                                                         (tracef "editor-message-handler: the-data: %s"
                                                                 (with-out-str
-                                                                  (pprint/pprint the-data)))
-                                                        (reset! the-page-map the-data))
-      (= message-id :hey-editor/shutdown-after-save) (let [new-location (str "/" (:page_title @the-page-map))]
+                                                                  (pprint/pprint page-map)))
+                                                        ; This is where the global page map is set.
+                                                        (reset! glbl-page-map page-map))
+      (= message-id :hey-editor/shutdown-after-save) (when-let [new-location (str "/" (second ?data))]
                                                        (tracef "The new location is: %s" new-location)
                                                        (ws/stop-router!)
                                                        (.replace js/location new-location))
@@ -204,20 +207,20 @@
 (defn the-editor-container
   "Starts the websocket router and returns a function that lays out
   the editor and preview area side-by-side."
-  []
+  [page-map-atom]
   (trace "the-editor-container")
-  (fn []
-    (tracef "the-editor-container: @the-page-map: %s" @the-page-map)
+  (fn [page-map-atom]
+    (tracef "the-editor-container: @the-page-map: %s" @page-map-atom)
     [:div {:class "mde-container"}
-     (make-title-input-element the-page-map)
-     (make-tag-list-input-component the-page-map)
+     [make-title-input-element page-map-atom]
+     [make-tag-list-input-component page-map-atom]
      [:div {:class "mde-content-label-div"}
       [:label {:class "form-label"
                :for   "content"} "Page Content"]]
 
      [:div {:class "mde-editor-and-preview-container"}
-      [editor the-page-map]
-      [preview the-page-map]]
+      [editor page-map-atom]
+      [preview page-map-atom]]
 
      [:div {:class "button-bar-container"}
       [:input {:type    "button"
@@ -228,7 +231,7 @@
                :onClick #(do
                            (trace "Saw Click on Save Button!")
                            (ws/send-message! [:hey-server/save-doc-and-quit
-                                              {:data @the-page-map}]))}]
+                                              {:data @page-map-atom}]))}]
       [:input {:type    "button"
                :id      "Cancel Button"
                :name    "cancel-button"
@@ -239,7 +242,7 @@
                            (ws/send-message! [:hey-server/cancel-editing]))}]]]))
 
 (defn reload []
-  (reagent/render [the-editor-container] (.getElementById js/document "editor-container")))
+  (reagent/render [the-editor-container glbl-page-map] (.getElementById js/document "editor-container")))
 
 (defn ^:export main []
   (reload))
