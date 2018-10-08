@@ -31,9 +31,9 @@
 
 (defn- save-doc!
   "Save new or edited content."
-  [websocket-data]
-  (tracef "save-doc!: websocket-data: %s" websocket-data)
-  (when-let [post-map (and websocket-data (:data websocket-data))]
+  [page-map]
+  (tracef "save-doc!: page-mapL %s" page-map)
+  (when-let [post-map page-map]
     (let [id (db/page-map->id post-map)
           title (db/page-map->title post-map)
           content (db/page-map->content post-map)
@@ -61,8 +61,12 @@
   "Save the edited post and ask the client to shut itself down."
   [client-id ?data]
   (trace "Editor asked to save edited document.")
-  (save-doc! ?data)
-  (chsk-send! client-id [:hey-editor/shutdown-after-save]))
+  (let [page-map (and ?data (:data ?data))
+        page-to-return-to (db/page-map->title page-map)]
+    (save-doc! page-map)
+    (tracef "Here's the data that got saved: %s" ?data)
+    (tracef "Here's the page-to-return-to: %s" page-to-return-to)
+    (chsk-send! client-id [:hey-editor/shutdown-after-save page-to-return-to])))
 
 (defn- cancel-editing
   "Stop editing the post and ask the client to shut itself down."
