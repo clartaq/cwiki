@@ -1119,6 +1119,10 @@ div.one-column-list li
     /* border: 1px solid #e0e0e0;*/
 }
 
+.mde-header-container {
+    flex: none;
+}
+
 /* The editor and preview pane are set up in a row. */
 .mde-editor-and-preview-container {
     /* Make this container fill all remaining space in it's parent. */
