@@ -1090,11 +1090,9 @@ div.one-column-list li
 ** there are no ids referenced here.
  */
 
-.editor-container
+.outer-editor-container
 {
-    flex-grow: 1;
     display: flex;
-    flex-direction: column;
     height: 100%;
 }
 
@@ -1109,9 +1107,9 @@ div.one-column-list li
 ** The mde container is a column with the toolbar, if present, across the
 ** top and the editor and preview in a row below it.
  */
-.mde-container {
+.inner-editor-container {
     /* make this container fill all remaining space in it's (flexbox) parent. */
-    flex-grow: 1;
+    flex: 1 1 auto;
     display: flex;
     flex-flow: column;
     /* Also makes the embedded textarea use full available height. */
@@ -1119,17 +1117,8 @@ div.one-column-list li
     /* border: 1px solid #e0e0e0;*/
 }
 
-.mde-header-container {
+.editor-header {
     flex: none;
-}
-
-/* The editor and preview pane are set up in a row. */
-.mde-editor-and-preview-container {
-    /* Make this container fill all remaining space in it's parent. */
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    height: 100%;
 }
 
 /*
@@ -1183,40 +1172,61 @@ div.one-column-list li
     padding-bottom: 0.3rem;
 }
 
+/* The editor and preview pane are set up in a row. */
+.editor-and-preview-section {
+    /* Make this container fill all remaining space in it's parent. */
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+
+    /* This is important to get it to work with Firefox */
+    overflow-y: scroll;
+}
+
+.editor-container {
+    flex: 1;
+    height: 100%;
+    overflow-y: scroll;
+}
 
 /*
 ** The editor uses the default font for text areas.
  */
-.mde-editor-class {
-    flex: 1;
-    display: flex;
+.editor-textarea {
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    resize: none;
+    overflow-y: scroll;
+
     font-size: 1.3rem;
     line-height: 1.8rem;
     border: none;
     outline: none;
-    overflow-y: scroll;
+
     padding-left: 10px;
     padding-right: 10px;
-    height: 100%;
 }
 
 /*
 ** Take away the blue border around the editor when it is being
 ** typed in.
  */
-.mde-editor-class:focus {
+.editor-textarea:focus {
     outline: none;
     border: none;
 }
 
 .mde-preview-class {
     flex: 1;
+    height: 100%;
+    overflow-y: scroll;
+
     font-size: 1.3rem;
     line-height: 1.8rem;
     padding-left: 10px;
     padding-right: 10px;
-    height: 100%;
-    overflow-y: scroll;
 }
 
 /*
