@@ -64,7 +64,6 @@
        (base/wiki-header-component post-map req {:editing true})
        (sidebar-and-editor
          (base/sidebar-aside req)
-         [:section {:class "editor-section"}
-          [:div {:id "editor-container" :class "editor-container"}
-           [:p "The stuff from the ClojureScript editor should show up here."]]])
+          [:section {:id "outer-editor-container" :class "outer-editor-container"}
+           [:p "The stuff from the ClojureScript editor should show up here."]])
        (standard-end-of-body)])))

@@ -69,17 +69,18 @@
   message over the websocket to the server."
   [page-map-atom]
   (trace "enter editor")
-  [:textarea
-   {:class     "mde-editor-class"
-    :value     (:page_content @page-map-atom)
-    :on-change (fn [arg]
-                 (let [new-content (-> arg .-target .-value)]
-                   (swap! page-map-atom assoc :page_content new-content)
-                   (change-watcher! doc-save-function page-map-atom)
-                   (when (get-in @page-map-atom [:options :send-every-keystroke])
-                     (ws/send-message! [:hey-server/content-updated
-                                        {:?data new-content}]))
-                   new-content))}])
+  [:div {:class "editor-container"}
+   [:textarea
+    {:class     "editor-textarea"
+     :value     (:page_content @page-map-atom)
+     :on-change (fn [arg]
+                  (let [new-content (-> arg .-target .-value)]
+                    (swap! page-map-atom assoc :page_content new-content)
+                    (change-watcher! doc-save-function page-map-atom)
+                    (when (get-in @page-map-atom [:options :send-every-keystroke])
+                      (ws/send-message! [:hey-server/content-updated
+                                         {:?data new-content}]))
+                    new-content))}]])
 
 (defn preview
   "The preview div."
@@ -211,38 +212,44 @@
   (trace "the-editor-container")
   (fn [page-map-atom]
     (tracef "the-editor-container: @the-page-map: %s" @page-map-atom)
-    [:div {:class "mde-container"}
-     [make-title-input-element page-map-atom]
-     [make-tag-list-input-component page-map-atom]
-     [:div {:class "mde-content-label-div"}
-      [:label {:class "form-label"
-               :for   "content"} "Page Content"]]
+    [:div {:class "inner-editor-container"}
 
-     [:div {:class "mde-editor-and-preview-container"}
+
+     [:header {:class "editor-header"}
+      [make-title-input-element page-map-atom]
+      [make-tag-list-input-component page-map-atom]
+
+      [:div {:class "button-bar-container"}
+       [:input {:type    "button"
+                :id      "Save Button"
+                :name    "save-button"
+                :value   "Save Changes"
+                :class   "form-button button-bar-item"
+                :onClick #(do
+                            (trace "Saw Click on Save Button!")
+                            (ws/send-message! [:hey-server/save-doc-and-quit
+                                               {:data @page-map-atom}]))}]
+       [:input {:type    "button"
+                :id      "Cancel Button"
+                :name    "cancel-button"
+                :value   "Cancel"
+                :class   "form-button button-bar-item"
+                :onClick #(do
+                            (trace "Saw Click on the Cancel Button!")
+                            (ws/send-message! [:hey-server/cancel-editing]))}]]
+
+      [:div {:class "mde-content-label-div"}
+       [:label {:class "form-label"
+                :for   "content"} "Page Content"]]]
+
+     [:section {:class "editor-and-preview-section"}
       [editor page-map-atom]
       [preview page-map-atom]]
 
-     [:div {:class "button-bar-container"}
-      [:input {:type    "button"
-               :id      "Save Button"
-               :name    "save-button"
-               :value   "Save Changes"
-               :class   "form-button button-bar-item"
-               :onClick #(do
-                           (trace "Saw Click on Save Button!")
-                           (ws/send-message! [:hey-server/save-doc-and-quit
-                                              {:data @page-map-atom}]))}]
-      [:input {:type    "button"
-               :id      "Cancel Button"
-               :name    "cancel-button"
-               :value   "Cancel"
-               :class   "form-button button-bar-item"
-               :onClick #(do
-                           (trace "Saw Click on the Cancel Button!")
-                           (ws/send-message! [:hey-server/cancel-editing]))}]]]))
+]))
 
 (defn reload []
-  (reagent/render [the-editor-container glbl-page-map] (.getElementById js/document "editor-container")))
+  (reagent/render [the-editor-container glbl-page-map] (.getElementById js/document "outer-editor-container")))
 
 (defn ^:export main []
   (reload))
