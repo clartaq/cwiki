@@ -2,14 +2,13 @@
 author: CWiki
 title: Text Formatting
 date: 2017-10-24T08:57:33.000-04:00
-modified: 2018-09-15T10:35:38.807-04:00
+modified: 2018-10-06T15:48:20.791-04:00
 tags:
   - formatting
   - Markdown
   - MathJax
   - TeX
 ---
-
 
 Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, especially some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
 
