@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   viewBox="-255 -255 512 512"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   sodipodi:docname="cwiki-icon.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.3780191"
+     inkscape:cx="254.53928"
+     inkscape:cy="218.99978"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-text-baseline="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1525"
+     inkscape:window-height="1254"
+     inkscape:window-x="0"
+     inkscape:window-y="1"
+     inkscape:window-maximized="0"
+     units="px"
+     inkscape:pagecheckerboard="false"
+     viewbox-x="-255"
+     viewbox-y="-255">
+    <sodipodi:guide
+       position="89.984239,0"
+       orientation="0,1"
+       id="guide3739"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="0,732.93614"
+       orientation="1,0"
+       id="guide3741"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="225.68628,255.43913"
+       orientation="0,1"
+       id="guide3716"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-161.53332)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:50.79999924px;line-height:1.25;font-family:'Lucida Grande';-inkscape-font-specification:'Lucida Grande, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
+       x="81.64286"
+       y="111.79166"
+       id="text3721"><tspan
+         sodipodi:role="line"
+         id="tspan3719"
+         x="81.64286"
+         y="158.42006"
+         style="font-size:50.79999924px;stroke-width:0.26458332" /></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3723"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:192px;line-height:1.25;font-family:'Lucida Grande';-inkscape-font-specification:'Lucida Grande, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(2.6247135,0,0,2.6247135,-726.48504,-1223.4295)"><flowRegion
+         id="flowRegion3725"
+         style="font-size:192px"><rect
+           id="rect3727"
+           width="554.28571"
+           height="345.71429"
+           x="171.42857"
+           y="422.51968"
+           style="font-size:192px" /></flowRegion><flowPara
+         id="flowPara3729">C</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot3731"
+       style="font-style:normal;font-variant:normal;font-weight:500;font-stretch:normal;font-size:74.66666412px;line-height:1.25;font-family:'Lucida Grande';-inkscape-font-specification:'Lucida Grande, Medium';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(2.6247135,0,0,2.6247135,-353.34559,-222.80692)"><flowRegion
+         id="flowRegion3733"
+         style="font-size:74.66666412px"><rect
+           id="rect3735"
+           width="408.57144"
+           height="122.85714"
+           x="94.285713"
+           y="102.51968"
+           style="font-size:74.66666412px" /></flowRegion><flowPara
+         id="flowPara3737">wiki</flowPara></flowRoot>  </g>
+</svg>
