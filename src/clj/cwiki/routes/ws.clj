@@ -32,7 +32,7 @@
 (defn- save-doc!
   "Save new or edited content."
   [page-map]
-  (tracef "save-doc!: page-mapL %s" page-map)
+  (tracef "save-doc!: page-map: %s" page-map)
   (when-let [post-map page-map]
     (let [id (db/page-map->id post-map)
           title (db/page-map->title post-map)
@@ -59,12 +59,11 @@
 
 (defn- save-doc-and-quit!
   "Save the edited post and ask the client to shut itself down."
-  [client-id ?data]
+  [client-id page-map]
   (trace "Editor asked to save edited document.")
-  (let [page-map (and ?data (:data ?data))
-        page-to-return-to (db/page-map->title page-map)]
+  (let [page-to-return-to (db/page-map->title page-map)]
     (save-doc! page-map)
-    (tracef "Here's the data that got saved: %s" ?data)
+    (tracef "Here's the data that got saved: %s" page-map) ;?data)
     (tracef "Here's the page-to-return-to: %s" page-to-return-to)
     (chsk-send! client-id [:hey-editor/shutdown-after-save page-to-return-to])))
 
@@ -82,8 +81,8 @@
   (cond
     (= id :hey-server/send-document-to-editor) (send-document-to-editor client-id)
     (= id :hey-server/content-updated) (content-updated ?data)
-    (= id :hey-server/save-doc) (save-doc! ?data)
-    (= id :hey-server/save-doc-and-quit) (save-doc-and-quit! client-id ?data)
+    (= id :hey-server/save-doc) (save-doc! (:data ?data))
+    (= id :hey-server/save-doc-and-quit) (save-doc-and-quit! client-id (:data ?data))
     (= id :hey-server/cancel-editing) (cancel-editing client-id)
     (= id :chsk/uidport-open) (trace ":chsk/uidport-open")
     (= id :chsk/uidport-close) (trace ":chsk/uidport-close")
