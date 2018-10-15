@@ -22,9 +22,9 @@
 ; The delay-handle stores the handle to the autosave countdown timer.
 (def ^{:private true} glbl-delay-handle (atom nil))
 
-;;
-;; Websocket messages handlers to work with the server.
-;;
+;-------------------------------------------------------------------------------
+; Websocket message handlers to work with the server.
+;
 
 ;(defn doc-save-function
 ;  "Send a message to the server to save the document."
@@ -71,6 +71,7 @@
 
 ;-------------------------------------------------------------------------------
 ; Auto-save-related functions.
+;
 
 (defn clear-autosave-delay! []
   "Clear the autosave countdown timer."
@@ -97,20 +98,15 @@
   autosave duration is greater than zero, restarts the countdown until the
   document is saved automatically."
   [options]
-  (println "autosave notified")
   (let [delay (* 1000 (:editor_autosave_interval options))
         the-save-fn (:assemble-and-save-fn options)]
-    (println "the-save-fn: " the-save-fn)
     (when (pos? delay)
       (clear-autosave-delay!)
       (restart-autosave-delay! the-save-fn delay))))
 
 ;-------------------------------------------------------------------------------
 ; The editor components.
-
-;;
-;; Layout and change handlers for the page.
-;;
+;
 
 ;(defn tag-change-listener
 ;  "Return a change listener function for the tag indicated."
@@ -223,9 +219,6 @@
 (defn layout-button-bar
   "Layout the editor button bar."
   [options]
-  (println "Enter layout-button-bar")
-  (println "options: " options)
-  (println "re-assembler-fn: " (:re-assembler-fn options))
   [:div {:class "button-bar-container"}
    [:input {:type    "button"
             :id      "Save Button"
@@ -234,14 +227,9 @@
             :class   "form-button button-bar-item"
             :onClick #(do
                         (trace "Saw Click on Save Button!")
-                        (println "result of calling re-assembler-fn: "
-                                 (let [fxn (:re-assembler-fn options)]
-                                   (fxn)))
-
                         (ws/send-message! [:hey-server/save-doc-and-quit
                                            {:data (let [fxn (:re-assembler-fn options)
                                                         new-page-map (fxn)]
-                                                    (println "new-page-map: " new-page-map)
                                                     new-page-map)}]))}]
    [:input {:type    "button"
             :id      "Cancel Button"
@@ -252,7 +240,7 @@
                         (trace "Saw Click on the Cancel Button!")
                         (ws/send-message! [:hey-server/cancel-editing]))}]])
 
-(defn new-tag-change-listener
+(defn tag-change-listener
   "Return a new change listener for the specified tag."
   [tags-vector-atom n single-tag-atom options]
   (println "tag changed: n: " n)
@@ -279,25 +267,20 @@
                            {:data @tags-vector-atom}])))))
 
 (defn layout-tag-input-element
-  "Layo ut a single tag input element."
+  "Layo out a single tag input element."
   [tags-vector-atom n options]
-  (println "layout-tag-input-element: @tags-vector-atom: " @tags-vector-atom)
   (fn [tags-vector-atom]
     (let [tag-of-interest (reagent/atom (nth @tags-vector-atom n ""))]
       [:input {:type        "text"
                :class       "mde-tag-text-field"
                :placeholder (str "Tag #" (+ 1 n))
                :value       @tag-of-interest
-               :on-change   (new-tag-change-listener tags-vector-atom n
-                                                     tag-of-interest options)}])))
+               :on-change   (tag-change-listener tags-vector-atom n
+                                                 tag-of-interest options)}])))
 
 (defn layout-tags-editor
   "Lay out the inputs for all of the tags."
   [tags-atom options]
-  (println "Enter layout-tags-editor")
-  (println "options: " options)
-  (println "tags-atom: " tags-atom)
-  (println "@tags-atom: " @tags-atom)
   [:section {:class "tag-edit-container tag-edition-section"}
    [:label {:class "tag-edit-label"} "Tags"]
    [:div {:class "mde-tag-edit-list" :id "mde-tag-edit-list"}
@@ -307,8 +290,6 @@
 (defn layout-title-editor
   "Lay out the title editing control and return the layout."
   [title-atom options]
-  (println "layout-title-editor: title-atom: " title-atom)
-  (println "@title-atom: " @title-atom)
   (let [ro (when (= "Front Page" @title-atom)
              {:readOnly "readOnly"})
         inp (merge ro
@@ -323,14 +304,11 @@
                                    title)
                                  "Enter a Title for the Page")
                     :on-change (fn [arg] (let [new-title (-> arg .-target .-value)]
-                                           (println "new-title: " new-title)
                                            (notify-autosave options)
                                            (reset! title-atom new-title)
-                                           (println "new @title-atom: " @title-atom)
                                            (when (:send-every-keystroke options)
                                              (ws/send-message! [:hey-server/title-updated
                                                                 {:data new-title}]))))})]
-    (println "@title-atom in function: " @title-atom)
     [:div {:class "mde-title-edit-section"}
      [:div {:class "form-label-div"}
       [:label {:class "form-label required"
@@ -341,7 +319,6 @@
   "Lay out the header section for the editor. Includes the title, tags, and
   button bar."
   [title-atom tags-atom options]
-  (println "layout-editor-header")
   [:header {:class "editor-header"}
    [layout-button-bar options]
    [layout-title-editor title-atom options]
@@ -382,9 +359,7 @@
        :value     @content-atom
        :on-change (fn [arg]
                     (let [new-content (-> arg .-target .-value)]
-                      (println "new-content: " new-content)
                       (reset! content-atom new-content)
-                      (println "updated @content-atom after reset!: " @content-atom)
                       (notify-autosave options)
                       (when (:send-every-keystroke options)
                         (ws/send-message! [:hey-server/saw-a-keystroke-in-content
@@ -438,7 +413,6 @@
 (defn layout-editor-and-preview-section
   "Lay out the side-by-side editing and preview panes for the editor."
   [content-atom options]
-  (println "layout-editor-and-preview-section")
   [:section {:class "editor-and-preview-section"}
    [layout-editor-pane content-atom options]
    [layout-preview-pane content-atom]])
@@ -449,7 +423,6 @@
   side-by-side at the bottom. Returns the layout."
   [page-map-atom]
   (tracef "layout-inner-editor-container: @page-map-atom: " @page-map-atom)
-  (println "layout-inner-editor-container")
   (when @page-map-atom
     (let [pm @page-map-atom
           title-atom (reagent/atom (:page_title pm))
@@ -457,30 +430,26 @@
           tags-atom (atom (:tags pm))
           content-atom (reagent/atom (:page_content pm))
           options (:options pm)]
-      (println "    after let")
-      (letfn [(re-assembler-fn []
-                (println "Enter re-assembler-fn")
-                (println "@title-atom in re-assembler: " @title-atom)
+      (letfn [(re-assembler-fn
+                "A function to re-assemble a (possibly modified) page
+                from the original input and any modified parts."
+                []
                 (let [re-assembled-page-map (merge @page-map-atom
                                                    {:page_title   @title-atom
                                                     :tags         @tags-atom
                                                     :page_content @content-atom})]
-                  (println "re-assembled-page-map: " re-assembled-page-map)
                   re-assembled-page-map))
-              (assemble-and-save-fn []
+              (assemble-and-save-fn
+                "Assemble the (possibly modified page) and save it."
+                []
                 (let [the-doc (re-assembler-fn)
                       sf doc-save-fn]
-                  (println "In assemble-and-save-fn")
-                  (println "    the-doc: " the-doc)
-                  (println "    sf: " sf)
                   (sf the-doc)))]
-        (println "    after letfn")
         (let [final-options (merge {:re-assembler-fn      re-assembler-fn
                                     :doc-save-fn          doc-save-fn
                                     :assemble-and-save-fn assemble-and-save-fn}
                                    options)]
 
-          (println "after final-options")
           [:div {:class "inner-editor-container"}
            [layout-editor-header title-atom tags-atom final-options]
            [layout-editor-and-preview-section content-atom final-options]])))))
