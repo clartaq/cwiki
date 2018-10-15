@@ -430,18 +430,13 @@
           tags-atom (atom (:tags pm))
           content-atom (reagent/atom (:page_content pm))
           options (:options pm)]
-      (letfn [(re-assembler-fn
-                "A function to re-assemble a (possibly modified) page
-                from the original input and any modified parts."
-                []
+      (letfn [(re-assembler-fn []
                 (let [re-assembled-page-map (merge @page-map-atom
                                                    {:page_title   @title-atom
                                                     :tags         @tags-atom
                                                     :page_content @content-atom})]
                   re-assembled-page-map))
-              (assemble-and-save-fn
-                "Assemble the (possibly modified page) and save it."
-                []
+              (assemble-and-save-fn []
                 (let [the-doc (re-assembler-fn)
                       sf doc-save-fn]
                   (sf the-doc)))]
