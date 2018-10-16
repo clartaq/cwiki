@@ -248,12 +248,14 @@ body
 {
     margin: 0;
     padding: 0 1em;
-    flex: 0 0 auto;
+    /*flex: none;*/
+    /*flex: 0 0 auto;*/
     background-color: var(--page-header-background-color);
 }
 
 .header-wrapper
 {
+    flex: none;
     margin: 0;
     padding: 0.5em 0 0;
     line-height: 0;
