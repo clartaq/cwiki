@@ -61,6 +61,10 @@ To stop the program, use:
 
 I ​run this way in IntelliJ using Cursive to start a REPL.
 
+**Note on Using the Cursive REPL**: After a `lein clean` or other operation that deletes the target files, the Cursive REPL will attempt to re-compile the `wiki-attributes.clj` file. It will apparently fail (but actually succeeds.) To continue, just click the "Stop REPL" button (the red square at the top of the REPL window), then click the "Reconnect" button. Things will proceed as normal.
+
+Attempting to run from the `lein repl` command seems to work just fine.
+
 #### From a Terminal ####
 
 From a terminal in the project directory, type
