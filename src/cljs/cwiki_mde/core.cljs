@@ -34,7 +34,6 @@
 (defn doc-save-fn
   "Send a message to the server to save the document."
   [page-map]
-  (println "doc-save-fn: page-map: " page-map)
   (ws/send-message! [:hey-server/save-doc {:data page-map}]))
 
 (defn editor-handshake-handler
@@ -243,24 +242,19 @@
 (defn tag-change-listener
   "Return a new change listener for the specified tag."
   [tags-vector-atom n single-tag-atom options]
-  (println "tag changed: n: " n)
   (fn [arg]
     (let [new-tag (-> arg .-target .-value)]
-      (println "new-tag: " new-tag)
+      (reset! single-tag-atom new-tag)
       (notify-autosave options)
       (if (blank? new-tag)
         ; User deleted a tag.
         (let [old-tag-vec @tags-vector-atom
               new-vec (vec (concat (subvec old-tag-vec 0 n)
                                    (subvec old-tag-vec (inc n))))]
-          (println "new-vec: " new-vec)
           (reset! tags-vector-atom new-vec))
         (do
-          (reset! single-tag-atom new-tag)
-          (println "@single-tag-atom: " @single-tag-atom)
           (let [new-vec (swap! tags-vector-atom assoc n new-tag)]
             ;(swap! tags-vector-atom assoc n new-tag)
-            (println "new-vec: " new-vec)
             new-vec)))
       (when (:send-every-keystroke options)
         (ws/send-message! [:hey-server/tags-updated
