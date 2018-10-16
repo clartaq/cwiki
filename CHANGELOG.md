@@ -5,12 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-##[[Unreleased]]
+##[0.1.1] - 2018-10-16
 ### Added ###
+- CWiki now has a favicon.
 
 ### Changed ###
+- The "Save" and "Cancel" buttons in the editor are now at the top of the editor window. They do not scroll out of view on long pages.
 
 ### Fixed ###
+- Resolved issue [#22: :"Editing User Profile does not Change Profile"](https://bitbucket.org/David_Clark/cwiki/issues/22/editing-user-profile-does-not-change) in commit [68d222f](https://bitbucket.org/David_Clark/cwiki/commits/68d222fe7f1a5580132bb07befdc8031e33b6ba5). Editing a profile now keeps any changes made.
+- Resolved issue [#23: "Different Scrolling Behavior in Firefox"](https://bitbucket.org/David_Clark/cwiki/issues/23/different-scrolling-behavior-in-firefox) in commit [8c10386](https://bitbucket.org/David_Clark/cwiki/commits/8c10386e92f4284fa84fea1c4245fcf2fb330343). Scrolling of the browser window is now consistent on Safari, Firefox, Brave, and Opera.
+- Resolved issue [#26: "Editing Area Mis-Sized
+Create issue"](https://bitbucket.org/David_Clark/cwiki/issues/26/editing-area-mis-sized) in commit [dd51b0b](https://bitbucket.org/David_Clark/cwiki/commits/dd51b0b3326f4bffcc0bcca8d108445db379f614#chg-resources/public/css/styles.css).
+- Resolved issue [#27: "Rule Separating Sidebar and Main Content is Mis-Sized"](https://bitbucket.org/David_Clark/cwiki/issues/27/rule-separating-sidebar-and-main-content) in commit [84d244d](https://bitbucket.org/David_Clark/cwiki/commits/84d244de72d67aaf5d8b500233e3c1d1a19a8d46). The vertical rule between the sidebar and content now extends the full height of the browser window.
+- Resolved issue [#29: "Need to Split Parts of Document in Editor
+Create issue"](https://bitbucket.org/David_Clark/cwiki/issues/29/need-to-slit-parts-of-document-in-editor) in commit [136621e](https://bitbucket.org/David_Clark/cwiki/commits/136621e55a737ede8b38926069bf5cc133baafe5). You will no longer receive messages from the browser about MathJax formatting while editing the page title or tags.
 
 ## [0.1.0] - 2018-09-20
 ### Added ###
