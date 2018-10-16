@@ -60,7 +60,7 @@
   of the text. If present, the front matter must be the first thing appearing
   in the text and marked by leading and trailing lines consisting of three
   hypens ('---'). A map is returned containing the collection of lines
-  consituting the body under the :body key. If YAML front matter is present,
+  constituting the body under the :body key. If YAML front matter is present,
   it is returned in the map under the key of :front."
   [coll]
   (let [lines (drop-lines-while-blank coll)]
