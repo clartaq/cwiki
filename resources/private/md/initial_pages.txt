@@ -27,7 +27,6 @@ Features.md
 How_to_Make_a_Table_of_Contents.md
 Limits.md
 Links_Primer.md
-Motivation.md
 Other_Wiki_Software.md
 Pages_Primer.md
 Roadmap.md
@@ -36,4 +35,5 @@ Sidebar.md
 Special_Pages.md
 Speed.md
 Text_Formatting.md
+The_Motivation_for_Writing_CWiki.md
 Wikilinks.md

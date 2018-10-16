@@ -2,12 +2,12 @@
 author: CWiki
 title: The Motivation for Writing CWiki
 date: 2018-01-07T10:24:01.000-05:00
-modified: 2018-06-18T17:17:03.711-04:00
+modified: 2018-10-16T12:38:32.835-04:00
 tags:
   - motivation
+  - rationale
   - technical note
 ---
-
 
 You might rightly ask "Why does the world need another wiki program?" Well, CWiki probably isn't vital to the survival of civilization as we know it. But I was motivated by a few things.
 
@@ -17,10 +17,10 @@ First, I've always been fascinated by wiki software (and blog software, and edit
 
 **Markdown with Extensions**. I like Markdown too. But this is a wiki. It has to support wiki links as well as HTML links.
 
-**Syntax-Highlighted Code Listings**. I put a lot of code listings in some of the things I write. Has to look nice and be easy to do.
+**Syntax-Highlighted Code Listings**. I put a lot of code listings in some of the things I write. The code listing must look nice and be easy to do.
 
 **Mathematics**. I want to be able to write content containing mathematics. Markdown does not support it natively. I wanted to be able to use [$\rm\TeX$](https://en.wikibooks.org/wiki/LaTeX/Mathematics).
 
-**Runs in a Browser**. Since Markdown generates HTML and a lot of the links will point to external websites​, might as well use the browser as the UI for the program too.
+**Runs in a Browser**. Since Markdown generates HTML and a lot of the links will point to external websites, the wiki might as well use the browser as the UI for the program too.
 
-CWiki was written as a learning experience and to develop a tool I would want to use.
+CWiki was written as a learning experience and to develop a tool I would want to use.​
