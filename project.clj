@@ -79,7 +79,10 @@
                                       [lein-figwheel "0.5.16"]]
                        ; Leave this alone. IntelliJ has issues otherwise.
                        :test-paths   ["test/cljs"]
-                       :env          {:dev "true"}}
+                       :env          {:profile-type "development"
+                                      :debugging-css "true"}}
+
+             :test    {:env {:profile-type "test"}}
 
              :uberjar {:aot          :all
                        :omit-source  true
@@ -93,7 +96,7 @@
                        ; dependency version incompatibility somewhere that needs
                        ; to be fixed.
                        :dependencies [[ring/ring-mock "0.3.2"]]
-                       :env          {:production "true"}}
+                       :env          {:profile-type "production"}}
              }
 
   :cljsbuild {:builds
