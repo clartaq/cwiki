@@ -10,7 +10,6 @@
             [clj-time.format :as f]
             [clj-time.coerce :as c]
             [clojure.string :as s]
-            [cwiki.css-source :refer [get-css-path]]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.authorization :as ath]
             [cwiki.util.files :refer [is-seed-page?]]
@@ -109,6 +108,21 @@
             h (hc/html (link-to uri "Delete"))]
         h))))
 
+(defn get-development-css-path
+  "Return the path to the development css file."
+  []
+  (let [debugging-css (env :debugging-css)
+        q (if debugging-css
+            (str "?" (rand-int 2147483647))
+            "")
+        cssp (str "/css/styles.css" q)]
+    cssp))
+
+(defn get-production-css-path
+  "Return the path to the minimized, production css file."
+  []
+  "/css/styles.min.css")
+
 (defn standard-head
   "Return the standard html head section for the wiki html pages. If the var
   'debugging-css' is def'ed to true, should reload CSS every time the page
@@ -116,22 +130,25 @@
   :editor-highlighter (for the highlighter used in the editor preview pane)
   or :page-highlighter for all page views for reading."
   [post-map which-highlighter]
-    [:head
-     [:title (get-tab-title post-map)]
-     [:link {:rel "shortcut icon" :href "/img/favicon/favicon.ico"}]
-     [:link {:rel "apple-touch-icon" :sizes "180x180" :href "/img/favicon/apple-touch-icon.png"}]
-     [:link {:rel "icon" :type "image/png" :sizes "32x32" :href "/img/favicon/favicon-32x32.png"}]
-     [:link {:rel "icon" :type "image/png" :sizes "16x16" :href "/img/favicon/favicon-16x16.png"}]
-     [:link {:rel "manifest" :href "/img/favicon/site.webmanifest"}]
-     [:link {:rel "mask-icon" :href "/img/favicon/safari-pinned-tab.svg" :color "#5bbad5"}]
-     [:meta {:name "msapplication-TileColor" :content "#da532c"}]
-     [:meta {:name "msapplication-config" :content "/img/favicon/browserconfig.xml"}]
-     [:meta {:name "theme-color" :content "#ffffff"}]
-     (include-css (get-css-path))
-     (when (= which-highlighter :editor-highlighter)
-       (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css"))
-     (when (= which-highlighter :page-highlighter)
-       (include-css (str "/js/styles/default.css")))]);)
+  [:head
+   [:title (get-tab-title post-map)]
+   [:link {:rel "shortcut icon" :href "/img/favicon/favicon.ico"}]
+   [:link {:rel "apple-touch-icon" :sizes "180x180" :href "/img/favicon/apple-touch-icon.png"}]
+   [:link {:rel "icon" :type "image/png" :sizes "32x32" :href "/img/favicon/favicon-32x32.png"}]
+   [:link {:rel "icon" :type "image/png" :sizes "16x16" :href "/img/favicon/favicon-16x16.png"}]
+   [:link {:rel "manifest" :href "/img/favicon/site.webmanifest"}]
+   [:link {:rel "mask-icon" :href "/img/favicon/safari-pinned-tab.svg" :color "#5bbad5"}]
+   [:meta {:name "msapplication-TileColor" :content "#da532c"}]
+   [:meta {:name "msapplication-config" :content "/img/favicon/browserconfig.xml"}]
+   [:meta {:name "theme-color" :content "#ffffff"}]
+   (if (or (= (env :profile-type) "development")
+           (= (env :profile-type) "test"))
+       (include-css (get-development-css-path))
+       (include-css (get-production-css-path)))
+   (when (= which-highlighter :editor-highlighter)
+     (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css"))
+   (when (= which-highlighter :page-highlighter)
+     (include-css (str "/js/styles/default.css")))])        ;)
 
 (defn standard-end-of-body
   "Returns a div with the standard scripts to include in the page."

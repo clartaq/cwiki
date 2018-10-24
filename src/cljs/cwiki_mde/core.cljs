@@ -6,6 +6,7 @@
 (ns cwiki-mde.core
   (:require [clojure.string :refer [blank?]]
             [cljs.pprint :as pprint]
+          ;  [cwiki-mde.tag-editor :as te]
             [cwiki-mde.ws :as ws]
             [reagent.core :as reagent]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
@@ -94,7 +95,7 @@
 (defn layout-button-bar
   "Layout the editor button bar."
   [options]
-  [:div {:class "button-bar-container"}
+  [:section {:class "button-bar-container"}
    [:input {:type    "button"
             :id      "Save Button"
             :name    "save-button"
@@ -128,10 +129,7 @@
               new-vec (vec (concat (subvec old-tag-vec 0 n)
                                    (subvec old-tag-vec (inc n))))]
           (reset! tags-vector-atom new-vec))
-        (do
-          (let [new-vec (swap! tags-vector-atom assoc n new-tag)]
-            ;(swap! tags-vector-atom assoc n new-tag)
-            new-vec)))
+        (swap! tags-vector-atom assoc n new-tag))
       (when (:send-every-keystroke options)
         (ws/send-message! [:hey-server/tags-updated
                            {:data @tags-vector-atom}])))))
@@ -179,7 +177,7 @@
                                            (when (:send-every-keystroke options)
                                              (ws/send-message! [:hey-server/title-updated
                                                                 {:data new-title}]))))})]
-    [:div {:class "mde-title-edit-section"}
+    [:section {:class "mde-title-edit-section"}
      [:div {:class "form-label-div"}
       [:label {:class "form-label required"
                :for   "page-title"} "Page Title"]]
@@ -193,6 +191,7 @@
    [layout-button-bar options]
    [layout-title-editor title-atom options]
    [layout-tags-editor tags-atom options]
+  ; [te/layout-tag-bar @tags-atom] ;["A Tag" "B Tag"]]
    [:div {:class "mde-content-label-div"}
     [:label {:class "form-label"
              :for   "content"} "Page Content"]]])
