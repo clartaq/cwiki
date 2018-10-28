@@ -739,7 +739,8 @@ label.cabinet input.file
     letter-spacing: 0;
     line-height: 1.688rem;
     overflow: hidden;
-    padding: 0 .875rem;
+   /*padding: 0 .875rem;*/
+    padding: 0.2rem 0.875rem 0 0.875rem;
     position: relative;
     text-decoration: none;
     text-overflow: ellipsis;
@@ -1296,17 +1297,17 @@ div.one-column-list li
 
 .tag-editor--composite-lozenge {
     display: flex;
-    flex: 0 0 auto;
     flex-flow: row;
+    flex: 0 1 min-content;
 
     margin-right: 0.5rem;
 }
 
-.tag-editor--name {
+.tag-editor--name-input {
     flex: 1 1 auto;
 
     margin-bottom: 0.5rem;
-    margin-right: 0;
+    margin-right: 0.2rem;
     padding-top: 0.15rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -1318,23 +1319,26 @@ div.one-column-list li
     line-height: 1.2rem;
 
     color: var(--form-button-color);
-    cursor: text; /*default;*/
+    background-color: var(--form-button-background-color);
+    cursor: text;
     text-decoration: none;
     text-overflow: ellipsis;
     vertical-align: center;
     text-align: center;
 
     pointer-events: auto;
+}
 
-    /*
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    border-left: 1px solid black;
-    border-top-left-radius: 0.75rem;
-    border-bottom-left-radius: 0.75rem;
-    */
+.tag-editor--name-input:focus {
+    border: 1px solid green; /*var(--active-border-color);*/
+    /*box-shadow: *inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--form-button-focus-box-shadow-color);*/
+    outline: 0
+}
 
-    background-color: white;
+.tag-editor--name-input:active {
+    border: 1px solid blue; /*var(--active-border-color);*/
+    background-color: var(--form-button-active-background-color);
+   /* box-shadow: inset 0 1px var(--form-button-active-box-shadow-color);*/
 }
 
 .tag-editor--delete-button {
@@ -1342,6 +1346,7 @@ div.one-column-list li
 }
 
 .tag-editor--add-button {
+    margin-left: 1rem;
     background-image: url('../img/shrunken-a9c6c9-add-circular-button.svg');
 }
 
@@ -1364,7 +1369,8 @@ div.one-column-list li
     border-bottom-right-radius: 0.75rem;
     */
 
-    border: 1px solid black;
+    border: 1px solid var(--active-border-color);
+    background-color: var(--form-button-background-color);
     /*border: 1px white solid;*/
     /*
     border-top-right-radius: 0.75rem;
@@ -1373,11 +1379,70 @@ div.one-column-list li
     border-radius: 50%;
 }
 
-.tag-editor--button-image:hover {
+.tag-editor--button-image:hover, .tag-editor--name-input:hover {
     fill: #00b0e8;
-    background-color: var(--rule-color);
+    /*background-color: var(--rule-color);*/
+    background-color: var(--form-button-hover-color);
+
 }
 
 .tag-editor--button-image:hover:active {
     background-color: var(--page-header-background-color);
 }
+
+
+/*
+.form-button
+{
+    background-color: var(--form-button-background-color);
+    border: 1ps solid var(--active-border-color);
+    border-radius: 4px;
+    box-shadow: inset 0 1px var(--form-button-box-shadow-color);
+    box-sizing: border-box;
+    color: var(--form-button-color);
+    cursor: default;
+    display: inline-block;
+    font: inherit;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    line-height: 1.688rem;
+    overflow: hidden;
+    !*padding: 0 .875rem;*!
+    padding: 0.2rem 0.875rem 0 0.875rem;
+    position: relative;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px var(--form-button-text-shadow-color);
+    vertical-align: center;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.form-button:hover
+{
+    background-color: var(--form-button-hover-color);
+}
+
+.form-button:focus
+{
+    border: 1px solid var(--active-border-color);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--form-button-focus-box-shadow-color);
+    outline: 0;
+}
+
+.form-button:active
+{
+    border: 1px solid var(--active-border-color);
+    background-color: var(--form-button-active-background-color);
+    box-shadow: inset 0 1px var(--form-button-active-box-shadow-color);
+}
+
+.form-button:disabled
+{
+    opacity: 0.3;
+    cursor: default;
+    pointer-events: none;
+}
+
+*/

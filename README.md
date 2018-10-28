@@ -91,6 +91,26 @@ java -jar target/cwiki.jar
 
  When running for the very first time, there will be a pause of several seconds as the database containing the initial wiki content is created. The program will start a local web server and start up your default web browser to display the initial content of the wiki.
 
+## Running Tests ##
+
+### Prerequisites ###
+
+Just as with running the program, Java 8 or later is required.
+
+Running the tests for ClojureScript requires a little more setup. You must install [SlimerJS](https://slimerjs.org) and a compatible version of [Firefox](https://www.mozilla.org/en-US/firefox/). At the time this is written, I am using SlimerJS version 1.0.0 with Firefox version 59.0b9. This is the last version of Firefox supported by SlimerJS. I don't use it for browsing, just testing.
+
+### From a Terminal ###
+
+To run the tests on the Clojure code:
+
+`lein test`
+
+To run the tests on the ClojureScript code:
+
+`lein test-cljs`
+
+Note that the ClojureScript testing framework will remain active and repeat the tests whenever a change in the source files is detected. You can end it by typing `Ctrl-C`.
+
 ## License ##
 
 This software is licensed under the BSD Simplified 2-Clause License. See the [LICENSE.txt](https://bitbucket.org/David_Clark/cwiki/src/default/LICENSE.txt) file.
