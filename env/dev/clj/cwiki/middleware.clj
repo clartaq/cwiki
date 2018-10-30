@@ -6,7 +6,7 @@
             [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.reload :refer [wrap-reload]]))
 
-(println "wrapping dev middleware")
+;(println "wrapping dev middleware")
 
 (def backend (backends/session))
 
