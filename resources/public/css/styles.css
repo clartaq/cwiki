@@ -739,7 +739,6 @@ label.cabinet input.file
     letter-spacing: 0;
     line-height: 1.688rem;
     overflow: hidden;
-   /*padding: 0 .875rem;*/
     padding: 0.2rem 0.875rem 0 0.875rem;
     position: relative;
     text-decoration: none;
@@ -845,30 +844,6 @@ tr:hover td
 {
     background: var(--table-row-hover-background-color);
 }
-
-/* The footer. */
-
-/*
-.footer
-{
-    margin: 0;
-    padding: 0;
-    flex: 0 0 auto;
-    font-size: 0.825em;
-    color: var(--footer-color);
-    background-color: var(--footer-background-color);
-}
-
-.footer-wrapper
-{
-    margin: 0;
-    padding: 1em 0.5em 0;
-    line-height: 0;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-*/
 
 /* Block quote-related selectors. */
 
@@ -1096,7 +1071,10 @@ div.one-column-list li
 .outer-editor-container
 {
     display: flex;
+    flex: 1;
     height: 100%;
+    padding: 0.5em 0.5em 0.5em 1.5em;
+    border-left: 1px solid var(--rule-color);
 }
 
 .editor-form
@@ -1169,7 +1147,7 @@ div.one-column-list li
 
 .mde-form-title-field {
     width: 98%;
-    font-size: 0.9rem;
+    font-size: 1rem;
     padding-top: 0.2rem;
     padding-left: 0.1rem;
     padding-bottom: 0.3rem;
@@ -1260,24 +1238,18 @@ div.one-column-list li
     margin-top: 0.75rem;
 }
 
-/* Experimental tag editor stuff. */
+/* Stuff for the new tag editor. */
 
 .tag-editor--container {
     display: flex;
     flex-direction: column;
 
     width: 50%;
-
-    /*
-    border: 1px black solid;
-    background-color: bisque;
-    */
 }
 
 .tag-editor--label {
     background-color: var(--form-label-background);
     color: var(--form-label-color);
-   /* margin-top: 2rem;*/
     font-size: 1.1rem;
     font-weight: bold;
 }
@@ -1288,57 +1260,57 @@ div.one-column-list li
     flex-wrap: wrap;
     margin: 0;
     padding: 0.1rem 0 0 0.1rem;
-
-    /*
-    border: 1px solid black;
-    background-color: white;
-    */
 }
 
 .tag-editor--composite-lozenge {
     display: flex;
     flex-flow: row;
-    flex: 0 1 min-content;
 
     margin-right: 0.5rem;
 }
 
 .tag-editor--name-input {
-    flex: 1 1 auto;
+    flex: 1;
 
     margin-bottom: 0.5rem;
-    margin-right: 0.2rem;
+    margin-right: 0;
     padding-top: 0.15rem;
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 
     font-family: var(--tag-font-family);
     font-size: 1rem;
-    font-weight: normal; /*600;*/
+    font-weight: normal;
     letter-spacing: 0;
     line-height: 1.2rem;
 
     color: var(--form-button-color);
-    background-color: var(--form-button-background-color);
-    cursor: text;
     text-decoration: none;
     text-overflow: ellipsis;
     vertical-align: center;
     text-align: center;
+    border: 1px solid var(--active-border-color);
 
+    cursor: text;
     pointer-events: auto;
 }
 
-.tag-editor--name-input:focus {
-    border: 1px solid green; /*var(--active-border-color);*/
-    /*box-shadow: *inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--form-button-focus-box-shadow-color);*/
-    outline: 0
+.tag-editor--name-input:not(:first-child) {
+    border-left: 0;
 }
 
-.tag-editor--name-input:active {
-    border: 1px solid blue; /*var(--active-border-color);*/
-    background-color: var(--form-button-active-background-color);
-   /* box-shadow: inset 0 1px var(--form-button-active-box-shadow-color);*/
+.tag-editor--name-input:not(:last-child) {
+    border-right: 0;
+}
+
+.tag-editor--name-input:focus {
+    box-shadow: inset 0 0 10px var(--search-submit-focus-box-shadow-color);
+    background: var(--form-button-text-shadow-color);
+    outline: none;
+}
+
+.tag-editor--name-input:focus:hover {
+   background-color: var(--form-button-text-shadow-color);
 }
 
 .tag-editor--delete-button {
@@ -1351,37 +1323,30 @@ div.one-column-list li
 }
 
 .tag-editor--button-image {
-    flex: 1 0 auto;
-
     vertical-align: baseline;
-    width: 1.5rem;
-    max-width: 1.5rem;
-    height: 1.5rem;
-    max-height: 1.5rem;
+    width: 1.55rem;
+    max-width: 1.55rem;
+    height: 1.55rem;
+    max-height: 1.55rem;
     margin-right: 0.5rem;
 
     pointer-events: auto;
 
-    /*
-    background-color: transparent;
-    border: 1px black solid;
-    border-top-right-radius: 0.75rem;
-    border-bottom-right-radius: 0.75rem;
-    */
-
     border: 1px solid var(--active-border-color);
     background-color: var(--form-button-background-color);
-    /*border: 1px white solid;*/
-    /*
-    border-top-right-radius: 0.75rem;
-    border-bottom-right-radius: 0.75rem;
-    */
-    border-radius: 50%;
+}
+
+.tag-editor--name-input:first-child,
+.tag-editor--button-image:first-child {
+    border-radius: 2px 0 0 2px;
+}
+
+.tag-editor--name-input:last-child,
+.tag-editor--button-image:last-child {
+    border-radius: 0 2px 2px 0;
 }
 
 .tag-editor--button-image:hover, .tag-editor--name-input:hover {
-    fill: #00b0e8;
-    /*background-color: var(--rule-color);*/
     background-color: var(--form-button-hover-color);
 
 }
@@ -1389,60 +1354,3 @@ div.one-column-list li
 .tag-editor--button-image:hover:active {
     background-color: var(--page-header-background-color);
 }
-
-
-/*
-.form-button
-{
-    background-color: var(--form-button-background-color);
-    border: 1ps solid var(--active-border-color);
-    border-radius: 4px;
-    box-shadow: inset 0 1px var(--form-button-box-shadow-color);
-    box-sizing: border-box;
-    color: var(--form-button-color);
-    cursor: default;
-    display: inline-block;
-    font: inherit;
-    font-size: 1.1rem;
-    font-weight: 600;
-    letter-spacing: 0;
-    line-height: 1.688rem;
-    overflow: hidden;
-    !*padding: 0 .875rem;*!
-    padding: 0.2rem 0.875rem 0 0.875rem;
-    position: relative;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    text-shadow: 0 1px var(--form-button-text-shadow-color);
-    vertical-align: center;
-    text-align: center;
-    white-space: nowrap;
-}
-
-.form-button:hover
-{
-    background-color: var(--form-button-hover-color);
-}
-
-.form-button:focus
-{
-    border: 1px solid var(--active-border-color);
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--form-button-focus-box-shadow-color);
-    outline: 0;
-}
-
-.form-button:active
-{
-    border: 1px solid var(--active-border-color);
-    background-color: var(--form-button-active-background-color);
-    box-shadow: inset 0 1px var(--form-button-active-box-shadow-color);
-}
-
-.form-button:disabled
-{
-    opacity: 0.3;
-    cursor: default;
-    pointer-events: none;
-}
-
-*/

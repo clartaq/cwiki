@@ -1,7 +1,7 @@
-;;;
-;;; This is the MDE Markdown editor, such as it is, derived from
-;;; Carmen La's Reagent Markdown Editor in Reagent Recipes.
-;;;
+;;;;
+;;;; This is the MDE Markdown editor, such as it is, derived from
+;;;; Carmen La's Reagent Markdown Editor in Reagent Recipes.
+;;;;
 
 (ns cwiki-mde.core
   (:require [clojure.string :refer [blank?]]
@@ -12,20 +12,20 @@
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
 
-;-------------------------------------------------------------------------------
-; Global variables.
-;
+;;;-----------------------------------------------------------------------------
+;;; Global variables.
+;;;
 
-; The global page map is set when the server sends it over. It is used when
-; setting up the innner editor container.
+;; The global page map is set when the server sends it over. It is used when
+;; setting up the innner editor container.
 (def ^{:private true} glbl-page-map (r/atom nil))
 
-; The delay-handle stores the handle to the autosave countdown timer.
+;; The delay-handle stores the handle to the autosave countdown timer.
 (def ^{:private true} glbl-delay-handle (atom nil))
 
-;-------------------------------------------------------------------------------
-; Websocket message handlers to work with the server.
-;
+;;;-----------------------------------------------------------------------------
+;;; Websocket message handlers to work with the server.
+;;;
 
 (defn doc-save-fn
   "Send a message to the server to save the document."
@@ -51,22 +51,25 @@
   (let [message-id (first ?data)]
     (tracef "editor-message-handler: message-id: %s" message-id)
     (cond
-      (= message-id :hey-editor/here-is-the-document) (when-let [page-map (second ?data)]
-                                                        (tracef "editor-message-handler: the-data: %s"
-                                                                (with-out-str
-                                                                  (pprint/pprint page-map)))
-                                                        ; This is where the global page map is set.
-                                                        (reset! glbl-page-map page-map))
-      (= message-id :hey-editor/shutdown-after-save) (when-let [new-location (str "/" (second ?data))]
-                                                       (tracef "The new location is: %s" new-location)
-                                                       (ws/stop-router!)
-                                                       (.replace js/location new-location))
-      (= message-id :hey-editor/shutdown-after-cancel) (do (ws/stop-router!)
-                                                           (.replace js/location (.-referrer js/document))))))
+      (= message-id
+         :hey-editor/here-is-the-document) (when-let [page-map (second ?data)]
+                                             (tracef "editor-message-handler: the-data: %s"
+                                                     (with-out-str
+                                                       (pprint/pprint page-map)))
+                                             ; This is where the global page map is set.
+                                             (reset! glbl-page-map page-map))
+      (= message-id
+         :hey-editor/shutdown-after-save) (when-let [new-location (str "/" (second ?data))]
+                                            (tracef "The new location is: %s" new-location)
+                                            (ws/stop-router!)
+                                            (.replace js/location new-location))
+      (= message-id
+         :hey-editor/shutdown-after-cancel) (do (ws/stop-router!)
+                                                (.replace js/location (.-referrer js/document))))))
 
-;-------------------------------------------------------------------------------
-; Auto-save-related functions.
-;
+;;;-----------------------------------------------------------------------------
+;;; Auto-save-related functions.
+;;;
 
 (defn clear-autosave-delay! []
   "Clear the autosave countdown timer."
@@ -88,9 +91,9 @@
       (clear-autosave-delay!)
       (restart-autosave-delay! the-save-fn delay))))
 
-;-------------------------------------------------------------------------------
-; The editor components.
-;
+;;;-----------------------------------------------------------------------------
+;;; The editor components.
+;;;
 
 (defn layout-button-bar
   "Layout the editor button bar."
@@ -115,45 +118,6 @@
             :onClick #(do
                         (trace "Saw Click on the Cancel Button!")
                         (ws/send-message! [:hey-server/cancel-editing]))}]])
-
-;(defn tag-change-listener
-;  "Return a new change listener for the specified tag."
-;  [tags-vector-atom n single-tag-atom options]
-;  (fn [arg]
-;    (let [new-tag (-> arg .-target .-value)]
-;      (reset! single-tag-atom new-tag)
-;      (notify-autosave options)
-;      (if (blank? new-tag)
-;        ; User deleted a tag.
-;        (let [old-tag-vec @tags-vector-atom
-;              new-vec (vec (concat (subvec old-tag-vec 0 n)
-;                                   (subvec old-tag-vec (inc n))))]
-;          (reset! tags-vector-atom new-vec))
-;        (swap! tags-vector-atom assoc n new-tag))
-;      (when (:send-every-keystroke options)
-;        (ws/send-message! [:hey-server/tags-updated
-;                           {:data @tags-vector-atom}])))))
-
-;(defn layout-tag-input-element
-;  "Layo out a single tag input element."
-;  [tags-vector-atom n options]
-;  (fn [tags-vector-atom]
-;    (let [tag-of-interest (r/atom (nth @tags-vector-atom n ""))]
-;      [:input {:type        "text"
-;               :class       "mde-tag-text-field"
-;               :placeholder (str "Tag #" (+ 1 n))
-;               :value       @tag-of-interest
-;               :on-change   (tag-change-listener tags-vector-atom n
-;                                                 tag-of-interest options)}])))
-
-;(defn layout-tags-editor
-;  "Lay out the inputs for all of the tags."
-;  [tags-atom options]
-;  [:section {:class "tag-edit-container tag-edition-section"}
-;   [:label {:class "tag-edit-label"} "Tags"]
-;   [:div {:class "mde-tag-edit-list" :id "mde-tag-edit-list"}
-;    (for [n (range 10)]
-;      ^{:key (str "tag-" n)} [layout-tag-input-element tags-atom n options])]])
 
 (defn layout-title-editor
   "Lay out the title editing control and return the layout."
@@ -190,8 +154,6 @@
   [:header {:class "editor-header"}
    [layout-button-bar options]
    [layout-title-editor title-atom options]
-   ;[layout-tags-editor tags-atom-vector options]
-   ;(println "(type @tags-atom-vector): " (type @tags-atom-vector))
    [te/layout-tag-list tags-atom-vector options]
    [:div {:class "mde-content-label-div"}
     [:label {:class "form-label"
@@ -269,7 +231,6 @@
   (when @page-map-atom
     (let [pm @page-map-atom
           title-atom (r/atom (:page_title pm))
-          ; The tags are Reactive, but NOT the tag vector.
           tags-atom-vector (r/atom (:tags pm))
           content-atom (r/atom (:page_content pm))
           options (:options pm)]

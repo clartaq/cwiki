@@ -1,28 +1,11 @@
+;;;;
+;;;; This is the tag editor component for the CWiki editor.
+;;;;
+
 (ns cwiki-mde.tag-editor
   (:require [clojure.string :refer [blank?]]
             [reagent.core :as r]
             [cwiki-mde.ws :as ws]))
-
-;-------------------------------------------------------------------------------
-; Basic operations on the set of tags.
-
-(defn add-new-tag-to-set
-  [set-atom new-tag]
-  (swap! set-atom conj new-tag))
-
-(defn remove-tag-from-set
-  [set-atom tag]
-  (swap! set-atom disj tag))
-
-(defn replace-tag-in-set
-  [set-atom old-tag new-tag]
-  (when (contains? @set-atom old-tag)
-    (let [reduced-set-atom (atom (remove-tag-from-set set-atom old-tag))]
-      (add-new-tag-to-set reduced-set-atom new-tag))))
-
-(defn add-new-tag
-  [tag]
-  (println "Adding tag: " tag))
 
 (defn tag-num->id
   [num]
@@ -44,8 +27,9 @@
 (defn layout-add-tag-button
   "Return a button to initiate adding a tag."
   [tags-vector-atom]
+  (fn [tags-vector-atom]
   [:span [:svg {:class    "tag-editor--add-button tag-editor--button-image"
-                :on-click #(swap! tags-vector-atom conj "A New Tag")}]])
+                :on-click #(swap! tags-vector-atom conj "A New Tag")}]]))
 
 (defn resize-tag-input
   [tag-id]
@@ -53,12 +37,6 @@
     (when target
       (.setAttribute target "size" (-> target .-value .-length))
       (.setAttribute target "style" "width:auto"))))
-
-(defn on-key-up-listener
-  []
-  (fn [arg]
-    (when (= 13 (.-keyCode arg))
-      (resize-tag-input (-> arg .-target .-id)))))
 
 (defn tag-change-listener
   "Return a new change listener for the specified tag."
@@ -89,7 +67,6 @@
                :class     "tag-editor--name-input"
                :id        tag-id
                :value     @tag-of-interest
-               ;:on-key-up (on-key-up-listener)
                :on-focus  #(resize-tag-input tag-id)
                :on-blur   #(resize-tag-input tag-id)
                :on-change (tag-change-listener tags-vector-atom n
@@ -105,9 +82,10 @@
 (defn layout-tag-list
   [tags-vector-atom options]
   [:section.tag-editor--container
-   [:label.tag-editor--label "Tags"]
+   [:label.tag-editor--label {:for "tag-list"} "Tags"]
+   [:form {:name "tag-list"}
    [:div.tag-editor--list
     (for [n (range (count @tags-vector-atom))]
       ^{:key (str "tag-bl-" n)}
       [layout-tag-composite-lozenge tags-vector-atom n options])
-    [layout-add-tag-button tags-vector-atom]]])
+    [layout-add-tag-button tags-vector-atom]]]])
