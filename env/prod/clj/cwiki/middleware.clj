@@ -6,7 +6,7 @@
             [ring.middleware.file-info :refer [wrap-file-info]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]))
 
-(println "wrapping production middleware")
+;(println "wrapping production middleware")
 
 (defn wrap-middleware [handler]
   ; Have to have this for the uberjar to start on a virgin system.
