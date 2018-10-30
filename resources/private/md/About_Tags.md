@@ -2,12 +2,13 @@
 author: CWiki
 title: About Tags
 date: 2018-01-22T17:45:17.000-05:00
-modified: 2018-06-19T10:40:46.264-04:00
+modified: 2018-10-30T10:34:44.269-04:00
 tags:
   - about
   - help
   - tags
 ---
+
 
 ​
 Tags are a convenience that lets you classify your information in some (hopefully) systematic way. They are just words or short phrases that you can associate with a page.
@@ -32,5 +33,5 @@ Some of the characteristics of tags include:
 
 - Tags are always associated with at least one page.
 - Tags may be of any length up to limits imposed by the operating system and hardware.  Theoretically, they could be billions of characters long.
-- There is no theoretical limit on the number of tags associated with a page. However, due to limitations in the editing capabilities of CWiki, you can only enter 10. This may change in the future.
+- There is no theoretical limit on the number of tags associated with a page. However, problems may occur if you add enough tags to push the editing area for the main page content below the bottom of the browser window and out of view​.
 - The contents of a tag, the characters making it up, are [UTF-16](https://en.wikipedia.org/wiki/UTF-16). This means you can use just about any symbol in any language in the world. This has not been thoroughly tested though.

@@ -6,8 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] ##
+### Added ###
+### Changed ###
 
-##[0.1.1] - 2018-10-16
+- The marquee item in this release is the new handling of tags in the page editor. Much more flexible and inuitive. It also removes the artificial limit on the number of tags that can be associated with a page.
+
+### Fixed ###
+
+## [0.1.1] - 2018-10-16 ##
 ### Added ###
 - CWiki now has a favicon.
 
