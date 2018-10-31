@@ -77,7 +77,6 @@ url("/public/fonts/STIX2Math.woff2") format("woff2"),
 
 html, body
 {
-    /*font-size: 15px; /*1em;*/
     height: 100%;
 }
 
@@ -242,25 +241,12 @@ body
     position: relative;
 }
 
-/* All of the visible content is held within a page div. */
-
-/*
-.page
-{
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-}
-*/
-
 /* The pieces of the page header. */
 
 .page-header
 {
     margin: 0;
     padding: 0 1em;
-    /*flex: none;*/
-    /*flex: 0 0 auto;*/
     background-color: var(--page-header-background-color);
 }
 
@@ -578,28 +564,6 @@ inside another flexbox. */
     margin-right: 0.5em;
 }
 
-/*
-input#new-tag-button
-{
-    !* For placing svg images on buttons. *!
-    !*!/http://paulabrown.net/search-button-png-210.png);*!
-    !*height: 89px; !*!!* height of image*!
-    !*max-height: 89px;*!
-    !*   width: 24px; !*!!* width of image*!
-    !* max-width: 89px;*!
-    width: 29%;
-    padding: 0;
-    border: none;
-    !*!/ get rid of grey border*!
-    color: transparent;
-    !*!/ hide the text (without indenting it to hell)*!
-    background: transparent url(/public/img/shrunken-a9c6c9-add-circular-button.svg) no-repeat;
-    outline: none;
-    display: block;
-    !*!/ Ensure block element to apply this to inline-elements*!;
-}
-*/
-
 /* Forms */
 
 .form-title
@@ -705,31 +669,6 @@ input#new-tag-button
     font-size: 1rem;
     padding-top: 0.2rem;
     padding-bottom: 0.3rem;
-}
-
-/*
-  Special cases for the "file" input element.
- */
-
-label.cabinet
-{
-    width: 79px;
-    height: 22px;
-    background: url(/public/img/shrunken-a9c6c9-search.svg) 0 0 no-repeat;
-    display: block;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-label.cabinet input.file
-{
-    font-size: 16px;
-    position: relative;
-    height: 100%;
-    width: auto;
-    opacity: 0;
-    -moz-opacity: 0;
-    filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
 }
 
 /*
@@ -1091,15 +1030,6 @@ div.one-column-list li
 }
 
 /*
-.editor-form
-{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-*/
-
-/*
 ** The mde container is a column with the toolbar, if present, across the
 ** top and the editor and preview in a row below it.
  */
@@ -1114,46 +1044,7 @@ div.one-column-list li
 }
 
 .editor-header {
-    /*flex: none;*/
 }
-
-/*
-** The toolbar, if present, takes up all of the width across the top
-** of the editor and preview pane.
- */
-
-/*
-.mde-toolbar-class {
-    !* Put the child buttons in a row. *!
-    display: flex;
-    flex-direction: row;
-    padding: 5px;
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.mde-toolbar-button {
-    font-size: 0.9em;
-    background-color: transparent;
-    min-width: 20px;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
-}
-
-.mde-toolbar-button:hover {
-    background-color: #333333;
-    color: white;
-}
-
-.mde-toolbar-button:active {
-    background-color: #f0f0f0;
-    color: #000;
-}
-
-.mde-toolbar-button-selected {
-    background-color: #e0e0e0;
-}
-*/
 
 .mde-title-edit-section {
     margin-bottom: 1rem;
@@ -1223,26 +1114,6 @@ div.one-column-list li
     line-height: 1.8rem;
     padding-left: 10px;
     padding-right: 10px;
-}
-
-/*
-** Tag area styling.
- */
-
-.mde-tag-edit-list {
-    display: flex;
-    flex-wrap: wrap;
-    width: 50%;
-    margin: -0.1rem 0 0 -0.1rem;
-}
-
-.mde-tag-text-field {
-    font-size: 0.8rem;
-    padding-top: 0.2rem;
-    padding-left: 0.1rem;
-    padding-bottom: 0.1rem;
-    margin: 0.1rem 0 0 0.1rem;
-    width: calc(100% * (1/5) - 0.1rem - 6px);
 }
 
 /*
