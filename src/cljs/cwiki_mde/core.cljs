@@ -127,6 +127,7 @@
         inp (merge ro
                    {:type      "text"
                     :class     "mde-form-title-field"
+                    :id        "mde-form-title-field-id"
                     :name      "page-title"
                     :value     (if-let [title @title-atom]
                                  (do

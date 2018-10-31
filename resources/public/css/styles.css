@@ -220,8 +220,17 @@ small
     font-size: 0.833rem;
 }
 
+/*
+** Had to move the contents of the previously existing "page" class to
+** the body because the editor did not include the "page" class and
+** scrolled weirdly as a result.
+ */
 body
 {
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+
     padding: 0.15rem;
     font-family: var(--body-font-family);
     font-weight: normal;
@@ -235,12 +244,14 @@ body
 
 /* All of the visible content is held within a page div. */
 
+/*
 .page
 {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
 }
+*/
 
 /* The pieces of the page header. */
 
@@ -447,8 +458,8 @@ inside another flexbox. */
 
 .left-aside
 {
-    padding: 1.5em;
     flex: 0 0 10em;
+    padding: 1.5em;
     overflow: auto;
 }
 
@@ -567,25 +578,27 @@ inside another flexbox. */
     margin-right: 0.5em;
 }
 
+/*
 input#new-tag-button
 {
-    /* For placing svg images on buttons. */
-    /*//http://paulabrown.net/search-button-png-210.png);*/
-    /*height: 89px; /*//* height of image*/
-    /*max-height: 89px;*/
-    /*   width: 24px; /*//* width of image*/
-    /* max-width: 89px;*/
+    !* For placing svg images on buttons. *!
+    !*!/http://paulabrown.net/search-button-png-210.png);*!
+    !*height: 89px; !*!!* height of image*!
+    !*max-height: 89px;*!
+    !*   width: 24px; !*!!* width of image*!
+    !* max-width: 89px;*!
     width: 29%;
     padding: 0;
     border: none;
-    /*// get rid of grey border*/
+    !*!/ get rid of grey border*!
     color: transparent;
-    /*// hide the text (without indenting it to hell)*/
+    !*!/ hide the text (without indenting it to hell)*!
     background: transparent url(/public/img/shrunken-a9c6c9-add-circular-button.svg) no-repeat;
     outline: none;
     display: block;
-    /*// Ensure block element to apply this to inline-elements*/;
+    !*!/ Ensure block element to apply this to inline-elements*!;
 }
+*/
 
 /* Forms */
 
@@ -1077,12 +1090,14 @@ div.one-column-list li
     border-left: 1px solid var(--rule-color);
 }
 
+/*
 .editor-form
 {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
+*/
 
 /*
 ** The mde container is a column with the toolbar, if present, across the
@@ -1099,7 +1114,7 @@ div.one-column-list li
 }
 
 .editor-header {
-    flex: none;
+    /*flex: none;*/
 }
 
 /*
