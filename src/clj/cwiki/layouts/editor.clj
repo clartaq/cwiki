@@ -60,7 +60,7 @@
     (html5
       {:ng-app "CWiki" :lang "en"}
       (base/standard-head (get-post-map-for-editing) :editor-highlighter)
-      [:body {:class "page-container"}
+      [:body {:class "page"}
        (base/wiki-header-component post-map req {:editing true})
        (sidebar-and-editor
          (base/sidebar-aside req)
