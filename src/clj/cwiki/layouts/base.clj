@@ -459,9 +459,8 @@
                 [:label {:class "form-label"
                          :for   "filename"} "Select the file to Import"]]
                [:p "First select a file to import, then press the \"Import\" button."]
-               [:label                                      ;{:class "cabinet"}
+               [:label
                 [:input {:type   "file"
-                         ; :class  "file"
                          :id     "file-info"
                          :name   "file-info"
                          :accept ".txt,.md"}]]]
