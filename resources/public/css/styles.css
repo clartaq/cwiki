@@ -69,6 +69,26 @@ url("/public/fonts/STIX2Math.woff2") format("woff2"),
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/*
+** Ubuntu Mono makes a nice editing font.
+ */
+/* latin-ext */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Ubuntu Mono'), local('UbuntuMono-Regular'), url(https://fonts.gstatic.com/s/ubuntumono/v7/KFOjCneDtsqEr0keqCMhbCc0CsTYl4BOQ3o.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+    font-family: 'Ubuntu Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Ubuntu Mono'), local('UbuntuMono-Regular'), url(https://fonts.gstatic.com/s/ubuntumono/v7/KFOjCneDtsqEr0keqCMhbCc6CsTYl4BO.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 *
 {
     margin: 0;
@@ -150,7 +170,7 @@ html, body
     /* Fonts. */
     --headline-font-family: "Century Gothic", Muli, "Segoe UI", Arial, sans-serif;
     --body-font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
-    --fixed-font-family: Consolas, Menlo, Monaco, "Lucida Console",
+    --fixed-font-family: Consolas, "Ubuntu Mono", Menlo, Monaco, "Lucida Console",
     "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
     "Courier New", monospace, serif;
     --form-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
@@ -1081,14 +1101,16 @@ div.one-column-list li
 ** The editor uses the default font for text areas.
  */
 .editor-textarea {
+
+    font-family: var(--fixed-font-family);
     box-sizing: border-box;
     height: 100%;
     width: 100%;
     resize: none;
     overflow-y: scroll;
 
-    font-size: 1.3rem;
-    line-height: 1.8rem;
+    font-size: 1.2rem;
+    line-height: 1.6rem;
     border: none;
     outline: none;
 
@@ -1200,12 +1222,12 @@ div.one-column-list li
 }
 
 .tag-editor--delete-button {
-    background-image: url('../img/shrunken-a9c6c9-close-cross-circular-button.svg');
+    background-image: url('../img/shrunken-454545-close-cross-circular-button.svg');
 }
 
 .tag-editor--add-button {
     margin-left: 1rem;
-    background-image: url('../img/shrunken-a9c6c9-add-circular-button.svg');
+    background-image: url('../img/shrunken-454545-add-circular-button.svg');
 }
 
 .tag-editor--button-image {
