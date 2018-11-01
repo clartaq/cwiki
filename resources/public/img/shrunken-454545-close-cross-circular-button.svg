@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   version="1.1"
+   viewBox="0 0 25 25"
+   id="svg4618"
+   sodipodi:docname="shrunken-454545-close-cross-circular-button.svg"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06">
+  <defs
+     id="defs4622" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1734"
+     inkscape:window-height="1032"
+     id="namedview4620"
+     showgrid="false"
+     inkscape:zoom="26.700352"
+     inkscape:cx="5.7959685"
+     inkscape:cy="12.5"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg4618" />
+  <metadata
+     id="metadata4606">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <style
+     id="style4608">.a{fill:#a9c6c9;stroke:#a9c6c9;}</style>
+  <g
+     class="a"
+     transform="matrix(.26891 0 0 .26743 .69471 .80344)"
+     fill="#a9c6c9"
+     stroke="#a9c6c9"
+     id="g4616"
+     style="fill:#454545;fill-opacity:1;stroke:#454545;stroke-opacity:1">
+    <g
+       class="a"
+       fill="#a9c6c9"
+       stroke="#a9c6c9"
+       id="g4614"
+       style="fill:#454545;fill-opacity:1;stroke:#454545;stroke-opacity:1">
+      <g
+         class="a"
+         fill="#a9c6c9"
+         stroke="#a9c6c9"
+         id="g4612"
+         style="fill:#454545;fill-opacity:1;stroke:#454545;stroke-opacity:1">
+        <path
+           class="a"
+           d="m43.9 0c-24.2 0-43.9 19.7-43.9 43.9s19.7 43.9 43.9 43.9 43.9-19.7 43.9-43.9c0.1-24.2-19.6-43.9-43.9-43.9zm0 79.9c-19.8 0-35.9-16.1-35.9-35.9s16.1-35.9 35.9-35.9 35.9 16.1 35.9 35.9c0.1 19.7-16.1 35.9-35.9 35.9zm14.1-44.2-5.6-5.6-8.4 8.4-8.4-8.4-5.6 5.6 8.4 8.4-8.4 8.4 5.6 5.6 8.4-8.4 8.4 8.4 5.6-5.6-8.4-8.4z"
+           fill="#a9c6c9"
+           stroke="#a9c6c9"
+           id="path4610"
+           style="fill:#454545;fill-opacity:1;stroke:#454545;stroke-opacity:1" />
+      </g>
+    </g>
+  </g>
+</svg>
