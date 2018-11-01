@@ -147,9 +147,7 @@
 
        ;; Select the title editor and put the cursor at the start.
        :component-did-mount (fn [this]
-                              (println ":component-did-mount: this: " this)
                               (let [elm (.getElementById js/document "mde-form-title-field-id")]
-                                (println "    elm: " elm)
                                 (doto elm
                                   (.focus)
                                   (.setSelectionRange 0 0))))
