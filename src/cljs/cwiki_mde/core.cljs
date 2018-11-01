@@ -142,11 +142,24 @@
                                            (when (:send-every-keystroke options)
                                              (ws/send-message! [:hey-server/title-updated
                                                                 {:data new-title}]))))})]
-    [:section {:class "mde-title-edit-section"}
-     [:div {:class "form-label-div"}
-      [:label {:class "form-label required"
-               :for   "page-title"} "Page Title"]]
-     [:input inp]]))
+    (r/create-class
+      {:display-name        "title-editor"
+
+       ;; Select the title editor and put the cursor at the start.
+       :component-did-mount (fn [this]
+                              (println ":component-did-mount: this: " this)
+                              (let [elm (.getElementById js/document "mde-form-title-field-id")]
+                                (println "    elm: " elm)
+                                (doto elm
+                                  (.focus)
+                                  (.setSelectionRange 0 0))))
+
+       :reagent-render      (fn [title-atom options]
+                              [:section {:class "mde-title-edit-section"}
+                               [:div {:class "form-label-div"}
+                                [:label {:class "form-label required"
+                                         :for   "page-title"} "Page Title"]]
+                               [:input inp]])})))
 
 (defn layout-editor-header
   "Lay out the header section for the editor. Includes the title, tags, and
