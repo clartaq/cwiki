@@ -4,6 +4,8 @@
             [prone.middleware :refer [wrap-exceptions]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]
             [ring.middleware.file :refer [wrap-file]]
+            [ring.middleware.content-type :refer [wrap-content-type]]
+            [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.reload :refer [wrap-reload]]))
 
 ;(println "wrapping dev middleware")
@@ -17,5 +19,7 @@
       ; Makes static assets in $PROJECT_DIR/resources/public/ available.
       (wrap-file "resources")
       ; Content-Type, Content-Length, and Last Modified headers for files in body.
+      (wrap-content-type)
+      (wrap-not-modified)
       (wrap-exceptions)
       (wrap-reload)))
