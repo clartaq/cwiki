@@ -21,15 +21,17 @@
 (defn layout-delete-tag-button
   "Return a button to delete a tag."
   [tags-vector-atom n]
-  [:span [:svg {:class    "tag-editor--delete-button tag-editor--button-image"
-                :on-click #(delete-existing-tag tags-vector-atom n)}]])
+  [:span {:title "Delete this tag"}
+   [:svg {:class    "tag-editor--delete-button tag-editor--button-image"
+          :on-click #(delete-existing-tag tags-vector-atom n)}]])
 
 (defn layout-add-tag-button
   "Return a button to initiate adding a tag."
   [tags-vector-atom]
   (fn [tags-vector-atom]
-  [:span [:svg {:class    "tag-editor--add-button tag-editor--button-image"
-                :on-click #(swap! tags-vector-atom conj "A New Tag")}]]))
+    [:span {:title "Add a new tag"}
+     [:svg {:class    "tag-editor--add-button tag-editor--button-image"
+            :on-click #(swap! tags-vector-atom conj "A New Tag")}]]))
 
 (defn resize-tag-input
   [tag-id]
@@ -84,8 +86,8 @@
   [:section.tag-editor--container
    [:label.tag-editor--label {:for "tag-list"} "Tags"]
    [:form {:name "tag-list"}
-   [:div.tag-editor--list
-    (for [n (range (count @tags-vector-atom))]
-      ^{:key (str "tag-bl-" n)}
-      [layout-tag-composite-lozenge tags-vector-atom n options])
-    [layout-add-tag-button tags-vector-atom]]]])
+    [:div.tag-editor--list
+     (for [n (range (count @tags-vector-atom))]
+       ^{:key (str "tag-bl-" n)}
+       [layout-tag-composite-lozenge tags-vector-atom n options])
+     [layout-add-tag-button tags-vector-atom]]]])
