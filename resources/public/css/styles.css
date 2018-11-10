@@ -33,35 +33,34 @@ url("/public/fonts/STIX2Math.woff2") format("woff2"),
 */
 
 /* latin-ext */
-@font-face
-{
+@font-face {
     font-family: 'Muli';
     font-style: italic;
     font-weight: 700;
     src: local('Muli Bold Italic'), local('Muli-BoldItalic'), url(https://fonts.gstatic.com/s/muli/v11/7Au9p_0qiz-afTf-lCfGw2QIElsO02Ex.woff2) format('woff2');
     unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+
 /* latin */
-@font-face
-{
+@font-face {
     font-family: 'Muli';
     font-style: italic;
     font-weight: 700;
     src: local('Muli Bold Italic'), local('Muli-BoldItalic'), url(https://fonts.gstatic.com/s/muli/v11/7Au9p_0qiz-afTf-lCfGzWQIElsO0w.woff2) format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 /* latin-ext */
-@font-face
-{
+@font-face {
     font-family: 'Muli';
     font-style: normal;
     font-weight: 700;
     src: local('Muli Bold'), local('Muli-Bold'), url(https://fonts.gstatic.com/s/muli/v11/7Au_p_0qiz-adYnjOCv2z24PMFk-0g.woff2) format('woff2');
     unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+
 /* latin */
-@font-face
-{
+@font-face {
     font-family: 'Muli';
     font-style: normal;
     font-weight: 700;
@@ -80,6 +79,7 @@ url("/public/fonts/STIX2Math.woff2") format("woff2"),
     src: local('Ubuntu Mono'), local('UbuntuMono-Regular'), url(https://fonts.gstatic.com/s/ubuntumono/v7/KFOjCneDtsqEr0keqCMhbCc0CsTYl4BOQ3o.woff2) format('woff2');
     unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+
 /* latin */
 @font-face {
     font-family: 'Ubuntu Mono';
@@ -89,19 +89,85 @@ url("/public/fonts/STIX2Math.woff2") format("woff2"),
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-*
-{
+/*
+** This is the icon font. It was created from Font Awesome icons compiled into
+** a custom face by fontello.com. This application does not need all of the
+** font files provided.
+ */
+
+@font-face {
+    font-family: 'cwiki-icons-26px';
+    src: url('/public/fonts/cwiki-icons-26px.woff2?41402764') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.cw-icon:before {
+    content: '\e800';
+}
+
+.ccw-icon:before {
+    content: '\e801';
+}
+
+.bold-icon:before {
+    content: '\e802';
+}
+
+.italic-icon:before {
+    content: '\e803';
+}
+
+.link-icon:before {
+    content: '\e804';
+}
+
+.floppy-icon:before {
+    content: '\e805';
+}
+
+.list-bullet-icon:before {
+    content: '\f0ca';
+}
+
+.list-numbered-icon:before {
+    content: '\f0cb';
+}
+
+.strike-icon:before {
+    content: '\f0cc';
+}
+
+.underline-icon:before {
+    content: '\f0cd';
+}
+
+.quote-left-icon:before {
+    content: '\f10d';
+}
+
+.code-icon:before {
+    content: '\f121';
+}
+
+.header-icon:before {
+    content: '\f1dc';
+}
+
+.question-circle-o-icon:before {
+    content: '\f29c';
+}
+
+* {
     margin: 0;
     padding: 0;
 }
 
-html, body
-{
+html, body {
     height: 100%;
 }
 
-:root
-{
+:root {
     /* Some colors. */
     --heading-background-color: transparent;
     --heading-color: #575757;
@@ -166,6 +232,8 @@ html, body
     --code-highlight-color: #f0f0f0;
     /* For the border around code. */
     --code-border-color: #575757;
+    /* For disabled editor button bar icons.*/
+    --disabled-button-bar-icon-text-color: #acafaf;
 
     /* Fonts. */
     --headline-font-family: "Century Gothic", Muli, "Segoe UI", Arial, sans-serif;
@@ -181,14 +249,13 @@ html, body
     /* Some sizes and spacings. */
     --content-max-width: 70ch;
     --tag-field-right-margin: 0.2rem;
-    --form-component-max-width: calc(0.3*var(--content-max-width));
+    --form-component-max-width: calc(0.3 * var(--content-max-width));
     --tag-field-width: calc((var(--content-max-width)
-    - (4*var(--tag-field-right-margin)))/5);
+    - (4 * var(--tag-field-right-margin))) / 5);
 }
 
 /* Some typography */
-h1, h2, h3, h4, h5, h6
-{
+h1, h2, h3, h4, h5, h6 {
     background-color: var(--heading-background-color);
     color: var(--heading-color);
     font-family: var(--headline-font-family);
@@ -197,15 +264,13 @@ h1, h2, h3, h4, h5, h6
     line-height: 1.3rem;
 }
 
-h1
-{
+h1 {
     font-size: 2.2rem;
     padding-bottom: 0.4rem;
     line-height: 2.5rem;
 }
 
-h2
-{
+h2 {
     font-size: 1.728rem;
     border-bottom: var(--rule-color);
     padding-top: 0.3rem;
@@ -213,29 +278,24 @@ h2
     line-height: 2rem;
 }
 
-h3
-{
+h3 {
     font-size: 1.44rem;
     line-height: 1.6rem;
 }
 
-h4
-{
+h4 {
     font-size: 1.2rem;
 }
 
-h5
-{
+h5 {
     font-size: 0.875rem;
 }
 
-h6
-{
+h6 {
     font-size: 0.85rem;
 }
 
-small
-{
+small {
     font-size: 0.833rem;
 }
 
@@ -244,11 +304,12 @@ small
 ** the body because the editor did not include the "page" class and
 ** scrolled weirdly as a result.
  */
-body
-{
+body {
+    /*
     display: flex;
-    min-height: 100%;
+    height: 100%;
     flex-direction: column;
+    */
 
     padding: 0.15rem;
     font-family: var(--body-font-family);
@@ -261,17 +322,23 @@ body
     position: relative;
 }
 
+/* All of the visible content is held within a page div. */
+
+.page {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
 /* The pieces of the page header. */
 
-.page-header
-{
+.page-header {
     margin: 0;
     padding: 0 1em;
     background-color: var(--page-header-background-color);
 }
 
-.header-wrapper
-{
+.header-wrapper {
     flex: none;
     margin: 0;
     padding: 0.5em 0 0;
@@ -281,15 +348,13 @@ body
     justify-content: space-between;
 }
 
-.left-header-wrapper
-{
+.left-header-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
 
-.brand-title
-{
+.brand-title {
     font-size: 1.5em;
     font-weight: bold;
     line-height: 0.8em;
@@ -298,31 +363,26 @@ body
     padding-bottom: 0;
 }
 
-.brand-sub-title
-{
+.brand-sub-title {
     font-size: 0.8em;
     color: var(--brand-sub-title-color);
     padding-top: 0.8em;
 }
 
-.brand-sub-title > a:link
-{
+.brand-sub-title > a:link {
     color: var(--brand-link-color);
     font-weight: bold;
 }
 
-.brand-sub-title > a:visited
-{
+.brand-sub-title > a:visited {
     color: var(--brand-link-visited-color);
 }
 
-.brand-sub-title > a:hover:active:focus
-{
+.brand-sub-title > a:hover:active:focus {
     text-decoration: underline;
 }
 
-.hmenu
-{
+.hmenu {
     margin: 0;
     padding: 1.5em 0 0;
     display: flex;
@@ -331,8 +391,7 @@ body
     background-color: var(--hmenu-background-color);
 }
 
-.menu-item
-{
+.menu-item {
     font-size: 0.8em;
     font-weight: bold;
     margin: 0;
@@ -342,25 +401,21 @@ body
 
 /* Styles for the "More" dropdown. */
 
-.menu-item ul
-{
+.menu-item ul {
     list-style: none;
     padding: 0;
     margin-left: -2em;
 }
 
-.menu-item > ul > li
-{
+.menu-item > ul > li {
     display: inline-block;
     position: relative;
 }
 
-.menu-item a
-{
+.menu-item a {
 }
 
-.menu-item > ul > li.subNav ul
-{
+.menu-item > ul > li.subNav ul {
     display: none;
     position: absolute;
     top: 100%;
@@ -369,14 +424,12 @@ body
     background: var(--menu-item-subnav-background);
 }
 
-.menu-item ul li.subNav:hover ul
-{
+.menu-item ul li.subNav:hover ul {
     margin-left: -2em;
     display: block;
 }
 
-.menu-item ul li.subNav ul li
-{
+.menu-item ul li.subNav ul li {
     margin-left: 0;
     padding-left: 2em;
     padding-right: 2em;
@@ -385,8 +438,7 @@ body
 
 /* Styles for the search box. */
 
-.search-container
-{
+.search-container {
     margin-top: -0.8rem;
     margin-left: 2rem;
 }
@@ -395,8 +447,7 @@ div.search-container input[type=text] {
     width: 100%;
 }
 
-#search-text
-{
+#search-text {
     font-size: 0.9rem;
     color: var(--search-text-color);
     border: 1px solid var(--active-border-color);
@@ -406,8 +457,7 @@ div.search-container input[type=text] {
     padding: 3px;
 }
 
-#search-submit
-{
+#search-submit {
     font-size: 0.9rem;
     font-weight: bold;
     color: var(--search-submit-color);
@@ -420,30 +470,26 @@ div.search-container input[type=text] {
     margin-left: 3px;
 }
 
-#search-submit:hover
-{
+#search-submit:hover {
     color: var(--search-submit-hover-color);
     background-color: var(--search-submit-hover-background-color);
 }
 
-#search-submit:focus
-{
+#search-submit:focus {
     color: var(--search-submit-focus-color);
     border: 1px solid var(--active-border-color);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--search-submit-focus-box-shadow-color);
     outline: 0;
 }
 
-#search-submit:active
-{
+#search-submit:active {
     color: var(--search-submit-active-color);
     border: 1px solid var(--active-border-color);
     background-color: var(--search-submit-active-background-color);
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.1);
 }
 
-#search-submit:disabled
-{
+#search-submit:disabled {
     color: var(--search-submit-disabled-color);
     opacity: 0.3;
     cursor: default;
@@ -452,8 +498,7 @@ div.search-container input[type=text] {
 
 /* The sidebar and article is itself a flexbox, but also an element
 inside another flexbox. */
-.sidebar-and-article
-{
+.sidebar-and-article {
     flex-basis: auto;
 
     display: flex;
@@ -462,45 +507,38 @@ inside another flexbox. */
     overflow: auto;
 }
 
-.left-aside
-{
+.left-aside {
     flex: 0 0 10em;
     padding: 1.5em;
     overflow: auto;
 }
 
-.left-aside h6
-{
+.left-aside h6 {
     font-size: 0.8em;
     border-bottom: 1px solid var(--rule-color);
 }
 
-.left-aside p
-{
+.left-aside p {
     font-size: 0.85em;
     line-height: 1.4em;
 }
 
-.left-aside li
-{
+.left-aside li {
     font-size: 0.8em;
     list-style-type: none;
     margin-left: 0.5em;
     line-height: 1.4em;
 }
 
-.left-aside li:last-child
-{
+.left-aside li:last-child {
     padding-bottom: 0.5em;
 }
 
-.left-aside li:first-child
-{
+.left-aside li:first-child {
     margin-top: -0.4em;
 }
 
-.page-content
-{
+.page-content {
     padding: 0.5em 0.5em 0.5em 1.5em;
     max-width: var(--content-max-width);
     border-left: 1px solid var(--rule-color);
@@ -511,97 +549,83 @@ inside another flexbox. */
 }
 
 /* The page title and meta info at the top of the page content. */
-.page-title-div
-{
+.page-title-div {
     padding-bottom: 1.2rem;
 }
 
-.page-title-header
-{
+.page-title-header {
     padding-bottom: 1rem;
     margin-top: 1rem;
     margin-bottom: 0;
 }
 
-.author-line
-{
+.author-line {
     text-align: left;
     margin-bottom: -0.3rem;
     font-size: 0.95rem;
     padding-bottom: 0;
 }
 
-.author-header
-{
+.author-header {
     font-weight: bold;
 }
 
-.date-line
-{
+.date-line {
     text-align: left;
     margin-bottom: 0;
     /*-0.3rem;*/
     font-size: 0.95rem;
 }
 
-.date-header
-{
+.date-header {
     font-weight: bold;
 }
 
-.date-text
-{
+.date-text {
 }
 
-.tag-line
-{
+.tag-line {
     text-align: left;
     margin-bottom: -0.3rem;
     font-size: 0.95rem;
 }
 
-.tag-header
-{
+.tag-header {
     font-weight: bold;
 }
 
-.tag-text
-{
+.tag-text {
 }
 
 /* Container for horizontal button bars. */
 
-.button-bar-container
-{
+.button-bar-container {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
+    flex: 1 0 auto;
     margin-top: 2em;
 }
 
-.button-bar-item
-{
+.button-bar-item {
     margin-right: 0.5em;
 }
 
 /* Forms */
 
-.form-title
-{
+.form-title {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--form-title-color);
     margin-top: 1rem;
 }
 
-.form-group
-{
+.form-group {
     margin-bottom: 1rem;
     margin-top: 1rem;
 }
 
-.form-label, .tag-edit-label
-{
+.form-label, .tag-edit-label {
     background-color: var(--form-label-background);
     color: var(--form-label-color);
     margin-top: 2rem;
@@ -609,12 +633,10 @@ inside another flexbox. */
     font-weight: bold;
 }
 
-.form-label-div
-{
+.form-label-div {
 }
 
-.form-title-field
-{
+.form-title-field {
     width: var(--content-max-width);
     font-size: 1rem;
     padding-top: 0.2rem;
@@ -622,8 +644,7 @@ inside another flexbox. */
     padding-bottom: 0.3rem;
 }
 
-.form-text-field, .form-email-field
-{
+.form-text-field, .form-email-field {
     width: var(--form-component-max-width);
     font-size: 1rem;
     padding-top: 0.2rem;
@@ -631,8 +652,7 @@ inside another flexbox. */
     padding-bottom: 0.3rem;
 }
 
-.long-form-text-field
-{
+.long-form-text-field {
     width: var(--content-max-width);
     font-size: 1rem;
     padding-top: 0.2rem;
@@ -640,8 +660,7 @@ inside another flexbox. */
     padding-bottom: 0.3rem;
 }
 
-.tag-text-field
-{
+.tag-text-field {
     font-size: 0.8rem;
     padding-top: 0.1rem;
     padding-left: 0.1rem;
@@ -651,22 +670,19 @@ inside another flexbox. */
     margin-bottom: 0.3rem;
 }
 
-.tag-edit-tag-list
-{
+.tag-edit-tag-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
 
-.form-text-area
-{
+.form-text-area {
     font-size: 1rem;
     padding: 0.2rem 0.1rem 0.3rem;
     flex: 1;
 }
 
-.form-dropdown
-{
+.form-dropdown {
     width: var(--form-component-max-width);
     font-size: 1rem;
     background-color: transparent;
@@ -674,17 +690,14 @@ inside another flexbox. */
     padding-bottom: 0.3rem;
 }
 
-.form-dropdown select
-{
+.form-dropdown select {
 }
 
-.form-dropdown option
-{
+.form-dropdown option {
     font-size: 1rem;
 }
 
-.form-password-field
-{
+.form-password-field {
     width: var(--form-component-max-width);
     font-size: 1rem;
     padding-top: 0.2rem;
@@ -695,10 +708,9 @@ inside another flexbox. */
   This button is derived from the topcoat-button--large from the
   topcoat css collection at topcoat.io.
  */
-.form-button
-{
+.form-button {
     background-color: var(--form-button-background-color);
-    border: 1ps solid var(--active-border-color);
+    border: 1 ps solid var(--active-border-color);
     border-radius: 4px;
     box-shadow: inset 0 1px var(--form-button-box-shadow-color);
     box-sizing: border-box;
@@ -721,62 +733,53 @@ inside another flexbox. */
     white-space: nowrap;
 }
 
-.form-button:hover
-{
+.form-button:hover {
     background-color: var(--form-button-hover-color);
 }
 
-.form-button:focus
-{
+.form-button:focus {
     border: 1px solid var(--active-border-color);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.36), 0 0 0 2px var(--form-button-focus-box-shadow-color);
     outline: 0;
 }
 
-.form-button:active
-{
+.form-button:active {
     border: 1px solid var(--active-border-color);
     background-color: var(--form-button-active-background-color);
     box-shadow: inset 0 1px var(--form-button-active-box-shadow-color);
 }
 
-.form-button:disabled
-{
+.form-button:disabled {
     opacity: 0.3;
     cursor: default;
     pointer-events: none;
 }
 
-.form-restrictions
-{
+.form-restrictions {
     width: 30%;
     font-size: 0.75rem;
     line-height: 1.0rem;
 }
 
-.hint-field
-{
+.hint-field {
     padding-top: 1.0rem;
     font-size: 0.95rem;
     line-height: 1.2rem;
     width: var(--content-max-width);
 }
 
-.required-field-hint
-{
+.required-field-hint {
     font-size: 0.95rem;
 }
 
-.required:after, .required-field-hint:after
-{
+.required:after, .required-field-hint:after {
     content: " *";
     color: var(--required-color);
 }
 
 /* Tables */
 
-table
-{
+table {
     font-size: 0.85em;
     color: var(--table-color);
     border: 1px solid var(--table-border-color);
@@ -784,43 +787,36 @@ table
     margin-bottom: 1em;
 }
 
-thead
-{
+thead {
     border: 1px solid var(--table-header-border-color);
 }
 
-th
-{
+th {
     background-color: var(--table-header-background-color);
     padding: 8px;
     border: 1px solid var(--table-header-border-color);
 }
 
-tbody tr:nth-child(odd)
-{
+tbody tr:nth-child(odd) {
     background-color: var(--table-body-table-row-nth-odd-color);
 }
 
-tr
-{
+tr {
     background-color: var(--table-row-background-color);
 }
 
-td
-{
+td {
     padding: 8px;
     border: 1px solid var(--table-node-border-color);
 }
 
-tr:hover td
-{
+tr:hover td {
     background: var(--table-row-hover-background-color);
 }
 
 /* Block quote-related selectors. */
 
-blockquote
-{
+blockquote {
     font-size: 1.2rem;
     line-height: 1.5em;
     border-left: 3px solid var(--rule-color);
@@ -829,13 +825,11 @@ blockquote
     margin-bottom: 1.4rem;
 }
 
-blockquote p
-{
+blockquote p {
     width: 80%;
 }
 
-blockquote footer
-{
+blockquote footer {
     width: 65%;
     padding-left: 10%;
     font-size: 1.0rem;
@@ -844,13 +838,11 @@ blockquote footer
 
 /* Some miscellaneous, simple elements. */
 
-p
-{
+p {
     margin-bottom: 1em;
 }
 
-hr
-{
+hr {
     height: 0;
     margin: 15px 0;
     overflow: hidden;
@@ -859,67 +851,56 @@ hr
     border-bottom: 1px solid var(--rule-color);
 }
 
-li
-{
+li {
     margin-left: 2em;
 }
 
-li:last-child
-{
+li:last-child {
     padding-bottom: 1em;
 }
 
-li:first-child
-{
+li:first-child {
 }
 
 /* Some link styling. */
 
-a:link
-{
+a:link {
     color: var(--normal-link-color);
     text-decoration: none;
 }
 
-a:focus
-{
+a:focus {
     color: var(--normal-link-color);
     text-decoration: underline;
 }
 
-a:visited
-{
+a:visited {
     color: var(--normal-link-color);
     text-decoration: none;
 }
 
-a:hover
-{
+a:hover {
     color: var(--normal-link-color);
     text-decoration: underline;
 }
 
-a:active
-{
+a:active {
     color: var(--normal-link-color);
     text-decoration: underline;
 }
 
 /* Mark external links with the Wikipedia icon for such. */
-a[href ^= 'http']:not([href *= 'yourdomain.'])
-{
+a[href ^= 'http']:not([href *= 'yourdomain.']) {
     background: transparent url(../img/external_link.svg) no-repeat center right;
     padding-right: 16px;
 }
 
 /* Smart quotes for those fonts where it is available. */
-q
-{
+q {
     quotes: "“" "”";
 }
 
-.menu-item a
-{
+.menu-item a {
     color: var(--menu-item-link-color);
 }
 
@@ -928,8 +909,7 @@ q
 /* Both pre-formatted and code blocks get this treatment. This
    sets up in-line code that is contained in another body of
    text. */
-pre, code
-{
+pre, code {
     border-radius: 5px;
     border: 1px solid var(--code-border-color); /*#BCBEC0;*/
     background-color: var(--code-background-color);
@@ -942,8 +922,7 @@ pre, code
 
 /* Style code blocks that have a pre-formatted ancestor.  This
    sets up code listings. */
-pre code
-{
+pre code {
     border: 0;
     background: transparent;
     font-size: 100%;
@@ -953,8 +932,7 @@ pre code
 
 /* This sets up pre-formatted blocks that are not code listings. */
 
-pre
-{
+pre {
     background-color: var(--code-highlight-color);
     font-size: 85%;
     line-height: 1.4rem;
@@ -964,69 +942,58 @@ pre
 
 /* Styles for building a two-column list page. */
 
-div.two-column-list
-{
+div.two-column-list {
     max-width: var(--content-max-width);
     columns: 2;
     column-gap: 2em;
     column-rule: 1px solid var(--rule-color);
 }
 
-div.two-column-list li
-{
+div.two-column-list li {
     display: inline-block;
     margin-left: 0;
     width: 34ch;
 }
 
-div.one-column-list
-{
+div.one-column-list {
     max-width: var(--content-max-width);
 }
 
-div.one-column-list li
-{
+div.one-column-list li {
     display: inline-block;
     margin-left: 0;
     width: 50ch;
 }
 
 /* Styles for displaying the content of a map. */
-.mp-list
-{
+.mp-list {
     list-style: none;
 }
 
-.mp-key-list
-{
+.mp-key-list {
     list-style: none;
 }
 
-.mp-key-list-item
-{
+.mp-key-list-item {
     list-style: none;
     padding: 0 0.5em 0 0;
     text-align: right;
 }
 
-.mp-val-list
-{
+.mp-val-list {
     list-style: none;
 }
 
-.mp-val-list-item
-{
+.mp-val-list-item {
     padding: 0;
     text-align: left;
 }
 
-.mp-val-list-item:before
-{
+.mp-val-list-item:before {
     content: '\2014 \0000a0 \0000a0';
 }
 
-.map-pair
-{
+.map-pair {
     margin: 0;
     padding: 0;
     display: flex;
@@ -1040,8 +1007,7 @@ div.one-column-list li
 ** there are no ids referenced here.
  */
 
-.outer-editor-container
-{
+.outer-editor-container {
     display: flex;
     flex: 1;
     height: 100%;
@@ -1060,7 +1026,17 @@ div.one-column-list li
     flex-flow: column;
     /* Also makes the embedded textarea use full available height. */
     height: 100%
-    /* border: 1px solid #e0e0e0;*/
+}
+
+.editor-and-button-bar {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+
+    margin-top: 1rem;
+    border: 1px solid var(--active-border-color);;
+    border-radius: 2px;
 }
 
 .editor-header {
@@ -1079,6 +1055,79 @@ div.one-column-list li
     padding-bottom: 0.3rem;
 }
 
+.editor-button-bar {
+    display: flex;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--active-border-color);
+}
+
+.editor-button-bar--left {
+    flex: 1;
+    display: flex;
+    padding-left: 5px;
+}
+
+.editor-button-bar--right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 5px;
+}
+
+.editor-button-bar--gap {
+    width: 1rem;
+    min-width: 1rem;
+}
+
+.editor-button-bar--button {
+    font-size: 1.55rem;
+    cursor: pointer;
+    background-color: var(--form-button-background-color);
+    padding: 0.1rem 0 0.2rem 0.3rem;
+    margin: 5px;
+
+    pointer-events: auto;
+
+    border: none;
+    border-radius: 2px;
+
+    transition: all ease 0.2s;
+}
+
+.editor-button-bar--icon {
+    font-family: "cwiki-icons-26px", sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    margin-right: .2em;
+    text-align: center;
+
+    /* For safety - reset parent styles, that can break glyph codes*/
+    font-variant: normal;
+    text-transform: none;
+
+    /* fix buttons height, for twitter bootstrap */
+    line-height: 1em;
+}
+
+.editor-button-bar--button:disabled, .editor-button-bar--button:hover:disabled {
+    background-color: var(--form-button-background-color);
+    color: var(--disabled-button-bar-icon-text-color);
+}
+
+.editor-button-bar--button:hover {
+    background-color: var(--search-submit-focus-border-color);
+}
+
+.editor-button-bar--button:active {
+    background-color: var(--heading-color);
+}
+
 /* The editor and preview pane are set up in a row. */
 .editor-and-preview-section {
     /* Make this container fill all remaining space in it's parent. */
@@ -1088,13 +1137,17 @@ div.one-column-list li
     height: 100%;
 
     /* This is important to get it to work with Firefox */
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
+    overflow: hidden;
 }
 
 .editor-container {
     flex: 1;
     height: 100%;
-    overflow-y: scroll;
+    padding-left: 10px;
+    padding-right: 10px;
+    /*overflow-y: scroll;*/
+    overflow: hidden;
 }
 
 /*
@@ -1113,9 +1166,6 @@ div.one-column-list li
     line-height: 1.6rem;
     border: none;
     outline: none;
-
-    padding-left: 10px;
-    padding-right: 10px;
 }
 
 /*
@@ -1218,7 +1268,7 @@ div.one-column-list li
 }
 
 .tag-editor--name-input:focus:hover {
-   background-color: var(--form-button-text-shadow-color);
+    background-color: var(--form-button-text-shadow-color);
 }
 
 .tag-editor--delete-button {
@@ -1254,11 +1304,73 @@ div.one-column-list li
     border-radius: 0 2px 2px 0;
 }
 
-.tag-editor--button-image:hover, .tag-editor--name-input:hover {
-    background-color: var(--form-button-hover-color);
+.tag-editor--button-image:hover {
+    background-color: var(--search-submit-focus-border-color);
+}
 
+.tag-editor--name-input:hover {
+    var(--form-button-hover-color);
 }
 
 .tag-editor--button-image:hover:active {
     background-color: var(--page-header-background-color);
+}
+
+/*
+** Popup stuff.
+ */
+
+/* Copied from https://www.w3schools.com/howto/howto_js_popup.asp */
+
+/* Popup container */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
 }
