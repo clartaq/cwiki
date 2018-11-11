@@ -31,6 +31,8 @@
 ;; A flag indicating whether or not the textarea has unsaved changes.
 (def ^{:private true} editor-is-dirty (r/atom nil))
 
+(def ^{:private true} save-has-occurred (r/atom nil))
+
 ;;;-----------------------------------------------------------------------------
 ;;; Utility functions.
 ;;;
@@ -46,6 +48,7 @@
   "Send a message to the server to save the document."
   [page-map]
   (ws/send-message! [:hey-server/save-doc {:data page-map}])
+  (reset! save-has-occurred true)
   (reset! editor-is-dirty nil))
 
 (defn editor-handshake-handler
@@ -357,6 +360,9 @@
             :name    "cancel-button"
             :value   "Cancel"
             :class   "form-button button-bar-item"
+            :style   (if @(:save-has-occurred-atom options) ;save-has-occurred
+                       {:visibility "hidden"}
+                       {:visibility "visible"})
             :onClick #(do
                         (trace "Saw Click on the Cancel Button!")
                         (ws/send-message! [:hey-server/cancel-editing]))}]])
@@ -386,7 +392,8 @@
         (let [final-options (merge {:re-assembler-fn      re-assembler-fn
                                     :doc-save-fn          doc-save-fn
                                     :assemble-and-save-fn assemble-and-save-fn
-                                    :autosave-notifier-fn mark-page-dirty}
+                                    :autosave-notifier-fn mark-page-dirty
+                                    :save-has-occurred-atom save-has-occurred}
                                    options)]
 
           [:div {:class "inner-editor-container"}
