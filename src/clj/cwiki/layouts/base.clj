@@ -143,8 +143,8 @@
    [:meta {:name "theme-color" :content "#ffffff"}]
    (if (or (= (env :profile-type) "development")
            (= (env :profile-type) "test"))
-       (include-css (get-development-css-path))
-       (include-css (get-production-css-path)))
+     (include-css (get-development-css-path))
+     (include-css (get-production-css-path)))
    (when (= which-highlighter :editor-highlighter)
      (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css"))
    (when (= which-highlighter :page-highlighter)
@@ -206,6 +206,10 @@
   ([post-map req options]
    (let [allow-editing (not (:editing options))
          title (db/page-map->title post-map)
+         new-link (and post-map
+                       allow-editing
+                       (ath/can-create? req)
+                       [:a {:href "/New Page"} "New"])
          can-edit-and-delete (ath/can-edit-and-delete? req title)
          edit-link (and post-map
                         allow-editing
@@ -216,8 +220,8 @@
                           can-edit-and-delete
                           (get-delete-link-for-existing-page post-map req))]
      [:nav {:class "hmenu"}
-      (when (ath/can-create? req)
-        (menu-item-span [:a {:href "/New Page"} "New"]))
+      (when new-link
+        (menu-item-span new-link))
       (when edit-link
         (menu-item-span edit-link))
       (when delete-link
