@@ -667,6 +667,8 @@
              (sorted-set-by case-insensitive-comparator) page-ids))))
 
 (defn update-page-title-and-content!
+  "Update the content of an existing page, including page id, tags, and
+  content. Return the post map for the updated page."
   ([id title tag-set content]
    (update-page-title-and-content! id title tag-set content (get-h2-db-spec)))
   ([id title tag-set content db]
@@ -674,7 +676,8 @@
                             :page_content  content
                             :page_modified (dt/sql-now)}
                  ["page_id=?" id])
-   (update-tags-for-page tag-set id db)))
+   (update-tags-for-page tag-set id db)
+   (find-post-by-title title db)))
 
 (defn insert-new-page!
   "Insert a new page into the database given a title, tags and content.
