@@ -5,8 +5,8 @@
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.9.0"]
-                 [org.clojure/clojurescript "1.10.339" :scope "provided"]
-                 [org.clojure/core.async "0.4.474"]
+                 [org.clojure/clojurescript "1.10.439" :scope "provided"]
+                 [org.clojure/core.async "0.4.490"]
                  [org.clojure/java.jdbc "0.7.8"]
 
                  [buddy/buddy-auth "2.1.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
@@ -69,7 +69,7 @@
                                       [figwheel-sidecar "0.5.17" :exclusions [org.clojure/tools.nrepl]]
                                       [prone "1.6.1"]
                                       [ring/ring-mock "0.3.2"]
-                                      [ring/ring-devel "1.7.0"]]
+                                      [ring/ring-devel "1.7.1"]]
 
                        :source-paths ["env/dev/clj"]
 
