@@ -26,12 +26,25 @@
 ;; The id of the save button in the button bar. Used so variout functions
 ;; can disable or enable the button based on when the content of the editor
 ;; is saved or changed.
-(defonce ^{:private true} save-button-id "editor-button-bar--save-button")
+;(defonce ^{:private true} save-button-id "editor-button-bar--save-button")
 
 ;; A flag indicating whether or not the textarea has unsaved changes.
-(def ^{:private true} editor-is-dirty (r/atom nil))
+(def ^{:private true} glbl-editor-is-dirty (r/atom nil))
 
-(def ^{:private true} save-has-occurred (r/atom nil))
+;; Flag indicating that at least one save has occurred. Used to remove the
+;; "Cancel" button.
+;(def ^{:private true} save-has-occurred (atom nil))
+
+;; Flag indicating that it is ok to exit the editor, even if there are
+;; unsaved changes. Used by the "Unsaved Changes" modal dialog to indicate
+;; whether the use wants to exit and lose the changes.
+(def ^{:private true} glbl-ok-to-exit (atom nil))
+
+;; A value set after the first save of a new page. When the page is saved,
+;; the server responds with its database id. This value is used in all
+;; subsequent saves. Not doing so would allow multiple "duplicates" of the
+;; new page to be saved if the user changes page titles between saved.
+(def ^{:private true} glbl-id-for-next-save (atom nil))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Utility functions.
@@ -39,6 +52,41 @@
 
 (defn- get-element-by-id [the-id]
   (.getElementById js/document the-id))
+
+(defn toggle-modal
+  "Toggle the display state of the modal dialog with the given id."
+  [ele-id]
+  (let [close-button (get-element-by-id ele-id)
+        overlay (get-element-by-id "modal-overlay")]
+    (when (and close-button overlay)
+      (.toggle (.-classList close-button) "closed")
+      (.toggle (.-classList overlay) "closed"))))
+
+(defn toggle-unsaved-changes-modal
+  "Toggle the display state of the modal dialog that is shown when there
+  are unsaved changes."
+  []
+  (toggle-modal "unsaved-changes-modal"))
+
+(defn toggle-duplicate-title-modal
+  "Toggle the display state of the modal dialog that is shown when the
+  user is trying to save a new page with a title that duplicates a page
+  already in the wiki."
+  []
+  (toggle-modal "duplicate-title-modal"))
+
+(defn tell-server-to-quit
+  [options]
+  (println "tell-server-to-quit")
+  (let [fxn (:re-assembler-fn options)
+        new-page-map (fxn)
+        page_id (:page_id new-page-map)
+        page_title (:page_title new-page-map)
+        referrer (.-referrer js/document)]
+    (ws/send-message! [:hey-server/quit-editing
+                       {:page-id    page_id
+                        :page-title page_title
+                        :referrer   referrer}])))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Websocket message handlers to work with the server.
@@ -48,8 +96,7 @@
   "Send a message to the server to save the document."
   [page-map]
   (ws/send-message! [:hey-server/save-doc {:data page-map}])
-  (reset! save-has-occurred true)
-  (reset! editor-is-dirty nil))
+  (reset! glbl-editor-is-dirty nil))
 
 (defn editor-handshake-handler
   "Handle the handshake event between the server and client. This function
@@ -78,13 +125,18 @@
                                              ; This is where the global page map is set.
                                              (reset! glbl-page-map page-map))
       (= message-id
-         :hey-editor/shutdown-after-save) (when-let [new-location (str "/" (second ?data))]
-                                            (tracef "The new location is: %s" new-location)
-                                            (ws/stop-router!)
-                                            (.replace js/location new-location))
+         :hey-editor/here-is-the-id) (reset! glbl-id-for-next-save (second ?data))
+
       (= message-id
-         :hey-editor/shutdown-after-cancel) (do (ws/stop-router!)
-                                                (.replace js/location (.-referrer js/document))))))
+         :hey-editor/that-page-already-exists) (do
+                                                 (trace "Saw :hey-editor/that-page-already-exists")
+                                                 (toggle-duplicate-title-modal)
+                                                 (reset! glbl-editor-is-dirty true))
+      (= message-id
+         :hey-editor/shutdown-and-go-to) (when-let [new-location (str "/" (second ?data))]
+                                           (tracef "The new location is: %s" new-location)
+                                           (ws/stop-router!)
+                                           (.replace js/location new-location)))))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Auto-save-related functions.
@@ -114,7 +166,80 @@
   "Mark the page as dirty and reset the autosave timer."
   [options]
   (notify-autosave options)
-  (reset! editor-is-dirty true))
+  (reset! glbl-editor-is-dirty true))
+
+;;;-----------------------------------------------------------------------------
+;;; Dialogs
+;;;
+
+(defn layout-unsaved-changes-warning-dialog
+  "Brings up a modal dialog that informs the user that there are unsaved
+  changes to the page. Asks them what to do before exiting and losing
+  the new work."
+  [options]
+  (let [msg [:p {:class "dialog-message"}
+             "There are unsaved changes on this page. Do you really want "
+             "to quit and lose those changes?"]]
+    [:div {:class "modal closed" :id "unsaved-changes-modal" :role "dialog"}
+     [:header {:class "modal-header"}
+      [:section {:class "modal-header-left"} "Unsaved Changes"]
+      [:section {:class "modal-header-right"}
+       [:input {:type     "button"
+                :class    "form-button"
+                :id       "close-unsaved-dialog-button"
+                :value    "Close"
+                :title    "Close this dialog and return to the editor."
+                :on-click #(do
+                             (reset! glbl-ok-to-exit nil)
+                             (toggle-unsaved-changes-modal))}]]]
+     [:section {:class "modal-guts"} msg]
+     [:div {:class "modal-footer"}
+      [:section {:class "button-bar-container"}
+       [:input {:type     "button"
+                :class    "form-button button-bar-item"
+                :id       "quit-without-saving-button-id"
+                :value    "Yes. Exit without Saving."
+                :title    "Exit without saving changes"
+                :on-click #(do
+                             (reset! glbl-ok-to-exit true)
+                             (toggle-unsaved-changes-modal)
+                             (tell-server-to-quit options))}]
+       [:input {:type     "button"
+                :class    "form-button button-bar-item"
+                :value    "No. Return to the Editor."
+                :title    "Close this dialog and return to the editor"
+                :on-click #(do
+                             (reset! glbl-ok-to-exit nil)
+                             (toggle-unsaved-changes-modal))}]]]]))
+
+(defn layout-duplicate-page-warning-dialog
+  "Notify the user that a page with the same title already exists in the
+  wiki and allow them to return to the editor."
+  []
+  (let [msg [:div
+             [:p {:class "dialog-message"}
+              "There is already a page in the wiki with this title."
+              " Duplicate titles are not allowed."]
+             [:p {:class "dialog-message"}
+              "Return to the editor and change the title before saving."]]]
+    [:div {:class "modal closed" :id "duplicate-title-modal" :role "dialog"}
+     [:header {:class "modal-header"}
+      [:section {:class "modal-header-left"} "Duplicate Title"]
+      [:section {:class "modal-header-right"}
+       [:input {:type     "button"
+                :class    "form-button"
+                :id       "close-duplicate-dialog-button"
+                :value    "Close"
+                :title    "Close this dialog and return to the editor."
+                :on-click #(toggle-duplicate-title-modal)}]]]
+     [:section {:class "modal-guts"} msg]
+     [:div {:class "modal-footer"}
+      [:section {:class "button-bar-container"}
+       [:input {:type     "button"
+                :class    "form-button button-bar-item"
+                :value    "Ok. Return to the Editor."
+                :title    "Close this dialog and return to the editor"
+                :on-click #(toggle-duplicate-title-modal)}]]]]))
 
 ;;;-----------------------------------------------------------------------------
 ;;; The editor components.
@@ -256,10 +381,10 @@
 
     [:button.editor-button-bar--button
      {:title    "Save revised content"
-      :id       save-button-id
-      :on-click #(when @editor-is-dirty
+      :id       "save-button-id"
+      :on-click #(when @glbl-editor-is-dirty
                    ((:assemble-and-save-fn options)))
-      :disabled (not @editor-is-dirty)}
+      :disabled (not @glbl-editor-is-dirty)}
      [:i.editor-button-bar--icon.floppy-icon {:id "floppy-icon"}]]
 
     [:button.editor-button-bar--button.popup
@@ -283,10 +408,10 @@
        :on-change (fn [arg]
                     (let [new-content (-> arg .-target .-value)]
                       (reset! content-atom new-content)
-                      (reset! editor-is-dirty true)
+                      (reset! glbl-editor-is-dirty true)
                       (mark-page-dirty options)
                       (when (:send-every-keystroke options)
-                        (ws/send-message! [:hey-server/saw-a-keystroke-in-content
+                        (ws/send-message! [:hey-server/content-updated
                                            {:data new-content}]))
                       new-content))}]]))
 
@@ -345,27 +470,13 @@
   [options]
   [:section {:class "button-bar-container"}
    [:input {:type    "button"
-            :id      "Save Button"
-            :name    "save-button"
-            :value   "Save Changes"
+            :id      "done-button"
+            :name    "done-button"
+            :value   "Done"
             :class   "form-button button-bar-item"
-            :onClick #(do
-                        (trace "Saw Click on Save Button!")
-                        (ws/send-message! [:hey-server/save-doc-and-quit
-                                           {:data (let [fxn (:re-assembler-fn options)
-                                                        new-page-map (fxn)]
-                                                    new-page-map)}]))}]
-   [:input {:type    "button"
-            :id      "Cancel Button"
-            :name    "cancel-button"
-            :value   "Cancel"
-            :class   "form-button button-bar-item"
-            :style   (if @(:save-has-occurred-atom options) ;save-has-occurred
-                       {:visibility "hidden"}
-                       {:visibility "visible"})
-            :onClick #(do
-                        (trace "Saw Click on the Cancel Button!")
-                        (ws/send-message! [:hey-server/cancel-editing]))}]])
+            :onClick #(if @glbl-editor-is-dirty
+                        (toggle-unsaved-changes-modal)
+                        (tell-server-to-quit options))}]])
 
 (defn layout-inner-editor-container
   "Lays out the section of the wiki page containing the editor, including the
@@ -373,33 +484,38 @@
   side-by-side at the bottom. Returns the layout."
   [page-map-atom]
   (tracef "layout-inner-editor-container: @page-map-atom: " @page-map-atom)
-  (when @page-map-atom
-    (let [pm @page-map-atom
-          title-atom (r/atom (:page_title pm))
-          tags-atom-vector (r/atom (:tags pm))
-          content-atom (r/atom (:page_content pm))
-          options (:options pm)]
-      (letfn [(re-assembler-fn []
-                (let [re-assembled-page-map (merge @page-map-atom
-                                                   {:page_title   @title-atom
-                                                    :tags         @tags-atom-vector
-                                                    :page_content @content-atom})]
-                  re-assembled-page-map))
-              (assemble-and-save-fn []
-                (let [the-doc (re-assembler-fn)
-                      sf doc-save-fn]
-                  (sf the-doc)))]
-        (let [final-options (merge {:re-assembler-fn      re-assembler-fn
-                                    :doc-save-fn          doc-save-fn
-                                    :assemble-and-save-fn assemble-and-save-fn
-                                    :autosave-notifier-fn mark-page-dirty
-                                    :save-has-occurred-atom save-has-occurred}
-                                   options)]
+  (fn []
+    (when @page-map-atom
+      (let [pm @page-map-atom
+            title-atom (r/atom (:page_title pm))
+            tags-atom-vector (r/atom (:tags pm))
+            content-atom (r/atom (:page_content pm))
+            options (:options pm)]
+        (letfn [(re-assembler-fn []
+                  (let [page-map-id (or (:page_id pm) @glbl-id-for-next-save)
+                        re-assembled-page-map (merge @page-map-atom
+                                                     {:page_id      page-map-id
+                                                      :page_title   @title-atom
+                                                      :tags         @tags-atom-vector
+                                                      :page_content @content-atom})]
+                    re-assembled-page-map))
+                (assemble-and-save-fn []
+                  (let [the-doc (re-assembler-fn)
+                        sf doc-save-fn]
+                    (sf the-doc)))]
+          (let [final-options (merge {:re-assembler-fn      re-assembler-fn
+                                      :doc-save-fn          doc-save-fn
+                                      :assemble-and-save-fn assemble-and-save-fn
+                                      :autosave-notifier-fn mark-page-dirty}
+                                     options)]
 
-          [:div {:class "inner-editor-container"}
-           [layout-editor-header title-atom tags-atom-vector final-options]
-           [layout-editor-and-preview-section content-atom final-options]
-           [layout-editor-bottom-button-bar final-options]])))))
+            [:div {:class "inner-editor-container"}
+             [layout-editor-header title-atom tags-atom-vector final-options]
+             [layout-editor-and-preview-section content-atom final-options]
+             [layout-editor-bottom-button-bar final-options]
+             [layout-unsaved-changes-warning-dialog final-options]
+             [layout-duplicate-page-warning-dialog]
+             [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))))
 
 (defn reload []
   (r/render [layout-inner-editor-container glbl-page-map]
