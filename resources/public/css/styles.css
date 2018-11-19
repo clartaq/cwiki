@@ -228,6 +228,11 @@ html, body {
     --menu-item-link-color: #a0e0ff;
     /* For in-line code segments of text. */
     --code-background-color: #f0f0f0;
+    /* Color and transparency for background overlay used during modal
+       dialogs. Same color as --code-background-color (but decimal
+       rgb values) and slightly transparent.
+     */
+    --overlay-color-and-transparency: rgba(240, 240, 240, 0.9);
     /* For code blocks and pre-formatted blocks. */
     --code-highlight-color: #f0f0f0;
     /* For the border around code. */
@@ -327,6 +332,8 @@ body {
 .page {
     display: flex;
     min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
     flex-direction: column;
 }
 
@@ -504,6 +511,8 @@ inside another flexbox. */
     display: flex;
     flex-direction: row;
     height: 100%;
+    width: 100%;
+    max-width: 100%;
     overflow: auto;
 }
 
@@ -717,7 +726,8 @@ inside another flexbox. */
     color: var(--form-button-color);
     cursor: default;
     display: inline-block;
-    font: inherit;
+    /*font: inherit;*/
+    font-family: var(--body-font-family);
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: 0;
@@ -1011,6 +1021,9 @@ div.one-column-list li {
     display: flex;
     flex: 1;
     height: 100%;
+    width: 100%;
+    max-width: 100%;
+
     padding: 0.5em 0.5em 0.5em 1.5em;
     border-left: 1px solid var(--rule-color);
 }
@@ -1025,7 +1038,9 @@ div.one-column-list li {
     display: flex;
     flex-flow: column;
     /* Also makes the embedded textarea use full available height. */
-    height: 100%
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
 }
 
 .editor-and-button-bar {
@@ -1135,6 +1150,8 @@ div.one-column-list li {
     display: flex;
     flex-direction: row;
     height: 100%;
+    width: 100%;
+    max-width: 100%;
 
     /* This is important to get it to work with Firefox */
     /*overflow-y: scroll;*/
@@ -1143,7 +1160,10 @@ div.one-column-list li {
 
 .editor-container {
     flex: 1;
+    flex-basis: 50%;
     height: 100%;
+    width: 50%;
+    max-width: 50%;
     padding-left: 10px;
     padding-right: 10px;
     /*overflow-y: scroll;*/
@@ -1155,11 +1175,14 @@ div.one-column-list li {
  */
 .editor-textarea {
 
+    display: block;
     font-family: var(--fixed-font-family);
     box-sizing: border-box;
     height: 100%;
     width: 100%;
     resize: none;
+    word-wrap: break-word;
+
     overflow-y: scroll;
 
     font-size: 1.2rem;
@@ -1180,6 +1203,7 @@ div.one-column-list li {
 .mde-preview-class {
     flex: 1;
     height: 100%;
+    width: 100%;
     overflow-y: scroll;
 
     font-size: 1.3rem;
@@ -1309,7 +1333,7 @@ div.one-column-list li {
 }
 
 .tag-editor--name-input:hover {
-    var(--form-button-hover-color);
+var(--form-button-hover-color);
 }
 
 .tag-editor--button-image:hover:active {
@@ -1366,11 +1390,109 @@ div.one-column-list li {
 
 /* Add animation (fade in the popup) */
 @-webkit-keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity:1 ;}
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/*
+** Stuff for the modal dialog box.
+ */
+
+.modal {
+    display: flex;
+    flex-direction: column;
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 600px;
+    max-width: 100%;
+    height: 400px;
+    max-height: 100%;
+
+    z-index: 1010;
+    border: 1px solid black;
+    background: var(--body-background-color);
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5px 20px 7px 20px;
+    font-family: var(--headline-font-family);
+    color: var(--brand-title-color);
+    background: var(--page-header-background-color);
+}
+
+.modal-header-left {
+}
+
+.modal-header-right {
+}
+
+.modal-header .formbutton {
+    z-index: 1020;
+    font-family: var(--body-font-family);
+}
+
+.modal.closed, .modal-overlay.closed{
+    display: none;
+}
+
+.modal-guts {
+    flex: 1; /* this essentially means "use all parent's inner height */
+    /* cover the modal */
+    display: block;
+
+    /* spacing as needed */
+    padding: 20px 20px 20px 20px;
+    word-wrap: break-word;
+
+    /* let it scroll */
+    overflow: auto;
+
+}
+
+.modal-footer {
+}
+
+.modal .button-bar-container  {
+    justify-content: center;
+    margin: 0;
+    padding: 20px 20px 11px 20px;
+}
+
+.modal-overlay {
+
+    /* recommendation:
+       don't focus on the number "1000" here, but rather,
+       you should have a documented system for z-index and
+       follow that system. This number should be pretty
+       high on the scale in that system.
+    */
+    z-index: 1000;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: var(--overlay-color-and-transparency);
 }

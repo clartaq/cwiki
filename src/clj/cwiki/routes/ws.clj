@@ -3,14 +3,16 @@
 ;;;
 
 (ns cwiki.routes.ws
-  (:require [compojure.core :refer [GET POST defroutes]]
+  (:require [clojure.string :as s]
+            [compojure.core :refer [GET POST defroutes]]
             [cwiki.layouts.editor :as editor-layout]
             [cwiki.models.wiki-db :as db]
             [ring.util.response :refer [redirect status]]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]))
+                                     trace debug info warn error]])
+  (:import (java.net URL)))
 
 (let [{:keys [ch-recv send-fn connected-uids
               ajax-post-fn ajax-get-or-ws-handshake-fn]}
@@ -25,13 +27,20 @@
   (def connected-uids connected-uids))                      ; Watchable, read-only atom
 
 (defn- save-new-doc!
-  "Save a completely new page to the database and display it."
-  [title content tags author-id]
-  (db/insert-new-page! title content tags author-id))
+  "Save a completely new page to the database and display it. Return the
+  page id of the newly saved page. If a page with the same title is
+  already present, reply to the editor with a 'Page Alredy Exists' message."
+  [client-id title content tags author-id]
+  (if (db/find-post-by-title title)
+    (chsk-send! client-id [:hey-editor/that-page-already-exists])
+    (let [pm (db/insert-new-page! title content tags author-id)
+          id (db/page-map->id pm)]
+      (chsk-send! client-id [:hey-editor/here-is-the-id id])
+      id)))
 
 (defn- save-doc!
-  "Save new or edited content."
-  [page-map]
+  "Save new or edited content. Return the page id of the saved document."
+  [client-id page-map]
   (tracef "save-doc!: page-map: %s" page-map)
   (when-let [post-map page-map]
     (let [id (db/page-map->id post-map)
@@ -39,8 +48,10 @@
           content (db/page-map->content post-map)
           tags (:tags post-map)]
       (if id
-        (db/update-page-title-and-content! id title (set tags) content)
-        (save-new-doc! title content tags (:page_author post-map))))))
+        (do
+          (db/update-page-title-and-content! id title (set tags) content)
+          id)
+        (save-new-doc! client-id title content tags (:page_author post-map))))))
 
 (defn- send-document-to-editor
   "Get the post to be edited and send it to the editor."
@@ -49,7 +60,7 @@
   (chsk-send! client-id [:hey-editor/here-is-the-document
                          (editor-layout/get-post-map-for-editing)]))
 
-(defn- content-updated
+(defn- content-updated!
   "When the content of the post being edited changes, do something with it
   here if desired."
   [?data]
@@ -57,21 +68,52 @@
   (when ?data
     (editor-layout/update-content-for-websocket ?data)))
 
-(defn- save-doc-and-quit!
-  "Save the edited post and ask the client to shut itself down."
-  [client-id page-map]
-  (trace "Editor asked to save edited document.")
-  (let [page-to-return-to (db/page-map->title page-map)]
-    (save-doc! page-map)
-    (tracef "Here's the data that got saved: %s" page-map) ;?data)
-    (tracef "Here's the page-to-return-to: %s" page-to-return-to)
-    (chsk-send! client-id [:hey-editor/shutdown-after-save page-to-return-to])))
+(defn- tags-updated!
+  [?data]
+  (trace "Saw 'tags updated' notification.")
+  (when ?data
+    (editor-layout/update-content-for-websocket ?data)))
 
-(defn- cancel-editing
-  "Stop editing the post and ask the client to shut itself down."
-  [client-id]
-  (trace "Editor asked to cancel editing.")
-  (chsk-send! client-id [:hey-editor/shutdown-after-cancel]))
+(defn- title-updated!
+  [?data]
+  (trace "Saw 'title updated' notification."))
+
+(defn- page-from-referrer
+  [referrer]
+  (let [url (URL. referrer)
+        path (.getPath url)
+        page-title (s/replace-first path #"/" "")]
+    (println "page-from-referrer returning: " page-title)
+    page-title))
+
+(defn- page-to-return-to
+  "Returns the title of the page that the editor should return to after it
+  shuts down."
+  [page-id page-title referrer]
+  ;; If the page has been saved, it has a page id. Get the page title for
+  ;; that id. If the page has never been saved, there will be no id for it.
+  ;; In that case, return to the referring page. If the referring page was
+  ;; the home page for the wiki, get the title of that page and return it.
+  ;; The special handling for the home page is because the referrer does not
+  ;; include the page title, just the slash character
+  (cond
+    (identity page-id) (db/page-id->title page-id)
+    (s/ends-with? referrer "/") (db/get-option-value :root_page)
+    (and page-title (db/title->page-id page-title)) page-title
+    :default (page-from-referrer referrer)))
+
+(defn- quit-editing!
+  "Handle the message from the editor that it wants to quit editing.
+  Return the title of the page the editor should redirect to after it
+  finished its shutdown tasks."
+  [client-id {:keys [page-id page-title referrer]}]
+  (println "quit-editing!")
+  (println "   page-id: " page-id)
+  (println "   page_title: " page-title)
+  (println "   referrer: " referrer)
+  (let [page-to-return-to (page-to-return-to page-id page-title referrer)]
+    (println "   page-to-return-to: " page-to-return-to)
+    (chsk-send! client-id [:hey-editor/shutdown-and-go-to page-to-return-to])))
 
 (defn handle-message!
   "Handle any message that we know about. It is an error to send
@@ -80,10 +122,11 @@
   (tracef "handle-message!: id: %s, client-id: %s" id client-id)
   (cond
     (= id :hey-server/send-document-to-editor) (send-document-to-editor client-id)
-    (= id :hey-server/content-updated) (content-updated ?data)
-    (= id :hey-server/save-doc) (save-doc! (:data ?data))
-    (= id :hey-server/save-doc-and-quit) (save-doc-and-quit! client-id (:data ?data))
-    (= id :hey-server/cancel-editing) (cancel-editing client-id)
+    (= id :hey-server/content-updated) (content-updated! ?data)
+    (= id :hey-server/tags-updated) (tags-updated! ?data)
+    (= id :hey-server/title-updated) (title-updated! ?data)
+    (= id :hey-server/save-doc) (save-doc! client-id (:data ?data))
+    (= id :hey-server/quit-editing) (quit-editing! client-id ?data)
     (= id :chsk/uidport-open) (trace ":chsk/uidport-open")
     (= id :chsk/uidport-close) (trace ":chsk/uidport-close")
     (= id :chsk/ws-ping) (trace ":chsk/ws-ping")
