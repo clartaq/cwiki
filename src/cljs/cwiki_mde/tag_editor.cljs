@@ -11,7 +11,7 @@
   "Return a unique id for the tag input element based on the index of the tag
   and the default tag id prefix."
   [num options]
-  (str (:editor-tag-id-prefix options) (+ 1 num)))
+  (str (:editor-tag-id-prefix options) (inc num)))
 
 (defn delete-existing-tag
   "Delete an existing tag."
