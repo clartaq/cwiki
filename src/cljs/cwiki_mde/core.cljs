@@ -6,8 +6,12 @@
 (ns cwiki-mde.core
   (:require [clojure.string :refer [blank?]]
             [cljs.pprint :as pprint]
+            [cljs-time.coerce :as c]
+            [cljs-time.core :as t]
+            [cljs-time.format :as f]
             [cwiki-mde.tag-editor :as te]
             [cwiki-mde.ws :as ws]
+            [keybind.core :as kbs]
             [reagent.core :as r]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
@@ -27,6 +31,9 @@
 ;; can disable or enable the button based on when the content of the editor
 ;; is saved or changed.
 ;(defonce ^{:private true} save-button-id "editor-button-bar--save-button")
+
+;; The id of the main text area in the editor page.
+(defonce ^{:private true} glbl-editor-textarea-id "editor-text-area-id")
 
 ;; A flag indicating whether or not the textarea has unsaved changes.
 (def ^{:private true} glbl-editor-is-dirty (r/atom nil))
@@ -49,6 +56,21 @@
 ;;;-----------------------------------------------------------------------------
 ;;; Utility functions.
 ;;;
+
+; Format a DateTime object nicely in the current time zone.
+(def custom-formatter (f/formatter "dd MMM yyyy, hh:mm:ss a"))
+; (t/default-time-zone))
+
+;(defn- get-formatted-time
+;  "Return a string containing the input time (represented as a long)
+;  nicely formatted in the current time zone."
+;  [time-as-long]
+;  (f/unparse custom-formatter (c/from-long time-as-long)))
+
+(defn- get-formatted-now
+  "Return a nicely formatted string containing the local instant time."
+  []
+  (f/unparse custom-formatter (t/time-now)))
 
 (defn- get-element-by-id [the-id]
   (.getElementById js/document the-id))
@@ -135,6 +157,7 @@
       (= message-id
          :hey-editor/shutdown-and-go-to) (when-let [new-location (str "/" (second ?data))]
                                            (tracef "The new location is: %s" new-location)
+                                           (kbs/unbind-all!)
                                            (ws/stop-router!)
                                            (.replace js/location new-location)))))
 
@@ -404,6 +427,7 @@
                :for   "content"} "Markdown"]]
      [:textarea
       {:class     "editor-textarea"
+       :id        glbl-editor-textarea-id
        :value     @content-atom
        :on-change (fn [arg]
                     (let [new-content (-> arg .-target .-value)]
@@ -465,6 +489,13 @@
     [layout-editor-pane content-atom options]
     [layout-preview-pane content-atom]]])
 
+(defn quit-fn
+  [options]
+  (println "quit-fn")
+  (if @glbl-editor-is-dirty
+    (toggle-unsaved-changes-modal)
+    (tell-server-to-quit options)))
+
 (defn layout-editor-bottom-button-bar
   "Layout the editor button bar."
   [options]
@@ -474,9 +505,78 @@
             :name    "done-button"
             :value   "Done"
             :class   "form-button button-bar-item"
-            :onClick #(if @glbl-editor-is-dirty
-                        (toggle-unsaved-changes-modal)
-                        (tell-server-to-quit options))}]])
+            :onClick #(quit-fn options
+                               ;if @glbl-editor-is-dirty
+                               ;(toggle-unsaved-changes-modal)
+                               ;(tell-server-to-quit options)
+                               )}]])
+;var start = el.selectionStart
+;var end = el.selectionEnd
+;var text = el.value
+;var before = text.substring(0, start)
+;var after  = text.substring(end, text.length)
+;el.value = (before + newText + after)
+;el.selectionStart = el.selectionEnd = start + newText.length
+;el.focus()
+
+(defn insert-text-into-input
+  [ele txt]
+  (let [start (.-selectionStart ele)
+        end (.-selectionEnd ele)
+        se (+ start (.-length txt))
+        val (.-value ele)
+        before (.substring val 0 start)
+        after (.substring val end (.-length val))]
+    (set! (.-value ele) (str before txt after))
+    (set! (.-selectionStart ele) se)
+    (set! (.-selectionEnd ele) se)
+    (.focus ele)))
+
+;; Example of doing this manually.
+;(let [save-fxn (:assemble-and-save-fn options)]
+;  (.addEventListener js/document "keydown"
+;                     (fn [e]
+;                       (let [the-key (.-key e)
+;                             lc-key (.toLowerCase the-key)]
+;                         (when (and (= "s" lc-key)
+;                                    (.-metaKey e))
+;                           (save-fxn options)
+;                           (.preventDefault e)
+;                           (.stopPropagation e)
+;                           false))) false))
+
+(defn bind-shortcut-keys
+  [editor-options]
+  (println "bind-shortcut-keys")
+
+  ;; Save the page.
+  (let [save-fxn (:assemble-and-save-fn editor-options)]
+    (letfn [(save-from-keyboard-fxn [evt]
+              (save-fxn editor-options)
+              (.preventDefault evt)
+              (.stopPropagation evt)
+              false)]
+      (kbs/bind! "defmod-s" ::save-shortcut save-from-keyboard-fxn)))
+
+  ;; Quit the editor.
+  ;(let [quit-fxn (:quit-fn editor-options)]
+  ;  (println "quit-fxn: " quit-fxn)
+  ;  (letfn [(quit-from-keyboard-fxn [e editor-options]
+  ;           ; (quit-fxn editor-options)
+  ;            (.preventDefault e)
+  ;            (.stopPropagation e)
+  ;            false)]
+  ;    (kbs/bind! "defmod-q" ::quit-shortcut quit-from-keyboard-fxn)))
+
+  ;; Timestamp.
+  (kbs/bind! "alt-defmod-t" ::timestamp-shortcut
+             (fn [evt]
+               (let [ele (.-target evt)]
+                 (when (= (.-id ele) (:editor-textarea-id editor-options))
+                   (insert-text-into-input ele (get-formatted-now))
+                   (.preventDefault evt)
+                   (.stopPropagation evt)
+                   false)))))
 
 (defn layout-inner-editor-container
   "Lays out the section of the wiki page containing the editor, including the
@@ -503,12 +603,15 @@
                   (let [the-doc (re-assembler-fn)
                         sf doc-save-fn]
                     (sf the-doc)))]
-          (let [final-options (merge {:re-assembler-fn      re-assembler-fn
-                                      :doc-save-fn          doc-save-fn
-                                      :assemble-and-save-fn assemble-and-save-fn
-                                      :autosave-notifier-fn mark-page-dirty}
+          (let [final-options (merge {:re-assembler-fn       re-assembler-fn
+                                      :doc-save-fn           doc-save-fn
+                                      :assemble-and-save-fn  assemble-and-save-fn
+                                      :quit-fn               quit-fn
+                                      :dirty-editor-notifier mark-page-dirty
+                                      :editor-textarea-id    glbl-editor-textarea-id}
                                      options)]
 
+            (bind-shortcut-keys final-options)
             [:div {:class "inner-editor-container"}
              [layout-editor-header title-atom tags-atom-vector final-options]
              [layout-editor-and-preview-section content-atom final-options]

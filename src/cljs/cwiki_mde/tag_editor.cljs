@@ -25,7 +25,7 @@
    [:svg {:class    "tag-editor--delete-button tag-editor--button-image"
           :on-click #(do
                        (delete-existing-tag tags-vector-atom n)
-                       ((:autosave-notifier-fn options) options))}]])
+                       ((:dirty-editor-notifier options) options))}]])
 
 (defn layout-add-tag-button
   "Return a button to initiate adding a tag."
@@ -35,10 +35,11 @@
      [:svg {:class    "tag-editor--add-button tag-editor--button-image"
             :on-click #(do
                          (swap! tags-vector-atom conj "A New Tag")
-                         ((:autosave-notifier-fn options) options))}]]))
+                         ((:dirty-editor-notifier options) options))}]]))
 
 (defn resize-tag-input
   [tag-id]
+  (println "resize-tag-input: tag-id: " tag-id)
   (let [target (.getElementById js/document tag-id)]
     (when target
       (.setAttribute target "size" (-> target .-value .-length))
@@ -47,13 +48,13 @@
 (defn tag-change-listener
   "Return a new change listener for the specified tag."
   [tags-vector-atom n single-tag-atom options]
+  (println "tag-change-listener")
   (fn [arg]
     (let [new-tag (-> arg .-target .-value)
-          autosave-notifier (:autosave-notifier-fn options)]
+          dirty-editor-notifier (:dirty-editor-notifier options)]
       (reset! single-tag-atom new-tag)
-      (when (and autosave-notifier
-                 (pos? (:editor_autosave_interval options)))
-        (autosave-notifier options))
+      (when dirty-editor-notifier
+        (dirty-editor-notifier options))
       (if (blank? new-tag)
         ; User deleted a tag.
         (delete-existing-tag tags-vector-atom n)
