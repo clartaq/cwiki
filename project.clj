@@ -15,6 +15,7 @@
                  [com.h2database/h2 "1.4.197"]
                  [circleci/clj-yaml "0.5.6"]
                  [clj-time "0.15.1"]
+                 [com.andrewmcveigh/cljs-time "0.5.2"]
                  [com.taoensso/sente "1.13.1"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.vladsch.flexmark/flexmark "0.34.56"]
@@ -27,6 +28,7 @@
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
                  [javax.xml.bind/jaxb-api "2.3.0"]
+                 [keybind "2.2.0"]
                  ; We keep this old version to remain compatible with
                  ; full text search with the H2 database.
                  [org.apache.lucene/lucene-core "3.6.2"]

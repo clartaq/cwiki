@@ -4,7 +4,7 @@
 ;;;;
 
 (ns cwiki-mde.core
-  (:require [clojure.string :refer [blank?]]
+  (:require [clojure.string :refer [blank?] :as s]
             [cljs.pprint :as pprint]
             [cljs-time.coerce :as c]
             [cljs-time.core :as t]
@@ -26,14 +26,6 @@
 
 ;; The delay-handle stores the handle to the autosave countdown timer.
 (def ^{:private true} glbl-delay-handle (atom nil))
-
-;; The id of the save button in the button bar. Used so variout functions
-;; can disable or enable the button based on when the content of the editor
-;; is saved or changed.
-;(defonce ^{:private true} save-button-id "editor-button-bar--save-button")
-
-;; The id of the main text area in the editor page.
-(defonce ^{:private true} glbl-editor-textarea-id "editor-text-area-id")
 
 ;; A flag indicating whether or not the textarea has unsaved changes.
 (def ^{:private true} glbl-editor-is-dirty (r/atom nil))
@@ -57,15 +49,8 @@
 ;;; Utility functions.
 ;;;
 
-; Format a DateTime object nicely in the current time zone.
+; Format a DateTime object nicely.
 (def custom-formatter (f/formatter "dd MMM yyyy, hh:mm:ss a"))
-; (t/default-time-zone))
-
-;(defn- get-formatted-time
-;  "Return a string containing the input time (represented as a long)
-;  nicely formatted in the current time zone."
-;  [time-as-long]
-;  (f/unparse custom-formatter (c/from-long time-as-long)))
 
 (defn- get-formatted-now
   "Return a nicely formatted string containing the local instant time."
@@ -276,7 +261,10 @@
 
      ; Select the title editor and put the cursor at the beginning.
      :component-did-mount (fn [this]
-                            (let [elm (get-element-by-id "mde-form-title-field-id")]
+                            (let [elm (get-element-by-id
+                                        (:editor-title-input-id options))]
+                              ;"mde-form-title-field-id")
+
                               (doto elm
                                 (.focus)
                                 (.setSelectionRange 0 0))))
@@ -288,7 +276,7 @@
                                              {:type      "text"
                                               :class     "mde-form-title-field"
                                               :name      "page-title"
-                                              :id        "mde-form-title-field-id"
+                                              :id        (:editor-title-input-id options) ;"mde-form-title-field-id"
                                               :value     (if-let [title @title-atom]
                                                            (do
                                                              (when (= title "favicon.ico")
@@ -427,12 +415,11 @@
                :for   "content"} "Markdown"]]
      [:textarea
       {:class     "editor-textarea"
-       :id        glbl-editor-textarea-id
+       :id        (:editor-textarea-id options) ;glbl-editor-textarea-id
        :value     @content-atom
        :on-change (fn [arg]
                     (let [new-content (-> arg .-target .-value)]
                       (reset! content-atom new-content)
-                      (reset! glbl-editor-is-dirty true)
                       (mark-page-dirty options)
                       (when (:send-every-keystroke options)
                         (ws/send-message! [:hey-server/content-updated
@@ -505,21 +492,10 @@
             :name    "done-button"
             :value   "Done"
             :class   "form-button button-bar-item"
-            :onClick #(quit-fn options
-                               ;if @glbl-editor-is-dirty
-                               ;(toggle-unsaved-changes-modal)
-                               ;(tell-server-to-quit options)
-                               )}]])
-;var start = el.selectionStart
-;var end = el.selectionEnd
-;var text = el.value
-;var before = text.substring(0, start)
-;var after  = text.substring(end, text.length)
-;el.value = (before + newText + after)
-;el.selectionStart = el.selectionEnd = start + newText.length
-;el.focus()
+            :onClick #(quit-fn options)}]])
 
 (defn insert-text-into-input
+  "Inserts the text into the element wherever the cursor happens to be."
   [ele txt]
   (let [start (.-selectionStart ele)
         end (.-selectionEnd ele)
@@ -547,7 +523,6 @@
 
 (defn bind-shortcut-keys
   [editor-options]
-  (println "bind-shortcut-keys")
 
   ;; Save the page.
   (let [save-fxn (:assemble-and-save-fn editor-options)]
@@ -560,23 +535,25 @@
 
   ;; Quit the editor.
   ;(let [quit-fxn (:quit-fn editor-options)]
-  ;  (println "quit-fxn: " quit-fxn)
   ;  (letfn [(quit-from-keyboard-fxn [e editor-options]
   ;           ; (quit-fxn editor-options)
   ;            (.preventDefault e)
   ;            (.stopPropagation e)
   ;            false)]
-  ;    (kbs/bind! "defmod-q" ::quit-shortcut quit-from-keyboard-fxn)))
+  ;    (kbs/bind! "defmod-w" ::quit-shortcut quit-from-keyboard-fxn)))
 
   ;; Timestamp.
   (kbs/bind! "alt-defmod-t" ::timestamp-shortcut
              (fn [evt]
-               (let [ele (.-target evt)]
+               (let [ele (.-target evt)
+                     chg-evt (js/Event. "change" #js{:bubbles "true"})]
+                 (println "chg-evt: " chg-evt)
+                 (println "   (.-bubbles chg-evt): " (.-bubbles chg-evt))
                  (when (= (.-id ele) (:editor-textarea-id editor-options))
                    (insert-text-into-input ele (get-formatted-now))
-                   (.preventDefault evt)
-                   (.stopPropagation evt)
-                   false)))))
+                   (println "About to dispatch event")
+                   (let [cancelled (.dispatchEvent ele chg-evt)]
+                     (println "cancelled: " cancelled)))))))
 
 (defn layout-inner-editor-container
   "Lays out the section of the wiki page containing the editor, including the
@@ -608,7 +585,9 @@
                                       :assemble-and-save-fn  assemble-and-save-fn
                                       :quit-fn               quit-fn
                                       :dirty-editor-notifier mark-page-dirty
-                                      :editor-textarea-id    glbl-editor-textarea-id}
+                                      :editor-textarea-id    "editor-text-area-id"
+                                      :editor-title-input-id "mde-form-title-field-id"
+                                      :editor-tag-id-prefix "tag-bl-"}
                                      options)]
 
             (bind-shortcut-keys final-options)
