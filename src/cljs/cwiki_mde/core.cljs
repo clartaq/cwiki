@@ -4,15 +4,11 @@
 ;;;;
 
 (ns cwiki-mde.core
-  (:require [clojure.string :refer [blank?] :as s]
+  (:require [clojure.string :refer [blank?]]
             [cljs.pprint :as pprint]
-            ;[cljs-time.coerce :as c]
-            ;[cljs-time.core :as t]
-            ;[cljs-time.format :as f]
             [cwiki-mde.keyboard-shortcuts :as kbs]
             [cwiki-mde.tag-editor :as te]
             [cwiki-mde.ws :as ws]
-            ;[keybind.core :as kbs]
             [reagent.core :as r]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
@@ -31,10 +27,6 @@
 ;; A flag indicating whether or not the textarea has unsaved changes.
 (def ^{:private true} glbl-editor-is-dirty (r/atom nil))
 
-;; Flag indicating that at least one save has occurred. Used to remove the
-;; "Cancel" button.
-;(def ^{:private true} save-has-occurred (atom nil))
-
 ;; Flag indicating that it is ok to exit the editor, even if there are
 ;; unsaved changes. Used by the "Unsaved Changes" modal dialog to indicate
 ;; whether the use wants to exit and lose the changes.
@@ -49,14 +41,6 @@
 ;;;-----------------------------------------------------------------------------
 ;;; Utility functions.
 ;;;
-
-; Format a DateTime object nicely.
-;(def custom-formatter (f/formatter "dd MMM yyyy, hh:mm:ss a"))
-;
-;(defn- get-formatted-now
-;  "Return a nicely formatted string containing the local instant time."
-;  []
-;  (f/unparse custom-formatter (t/time-now)))
 
 (defn- get-element-by-id [the-id]
   (.getElementById js/document the-id))
@@ -143,7 +127,6 @@
       (= message-id
          :hey-editor/shutdown-and-go-to) (when-let [new-location (str "/" (second ?data))]
                                            (tracef "The new location is: %s" new-location)
-                                           ;(kbs/unbind-all!)
                                            (kbs/unbind-shortcut-keys)
                                            (ws/stop-router!)
                                            (.replace js/location new-location)))))
@@ -437,7 +420,7 @@
                :for   "content"} "Markdown"]]
      [:textarea
       {:class     "editor-textarea"
-       :id        (:editor-textarea-id options) ;glbl-editor-textarea-id
+       :id        (:editor-textarea-id options)
        :value     @content-atom
        :on-change (fn [arg]
                     (let [new-content (-> arg .-target .-value)]
@@ -515,67 +498,6 @@
             :value   "Done"
             :class   "form-button button-bar-item"
             :onClick #(quit-fn options)}]])
-
-;(defn insert-text-into-input
-;  "Inserts the text into the element wherever the cursor happens to be."
-;  [ele txt]
-;  (let [start (.-selectionStart ele)
-;        end (.-selectionEnd ele)
-;        se (+ start (.-length txt))
-;        val (.-value ele)
-;        before (.substring val 0 start)
-;        after (.substring val end (.-length val))]
-;    (set! (.-value ele) (str before txt after))
-;    (set! (.-selectionStart ele) se)
-;    (set! (.-selectionEnd ele) se)
-;    (.focus ele)))
-;
-;;; Example of doing this manually.
-;;(let [save-fxn (:assemble-and-save-fn options)]
-;;  (.addEventListener js/document "keydown"
-;;                     (fn [e]
-;;                       (let [the-key (.-key e)
-;;                             lc-key (.toLowerCase the-key)]
-;;                         (when (and (= "s" lc-key)
-;;                                    (.-metaKey e))
-;;                           (save-fxn options)
-;;                           (.preventDefault e)
-;;                           (.stopPropagation e)
-;;                           false))) false))
-;
-;(defn bind-shortcut-keys
-;  [editor-options]
-;
-;  ;; Save the page.
-;  (let [save-fxn (:assemble-and-save-fn editor-options)]
-;    (letfn [(save-from-keyboard-fxn [evt]
-;              (save-fxn editor-options)
-;              (.preventDefault evt)
-;              (.stopPropagation evt)
-;              false)]
-;      (kbs/bind! "defmod-s" ::save-shortcut save-from-keyboard-fxn)))
-;
-;  ;; Quit the editor.
-;  ;(let [quit-fxn (:quit-fn editor-options)]
-;  ;  (letfn [(quit-from-keyboard-fxn [e editor-options]
-;  ;           ; (quit-fxn editor-options)
-;  ;            (.preventDefault e)
-;  ;            (.stopPropagation e)
-;  ;            false)]
-;  ;    (kbs/bind! "defmod-w" ::quit-shortcut quit-from-keyboard-fxn)))
-;
-;  ;; Timestamp.
-;  (kbs/bind! "alt-defmod-t" ::timestamp-shortcut
-;             (fn [evt]
-;               (let [ele (.-target evt)
-;                     chg-evt (js/Event. "change" #js{:bubbles "true"})]
-;                 (println "chg-evt: " chg-evt)
-;                 (println "   (.-bubbles chg-evt): " (.-bubbles chg-evt))
-;                 (when (= (.-id ele) (:editor-textarea-id editor-options))
-;                   (insert-text-into-input ele (get-formatted-now))
-;                   (println "About to dispatch event")
-;                   (let [cancelled (.dispatchEvent ele chg-evt)]
-;                     (println "cancelled: " cancelled)))))))
 
 (defn layout-inner-editor-container
   "Lays out the section of the wiki page containing the editor, including the

@@ -16,9 +16,6 @@
   []
   (f/unparse custom-formatter (t/time-now)))
 
-(defn- get-element-by-id [the-id]
-  (.getElementById js/document the-id))
-
 (defn insert-text-into-input
   "Inserts the text into the element wherever the cursor happens to be."
   [ele txt]
@@ -47,6 +44,7 @@
 ;                           false))) false))
 
 (defn bind-shortcut-keys
+  "Bind shortcut keys to actions."
   [editor-options]
 
   ;; Save the page.
@@ -67,7 +65,7 @@
   ;            false)]
   ;    (kbs/bind! "defmod-w" ::quit-shortcut quit-from-keyboard-fxn)))
 
-  ;; Timestamp.
+  ;; Insert a timestamp.
   (kbs/bind! "alt-defmod-t" ::timestamp-shortcut
              (fn [evt]
                (let [ele (.-target evt)
@@ -81,6 +79,7 @@
                      (println "cancelled: " cancelled)))))))
 
 (defn unbind-shortcut-keys
+  "Un-bind all of the shortcut keys."
   []
   (kbs/unbind-all!))
 
