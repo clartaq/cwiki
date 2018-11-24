@@ -10,8 +10,10 @@
             [ring.util.response :refer [redirect status]]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
-            [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]])
+            [taoensso.timbre :as log]
+            ; :refer [tracef debugf infof warnf errorf
+            ;                         trace debug info warn error]]
+            )
   (:import (java.net URL)))
 
 (let [{:keys [ch-recv send-fn connected-uids
@@ -41,7 +43,7 @@
 (defn- save-doc!
   "Save new or edited content. Return the page id of the saved document."
   [client-id page-map]
-  (tracef "save-doc!: page-map: %s" page-map)
+  (log/tracef "save-doc!: page-map: %s" page-map)
   (when-let [post-map page-map]
     (let [id (db/page-map->id post-map)
           title (db/page-map->title post-map)
@@ -56,7 +58,7 @@
 (defn- send-document-to-editor
   "Get the post to be edited and send it to the editor."
   [client-id]
-  (trace "server sending document")
+  (log/trace "server sending document")
   (chsk-send! client-id [:hey-editor/here-is-the-document
                          (editor-layout/get-post-map-for-editing)]))
 
@@ -64,19 +66,19 @@
   "When the content of the post being edited changes, do something with it
   here if desired."
   [?data]
-  (trace "Saw 'content updated' notification.")
+  (log/trace "Saw 'content updated' notification.")
   (when ?data
     (editor-layout/update-content-for-websocket ?data)))
 
 (defn- tags-updated!
   [?data]
-  (trace "Saw 'tags updated' notification.")
+  (log/trace "Saw 'tags updated' notification.")
   (when ?data
     (editor-layout/update-content-for-websocket ?data)))
 
 (defn- title-updated!
   [?data]
-  (trace "Saw 'title updated' notification."))
+  (log/trace "Saw 'title updated' notification."))
 
 (defn- page-from-referrer
   [referrer]
@@ -107,19 +109,14 @@
   Return the title of the page the editor should redirect to after it
   finished its shutdown tasks."
   [client-id {:keys [page-id page-title referrer]}]
-  (println "quit-editing!")
-  (println "   page-id: " page-id)
-  (println "   page_title: " page-title)
-  (println "   referrer: " referrer)
   (let [page-to-return-to (page-to-return-to page-id page-title referrer)]
-    (println "   page-to-return-to: " page-to-return-to)
     (chsk-send! client-id [:hey-editor/shutdown-and-go-to page-to-return-to])))
 
 (defn handle-message!
   "Handle any message that we know about. It is an error to send
   unrecognized messages."
   [{:keys [id client-id ?data]}]
-  (tracef "handle-message!: id: %s, client-id: %s" id client-id)
+  (log/tracef "handle-message!: id: %s, client-id: %s" id client-id)
   (cond
     (= id :hey-server/send-document-to-editor) (send-document-to-editor client-id)
     (= id :hey-server/content-updated) (content-updated! ?data)
@@ -127,10 +124,10 @@
     (= id :hey-server/title-updated) (title-updated! ?data)
     (= id :hey-server/save-doc) (save-doc! client-id (:data ?data))
     (= id :hey-server/quit-editing) (quit-editing! client-id ?data)
-    (= id :chsk/uidport-open) (trace ":chsk/uidport-open")
-    (= id :chsk/uidport-close) (trace ":chsk/uidport-close")
-    (= id :chsk/ws-ping) (trace ":chsk/ws-ping")
-    :default (errorf "Unknown message id received: %s" id)))
+    (= id :chsk/uidport-open) (log/trace ":chsk/uidport-open")
+    (= id :chsk/uidport-close) (log/trace ":chsk/uidport-close")
+    (= id :chsk/ws-ping) (log/trace ":chsk/ws-ping")
+    :default (log/errorf "Unknown message id received: %s" id)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -142,7 +139,7 @@
 (defn stop-ws-router!
   "Stop the websocket router."
   []
-  (info "Stopping websocket router.")
+  (log/info "Stopping websocket router.")
   (when-let [stop-fn @router_]
     (stop-fn)))
 
@@ -150,7 +147,7 @@
   "Start the websocket router."
   []
   (stop-ws-router!)
-  (info "Starting websocket router.")
+  (log/info "Starting websocket router.")
   (reset! router_
           (sente/start-server-chsk-router!
             ch-chsk handle-message!)))
