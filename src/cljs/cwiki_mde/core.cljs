@@ -69,7 +69,6 @@
 
 (defn tell-server-to-quit
   [options]
-  (println "tell-server-to-quit")
   (let [fxn (:re-assembler-fn options)
         new-page-map (fxn)
         page_id (:page_id new-page-map)
@@ -483,7 +482,6 @@
 
 (defn quit-fn
   [options]
-  (println "quit-fn")
   (if @glbl-editor-is-dirty
     (toggle-unsaved-changes-modal)
     (tell-server-to-quit options)))
