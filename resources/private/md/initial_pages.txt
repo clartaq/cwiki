@@ -36,6 +36,7 @@ Sidebar.md
 Special_Pages.md
 Speed.md
 Technical_Note_on_Keyboard_Shortcuts.md
+Technical_Note_on_the_Editor_CSS.md
 Text_Formatting.md
 The_Motivation_for_Writing_CWiki.md
 Wikilinks.md
