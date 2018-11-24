@@ -22,7 +22,7 @@
 
 ;; The global page map is set when the server sends it over. It is used when
 ;; setting up the innner editor container.
-(def ^{:private true} glbl-page-map (r/atom nil))
+(defonce ^{:private true} glbl-page-map (r/atom nil))
 
 ;; The delay-handle stores the handle to the autosave countdown timer.
 (def ^{:private true} glbl-delay-handle (atom nil))
@@ -372,6 +372,26 @@
       :on-click #(println "Saw click on web link button.")
       :disabled "true"}
      [:i.editor-button-bar--icon.link-icon]]
+
+    [:span.editor-button-bar--gap]
+
+    [:button.editor-button-bar--button
+     {:title    "Indent"
+      :on-click #(println "Saw click on indent button.")
+      :disabled "true"}
+     [:i.editor-button-bar--icon.indent-right-icon]]
+
+    [:button.editor-button-bar--button
+     {:title    "Outdent"
+      :on-click #(println "Saw click on outdent button.")
+      :disabled "true"}
+     [:i.editor-button-bar--icon.indent-left-icon]]
+
+    [:button.editor-button-bar--button
+     {:title    "Insert a timestamp"
+      :on-click #(println "Saw click on timestamp button.")
+      :disabled "true"}
+     [:i.editor-button-bar--icon.clock-icon]]
 
     [:span.editor-button-bar--gap]
 
