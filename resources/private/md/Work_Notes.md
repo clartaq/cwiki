@@ -2,7 +2,7 @@
 author: david
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2018-11-24T12:12:28.367-05:00
+modified: 2018-11-24T12:41:36.739-05:00
 tags:
   - cwiki
   - design
@@ -28,7 +28,7 @@ Noted an odd series of events
 1. The editor is re-invoked with another new page with the title of the deleted page.
 
 - Keystroke shortcuts. See [[Technical Note on Keyboard Shortcuts]].
-- Fix the damn CSS!
+- Fix the damn CSS! See [[Technical Note on the Editor CSS]].
 - Fix the issue with illegal characters in the title
 - Add the Markdown help in the editor
 
