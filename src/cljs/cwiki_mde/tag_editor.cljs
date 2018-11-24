@@ -79,6 +79,9 @@
                :value     @tag-of-interest
                :on-focus  #(resize-tag-input tag-id)
                :on-blur   #(resize-tag-input tag-id)
+               :on-click (fn [arg]
+                           (let [ele (.-target arg)]
+                             (.setSelectionRange ele 0 (.-length (.-value ele)))))
                :on-change (tag-change-listener tags-vector-atom n
                                                tag-of-interest options)}])))
 
