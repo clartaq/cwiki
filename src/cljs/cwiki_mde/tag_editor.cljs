@@ -7,11 +7,30 @@
             [reagent.core :as r]
             [cwiki-mde.ws :as ws]))
 
-(defn tag-num->id
+;-------------------------------------------------------------------------------
+; Data
+;
+
+(def ^{:private true} glbl-tag-map (atom {}))
+
+;-------------------------------------------------------------------------------
+; Utilities
+;
+
+(defn tag-index->id
   "Return a unique id for the tag input element based on the index of the tag
   and the default tag id prefix."
   [num options]
   (str (:editor-tag-id-prefix options) (inc num)))
+
+(defn tag-id->input-atom
+  "Given the html id of an editing control for a particular tag, return the
+  atom of the reactive component in the control."
+  [id]
+  (let [kw (keyword id)
+        res (kw @glbl-tag-map)]
+    (println "tag-id->input-atom: kw: " kw ", res: " res)
+    res))
 
 (defn delete-existing-tag
   "Delete an existing tag."
@@ -20,6 +39,10 @@
         new-vec (vec (concat (subvec old-tag-vec 0 n)
                              (subvec old-tag-vec (inc n))))]
     (reset! tags-vector-atom new-vec)))
+
+;-------------------------------------------------------------------------------
+; Layout functions
+;
 
 (defn layout-delete-tag-button
   "Return a button to delete a tag."
@@ -71,14 +94,16 @@
   (fn [tags-vector-atom]
     (let [tag-of-interest (r/atom (nth @tags-vector-atom n ""))
           cnt (count @tag-of-interest)
-          tag-id (tag-num->id n options)]
+          tag-id (tag-index->id n options)]
+      (swap! glbl-tag-map assoc (keyword tag-id) tag-of-interest)
+      (println "glbl-tag-map: " glbl-tag-map)
       [:input {:type      "text"
                :size      cnt
                :class     "tag-editor--name-input"
                :id        tag-id
                :value     @tag-of-interest
                :on-focus  #(resize-tag-input tag-id)
-               :on-blur   #(resize-tag-input tag-id)
+              ; :on-blur   #(resize-tag-input tag-id)
                :on-click (fn [arg]
                            (let [ele (.-target arg)]
                              (.setSelectionRange ele 0 (.-length (.-value ele)))))
@@ -103,6 +128,6 @@
      [:form {:name "tag-list"}
       [:div.tag-editor--list
        (for [n (range (count @tags-vector-atom))]
-         ^{:key (tag-num->id n options)}
+         ^{:key (tag-index->id n options)}
          [layout-tag-composite-lozenge tags-vector-atom n options])
        [layout-add-tag-button tags-vector-atom options]]]]))
