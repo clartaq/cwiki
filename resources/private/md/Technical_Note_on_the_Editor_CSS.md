@@ -2,7 +2,7 @@
 author: david
 title: Technical Note on the Editor CSS
 date: 2018-11-24T12:27:35.123-05:00
-modified: 2018-11-24T12:36:52.324-05:00
+modified: 2018-11-25T15:53:14.114-05:00
 tags:
   - CSS
   - cwiki
@@ -16,4 +16,8 @@ After adding the ClojureScript editor, it became more of a hassle. The problems 
 
 These two things were solved by settings for the vertical height (`height: 100%;`) and overflow (`overflow: hidden;`) and making sure _every ancestor_ of the problematic component had the correct setting.
 
+The changes above also made the pages less "yanky", that is, scrolling to the end of a page doesn't pull down the page header like it used to. Also, fewer scroll bars show up when scrolling things.
+
 Although everything seems to be working as this is written (24 Nov 2018, 12:35:54 pm, according to my new timestamp shortcut), there is still a problem with the "Done" button at the bottom of the editor being pushed halfway off the screen by something.
+
+Also, there are two anomalies in the preview pane. First, there is no scroll bar when scrolling the preview. Second, the right padding value does not appear to be respected; things extend all the way to the edge (but not beyond.)

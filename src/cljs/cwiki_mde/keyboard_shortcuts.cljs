@@ -1,7 +1,9 @@
 (ns cwiki-mde.keyboard-shortcuts
-  (:require [cljs-time.coerce :as c]
+  (:require [clojure.string :as s]
+            [cljs-time.coerce :as c]
             [cljs-time.core :as t]
             [cljs-time.format :as f]
+            [cwiki-mde.tag-editor :as te]
             [keybind.core :as kbs]))
 
 ;;------------------------------------------------------------------------------
@@ -18,17 +20,14 @@
 
 (defn insert-text-into-input
   "Inserts the text into the element wherever the cursor happens to be."
-  [ele txt]
+  [ele txt input-atom editor-state]
   (let [start (.-selectionStart ele)
         end (.-selectionEnd ele)
-        se (+ start (.-length txt))
         val (.-value ele)
         before (.substring val 0 start)
         after (.substring val end (.-length val))]
-    (set! (.-value ele) (str before txt after))
-    (set! (.-selectionStart ele) se)
-    (set! (.-selectionEnd ele) se)
-    (.focus ele)))
+    (reset! input-atom (str before txt after))
+    ((:dirty-editor-notifier editor-state) editor-state)))
 
 ;; Example of doing this manually.
 ;(let [save-fxn (:assemble-and-save-fn options)]
@@ -43,23 +42,41 @@
 ;                           (.stopPropagation e)
 ;                           false))) false))
 
+(defn- tag-input-id->tag-input-atom
+  [id editor-state]
+  (println "tag id: " id)
+  (let [n (dec (js/parseInt (re-find  #"\d+" id )))
+        _ (println "n: " n)]
+    (println "tag number n: " n)
+    (println "(:tags-atom-vector editor-state)" (:tags-atom-vector editor-state))
+    (println "(deref (:tags-atom-vector editor-state)): " (deref (:tags-atom-vector editor-state)))
+    (nth (deref (:tags-atom-vector editor-state)) n)))
+
+(defn- ele->input-atom
+  [ele editor-state]
+  (when-let [id (.-id ele)]
+    (cond
+      (= id (:editor-textarea-id editor-state)) (:page-content-ratom editor-state)
+      (= id (:editor-title-input-id editor-state)) (:page-title-atom editor-state)
+      (s/starts-with? id (:editor-tag-id-prefix editor-state)) (te/tag-id->input-atom id))))
+
 (defn bind-shortcut-keys
   "Bind shortcut keys to actions."
-  [editor-options]
+  [editor-state]
 
   ;; Save the page.
-  (let [save-fxn (:assemble-and-save-fn editor-options)]
+  (let [save-fxn (:assemble-and-save-fn editor-state)]
     (letfn [(save-from-keyboard-fxn [evt]
-              (save-fxn editor-options)
+              (save-fxn editor-state)
               (.preventDefault evt)
               (.stopPropagation evt)
               false)]
       (kbs/bind! "defmod-s" ::save-shortcut save-from-keyboard-fxn)))
 
   ;; Quit the editor.
-  ;(let [quit-fxn (:quit-fn editor-options)]
-  ;  (letfn [(quit-from-keyboard-fxn [e editor-options]
-  ;           ; (quit-fxn editor-options)
+  ;(let [quit-fxn (:quit-fn editor-state)]
+  ;  (letfn [(quit-from-keyboard-fxn [e editor-state]
+  ;           ; (quit-fxn editor-state)
   ;            (.preventDefault e)
   ;            (.stopPropagation e)
   ;            false)]
@@ -69,14 +86,14 @@
   (kbs/bind! "alt-defmod-t" ::timestamp-shortcut
              (fn [evt]
                (let [ele (.-target evt)
-                     chg-evt (js/Event. "change" #js{:bubbles "true"})]
-                 (println "chg-evt: " chg-evt)
-                 (println "   (.-bubbles chg-evt): " (.-bubbles chg-evt))
-                 (when (= (.-id ele) (:editor-textarea-id editor-options))
-                   (insert-text-into-input ele (get-formatted-now))
-                   (println "About to dispatch event")
-                   (let [cancelled (.dispatchEvent ele chg-evt)]
-                     (println "cancelled: " cancelled)))))))
+                     formatted-now (get-formatted-now)
+                     input-atom (ele->input-atom ele editor-state)]
+                 (println "ele: " ele ", formatted-now: " formatted-now ", input-atom: " input-atom)
+                 (when (and ele formatted-now input-atom))
+                   (insert-text-into-input ele
+                                           formatted-now
+                                           input-atom
+                                           editor-state)))));)
 
 (defn unbind-shortcut-keys
   "Un-bind all of the shortcut keys."

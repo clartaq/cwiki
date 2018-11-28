@@ -68,8 +68,8 @@
   (toggle-modal "duplicate-title-modal"))
 
 (defn tell-server-to-quit
-  [options]
-  (let [fxn (:re-assembler-fn options)
+  [state]
+  (let [fxn (:re-assembler-fn state)
         new-page-map (fxn)
         page_id (:page_id new-page-map)
         page_title (:page_title new-page-map)
@@ -147,17 +147,17 @@
   "Notify the autosave functionality that a change has occurred. When the
   autosave duration is greater than zero, restarts the countdown until the
   document is saved automatically."
-  [options]
-  (let [delay (* 1000 (:editor_autosave_interval options))
-        the-save-fn (:assemble-and-save-fn options)]
+  [state]
+  (let [delay (* 1000 (:editor_autosave_interval state))
+        the-save-fn (:assemble-and-save-fn state)]
     (when (pos? delay)
       (clear-autosave-delay!)
       (restart-autosave-delay! the-save-fn delay))))
 
 (defn mark-page-dirty
   "Mark the page as dirty and reset the autosave timer."
-  [options]
-  (notify-autosave options)
+  [state]
+  (notify-autosave state)
   (reset! glbl-editor-is-dirty true))
 
 ;;;-----------------------------------------------------------------------------
@@ -168,7 +168,7 @@
   "Brings up a modal dialog that informs the user that there are unsaved
   changes to the page. Asks them what to do before exiting and losing
   the new work."
-  [options]
+  [state]
   (let [msg [:p {:class "dialog-message"}
              "There are unsaved changes on this page. Do you really want "
              "to quit and lose those changes?"]]
@@ -195,7 +195,7 @@
                 :on-click #(do
                              (reset! glbl-ok-to-exit true)
                              (toggle-unsaved-changes-modal)
-                             (tell-server-to-quit options))}]
+                             (tell-server-to-quit state))}]
        [:input {:type     "button"
                 :class    "form-button button-bar-item"
                 :value    "No. Return to the Editor."
@@ -239,14 +239,14 @@
 
 (defn layout-title-editor
   "Lay out the title editing control and return the layout."
-  [title-atom options]
+  [title-atom state]
   (r/create-class
     {:display-name        "title-editor"
 
      ; Select the title editor and put the cursor at the beginning.
      :component-did-mount (fn [this]
                             (let [elm (get-element-by-id
-                                        (:editor-title-input-id options))]
+                                        (:editor-title-input-id state))]
                               ;"mde-form-title-field-id")
 
                               (doto elm
@@ -283,14 +283,14 @@
 (defn layout-editor-header
   "Lay out the header section for the editor. Includes the title, tags, and
   button bar."
-  [title-atom tags-atom-vector options]
+  [title-atom tags-atom-vector state]
   [:header {:class "editor-header"}
-   [layout-title-editor title-atom options]
-   [te/layout-tag-list tags-atom-vector options]])
+   [layout-title-editor title-atom state]
+   [te/layout-tag-list tags-atom-vector state]])
 
 (defn layout-editor-button-bar
   "Layout the editor button bar. Tedious but trivial."
-  [options]
+  [state]
   [:section {:class "editor-button-bar"}
    ;Buttons on the left side.
    [:section.editor-button-bar--left
@@ -371,10 +371,42 @@
       :disabled "true"}
      [:i.editor-button-bar--icon.indent-left-icon]]
 
+    ; from: K. Kilian Lindbergs answer to this question:
+    ; https://stackoverflow.com/questions/596481/is-it-possible-to-simulate-key-press-events-programmatically/19883789#19883789
+    ;
+    ;var pressthiskey = "q"/* <--- :) !? q for example */;
+    ;var e = new Event("keydown");
+    ;e.key = pressthiskey;
+    ;e.keyCode = e.key.charCodeAt(0);
+    ;e.which = e.keyCode;
+    ;e.altKey = false;
+    ;e.ctrlKey = true;
+    ;e.shiftKey = false;
+    ;e.metaKey = false;
+    ;e.bubbles = true;
+    ;document.dispatchEvent(e);
+
     [:button.editor-button-bar--button
      {:title    "Insert a timestamp"
-      :on-click #(println "Saw click on timestamp button.")
-      :disabled "true"}
+      :on-click (fn [arg]
+                  (let [target (get-element-by-id (:editor-textarea-id state))]
+                    (println "Saw click on timestamp button.")
+                    (println "target: " (.-id target))
+                    (let [evt (js/Event. "keydown")]
+                      (set! (.-key evt) "T")
+                      (set! (.-keyCode evt) (.charCodeAt (.-key evt) 0))
+                      (set! (.-which evt) (.-keyCode evt))
+                      (set! (.-altKey evt) "true")
+                      (set! (.-ctrlKey evt) nil)
+                      (set! (.-shiftKey evt) nil)
+                      (set! (.-metaKey evt) "true")
+                      (set! (.-bubbles evt) "true")
+                      (println "evt: " evt)
+                      (let [cancelled (.dispatchEvent target evt)]
+                        (println "cancelled: " cancelled)))))
+      ;#(println "Saw click on timestamp button.")
+      ;:disabled "true"
+      }
      [:i.editor-button-bar--icon.clock-icon]]
 
     [:span.editor-button-bar--gap]
@@ -398,7 +430,7 @@
      {:title    "Save revised content"
       :id       "save-button-id"
       :on-click #(when @glbl-editor-is-dirty
-                   ((:assemble-and-save-fn options)))
+                   ((:assemble-and-save-fn state)))
       :disabled (not @glbl-editor-is-dirty)}
      [:i.editor-button-bar--icon.floppy-icon {:id "floppy-icon"}]]
 
@@ -409,8 +441,8 @@
 
 (defn layout-editor-pane
   "This is the editing area, just a textarea. It sends an update message
-  oover the websocket server when options are so configured."
-  [content-atom options]
+  oover the websocket server when state are so configured."
+  [content-atom state]
   (trace "Enter layout-editor-pane.")
   (fn [content-atom]
     [:div {:class "editor-container"}
@@ -419,13 +451,13 @@
                :for   "content"} "Markdown"]]
      [:textarea
       {:class     "editor-textarea"
-       :id        (:editor-textarea-id options)
+       :id        (:editor-textarea-id state)
        :value     @content-atom
        :on-change (fn [arg]
                     (let [new-content (-> arg .-target .-value)]
                       (reset! content-atom new-content)
-                      (mark-page-dirty options)
-                      (when (:send-every-keystroke options)
+                      (mark-page-dirty state)
+                      (when (:send-every-keystroke state)
                         (ws/send-message! [:hey-server/content-updated
                                            {:data new-content}]))
                       new-content))}]]))
@@ -473,29 +505,29 @@
 
 (defn layout-editor-and-preview-section
   "Lay out the side-by-side editing and preview panes for the editor."
-  [content-atom options]
+  [content-atom state]
   [:section {:class "editor-and-button-bar"}
-   [layout-editor-button-bar options]
+   [layout-editor-button-bar state]
    [:section {:class "editor-and-preview-section"}
-    [layout-editor-pane content-atom options]
+    [layout-editor-pane content-atom state]
     [layout-preview-pane content-atom]]])
 
 (defn quit-fn
-  [options]
+  [state]
   (if @glbl-editor-is-dirty
     (toggle-unsaved-changes-modal)
-    (tell-server-to-quit options)))
+    (tell-server-to-quit state)))
 
 (defn layout-editor-bottom-button-bar
   "Layout the editor button bar."
-  [options]
+  [state]
   [:section {:class "button-bar-container"}
    [:input {:type    "button"
             :id      "done-button"
             :name    "done-button"
             :value   "Done"
             :class   "form-button button-bar-item"
-            :onClick #(quit-fn options)}]])
+            :onClick #(quit-fn state)}]])
 
 (defn layout-inner-editor-container
   "Lays out the section of the wiki page containing the editor, including the
@@ -522,22 +554,26 @@
                   (let [the-doc (re-assembler-fn)
                         sf doc-save-fn]
                     (sf the-doc)))]
-          (let [final-options (merge {:re-assembler-fn       re-assembler-fn
-                                      :doc-save-fn           doc-save-fn
-                                      :assemble-and-save-fn  assemble-and-save-fn
-                                      :quit-fn               quit-fn
-                                      :dirty-editor-notifier mark-page-dirty
-                                      :editor-textarea-id    "editor-text-area-id"
-                                      :editor-title-input-id "mde-form-title-field-id"
-                                      :editor-tag-id-prefix "tag-bl-"}
-                                     options)]
+          (let [editor-state (merge {:re-assembler-fn       re-assembler-fn
+                                     :doc-save-fn           doc-save-fn
+                                     :assemble-and-save-fn  assemble-and-save-fn
+                                     :quit-fn               quit-fn
+                                     :dirty-editor-notifier mark-page-dirty
+                                     :editor-textarea-id    "editor-text-area-id"
+                                     :editor-title-input-id "mde-form-title-field-id"
+                                     :editor-tag-id-prefix  "tag-bl-"
+                                     :page-title-atom       title-atom
+                                     :tags-atom-vector      tags-atom-vector
+                                     :page-content-ratom    content-atom}
 
-            (kbs/bind-shortcut-keys final-options)
+                                    options)]
+
+            (kbs/bind-shortcut-keys editor-state)
             [:div {:class "inner-editor-container"}
-             [layout-editor-header title-atom tags-atom-vector final-options]
-             [layout-editor-and-preview-section content-atom final-options]
-             [layout-editor-bottom-button-bar final-options]
-             [layout-unsaved-changes-warning-dialog final-options]
+             [layout-editor-header title-atom tags-atom-vector editor-state]
+             [layout-editor-and-preview-section content-atom editor-state]
+             [layout-editor-bottom-button-bar editor-state]
+             [layout-unsaved-changes-warning-dialog editor-state]
              [layout-duplicate-page-warning-dialog]
              [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))))
 
