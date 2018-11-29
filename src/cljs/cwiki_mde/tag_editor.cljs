@@ -8,12 +8,6 @@
             [cwiki-mde.ws :as ws]))
 
 ;-------------------------------------------------------------------------------
-; Data
-;
-
-(def ^{:private true} glbl-tag-map (atom {}))
-
-;-------------------------------------------------------------------------------
 ; Utilities
 ;
 
@@ -22,15 +16,6 @@
   and the default tag id prefix."
   [num options]
   (str (:editor-tag-id-prefix options) (inc num)))
-
-(defn tag-id->input-atom
-  "Given the html id of an editing control for a particular tag, return the
-  atom of the reactive component in the control."
-  [id]
-  (let [kw (keyword id)
-        res (kw @glbl-tag-map)]
-    (println "tag-id->input-atom: kw: " kw ", res: " res)
-    res))
 
 (defn delete-existing-tag
   "Delete an existing tag."
@@ -95,8 +80,6 @@
     (let [tag-of-interest (r/atom (nth @tags-vector-atom n ""))
           cnt (count @tag-of-interest)
           tag-id (tag-index->id n options)]
-      (swap! glbl-tag-map assoc (keyword tag-id) tag-of-interest)
-      (println "glbl-tag-map: " glbl-tag-map)
       [:input {:type      "text"
                :size      cnt
                :class     "tag-editor--name-input"

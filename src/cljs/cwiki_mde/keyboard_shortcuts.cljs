@@ -29,6 +29,18 @@
     (reset! input-atom (str before txt after))
     ((:dirty-editor-notifier editor-state) editor-state)))
 
+(defn- ele->input-atom
+  "Return the input atom embedded in the given html element. Returns
+  nil if the element is not the page content atom."
+  [ele editor-state]
+  (when-let [id (.-id ele)]
+    (when (= id (:editor-textarea-id editor-state))
+      (:page-content-ratom editor-state))))
+
+;;------------------------------------------------------------------------------
+;; Shortcut key binding.
+;;
+
 ;; Example of doing this manually.
 ;(let [save-fxn (:assemble-and-save-fn options)]
 ;  (.addEventListener js/document "keydown"
@@ -41,24 +53,6 @@
 ;                           (.preventDefault e)
 ;                           (.stopPropagation e)
 ;                           false))) false))
-
-(defn- tag-input-id->tag-input-atom
-  [id editor-state]
-  (println "tag id: " id)
-  (let [n (dec (js/parseInt (re-find  #"\d+" id )))
-        _ (println "n: " n)]
-    (println "tag number n: " n)
-    (println "(:tags-atom-vector editor-state)" (:tags-atom-vector editor-state))
-    (println "(deref (:tags-atom-vector editor-state)): " (deref (:tags-atom-vector editor-state)))
-    (nth (deref (:tags-atom-vector editor-state)) n)))
-
-(defn- ele->input-atom
-  [ele editor-state]
-  (when-let [id (.-id ele)]
-    (cond
-      (= id (:editor-textarea-id editor-state)) (:page-content-ratom editor-state)
-      (= id (:editor-title-input-id editor-state)) (:page-title-atom editor-state)
-      (s/starts-with? id (:editor-tag-id-prefix editor-state)) (te/tag-id->input-atom id))))
 
 (defn bind-shortcut-keys
   "Bind shortcut keys to actions."
@@ -88,7 +82,6 @@
                (let [ele (.-target evt)
                      formatted-now (get-formatted-now)
                      input-atom (ele->input-atom ele editor-state)]
-                 (println "ele: " ele ", formatted-now: " formatted-now ", input-atom: " input-atom)
                  (when (and ele formatted-now input-atom))
                    (insert-text-into-input ele
                                            formatted-now
