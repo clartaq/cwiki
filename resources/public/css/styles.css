@@ -336,7 +336,7 @@ body {
     font-size: 1.3rem;
     line-height: 1.8rem;
     margin: 0;
-    position: relative;
+   /* position: relative;*/
 }
 
 /* All of the visible content is held within a page div. */
@@ -1032,10 +1032,9 @@ div.one-column-list li {
     display: flex;
     flex: 1;
     height: 100%;
-    width: 100%;
-    max-width: 100%;
+    box-sizing: border-box;
     overflow: hidden;
-    padding: 0.5em 0.5em 0.5em 1.5em;
+    padding: 0.5rem 1rem 0.5rem 1rem;
     border-left: 1px solid var(--rule-color);
 }
 
@@ -1044,20 +1043,20 @@ div.one-column-list li {
 ** top and the editor and preview in a row below it.
  */
 .inner-editor-container {
-    /* make this container fill all remaining space in it's (flexbox) parent. */
-    flex: 1 1 auto;
     display: flex;
     flex-flow: column;
+    /* make this container fill all remaining space in it's (flexbox) parent. */
     /* Also makes the embedded textarea use full available height. */
-    height: 100%;
-    width: 100%;
+    flex: 1 1 auto;
+    box-sizing: border-box;
     overflow: hidden;
-    max-width: 100%;
+
+    padding-bottom: 5px;
 }
 
 .inner-editor-container .button-bar-container {
+    box-sizing: border-box;
     margin-top: 1rem;
-    overflow: hidden;
 }
 
 .editor-and-button-bar {
@@ -1079,8 +1078,10 @@ div.one-column-list li {
 }
 
 .mde-form-title-field {
-    width: 98%;
+    width: 100%;
+    box-sizing: border-box;
     font-size: 1rem;
+    padding-right: 0.1rem;
     padding-top: 0.2rem;
     padding-left: 0.1rem;
     padding-bottom: 0.3rem;
@@ -1166,22 +1167,15 @@ div.one-column-list li {
     display: flex;
     flex-direction: row;
     height: 100%;
-    width: 100%;
-    max-width: 100%;
-
     /* This is important to get it to work with Firefox */
-    /*overflow-y: scroll;*/
     overflow: hidden;
 }
 
 .editor-container {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    flex: 1;
-    flex-basis: 50%;
     height: 100%;
-    width: 50%;
-    max-width: 50%;
     padding-left: 10px;
     padding-right: 10px;
     overflow: hidden;
@@ -1191,15 +1185,10 @@ div.one-column-list li {
 ** The editor uses the default font for text areas.
  */
 .editor-textarea {
-
-    display: block;
     font-family: var(--fixed-font-family);
     box-sizing: border-box;
     height: 100%;
-    width: 100%;
     resize: none;
-    word-wrap: break-word;
-
     overflow-y: scroll;
 
     font-size: 1.2rem;
@@ -1219,14 +1208,14 @@ div.one-column-list li {
 
 .mde-preview-class {
     flex: 1;
+    box-sizing: border-box;
     height: 100%;
-    width: 100%;
     overflow-y: scroll;
 
     font-size: 1.3rem;
     line-height: 1.8rem;
     padding-left: 10px;
-    padding-right: 10px;
+    padding-right: 5px;
 }
 
 /*
