@@ -28,6 +28,7 @@ Features.md
 How_to_Make_a_Table_of_Contents.md
 Limits.md
 Links_Primer.md
+Markdown_Help.md
 Other_Wiki_Software.md
 Pages_Primer.md
 Roadmap.md
