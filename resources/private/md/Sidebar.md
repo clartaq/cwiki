@@ -2,17 +2,11 @@
 author: CWiki
 title: Sidebar
 date: 2017-06-11T13:32:19.000-04:00
-modified: 2018-11-24T12:13:23.817-05:00
+modified: 2018-11-29T17:38:34.449-05:00
 tags:
   - sidebar
   - special pages
 ---
-
-
-
-
-
-
 
 Here's your [[Sidebar]]. You can edit this page just like any other to put useful stuff here. Things like reminders of how to do things or useful links. See the [[About the Sidebar]] page for tips and information. Then, go ahead and edit it.
 
@@ -24,7 +18,7 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 * [[Special Pages]]
 * [[Roadmap]]
 * [[Work Notes]]
-* [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
+* [[Markdown Help]]
 
 ###### Tools ######
 

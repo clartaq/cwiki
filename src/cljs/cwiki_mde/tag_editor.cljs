@@ -86,6 +86,7 @@
                :id        tag-id
                :value     @tag-of-interest
                :on-focus  #(resize-tag-input tag-id)
+               ; Don't really seem to need this too.
               ; :on-blur   #(resize-tag-input tag-id)
                :on-click (fn [arg]
                            (let [ele (.-target arg)]
