@@ -7,14 +7,25 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased] ##
 ### Added ###
+
+- Explicitly set the Markdown editor to use a fixed-width font for editing.
+- Initial experiments with keyboard shortcuts.
+
 ### Changed ###
+
+- Layout of the editor page was improved such that it no longer allows the window header (and associated links) to be scrolled off the top of the page.
+- When you start editing a page, now the title is focused and the cursor is placed at the beginning of any existing title.
+- Changed coloring in icon editing buttons for better contrast.
+- Expanded and revised page content.
+- Updated dependencies.
+
 ### Fixed ###
 
 ## [0.1.2] - 2018-10-30 ##
 ### Changed ###
 
 - The marquee item in this release is the new handling of tags in the page editor. Much more flexible and inuitive. It also removes the artificial limit on the number of tags that can be associated with a page.
-- Expanded and revise content.
+- Expanded and revised content.
 - Updated project dependencies.
 
 ## [0.1.1] - 2018-10-16 ##

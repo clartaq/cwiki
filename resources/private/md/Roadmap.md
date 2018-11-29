@@ -2,7 +2,7 @@
 author: CWiki
 title: Roadmap
 date: 2018-09-20T11:11:38.543-04:00
-modified: 2018-09-24T16:40:55.310-04:00
+modified: 2018-11-29T16:33:57.728-05:00
 tags:
   - architecture
   - cwiki
@@ -11,6 +11,7 @@ tags:
   - process
   - technical note
 ---
+
 
 
 This project roadmap is an ever-evolving list of things to be changed and improved. Topic​s will appear and disappear from this page as development continues.
@@ -36,8 +37,6 @@ These topics fall into the following categories:
 * Automatic continuation of lists. It sure would be nice just to hit return and have the ​bullet marker show up.
 
 * Keyboard shortcuts. Making the editor more similar to existing external editors could reduce the cognitive dissonance of using the internal editor.
-
-* Beautify and style the edit/create pages. The tags interface is probably the worst offender.
 
 * It sure would be nice if the tags interface during editing provided some ​autocompletion or hints so you could see which tags already exist. (Is it "bug" or "bugs" for this type of post?)
 
