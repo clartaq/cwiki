@@ -2,7 +2,7 @@
 author: david
 title: Markdown Help
 date: 2018-11-18T15:39:33.103-05:00
-modified: 2018-12-01T13:35:51.540-05:00
+modified: 2018-12-01T17:27:52.152-05:00
 tags:
   - help
   - Markdown
@@ -184,6 +184,10 @@ Reference-style:
 ![alt text][logo]
 
 [logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+
+Here's a logo from CWiki demonstrating how a local image can be loaded too. This is the inline-style too.
+
+![A 150x150 pixel version of the CWiki icon](/img/favicon/mstile-150x150.png "One of the CWiki icon files used as a favicon.")
 ```
 
 Here's a logo from the [Markdown Here](https://github.com/adam-p/markdown-here) site, where I cribbed most of this help text from (hover to see the title text):
@@ -195,6 +199,10 @@ Reference-style:
 ![alt text][logo]
 
 [logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2"
+
+Here's a logo from CWiki demonstrating how a local image can be loaded too. This is the inline-style too.
+
+![A 150x150 pixel version of the CWiki icon](/img/favicon/mstile-150x150.png "One of the CWiki icon files used as a favicon.")
 
 ## Code and Syntax Highlighting <a name="code"></a> ##
 
