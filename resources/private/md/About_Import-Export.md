@@ -2,13 +2,14 @@
 author: CWiki
 title: About Import-Export
 date: 2017-12-10T09:47:06.000-05:00
-modified: 2018-08-15T15:55:23.658-04:00
+modified: 2018-12-01T13:20:53.681-05:00
 tags:
   - about
   - export
   - help
   - import
 ---
+
 
 
 
@@ -44,7 +45,7 @@ If the page has no author or the author is unknown to the system, or the author 
 
 #### Title
 
-If the metadata does not include a title, a random title will be generated. It will be hideous, so it should be easy to see on the [[All Pages]] page.
+If the metadata does not include a title, CWiki will attempt to create a title from the file name. If a suitable file name cannot be created, a random title will be generated. It will be hideous, so it should be easy to see on the [[All Pages]] page. All such pages have a title starting with "Title - " followed by some random characters.
 
 #### Timestamps
 

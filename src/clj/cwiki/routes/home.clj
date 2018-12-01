@@ -1,5 +1,6 @@
 (ns cwiki.routes.home
   (:require [cemerick.url :as url]
+            [clojure.string :as s]
             [compojure.core :refer :all]
             [compojure.response :as response]
             [cwiki.layouts.base :as layout]
@@ -133,7 +134,9 @@
   "Do the actual file import. Upon completion, notify the user that the
   import has succeeded. When acknowledged, display the imported page."
   [import-map file-name req]
-  (let [imported-page-title (db/add-page-from-map import-map
+  (let [file-name-only (first (s/split file-name #"\."))
+        enhanced-map (assoc import-map :file-name file-name-only)
+        imported-page-title (db/add-page-from-map enhanced-map ;import-map
                                                   (ri/req->user-name req))
         new-referer (str "/" imported-page-title)]
     (build-response (layout/confirm-import-page

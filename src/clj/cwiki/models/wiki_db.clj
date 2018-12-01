@@ -1,16 +1,16 @@
 (ns cwiki.models.wiki-db
   (:require [buddy.hashers :as hashers]
+            [clojure.edn :as edn]
             [clojure.java.io :as io]
             [clojure.java.jdbc :as jdbc]
+            [clojure.pprint :as pp]
             [clojure.set :as set]
             [clojure.string :as s]
+            [cwiki.util.datetime :as dt]
             [cwiki.util.files :as files]
             [cwiki.util.special :as special]
-            [cwiki.util.datetime :as dt]
             [taoensso.timbre :refer [trace debug info warn error
-                                     tracef debugf infof warnf errorf]]
-            [clojure.pprint :as pp]
-            [clojure.edn :as edn])
+                                     tracef debugf infof warnf errorf]])
   (:import (java.io File)
            (java.util UUID)
            (org.h2.jdbc JdbcClob)))
@@ -717,17 +717,20 @@
 
 (defn add-page-from-map
   "Add a new page to the wiki using the information in a map. The map must
-  have two keys, :meta and :body. Meta contains things like the author name,
-  tags, etc. The body contains the Markdown content. If the author cannot be
-  determined or is not recognized, the contents of the 'default-author'
-  argument is used. If there is no title, a random title is created.
+  have three keys, :meta, :body and :file-name. Meta contains things like
+  the author name, tags, etc. The body contains the Markdown content. If
+  the author cannot be determined or is not recognized, the contents of
+  the 'default-author' argument is used. If there is no title, the file name
+  is used, otherwise a random title is created.
   Return the title of the imported page."
   ([m default-author]
    (add-page-from-map m default-author (get-h2-db-spec)))
   ([m default-author db]
    (let [meta (:meta m)
          author-id (get-author-from-import-meta-data meta default-author db)
-         title (or (:title meta) (str "Title - " (UUID/randomUUID)))]
+         title (or (:title meta)
+                   (:file-name m)
+                   (str "Title - " (UUID/randomUUID)))]
      (when (and author-id title)
        (let [content (:body m)
              creation-date-str (or (:date meta)
