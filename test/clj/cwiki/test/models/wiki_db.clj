@@ -1,7 +1,8 @@
 (ns cwiki.test.models.wiki-db
-  (:require [clojure.test :refer :all]
-            [cwiki.models.wiki-db :as db] ;:refer :all]
-            [clojure.java.io :as io]
+  (:require [clojure.java.io :as io]
+            [clojure.test :refer :all]
+            [clojure.string :as s]
+            [cwiki.models.wiki-db :as db]
             [cwiki.util.files :as files]
             [taoensso.timbre :refer [trace debug info warn error
                                      tracef debugf infof warnf errorf]])
@@ -35,8 +36,10 @@
   containing YAML front matter."
   [file-name db]
   (let [file (File. (str "test/data/" file-name))
-        m (files/load-markdown-from-file file)]
-    (db/add-page-from-map m "CWiki" db)))
+        file-name-only (first (s/split file-name #"\."))
+        m (files/load-markdown-from-file file)
+        enhanced-map (assoc m :file-name file-name-only)]
+    (db/add-page-from-map enhanced-map "CWiki" db)))
 
 (defn add-test-pages!
   "Read the pages used for testing from files and add them to the test database."
@@ -115,6 +118,15 @@
 ; Tests
 ;-------------------------------------------------------------------------------
 
+; Assure that test files were added with expected titles.
+
+(deftest add-page-from-map-test
+  (testing "That the add-page-from-map function created the expected page titles."
+    (is (some? (db/title->page-id "NoDatesOrTagsBlankTitle" (get-test-db-spec))))
+    (is (some? (db/title->page-id "NoDatesOrTagsOrTitle" (get-test-db-spec))))
+    (is (some? (db/title->page-id "NoMeta" (get-test-db-spec))))
+    (is (nil? (db/title->page-id "NoMetaD" (get-test-db-spec))))))
+
 (deftest find-user-by-name-test
   (testing "find-user-by-name"
     (is (nil? (db/find-user-by-name "blofeld" (get-test-db-spec))))
@@ -156,8 +168,8 @@
 (defn insert-test-data
   [title content tags]
   (let [new-id (:page_id (db/insert-new-page! title content tags
-                                           (db/get-cwiki-user-id)
-                                           (get-test-db-spec)))]
+                                              (db/get-cwiki-user-id)
+                                              (get-test-db-spec)))]
     new-id))
 
 (deftest delete-page-by-id-test

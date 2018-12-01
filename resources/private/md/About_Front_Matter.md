@@ -2,12 +2,13 @@
 author: CWiki
 title: About Front Matter
 date: 2017-12-24T17:15:16.000-05:00
-modified: 2018-09-18T18:00:31.679-04:00
+modified: 2018-12-01T13:16:23.589-05:00
 tags:
   - about
   - front matter
   - metadata
 ---
+
 
 
 
@@ -49,7 +50,7 @@ You can see how these items are used and laid out at the top of this page. These
 The metadata does not *have* to be present when you import a file. You can even import plain text files if you like. The program will make up some items of the metadata if needed.
 
 ### There must be a title ###
-If no title is present when you import an existing file, an ugly, random title will be created and used. The ugliness is to make it easier for you to spot in the [[All Pages]] page.
+If no title is present when you import an existing file, CWiki will attempt to create a title from the file name. If a title cannot be generated for some reason, an ugly, random title will be created and used. The ugliness is to make it easier for you to spot in the [[All Pages]] page.
 
 ### The author must already be known to CWiki ###
 If the author does not already exist in the database, CWiki will be listed as the author.
