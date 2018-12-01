@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased] ##
+
+This time, most of the work was devoted to making the editor more usable. In my own use, it has much less friction. They layout helped as did the "Save File" shortcut key.
+
 ### Added ###
 
 - Explicitly set the Markdown editor to use a fixed-width font for editing.
@@ -20,6 +23,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Updated dependencies.
 
 ### Fixed ###
+
+- Resolved issue [#30: "Importing a File Should Create the Page Title from the File Name"](https://bitbucket.org/David_Clark/cwiki/issues/30/importing-a-file-should-create-the-page) in commit [6e3d82958720](https://bitbucket.org/David_Clark/cwiki/commits/6e3d82958720).
+- Resolved issue [#34: "The Tag Delete and Add Buttons Do Not Trigger an Autosave"](https://bitbucket.org/David_Clark/cwiki/issues/34/the-tag-delete-and-add-buttons-do-not) in commit [84c54811ebb9](https://bitbucket.org/David_Clark/cwiki/commits/84c54811ebb9).
+- Resolved issue [#35: "Editor Layout is All Screwed Up Again"](https://bitbucket.org/David_Clark/cwiki/issues/35/editor-layout-is-all-screwed-up-again) in commit [9f393f4492d1](https://bitbucket.org/David_Clark/cwiki/commits/9f393f4492d1). This gets the layout just as I want it.
+- Resolved issue [#37: "The \"Cancel\" Button at the Bottom of the Editor Should Not be Available after an Autosave or After Clicking the Save Button"](https://bitbucket.org/David_Clark/cwiki/issues/37/the-cancel-button-at-the-bottom-of-the) in commit [1eb9766b776a](https://bitbucket.org/David_Clark/cwiki/commits/1eb9766b776a). This has since become irrelevant since there is no longer a cancel button in the editor.
+- Resolved issue [#38: "If there are no changes to save, the bottom \"Save Changes\" button should just say \"Done\""](https://bitbucket.org/David_Clark/cwiki/issues/38/if-there-are-no-changes-to-save-the-bottom) in commit [19c4cb1529b9](https://bitbucket.org/David_Clark/cwiki/commits/19c4cb1529b9). The editor now uses a single button to exit. It will warn if there are unsaved changes before exiting.
 
 ## [0.1.2] - 2018-10-30 ##
 ### Changed ###
@@ -36,7 +45,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - The "Save" and "Cancel" buttons in the editor are now at the top of the editor window. They do not scroll out of view on long pages.
 
 ### Fixed ###
-- Resolved issue [#22: :"Editing User Profile does not Change Profile"](https://bitbucket.org/David_Clark/cwiki/issues/22/editing-user-profile-does-not-change) in commit [68d222f](https://bitbucket.org/David_Clark/cwiki/commits/68d222fe7f1a5580132bb07befdc8031e33b6ba5). Editing a profile now keeps any changes made.
+- Resolved issue [#22: "Editing User Profile does not Change Profile"](https://bitbucket.org/David_Clark/cwiki/issues/22/editing-user-profile-does-not-change) in commit [68d222f](https://bitbucket.org/David_Clark/cwiki/commits/68d222fe7f1a5580132bb07befdc8031e33b6ba5). Editing a profile now keeps any changes made.
 - Resolved issue [#23: "Different Scrolling Behavior in Firefox"](https://bitbucket.org/David_Clark/cwiki/issues/23/different-scrolling-behavior-in-firefox) in commit [8c10386](https://bitbucket.org/David_Clark/cwiki/commits/8c10386e92f4284fa84fea1c4245fcf2fb330343). Scrolling of the browser window is now consistent on Safari, Firefox, Brave, and Opera.
 - Resolved issue [#26: "Editing Area Mis-Sized
 Create issue"](https://bitbucket.org/David_Clark/cwiki/issues/26/editing-area-mis-sized) in commit [dd51b0b](https://bitbucket.org/David_Clark/cwiki/commits/dd51b0b3326f4bffcc0bcca8d108445db379f614#chg-resources/public/css/styles.css).
