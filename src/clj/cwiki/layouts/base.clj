@@ -722,14 +722,14 @@
                               :value       (str delay)}
                              "autosave-interval")
                  [:p {:class "hint-field"}
-                  "Enter an integer representing the number of seconds after the last
-                  keypress before saving the edits to a document. The default value
-                  of zero (0) indicates that there should not be any automatic saving."]
+                  "Enter an integer representing the number of seconds after
+                  the last keypress before saving the edits to a document. The
+                  default value of zero (0) indicates that there should not be
+                  any automatic saving."]
                  [:p {:class "hint-field"}
-                  "A setting of zero is recommended since autosaving nullifys the effect
-                  of the \"Cancel\" button. That is, when autosave is turned on,
-                  pressing the \"Cancel\" button will only restore the document to the
-                  state it was in at the time of the last autosave."]]
+                  "A setting of zero is recommended if you want to retain the
+                  ability to revert to the unaltered version of a page. Once an
+                  autosave occurs, you cannot easily recover the unaltered page."]]
                 [:div {:class "button-bar-container"}
                  (submit-button {:id    "save-options-button"
                                  :class "form-button button-bar-item"} "Save")
