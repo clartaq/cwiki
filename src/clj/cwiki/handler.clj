@@ -4,7 +4,7 @@
 ;;;
 
 (ns cwiki.handler
-  (:require [cemerick.url :as u]
+  (:require [cemerick.uri :as uri]
             [clojure.string :as s]
             [compojure.core :refer [defroutes routes]]
             [compojure.response :as response]
@@ -58,7 +58,7 @@
   "Deal with a request for a page in the wiki, including some special
   pages and pages that may not even exist yet."
   [request]
-  (let [title (s/replace-first (u/url-decode (:uri request)) "/" "")
+  (let [title (s/replace-first (uri/uri-decode (:uri request)) "/" "")
         raw-post (db/find-post-by-title title)]
     (cond
       (wanna-delete? request) (if (ath/can-edit-and-delete? request title)
