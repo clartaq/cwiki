@@ -11,7 +11,8 @@
 
                  [buddy/buddy-auth "2.1.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [buddy/buddy-hashers "1.3.0"]
-                 [com.cemerick/url "0.1.1"]
+                 ;[com.cemerick/url "0.1.1"]
+                 [com.arohner/uri "0.1.2"]
                  [com.h2database/h2 "1.4.197"]
                  [circleci/clj-yaml "0.5.6"]
                  [clj-time "0.15.1"]

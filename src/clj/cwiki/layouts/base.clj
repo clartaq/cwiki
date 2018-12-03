@@ -5,7 +5,7 @@
 ;;; application.
 
 (ns cwiki.layouts.base
-  (:require [cemerick.url :as u]
+  (:require [cemerick.uri :as uri]
             [clj-time.core :as t]
             [clj-time.format :as f]
             [clj-time.coerce :as c]
@@ -94,7 +94,7 @@
   [post-map req]
   (let [page-title (db/page-map->title post-map)]
     (when (special/is-editable? page-title)
-      (let [uri (str (u/url-encode page-title) "?edit=true")
+      (let [uri (str (uri/uri-encode page-title) "?edit=true")
             h (hc/html (link-to uri "Edit"))]
         h))))
 
@@ -104,7 +104,7 @@
   [post-map req]
   (let [page-title (db/page-map->title post-map)]
     (when (special/is-deletable? page-title)
-      (let [uri (str (u/url-encode page-title) "?delete=true")
+      (let [uri (str (uri/uri-encode page-title) "?delete=true")
             h (hc/html (link-to uri "Delete"))]
         h))))
 
