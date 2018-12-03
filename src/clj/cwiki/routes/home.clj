@@ -1,5 +1,5 @@
 (ns cwiki.routes.home
-  (:require [cemerick.uri :as uri]
+  (:require [cemerick.url :as url]
             [clojure.string :as s]
             [compojure.core :refer :all]
             [compojure.response :as response]
@@ -68,7 +68,7 @@
   (let [actual-id (Integer/valueOf ^String page-id)
         tags (get-tag-set-from-req req)]
     (db/update-page-title-and-content! actual-id new-title tags new-content)
-    (let [escaped-title (uri/uri-encode new-title)]
+    (let [escaped-title (url/url-encode new-title)]
       ; Important! We redirect here so that functions which use the
       ; referring page get the page itself and not the editing page.
       (redirect (str "/" escaped-title)))))
