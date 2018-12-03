@@ -2,7 +2,7 @@
 author: david
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2018-11-25T17:37:56.914-05:00
+modified: 2018-12-02T17:39:33.524-05:00
 tags:
   - cwiki
   - design
@@ -22,6 +22,28 @@ This page is the on-going saga of working on the CWiki program.
 - Need to work on the CSS for lists so that sub-lists don't get formatted so weird, 24 Nov 2018, 04:07:18 pm.
 - When inserting text with a keystroke shortcut, the page is not marked as dirty and the preview is not updated. 25 Nov 2018, 03:38:23 pm.
 - Seems like it's getting to be time to split out "commands", "keyboard-shortcuts", and "buttons" into their own namespaces in the editor. Getting to be like Java, 25 Nov 2018, 05:37:45 pm.
+- When importing a plain Markdown file without frontmatter, the page should be named based on the name of the file imported, not the random number that is generated now, 27 Nov 2018, 05:45:36 pm.
+
+##### Stop Deleting the Following Call from the Production Version of cwiki.middleware, 02 Dec 2018, 05:34:11 pm. #####
+
+```clojure
+(ns cwiki.middleware
+  (:require 
+  ...
+            [clojure.java.io :as io]
+  ...
+  ; Have to have this for the uberjar to start on a virgin system.
+  ; Just makes sure the "resources" directory exists so that the
+  ; "wrap-file" middleware below doesn't blow up.
+  (io/make-parents "resources/random-file.txt")
+  ...
+```
+
+For some reason, I keep deleting this. Without it, you can't start CWiki on a virgin system since the `resources` directory won't exist.
+
+##### Noticed that leading or trailing spaces around the link text or replacement text in a wikilink can cause the link to fail, 02 Dec 2018, 05:30:16 pm. #####
+
+For example, `[[preferences|Preferences]]` works, but `[[preferences | Preferences]]` does not.
 
 ##### Newly created tags should begin with the newly created text highlighted so the user can just start typing, 24 Nov 2018, 01:34:56 pm. #####
 
