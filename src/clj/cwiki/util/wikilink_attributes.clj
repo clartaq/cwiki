@@ -4,7 +4,7 @@
 ;;; These two classes are intended to replace the ad hoc methods used to
 ;;; parse wikilinks in Markdown files. They have the advantage that
 ;;; wikilinks inside of code blocks and preformatted text is not converted
-;;; to a link because we are using a parset that actually parses the
+;;; to a link because we are using a parser that actually parses the
 ;;; Markdown file rather than searching through the file for matching
 ;;; regular expressions.
 ;;;
@@ -34,7 +34,7 @@
 ;-------------------------------------------------------------------------------
 
 ; The style used for "normal" links.
-(def ok-to-link-style nil)                                  ;"color:green;") ;just for testing
+(def ok-to-link-style nil)
 ; The style used for links to non-existent pages. Triggers page creation.
 (def non-existent-link-style "color:red;")
 ; This is the style used for disabled links.
