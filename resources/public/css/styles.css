@@ -91,7 +91,7 @@ url("/public/fonts/STIX2Math.woff2") format("woff2"),
 
 /*
 ** This is the icon font. It was created from Font Awesome icons compiled into
-** a custom face by fontello.com. This application does not need all of the
+** a custom file by fontello.com. This application does not need all of the
 ** font files provided.
  */
 
@@ -224,7 +224,7 @@ html, body {
     --form-button-focus-border-color: #0036ff;
     --form-button-focus-box-shadow-color: #6fb5f1;
     --form-button-active-background-color: #d2d6d6;
-    --form-button-active-box-shadow-color: rgba(0, 0, 0, 0.1);
+    --form-button-active-box-shadow-color: #d2d6d6;
     --required-color: red;
     --table-color: #333333;
     --table-border-color: #999999;
@@ -316,18 +316,7 @@ small {
     font-size: 0.833rem;
 }
 
-/*
-** Had to move the contents of the previously existing "page" class to
-** the body because the editor did not include the "page" class and
-** scrolled weirdly as a result.
- */
 body {
-    /*
-    display: flex;
-    height: 100%;
-    flex-direction: column;
-    */
-
     padding: 0.15rem;
     font-family: var(--body-font-family);
     font-weight: normal;
@@ -336,7 +325,6 @@ body {
     font-size: 1.3rem;
     line-height: 1.8rem;
     margin: 0;
-   /* position: relative;*/
 }
 
 /* All of the visible content is held within a page div. */
@@ -347,6 +335,7 @@ body {
     width: 100%;
     max-width: 100%;
     flex-direction: column;
+    box-sizing: border-box;
     overflow: hidden;
 }
 
@@ -523,7 +512,6 @@ inside another flexbox. */
     flex-direction: row;
     height: 100%;
     width: 100%;
-    max-width: 100%;
     overflow: hidden;
 }
 
@@ -568,7 +556,7 @@ inside another flexbox. */
     overflow: auto;
 }
 
-/* The page title and meta info at the top of the page content. */
+/* The page title and meta info at the top of the page view. */
 .page-title-div {
     padding-bottom: 1.2rem;
 }
@@ -593,7 +581,6 @@ inside another flexbox. */
 .date-line {
     text-align: left;
     margin-bottom: 0;
-    /*-0.3rem;*/
     font-size: 0.95rem;
 }
 
@@ -737,7 +724,6 @@ inside another flexbox. */
     color: var(--form-button-color);
     cursor: default;
     display: inline-block;
-    /*font: inherit;*/
     font-family: var(--body-font-family);
     font-size: 1.1rem;
     font-weight: 600;
@@ -1176,6 +1162,7 @@ div.one-column-list li {
     display: flex;
     flex-direction: column;
     height: 100%;
+    box-sizing: border-box;
     padding-left: 10px;
     padding-right: 10px;
     overflow: hidden;
@@ -1338,7 +1325,7 @@ div.one-column-list li {
 }
 
 .tag-editor--name-input:hover {
-var(--form-button-hover-color);
+    background-color: var(--form-button-hover-color);
 }
 
 .tag-editor--button-image:hover:active {
