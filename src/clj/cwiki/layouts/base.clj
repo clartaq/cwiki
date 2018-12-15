@@ -21,7 +21,9 @@
             [hiccup.form :refer [form-to hidden-field submit-button text-area
                                  text-field]]
             [hiccup.page :refer [html5 include-css include-js]])
-  (:import (cwiki.util WikiLinkAttributeExtension)
+  (:import (cwiki.extensions CWikiLinkAttributeExtension)
+           ;(cwiki.extensions CWikiLinkRendererExtension)
+           ;(cwiki.extensions CWikiLinkResolverExtension)
            (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
            (com.vladsch.flexmark.ext.footnotes FootnoteExtension)
@@ -56,7 +58,9 @@
                                            [(FootnoteExtension/create)
                                             (StrikethroughExtension/create)
                                             (WikiLinkExtension/create)
-                                            (WikiLinkAttributeExtension/create)
+                                            ;(CWikiLinkRendererExtension/create)
+                                            (CWikiLinkAttributeExtension/create)
+                                            ;(CWikiLinkResolverExtension/create)
                                             (TablesExtension/create)]))))
 
 (def parser (.build ^com.vladsch.flexmark.parser.Parser$Builder (Parser/builder options)))
