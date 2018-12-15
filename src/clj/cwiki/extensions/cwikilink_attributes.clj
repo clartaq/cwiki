@@ -13,7 +13,7 @@
 ;;; at all, so a :prep-tasks task is included in the project file.
 ;;;
 
-(ns cwiki.util.wikilink-attributes
+(ns cwiki.extensions.cwikilink-attributes
   (:require [clojure.string :as s]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.req-info :as ri]
@@ -103,7 +103,7 @@
 ;-------------------------------------------------------------------------------
 
 (gen-class
-  :name cwiki.util.WikiLinkAttributeProvider
+  :name cwiki.extensions.CWikiLinkAttributeProvider
   :implements [com.vladsch.flexmark.html.AttributeProvider]
   :methods [^{:static true} [Factory [] com.vladsch.flexmark.html.AttributeProviderFactory]])
 
@@ -119,7 +119,7 @@
 (defn ^AttributeProviderFactory -Factory []
   (proxy [IndependentAttributeProviderFactory] []
     (create [^LinkResolverContext context]
-      (cwiki.util.WikiLinkAttributeProvider.))))
+      (cwiki.extensions.CWikiLinkAttributeProvider.))))
 
 ;-------------------------------------------------------------------------------
 ; The WikiLinkAttributeExtension provides the glue that plugs the
@@ -128,15 +128,15 @@
 
 ; First provide a forward declaration.
 (gen-class
-  :name cwiki.util.WikiLinkAttributeExtension
+  :name cwiki.extensions.CWikiLinkAttributeExtension
   :implements [com.vladsch.flexmark.html.HtmlRenderer$HtmlRendererExtension])
 
 ; Then expand it with the declaration of the method that returns an
 ; instance of the class.
 (gen-class
-  :name cwiki.util.WikiLinkAttributeExtension
+  :name cwiki.extensions.CWikiLinkAttributeExtension
   :implements [com.vladsch.flexmark.html.HtmlRenderer$HtmlRendererExtension]
-  :methods [^{:static true} [create [] cwiki.util.WikiLinkAttributeExtension]])
+  :methods [^{:static true} [create [] cwiki.extensions.CWikiLinkAttributeExtension]])
 
 (defn -rendererOptions
   [this ^MutableDataHolder options]
@@ -145,7 +145,7 @@
 
 (defn -extend
   [this ^HtmlRenderer$Builder rendererBuilder ^String rendererType]
-  (.attributeProviderFactory rendererBuilder (cwiki.util.WikiLinkAttributeProvider/Factory)))
+  (.attributeProviderFactory rendererBuilder (cwiki.extensions.CWikiLinkAttributeProvider/Factory)))
 
-(defn ^cwiki.util.WikiLinkAttributeExtension -create []
-  (cwiki.util.WikiLinkAttributeExtension.))
+(defn ^cwiki.extensions.CWikiLinkAttributeExtension -create []
+  (cwiki.extensions.CWikiLinkAttributeExtension.))
