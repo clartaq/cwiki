@@ -5,9 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] ##
+## [0.1.3] - 2018-11-17 ##
 
-This time, most of the work was devoted to making the editor more usable. In my own use, it has much less friction. They layout helped as did the "Save File" shortcut key.
+This time, most of the work was devoted to making the editor more usable. In my own use, it has much less friction. The layout helped as did the "Save File" shortcut key.
 
 ### Added ###
 
@@ -17,13 +17,18 @@ This time, most of the work was devoted to making the editor more usable. In my 
 ### Changed ###
 
 - Layout of the editor page was improved such that it no longer allows the window header (and associated links) to be scrolled off the top of the page.
+- Punctuation characters can now be used in page titles without creating malformed URLs for the wikilinks.
 - When you start editing a page, now the title is focused and the cursor is placed at the beginning of any existing title.
 - Changed coloring in icon editing buttons for better contrast.
 - Expanded and revised page content.
 - Updated dependencies.
+- Punctuation can now be used in page titles.
 
 ### Fixed ###
 
+- Resolved issue [#6: "Deleting a Highlighted Tag does not always Work"](https://bitbucket.org/David_Clark/cwiki/issues/6/deleting-a-highlighted-tag-does-not-always). This was closed because it has not been observed since fundamentally changing tag creation, deletion, and editing in release 0.1.2.
+- Resolved issue [#21: "Cant Edit Files with Slash ("/") Character in Page Title"](https://bitbucket.org/David_Clark/cwiki/issues/21/cant-edit-files-with-slash-character-in) in commit [01b62679ccb6]( https://bitbucket.org/David_Clark/cwiki/commits/01b62679ccb6).
+- Resolved issue [#31 "Editor Should Flag Illegal Characters in Title"](https://bitbucket.org/David_Clark/cwiki/issues/31/editor-should-flag-illegal-characters-in) in commit [01b62679ccb6]( https://bitbucket.org/David_Clark/cwiki/commits/01b62679ccb6).
 - Resolved issue [#30: "Importing a File Should Create the Page Title from the File Name"](https://bitbucket.org/David_Clark/cwiki/issues/30/importing-a-file-should-create-the-page) in commit [6e3d82958720](https://bitbucket.org/David_Clark/cwiki/commits/6e3d82958720).
 - Resolved issue [#34: "The Tag Delete and Add Buttons Do Not Trigger an Autosave"](https://bitbucket.org/David_Clark/cwiki/issues/34/the-tag-delete-and-add-buttons-do-not) in commit [84c54811ebb9](https://bitbucket.org/David_Clark/cwiki/commits/84c54811ebb9).
 - Resolved issue [#35: "Editor Layout is All Screwed Up Again"](https://bitbucket.org/David_Clark/cwiki/issues/35/editor-layout-is-all-screwed-up-again) in commit [9f393f4492d1](https://bitbucket.org/David_Clark/cwiki/commits/9f393f4492d1). This gets the layout just as I want it.
