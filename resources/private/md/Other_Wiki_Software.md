@@ -2,14 +2,14 @@
 author: CWiki
 title: Other Wiki Software
 date: 2017-10-10T13:20:24.000-04:00
-modified: 2018-06-28T18:02:19.450-04:00
+modified: 2018-12-05T17:44:34.237-05:00
 tags:
   - alternatives
+  - note-taking software
   - wiki software
 ---
 
-
-Here are some other wikis that I find interesting. Some of these are quite mature and very polished. Each has an opinionated approach to information management that works very smoothly when used as intended. Of course, each is missing something that I want. Otherwise, I would not have found it necessary to write CWiki.
+Here are some other wikis (and note-taking apps and personal knowledge bases) that I find interesting. Some of these are quite mature and very polished. Each has an opinionated approach to information management that works very smoothly when used as intended. Of course, each is missing something that I want. Otherwise, I would not have found it necessary to write CWiki.
 
 These wiki programs are all open source and under active development, as this is written (Autumn 2017). I encourage you to visit the home page of each of these projects and see what you think.
 
@@ -58,6 +58,46 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 - Frankly, it's ugly.
 - The editor is neither plain text or WYSIWYG. It is distracting. It makes things difficult to read. And there is no page format just for reading without the clutter.
 - Following links is un-intuitive.
+
+## Trilium Notes ##
+
+[Trilium Notes](https://github.com/zadam/trilium) is a note-taking application intended to help you build a personal knowledge base.
+
+What I find particularly interesting is that it can organize your notes hierarchically with one note appearing at more than one place in the hierarchy.
+
+### Features ###
+
+Lots of interesting features. You can see a list at the [repository site](https://github.com/zadam/trilium).
+
+- Scriptable
+- Hierarchical
+- Evernote and Markdown import.
+- Several different types of notes: text, code, _etc.
+
+### Pros ###
+
+- Hierarchical notes
+
+### Cons ###
+
+- It's an [Electron](https://electronjs.org)-based application written in JavaScript.
+- The UI is attractive, but a bit "busy."
+
+## Mindforger ##
+
+[Mindforger](https://github.com/dvorka/mindforger) bills itself as a "Thinking Notebook & Markdown IDE".
+
+### Features ###
+
+- Makes associations as you read and write.
+
+### Pros ###
+
+- Unknown
+
+### Cons ###
+
+- Unknown
 
 ## CherryTree ##
 
@@ -138,7 +178,7 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 ### Cons ###
 
 - Huge installation.
-- Administration is complicated in my opinion.
+- Administering an installation is complicated in my opinion.
 
 ## Boostnote ##
 
@@ -158,7 +198,7 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 
 - Written in JavaScript using the huge [Electron](https://electronjs.org/) ecosystem.
 - Has some problems with $\rm\TeX$, like not being able to render $\rm\TeX$ correctly. (It uses the Katex parser/renderer.)
-- Not really a wiki. It's a note-taking app. No support for within-wiki linking that I can find.
+- Not really a wiki. It's a note-taking app. There is no support for within-wiki linking that I can find.
 
 ## Joplin ##
 
@@ -183,9 +223,9 @@ See the Wikipedia article [here](https://en.wikipedia.org/wiki/WikidPad).
 
 * Another Electron app.
 * Not capable of wiki linking within its database of notes.
-* Doesn't seem to support the ​creation of Tables of Contents in Markdown in the usual way.
-* It doesn't seem possible to change the layout of the application's main page. When notes have long names, they can be truncated in the column that lists the notes in the open notebook.​
-* It does not seem possible to change the layout of the list of notebooks. For example, you cannot move one notebook higher in the list.
-* It would be nice if the application retained a "history" of notes visited such that you could move backward and forward through the list of notes already viewed, like you can with a browser.
+* Doesn't seem to support the creation of Tables of Contents in Markdown in the usual way.
+* It doesn't seem possible to change the layout of the application's main page. When notes have long names, they can be truncated in the column that lists the notes in the open notebook.
+* It does not seem possible to change the layout of the list of notebooks. For example, you cannot move one notebook higher on the list.
+* It would be nice if the application retained a "history" of notes visited such that you could move backward and forward through the list of notes already viewed​ like you can with a browser.
 
 Each of these alternative applications has pluses and minuses. Obviously, or I wouldn't have written CWiki.

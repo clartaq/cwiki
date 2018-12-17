@@ -18,11 +18,11 @@
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [com.taoensso/sente "1.13.1"]
                  [com.taoensso/timbre "4.10.0"]
-                 [com.vladsch.flexmark/flexmark "0.34.58"]
-                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.34.58"]
-                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.34.58"]
-                 [com.vladsch.flexmark/flexmark-ext-tables "0.34.58"]
-                 [com.vladsch.flexmark/flexmark-ext-wikilink "0.34.58"]
+                 [com.vladsch.flexmark/flexmark "0.35.0"]
+                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.35.0"]
+                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.35.0"]
+                 [com.vladsch.flexmark/flexmark-ext-tables "0.35.0"]
+                 [com.vladsch.flexmark/flexmark-ext-wikilink "0.35.0"]
                  [compojure "1.6.1" :exclusions [clout instaparse]]
                  [environ "1.1.0"]
                  [hiccup "1.0.5"]
@@ -45,6 +45,10 @@
   :uberjar-name "cwiki.jar"
 
   :source-paths ["src/clj"]
+  :java-source-paths ["src/java"]
+
+  ;:aot [cwiki.extensions.cwikilink-attributes]
+  :prep-tasks ["javac"]
 
   ; Leave this alone. IntelliJ has issues otherwise.
   :test-paths ["test/clj"]
@@ -75,7 +79,7 @@
 
                        :source-paths ["env/dev/clj"]
 
-                       :prep-tasks   [["compile" "cwiki.util.wikilink-attributes"]]
+                       :prep-tasks   ["javac" ["compile" "cwiki.extensions.cwikilink-attributes"]]
 
                        :plugins      [[lein-doo "0.1.10"]
                                       [lein-figwheel "0.5.16"]]
@@ -91,7 +95,8 @@
                        :source-paths ["env/prod/clj"]
                        :hooks        [minify-assets.plugin/hooks]
                        :prep-tasks   ["clean"
-                                      ["compile" "cwiki.util.wikilink-attributes"]
+                                      ["javac"]
+                                      ["compile" "cwiki.extensions.cwikilink-attributes"]
                                       "compile"
                                       ["cljsbuild" "once" "min"]]
                        ; This really shouldn't be required. There is some sort of

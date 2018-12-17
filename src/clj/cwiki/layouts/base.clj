@@ -22,14 +22,13 @@
                                  text-field]]
             [hiccup.page :refer [html5 include-css include-js]])
   (:import (cwiki.extensions CWikiLinkAttributeExtension)
-           ;(cwiki.extensions CWikiLinkRendererExtension)
-           ;(cwiki.extensions CWikiLinkResolverExtension)
+           (cwiki.extensions CWikiLinkResolverExtension)
            (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
            (com.vladsch.flexmark.ext.tables TablesExtension)
            (com.vladsch.flexmark.ext.footnotes FootnoteExtension)
            (com.vladsch.flexmark.ext.wikilink WikiLinkExtension)
-           (com.vladsch.flexmark.html HtmlRenderer)
-           (com.vladsch.flexmark.parser Parser)
+           (com.vladsch.flexmark.html HtmlRenderer HtmlRenderer$Builder)
+           (com.vladsch.flexmark.parser Parser Parser$Builder)
            (com.vladsch.flexmark.util KeepType)
            (com.vladsch.flexmark.util.options MutableDataSet)
            (java.net URL URLDecoder)
@@ -57,14 +56,16 @@
                  (.set Parser/EXTENSIONS (ArrayList.
                                            [(FootnoteExtension/create)
                                             (StrikethroughExtension/create)
+                                            ; Order is important here.
+                                            ; Our custom link resolver must
+                                            ; preceed the default resolver.
+                                            (CWikiLinkResolverExtension/create)
                                             (WikiLinkExtension/create)
-                                            ;(CWikiLinkRendererExtension/create)
                                             (CWikiLinkAttributeExtension/create)
-                                            ;(CWikiLinkResolverExtension/create)
                                             (TablesExtension/create)]))))
 
-(def parser (.build ^com.vladsch.flexmark.parser.Parser$Builder (Parser/builder options)))
-(def renderer (.build ^com.vladsch.flexmark.html.HtmlRenderer$Builder (HtmlRenderer/builder options)))
+(def parser (.build ^Parser$Builder (Parser/builder options)))
+(def renderer (.build ^HtmlRenderer$Builder (HtmlRenderer/builder options)))
 
 (defn- convert-markdown-to-html
   "Convert the markdown formatted input string to html

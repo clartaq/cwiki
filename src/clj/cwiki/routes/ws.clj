@@ -7,12 +7,13 @@
             [compojure.core :refer [GET POST defroutes]]
             [cwiki.layouts.editor :as editor-layout]
             [cwiki.models.wiki-db :as db]
+            [cwiki.util.percent-encode :as pe]
             [ring.util.response :refer [redirect status]]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
             [taoensso.timbre :as log]
-            ; :refer [tracef debugf infof warnf errorf
-            ;                         trace debug info warn error]]
+    ; :refer [tracef debugf infof warnf errorf
+    ;                         trace debug info warn error]]
             )
   (:import (java.net URL)))
 
@@ -98,11 +99,12 @@
   ;; the home page for the wiki, get the title of that page and return it.
   ;; The special handling for the home page is because the referrer does not
   ;; include the page title, just the slash character
-  (cond
-    (identity page-id) (db/page-id->title page-id)
-    (s/ends-with? referrer "/") (db/get-option-value :root_page)
-    (and page-title (db/title->page-id page-title)) page-title
-    :default (page-from-referrer referrer)))
+  (let [plain-title (cond
+                      (identity page-id) (db/page-id->title page-id)
+                      (s/ends-with? referrer "/") (db/get-option-value :root_page)
+                      (and page-title (db/title->page-id page-title)) page-title
+                      :default (page-from-referrer referrer))]
+    (pe/percent-encode plain-title)))
 
 (defn- quit-editing!
   "Handle the message from the editor that it wants to quit editing.

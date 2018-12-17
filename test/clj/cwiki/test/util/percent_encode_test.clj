@@ -1,0 +1,26 @@
+(ns cwiki.test.util.percent-encode-test
+  (:require [clojure.test :refer :all])
+  (:require [cwiki.util.percent-encode :refer [percent-encode]]))
+
+(deftest percent-encode-test
+  (testing "Percent encoding of reserved characters in strings."
+    (is (= "a%20or%20b" (percent-encode "a or b")))
+    (is (= "darn%21" (percent-encode "darn!")))
+    (is (= "num%23ber" (percent-encode "num#ber")))
+    (is (= "Dollar%20%24ign%24%20in%20their%20eyes" (percent-encode "Dollar $ign$ in their eyes")))
+    (is (= "amp%26persand" (percent-encode "amp&persand")))
+    (is (= "quo%27te" (percent-encode "quo'te")))
+    (is (= "left%20%28%27%28%27%29%20paren" (percent-encode "left ('(') paren")))
+    (is (= "a%20right%20%28%27%29%27%29%20paren" (percent-encode "a right (')') paren")))
+    (is (= "ast%2Aerisk" (percent-encode "ast*erisk")))
+    (is (= "3%20%2B%202%20%3D%205" (percent-encode "3 + 2 = 5")))
+    (is (= "com%2Cma" (percent-encode "com,ma")))
+    (is (= "slash%20%28%27%2F%27%29" (percent-encode "slash ('/')")))
+    (is (= "colon%3A" (percent-encode "colon:")))
+    (is (= "semi-%3Bcolon" (percent-encode "semi-;colon")))
+    (is (= "equus%3Dequals" (percent-encode "equus=equals")))
+    (is (= "huh%3F" (percent-encode "huh?")))
+    (is (= "at%40sign" (percent-encode "at@sign")))
+    (is (= "lsb%20%3D%20%27%5B%27" (percent-encode "lsb = '['")))
+    (is (= "rsb%20%3D%20%27%5D%27" (percent-encode "rsb = ']'")))
+    (is (= "Q%3A%20What%3F" (percent-encode "Q: What?")))))

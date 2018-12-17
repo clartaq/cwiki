@@ -241,44 +241,45 @@
   "Lay out the title editing control and return the layout."
   [title-atom state]
   (r/create-class
-    {:display-name        "title-editor"
+    {:display-name   "title-editor"
 
      ; Select the title editor and put the cursor at the beginning.
-     :component-did-mount (fn [this]
-                            (let [elm (get-element-by-id
-                                        (:editor-title-input-id state))]
-                              ;"mde-form-title-field-id")
+     ;:component-did-mount (fn [this]
+     ;                       (let [elm (get-element-by-id
+     ;                                   (:editor-title-input-id state))]
+     ;                         ;"mde-form-title-field-id")
+     ;
+     ;                         (doto elm
+     ;                           (.focus)
+     ;                           (.setSelectionRange 0 0))))
 
-                              (doto elm
-                                (.focus)
-                                (.setSelectionRange 0 0))))
-
-     :reagent-render      (fn [title-atom options]
-                            (let [ro (when (= "Front Page" @title-atom)
-                                       {:readOnly "readOnly"})
-                                  inp (merge ro
-                                             {:type      "text"
-                                              :class     "mde-form-title-field"
-                                              :name      "page-title"
-                                              :id        (:editor-title-input-id options) ;"mde-form-title-field-id"
-                                              :value     (if-let [title @title-atom]
-                                                           (do
-                                                             (when (= title "favicon.ico")
-                                                               (info "Saw funky title request for favicon.icl"))
-                                                             title)
-                                                           "Enter a Title for the Page Here")
-                                              :on-change (fn [arg]
-                                                           (let [new-title (-> arg .-target .-value)]
-                                                             (mark-page-dirty options)
-                                                             (reset! title-atom new-title)
-                                                             (when (:send-every-keystroke options)
-                                                               (ws/send-message! [:hey-server/title-updated
-                                                                                  {:data new-title}]))))})]
-                              [:section {:class "mde-title-edit-section"}
-                               [:div {:class "form-label-div"}
-                                [:label {:class "form-label required"
-                                         :for   "page-title"} "Page Title"]]
-                               [:input inp]]))}))
+     :reagent-render (fn [title-atom options]
+                       (let [ro (when (= "Front Page" @title-atom)
+                                  {:readOnly "readOnly"})
+                             inp (merge ro
+                                        {:type      "text"
+                                         :class     "mde-form-title-field"
+                                         :name      "page-title"
+                                         :id        (:editor-title-input-id options) ;"mde-form-title-field-id"
+                                         :autoFocus "true"
+                                         :value     (if-let [title @title-atom]
+                                                      (do
+                                                        (when (= title "favicon.ico")
+                                                          (info "Saw funky title request for favicon.icl"))
+                                                        title)
+                                                      "Enter a Title for the Page Here")
+                                         :on-change (fn [arg]
+                                                      (let [new-title (-> arg .-target .-value)]
+                                                        (mark-page-dirty options)
+                                                        (reset! title-atom new-title)
+                                                        (when (:send-every-keystroke options)
+                                                          (ws/send-message! [:hey-server/title-updated
+                                                                             {:data new-title}]))))})]
+                         [:section {:class "mde-title-edit-section"}
+                          [:div {:class "form-label-div"}
+                           [:label {:class "form-label required"
+                                    :for   "page-title"} "Page Title"]]
+                          [:input inp]]))}))
 
 (defn layout-editor-header
   "Lay out the header section for the editor. Includes the title, tags, and
@@ -444,23 +445,38 @@
   oover the websocket server when state are so configured."
   [content-atom state]
   (trace "Enter layout-editor-pane.")
-  (fn [content-atom]
-    [:div {:class "editor-container"}
-     [:div {:class "mde-content-label-div"}
-      [:label {:class "form-label"
-               :for   "content"} "Markdown"]]
-     [:textarea
-      {:class     "editor-textarea"
-       :id        (:editor-textarea-id state)
-       :value     @content-atom
-       :on-change (fn [arg]
-                    (let [new-content (-> arg .-target .-value)]
-                      (reset! content-atom new-content)
-                      (mark-page-dirty state)
-                      (when (:send-every-keystroke state)
-                        (ws/send-message! [:hey-server/content-updated
-                                           {:data new-content}]))
-                      new-content))}]]))
+  (r/create-class
+    {
+     :name                "editor-pane"
+
+     ;:component-did-mount #(let [ed-id (get-element-by-id "editor-text-area-id")]
+     ;                        (if ed-id
+     ;                          (do
+     ;                            (let [the-keys (js-keys ed-id)]
+     ;                              (for [tk the-keys]
+     ;                                (println "tk: " tk)))
+     ;                            (println "(js-keys ed-id): " (js-keys ed-id))
+     ;                            (println)
+     ;                            (println "attribute names: " (.getAttributeNames ed-id)))
+     ;                          (println "Didn't get editor text area element.")))
+
+     :reagent-render      (fn [content-atom]
+                            [:div {:class "editor-container"}
+                             [:div {:class "mde-content-label-div"}
+                              [:label {:class "form-label"
+                                       :for   "content"} "Markdown"]]
+                             [:textarea
+                              {:class     "editor-textarea"
+                               :id        (:editor-textarea-id state)
+                               :value     @content-atom
+                               :on-change (fn [arg]
+                                            (let [new-content (-> arg .-target .-value)]
+                                              (reset! content-atom new-content)
+                                              (mark-page-dirty state)
+                                              (when (:send-every-keystroke state)
+                                                (ws/send-message! [:hey-server/content-updated
+                                                                   {:data new-content}]))
+                                              new-content))}]])}))
 
 (defn highlight-code
   "Highlights any <pre><code></code></pre> blocks in the html."

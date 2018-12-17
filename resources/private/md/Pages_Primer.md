@@ -2,13 +2,11 @@
 author: CWiki
 title: Pages Primer
 date: 2017-10-24T08:48:43.000-04:00
-modified: 2018-09-17T15:46:26.579-04:00
+modified: 2018-12-16T10:50:47.988-05:00
 tags:
   - help
   - pages
 ---
-
-
 
 This "Pages Primer" is a brief introduction to creating, editing, and deleting pages in the wiki.
 
@@ -20,19 +18,21 @@ You can create pages in CWiki if you have been assigned the role of **writer**, 
 
 You can create a page by one of three methods.
 
-### Link to A Non-Existent Page ###
+### 1. Link to A Non-Existent Page ###
 
 When you are editing a page and want to link to a page that doesn't exist yet, enter the link to the non-existent page. When you are done writing the current page, the link to the page you want to create will appear in red, like this: [[page I want to link to]]. Then you can click on the red link. The editor will open up letting you put whatever content you want on the newly created page.
 
-### Click the "New" Link in the Navigation Bar (Recommended) ###
+### 2. Click the "New" Link in the Navigation Bar (Recommended) ###
 
 At the top of the wiki window in your browser, there are a series of navigation links, including one that says "New." When you click that link, a new page will be created. Just change the title and enter the content you want. Finally, click the "Save Changes" button below the editor. The new page will be saved.
 
 This method is probably the quickest way to get started writing something, but you will still need to link the page into some other part of the wiki. Otherwise, you will have an "Orphan": a page that is not referred to by any other part of the wiki.
 
-### Edit the Browser Address Bar (Not Recommended) ###
+### 3. Edit the Browser Address Bar (Not Recommended) ###
 
 If you look at the address bar in your browser, it should show something like `http://localhost:1350/Pages%20Primer`, that is, the title of the page is at the end of the address. You can change that address to the name of the page you want to create. If there is no other page with the same name in the wiki already, you will be shown an editor page to build it and then save it.
+
+Note also that some characters, there is a list [here](https://en.wikipedia.org/wiki/Percent-encoding), must be "percent-encoded", that is, certain characters cannot be present in a web address (known as a "[URL](https://en.wikipedia.org/wiki/URL)") and must be encoded as a percent sign followed by two hexadecimal digits. If you attempt this and screw it up, you may damage the database irreparably. That would require you to delete the database and start over.
 
 This method is becoming less reliable. Many browsers now support search directly in the address bar. If this is the case, changing the address bar initiates a search rather than creating a new page.
 
@@ -42,15 +42,15 @@ A "page" in the wiki consists of a couple of things.
 
 ### The Title ###
 
-A page must have a title and content.
-
-**WARNING:** Do not use slash characters in the titles of pages for the time being. See [issue #21](https://bitbucket.org/David_Clark/cwiki/issues/21/cant-edit-files-with-slash-character-in) for details and updates.
+A page must have a title and content. It should be no more than 255 characters, possibly fewer.
 
 The title must be unique within the wiki. The comparison for uniqueness is case-insensitive, so the titles "Title" and "title" are considered the same. Using titles that differ only by letter case can be confusing and is not allowed.
 
+**Warning**: It is recommended that you not start a title with a question mark ("?"). It will usually work, but some special operations in CWiki use a title that begins with a question mark. Using one may produce unexpected results.
+
 ### Tags ###
 
-You can specify tags (also known as "keywords" or "categories") to be associated with the page. See [[About Tags]]. When you open the edit/new page editor, you will see spaces to add up to 10 tags for the page. It's Ok to leave them blank too.
+You can specify tags (also known as "keywords" or "categories") to be associated with the page. See [[About Tags]]. When you open the edit/new page editor, you will see an area showing existing tags and a button to let you add more.
 
 When you view a page that has tags associated with it, you will see them near the top, under the author name.
 
@@ -65,6 +65,8 @@ If you have the appropriate role (see [[About Roles]]), you can edit most pages 
 You can edit something as often and as many times as you like.
 
 Be careful with titles. If you change a page title, that will break any links that refer to that title.
+
+For more details, see [[About the Editor]].
 
 ## Deleting Pages ##
 
