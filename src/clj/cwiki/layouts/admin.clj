@@ -19,10 +19,9 @@
 (defn confirm-save-seed-page
   "Return a page stating that the file has been saved."
   [page-name file-name referer]
-  (base/short-message-return-to-referer
+  (base/short-message-jump-in-history
     "Save Complete"
-    (str "Page \"" page-name "\" has been saved to \"" file-name "\".") referer))
-
+    (str "Page \"" page-name "\" has been saved to \"" file-name "\".") -2))
 
 (defn compose-save-seed-page
   "Compose and return a page that allows the user to save a seed page."
