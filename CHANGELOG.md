@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] ##
+
+### Added ###
+
+### Changed ###
+
+### Fixed ###
+
+- Resolved issue [#25: "https://bitbucket.org/David_Clark/cwiki/issues/25/modify-history-after-saving-a-seed-page"] in commit [0af5eb9facb8](https://bitbucket.org/David_Clark/cwiki/commits/0af5eb9facb8).
+
 ## [0.1.3] - 2018-11-17 ##
 
 This time, most of the work was devoted to making the editor more usable. In my own use, it has much less friction. The layout helped as did the "Save File" shortcut key.
