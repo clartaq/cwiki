@@ -1,11 +1,11 @@
-(ns cwiki.test.util.WikiLinkAttributesTest
+(ns cwiki.test.extensions.CWikiLinkAttributesTest
   (:require [clojure.test :refer :all]
-            [cwiki.util.wikilink-attributes])
+            [cwiki.extensions.cwikilink-attributes])
   (:import (com.vladsch.flexmark.util.options MutableDataSet)
            (com.vladsch.flexmark.parser Parser Parser$Builder)
            (com.vladsch.flexmark.html HtmlRenderer HtmlRenderer$Builder)
            (com.vladsch.flexmark.ext.wikilink WikiLinkExtension)
-           (cwiki.util WikiLinkAttributeExtension)
+           (cwiki.extensions CWikiLinkAttributeExtension)
            (java.util ArrayList)))
 
 ;-------------------------------------------------------------------------------
@@ -19,7 +19,7 @@
                     (.set WikiLinkExtension/LINK_ESCAPE_CHARS "")
                     (.set Parser/EXTENSIONS
                           (ArrayList. [(WikiLinkExtension/create)
-                                       (WikiLinkAttributeExtension/create)])))
+                                       (CWikiLinkAttributeExtension/create)])))
         parser (.build ^Parser$Builder (Parser/builder options))
         document (.parse ^Parser parser ^String markdown)
         renderer (.build ^HtmlRenderer$Builder (HtmlRenderer/builder options))]

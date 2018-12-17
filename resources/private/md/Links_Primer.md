@@ -2,12 +2,13 @@
 author: CWiki
 title: Links Primer
 date: 2017-10-24T08:55:54.000-04:00
-modified: 2018-08-15T17:55:47.732-04:00
+modified: 2018-12-15T17:35:03.233-05:00
 tags:
   - about
   - help
   - links
 ---
+
 
 ​
 This is a page that details how to create and use links in the wiki.
@@ -31,5 +32,3 @@ This can also be handy if you want to use the existing page name but not the sam
 This "\[\[Front Page|front page\]\]" becomes a reference to the [[Front Page|front page]].
 
 At some point in the future, CWiki may also support "namespaces" and other things, but that is a ways off.
-
-**Note**: At present, wikilinks cannot be included in code examples. The wikilink resolver in the program does not recognize that wikilinks included between backquotes ("\`"), `<code></code>`, and `<pre></pre>` tags should not be converted. Something for the future.

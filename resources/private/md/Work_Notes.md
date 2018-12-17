@@ -1,8 +1,8 @@
 ---
-author: david
+author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2018-12-02T17:39:33.524-05:00
+modified: 2018-12-17T11:10:32.562-05:00
 tags:
   - cwiki
   - design
@@ -11,18 +11,34 @@ tags:
   - technical note
 ---
 
+
 This page is the on-going saga of working on the CWiki program.
 
 ## Some "To Do"s ##
 
-- Keystroke shortcuts. See [[Technical Note on Keyboard Shortcuts]].
-- Fix the damn CSS! See [[Technical Note on the Editor CSS]].
-- Fix the issue with illegal characters in the title
+- ~~Keystroke shortcuts.~~ See [[Technical Note on Keyboard Shortcuts]].
+- ~~Fix the damn CSS!~~ See [[Technical Note on the Editor CSS]].
+- ~~Fix the issue with illegal characters in the title.~~ See [[Technical Note on Encoding Page Titles]].
 - Add the Markdown help in the editor
 - Need to work on the CSS for lists so that sub-lists don't get formatted so weird, 24 Nov 2018, 04:07:18 pm.
 - When inserting text with a keystroke shortcut, the page is not marked as dirty and the preview is not updated. 25 Nov 2018, 03:38:23 pm.
 - Seems like it's getting to be time to split out "commands", "keyboard-shortcuts", and "buttons" into their own namespaces in the editor. Getting to be like Java, 25 Nov 2018, 05:37:45 pm.
-- When importing a plain Markdown file without frontmatter, the page should be named based on the name of the file imported, not the random number that is generated now, 27 Nov 2018, 05:45:36 pm.
+
+##### Attempting to Switch to a Maintained Fork of `com.cemerick/url` Causes Issues, 03 Dec 2018, 04:54:38 pm. #####
+
+After trying out `com.arohner/uri "0.1.2"`, a maintained fork of the library, page import would no longer work.
+
+##### Page Titles with "?" and "/" (and possibly others) seem to mess up the database, 03 Dec 2018, 03:53:24 pm. #####
+
+After editing, you can't hit the backlink to get to the previous page. Sometimes the "All Pages" page won't work after editing.
+
+This is part of issues [#21](https://bitbucket.org/David_Clark/cwiki/issues/21/cant-edit-files-with-slash-character-in) and [#31](https://bitbucket.org/David_Clark/cwiki/issues/31/editor-should-flag-illegal-characters-in). Really need to get this fixed since it can cause data loss. (Not really data loss. Just messes up the database so that you want to re-initialize it -- which it shouldn't make you do.)
+
+Probably should look into more standard ways to form the URIs for viewing pages. However, since I use an extension to [flexmark](https://github.com/vsch/flexmark-java) that handles wikilinks, it may be a bit tough.
+
+**07 Dec 2018, 05:46:08 pm.** If I hand encode the URL in the address bar, things work as intended, even with special characters. Creating, editing, linking, deleting all work. So, we "just" need a way to encode the links formed from the page titles. Probably need a custom `NodeRenderer`.
+
+**17 Dec 2018, 11:08:26 am.** Turns out the `NodeRenderer` approach didn't work out so well. A custom `NodeResolver` did. See [[Technical Note on Encoding Page Titles]].
 
 ##### Stop Deleting the Following Call from the Production Version of cwiki.middleware, 02 Dec 2018, 05:34:11 pm. #####
 
