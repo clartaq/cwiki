@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2018-12-17T16:25:38.540-05:00
+modified: 2018-12-18T17:59:14.529-05:00
 tags:
   - cwiki
   - design
@@ -10,7 +10,6 @@ tags:
   - shortcut
   - technical note
 ---
-
 
 
 This page is the on-going saga of working on the CWiki program.
@@ -26,7 +25,17 @@ This page is the on-going saga of working on the CWiki program.
 - Seems like it's getting to be time to split out "commands", "keyboard-shortcuts", and "buttons" into their own namespaces in the editor. Getting to be like Java, 25 Nov 2018, 05:37:45 pm.
 - When exiting the editor, the program should check if the page being edited was a seed page. If so, it should offer to save it to a file (so I don't forget to do it before erasing the page database for testing or release), 17 Dec 2018, 04:25:32 pm.
 
-##### Noticed an Intermittent Error When Loading the Editor.17 Dec 2018, 04:16:22 pm. #####
+##### Clojure 10 and Java 11, 18 Dec 2018, 05:53:58 pm. #####
+
+Upgraded development environment to use Clojure 10 and Java 11. Had to add an explicit dependency for `[org.flatland/ordered "1.5.7"]` in the `project.clj` file to get things to compile. After that everything seems to be running normally.
+
+The `uberjar` got a tiny bit bigger too.
+
+##### Have Seen on Occaision the HTTP Requests Contain Two Copies of Authentication and Authorization data, 18 Dec 2018, 04:18:40 pm. #####
+
+Ought to find out how and where this occurs.
+
+##### Noticed an Intermittent Error When Loading the Editor, 17 Dec 2018, 04:16:22 pm. #####
 
 For some time now, I have sometimes observed the editor fail to load the correct page. I _think_ that when this occurs, it is the first edit attempt after loading the wiki. I _know_ it occurs when running either from the REPL or an Uberjar.
 
