@@ -1,12 +1,13 @@
 ---
-author: david
+author: CWiki
 title: Markdown Help
 date: 2018-11-18T15:39:33.103-05:00
-modified: 2018-12-01T17:27:52.152-05:00
+modified: 2018-12-17T17:53:24.309-05:00
 tags:
   - help
   - Markdown
 ---
+
 
 This list is largely copied and adapted from the
 [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
@@ -18,6 +19,8 @@ This list is largely copied and adapted from the
 [Links](#links)  
 [Images](#images)  
 [Code and Syntax Highlighting](#code)  
+[Mathematics](#mathematics)  
+[Tables of Contents](#toc)  
 [Tables](#tables)  
 [Blockquotes](#blockquotes)  
 [Inline HTML](#html)  
@@ -51,7 +54,7 @@ The trailing markers are totally optional. I tend to use them so I don't have to
 
 Here are some examples of adding emphasis.
 
-```
+```nohighlight
 An emphasis, aka italics, is created with *asterisks* or 
 _underscores_.
 
@@ -59,6 +62,8 @@ Strong emphasis, aka bold, with **asterisks** or
 __underscores__.
 
 Emphasis can be combined with **asterisks and _underscores_**.
+
+Markdown does not include syntax for underlining text. At the time the HTML tags for underlining were deprecated. They are not deprecated in HTML 5. But to still have to insert the tags for underline (`<u>...</u>`) manually to <u>underline</u> where you want it.
 
 Strikethrough uses two tildes. ~~Scratch this.~~
 ```
@@ -70,6 +75,8 @@ Strong emphasis, aka bold, with **asterisks** or
 __underscores__.
 
 Emphasis can be combined with **asterisks and _underscores_**.
+
+Markdown does not include syntax for underlining text. At the time the HTML tags for underlining were deprecated. They are not deprecated in HTML 5. But to still have to insert the tags for underline (`<u>...</u>`) manually to <u>underline</u> where you want it.
 
 Strikethrough uses two tildes. ~~Scratch this.~~
 
@@ -206,7 +213,7 @@ Here's a logo from CWiki demonstrating how a local image can be loaded too. This
 
 ## Code and Syntax Highlighting <a name="code"></a> ##
 
-Code blocks are part of the Markdown spec, but syntax highlighting isn't. However, many renderers -- like Github's and CWiki's -- support syntax highlighting. Which languages are supported and how those language names should be written will vary from renderer to renderer. *Markdown Here* supports highlighting for dozens of languages (and not-really-languages, like diffs and HTTP headers); to see the complete list, and how to write the language names, see the [highlight.js demo page](http://softwaremaniacs.org/media/soft/highlight/test.html).
+Code blocks are part of the Markdown spec, but syntax highlighting isn't. However, many renderers -- like Github's and CWiki's -- support syntax highlighting. Which languages are supported and how those language names should be written will vary from renderer to renderer. CWiki supports highlighting for dozens of languages (and not-really-languages, like diffs and HTTP headers); to see the complete list, and how to write the language names, see the [highlight.js demo page](http://softwaremaniacs.org/media/soft/highlight/test.html).
 
 ```nohighlight
 Inline `code` has `back-ticks around` it.
@@ -252,6 +259,23 @@ No language indicated, so no syntax highlighting in CWiki
 (varies on Github). 
 But let's throw in a <b>tag</b>.
 ```
+## Mathematics <a name="mathematics"></a> ##
+
+You can also enter mathematics using the familiar  [[About TeX|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
+
+The markup to show an equation on a line by itself uses double dollar signs, `$$,` to start and end a block of $\rm\TeX$ like this.
+
+`$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$`
+
+The above will render like this:
+
+$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
+
+For inline math, use single dollar signs, `$`, to surround the math. For example, here is the markup for the same equation as above `$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$` which renders as $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$.
+
+## Tables of Contents <a name="toc"></a> ##
+
+CWiki does not include any extensions to produce Tables of Contents since they can be created quickly in almost any Markdown editor. See [[How to Make a Table of Contents]] for example.
 
 ## Tables <a name="tables"></a> ##
 
@@ -259,9 +283,9 @@ Tables aren't part of the core Markdown spec, but they are part
 of GFM and CWiki supports them. They are an easy way of
 adding tables to your text -- a task that would otherwise require copy-pasting from another application.
 
-```nohighlight
 Colons can be used to align columns.
 
+```nohighlight
 | Tables        | Are           | Cool  |
 | ------------- |:-------------:| -----:|
 | col 3 is      | right-aligned | $1600 |
@@ -277,8 +301,6 @@ Markdown | Less | Pretty
 *Still* | `renders` | **nicely**
 1 | 2 | 3
 ```
-
-Colons can be used to align columns.
 
 | Tables        | Are           | Cool |
 | ------------- |:-------------:| -----:|
