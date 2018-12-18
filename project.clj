@@ -4,7 +4,7 @@
   :license {:name         "Simplfied BSD"
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
-  :dependencies [[org.clojure/clojure "1.9.0"]
+  :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.10.439" :scope "provided"]
                  [org.clojure/core.async "0.4.490"]
                  [org.clojure/java.jdbc "0.7.8"]
@@ -32,6 +32,7 @@
                  ; We keep this old version to remain compatible with
                  ; full text search with the H2 database.
                  [org.apache.lucene/lucene-core "3.6.2"]
+                 [org.flatland/ordered "1.5.7"]
                  [reagent "0.8.1"]
                  [ring/ring-defaults "0.3.2"]]
 
@@ -47,7 +48,6 @@
   :source-paths ["src/clj"]
   :java-source-paths ["src/java"]
 
-  ;:aot [cwiki.extensions.cwikilink-attributes]
   :prep-tasks ["javac"]
 
   ; Leave this alone. IntelliJ has issues otherwise.
