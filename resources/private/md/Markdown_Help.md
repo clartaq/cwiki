@@ -2,7 +2,7 @@
 author: CWiki
 title: Markdown Help
 date: 2018-11-18T15:39:33.103-05:00
-modified: 2018-12-17T17:53:24.309-05:00
+modified: 2018-12-19T11:25:55.787-05:00
 tags:
   - help
   - Markdown
@@ -87,16 +87,15 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 ```nohighlight
 1. First ordered list item
 2. Another item
-⋅⋅* Unordered sub-list. 
+⋅⋅⋅* Unordered sub-list. 
 1. Actual numbers don't matter, just that it's a number
-⋅⋅1. Ordered sub-list
+⋅⋅⋅1. Ordered sub-list
 4. And another item.
 
 ⋅⋅⋅You can have properly indented paragraphs within list items. 
 Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
 
-⋅⋅⋅To have a line break without a paragraph, you will need to use 
-two trailing spaces.⋅⋅
+⋅⋅⋅To have a line break without a paragraph, you will need to use two​ trailing spaces.⋅⋅
 ⋅⋅⋅Note that this line is separate but within the same paragraph.⋅⋅
 ⋅⋅⋅(This is contrary to the typical GFM line break behavior, where 
 trailing spaces are not required.)
@@ -109,9 +108,9 @@ trailing spaces are not required.)
 
 1. First ordered list item
 2. Another item
-  * Unordered sub-list. 
+   * Unordered sub-list. 
 1. Actual numbers don't matter, just that it's a number
-  1. Ordered sub-list
+   1. Ordered sub-list
 4. And another item.
 
    You can have properly indented paragraphs within list items. Notice the blank line above, and the leading spaces (at least one, but we'll use three here to also align the raw Markdown).
