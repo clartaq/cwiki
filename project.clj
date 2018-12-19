@@ -27,7 +27,6 @@
                  [environ "1.1.0"]
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
-                 [javax.xml.bind/jaxb-api "2.3.0"]
                  [keybind "2.2.0"]
                  ; We keep this old version to remain compatible with
                  ; full text search with the H2 database.
