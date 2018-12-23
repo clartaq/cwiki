@@ -11,10 +11,7 @@
             [ring.util.response :refer [redirect status]]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
-            [taoensso.timbre :as log]
-    ; :refer [tracef debugf infof warnf errorf
-    ;                         trace debug info warn error]]
-            )
+            [taoensso.timbre :as log])
   (:import (java.net URL)))
 
 (let [{:keys [ch-recv send-fn connected-uids
