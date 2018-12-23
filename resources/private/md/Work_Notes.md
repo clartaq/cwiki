@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2018-12-18T17:59:14.529-05:00
+modified: 2018-12-23T16:00:21.147-05:00
 tags:
   - cwiki
   - design
@@ -19,17 +19,41 @@ This page is the on-going saga of working on the CWiki program.
 - ~~Keystroke shortcuts.~~ See [[Technical Note on Keyboard Shortcuts]].
 - ~~Fix the damn CSS!~~ See [[Technical Note on the Editor CSS]].
 - ~~Fix the issue with illegal characters in the title.~~ See [[Technical Note on Encoding Page Titles]].
-- Add the Markdown help in the editor
-- Need to work on the CSS for lists so that sub-lists don't get formatted so weird, 24 Nov 2018, 04:07:18 pm.
-- When inserting text with a keystroke shortcut, the page is not marked as dirty and the preview is not updated. 25 Nov 2018, 03:38:23 pm.
 - Seems like it's getting to be time to split out "commands", "keyboard-shortcuts", and "buttons" into their own namespaces in the editor. Getting to be like Java, 25 Nov 2018, 05:37:45 pm.
 - When exiting the editor, the program should check if the page being edited was a seed page. If so, it should offer to save it to a file (so I don't forget to do it before erasing the page database for testing or release), 17 Dec 2018, 04:25:32 pm.
+
+##### Resizing the Markdown Help Dialog, 23 Dec 2018, 03:52:45 pm. #####
+
+Because the Markdown Help is so large, I wanted it to use a larger proportion of the screen than the other dialogs. It uses the reagent `create-class` method so that it can get the size of the editor pane after the component is mounted. Within the `:component-did-mount` function, a stateful `ratom` external to the class is set to contain the desired width and height. The `:reagent-render` function then uses that state to change its style, specifically, the size.
+
+Another interesting part of setting up the Markdown Help dialog was that I could reuse the functions that create the HTML for the preview pane. That way, calling the editor only needs to send the Markdown for the help page; the translation to HTML, code highlighting, and math formatting are all done when the editor is initialized.
+
+##### Maybe Auto-Save Should be the Default, 22 Dec 2018, 05:56:15 pm. #####
+
+After looking at a number of other Markdown editors, closed-source or open, for purchase or for free, I have yet to see one that doesn't just automatically save the user's work.
+
+##### Hiding Regions of the Editor #####
+
+There's no doubt that the editor can get quite busy. Maybe to remove distractions parts of it could be hidden with a user selection. Good candidates are the Title and Tags at the top and the Preview. Doing so would give users the option of just pounding out the words in a bigger area if that is what they are interested in.
+##### Text Inserted with a Keystroke Shortcut is not "Un-Do-able", 22 Dec 2018, 12:32:32 pm. #####
+
+##### Making the Markdown Help Available in the Editor, 22 Dec 2018, 12:29:27 pm. #####
+
+I can send the Markdown Help page HTML to the editor when the page is loaded. I put it in a dialog that works fine. But it shows the HTML as text, does not render the HTML.
+
+##### CSS to Make Multi-Level Lists Look Better,19 Dec 2018, 05:37:14 pm. #####
+
+Made the changes, which, for the lists, involved changing paragraph spacing and removing some existing styling from the `li` element.
+
+This messed up the drop-down menu. Had to make some additional "fiddly" padding and margin settings for the drop-down stuff. It very nearly overlaps the search box. Seems a bit fragile. May require additional work if it needs to be more robust.
 
 ##### Clojure 10 and Java 11, 18 Dec 2018, 05:53:58 pm. #####
 
 Upgraded development environment to use Clojure 10 and Java 11. Had to add an explicit dependency for `[org.flatland/ordered "1.5.7"]` in the `project.clj` file to get things to compile. After that everything seems to be running normally.
 
 The `uberjar` got a tiny bit bigger too.
+
+It also let me get rid of the dependency on `javax.xml.bind`, 19 Dec 2018, 11:01:22 am.
 
 ##### Have Seen on Occaision the HTTP Requests Contain Two Copies of Authentication and Authorization data, 18 Dec 2018, 04:18:40 pm. #####
 

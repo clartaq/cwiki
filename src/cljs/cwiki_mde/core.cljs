@@ -38,12 +38,45 @@
 ;; new page to be saved if the user changes page titles between saved.
 (def ^{:private true} glbl-id-for-next-save (atom nil))
 
+(def ^{:private true} glbl-markdown-help-html (atom nil))
+
+(def inner-editor-container-id "inner-editor-container-id")
+
 ;;;-----------------------------------------------------------------------------
 ;;; Utility functions.
 ;;;
 
 (defn- get-element-by-id [the-id]
   (.getElementById js/document the-id))
+
+(defn highlight-code
+  "Highlights any <pre><code></code></pre> blocks in the html."
+  [html-node]
+  (trace "highlight-code")
+  (let [nodes (.querySelectorAll html-node "pre code")]
+    (loop [i (.-length nodes)]
+      (when-not (neg? i)
+        (when-let [item (.item nodes i)]
+          (.highlightBlock js/hljs item))
+        (recur (dec i))))))
+
+(defn typeset-latex
+  "Typeset any mathematics in the text."
+  [latex-node]
+  (js/MathJax.Hub.Queue #js ["Typeset" js/MathJax.Hub latex-node]))
+
+(defn markdown-component
+  "Set the content in the containing node, optionally highlighting it."
+  [content]
+  [(with-meta
+     (fn []
+       [:div {:dangerouslySetInnerHTML
+              {:__html (-> content str js/marked)}}])
+     {:component-did-mount
+      (fn [this]
+        (let [node (r/dom-node this)]
+          (typeset-latex node)
+          (highlight-code node)))})])
 
 (defn toggle-modal
   "Toggle the display state of the modal dialog with the given id."
@@ -66,6 +99,11 @@
   already in the wiki."
   []
   (toggle-modal "duplicate-title-modal"))
+
+(defn toggle-markdown-help-modal
+  "Toggle visibility of the Markdown help dialog."
+  []
+  (toggle-modal "markdown-help-modal"))
 
 (defn tell-server-to-quit
   [state]
@@ -233,6 +271,51 @@
                 :title    "Close this dialog and return to the editor"
                 :on-click #(toggle-duplicate-title-modal)}]]]]))
 
+(defn layout-markdown-help-dialog
+  "Layout the dialog to contain the Markdown help and return it."
+  []
+  (let [state (r/atom nil)]
+    (r/create-class
+      {:display-name        "markdown-help-dialog"
+
+       ; The purpose here is to change the default size of the dialog based on
+       ; the size of the editor window. Since the Markdown help is so long, we
+       ; want to allow it to take up a bigger portion of the window.
+       :component-did-mount (fn []
+                              (let [icn (get-element-by-id "inner-editor-container-id")
+                                    dw (* 4 (int (/ (.-offsetWidth icn) 5)))
+                                    dh (* 4 (int (/ (.-offsetHeight icn) 5)))]
+                                (reset! state {:width dw :height dh})))
+
+       :reagent-render      (fn []
+                              (let [help-html (:markdown-help @glbl-page-map)
+                                    width (:width @state)
+                                    height (:height @state)]
+                                [:div {:class "modal closed"
+                                       :id    "markdown-help-modal"
+                                       :role  "dialog"
+                                       :style {:width width :height height}}
+                                 [:header {:class "modal-header"}
+                                  [:section {:class "modal-header-left"} "Markdown Help"]
+                                  [:section {:class "modal-header-right"}
+                                   [:input {:type     "button"
+                                            :class    "form-button"
+                                            :id       "close-markdown-help-button"
+                                            :value    "Close"
+                                            :title    "Close this dialog and return to the editor."
+                                            :on-click #(toggle-markdown-help-modal)}]]]
+                                 [:section {:class "modal-guts"}
+                                  (if help-html
+                                    (markdown-component help-html)
+                                    [:p "The help text is not available!"])]
+                                 [:div {:class "modal-footer"}
+                                  [:section {:class "button-bar-container"}
+                                   [:input {:type     "button"
+                                            :class    "form-button button-bar-item"
+                                            :value    "Ok. Return to the Editor."
+                                            :title    "Close this dialog and return to the editor"
+                                            :on-click #(toggle-markdown-help-modal)}]]]]))})))
+
 ;;;-----------------------------------------------------------------------------
 ;;; The editor components.
 ;;;
@@ -240,46 +323,33 @@
 (defn layout-title-editor
   "Lay out the title editing control and return the layout."
   [title-atom state]
-  (r/create-class
-    {:display-name   "title-editor"
-
-     ; Select the title editor and put the cursor at the beginning.
-     ;:component-did-mount (fn [this]
-     ;                       (let [elm (get-element-by-id
-     ;                                   (:editor-title-input-id state))]
-     ;                         ;"mde-form-title-field-id")
-     ;
-     ;                         (doto elm
-     ;                           (.focus)
-     ;                           (.setSelectionRange 0 0))))
-
-     :reagent-render (fn [title-atom options]
-                       (let [ro (when (= "Front Page" @title-atom)
-                                  {:readOnly "readOnly"})
-                             inp (merge ro
-                                        {:type      "text"
-                                         :class     "mde-form-title-field"
-                                         :name      "page-title"
-                                         :id        (:editor-title-input-id options) ;"mde-form-title-field-id"
-                                         :autoFocus "true"
-                                         :value     (if-let [title @title-atom]
-                                                      (do
-                                                        (when (= title "favicon.ico")
-                                                          (info "Saw funky title request for favicon.icl"))
-                                                        title)
-                                                      "Enter a Title for the Page Here")
-                                         :on-change (fn [arg]
-                                                      (let [new-title (-> arg .-target .-value)]
-                                                        (mark-page-dirty options)
-                                                        (reset! title-atom new-title)
-                                                        (when (:send-every-keystroke options)
-                                                          (ws/send-message! [:hey-server/title-updated
-                                                                             {:data new-title}]))))})]
-                         [:section {:class "mde-title-edit-section"}
-                          [:div {:class "form-label-div"}
-                           [:label {:class "form-label required"
-                                    :for   "page-title"} "Page Title"]]
-                          [:input inp]]))}))
+  (fn [title-atom options]
+    (let [ro (when (= "Front Page" @title-atom)
+               {:readOnly "readOnly"})
+          inp (merge ro
+                     {:type      "text"
+                      :class     "mde-form-title-field"
+                      :name      "page-title"
+                      :id        (:editor-title-input-id options) ;"mde-form-title-field-id"
+                      :autoFocus "true"
+                      :value     (if-let [title @title-atom]
+                                   (do
+                                     (when (= title "favicon.ico")
+                                       (info "Saw funky title request for favicon.icl"))
+                                     title)
+                                   "Enter a Title for the Page Here")
+                      :on-change (fn [arg]
+                                   (let [new-title (-> arg .-target .-value)]
+                                     (mark-page-dirty options)
+                                     (reset! title-atom new-title)
+                                     (when (:send-every-keystroke options)
+                                       (ws/send-message! [:hey-server/title-updated
+                                                          {:data new-title}]))))})]
+      [:section {:class "mde-title-edit-section"}
+       [:div {:class "form-label-div"}
+        [:label {:class "form-label required"
+                 :for   "page-title"} "Page Title"]]
+       [:input inp]])))
 
 (defn layout-editor-header
   "Lay out the header section for the editor. Includes the title, tags, and
@@ -437,7 +507,9 @@
 
     [:button.editor-button-bar--button.popup
      {:title    "Get help with Markdown"
-      :on-click #(println "Saw click on help button.")}
+      :on-click #(do
+                   (println "Saw click on help button.")
+                   (toggle-markdown-help-modal))}
      [:i.editor-button-bar--icon.question-circle-o-icon]]]])
 
 (defn layout-editor-pane
@@ -447,65 +519,25 @@
   (trace "Enter layout-editor-pane.")
   (r/create-class
     {
-     :name                "editor-pane"
+     :name           "editor-pane"
 
-     ;:component-did-mount #(let [ed-id (get-element-by-id "editor-text-area-id")]
-     ;                        (if ed-id
-     ;                          (do
-     ;                            (let [the-keys (js-keys ed-id)]
-     ;                              (for [tk the-keys]
-     ;                                (println "tk: " tk)))
-     ;                            (println "(js-keys ed-id): " (js-keys ed-id))
-     ;                            (println)
-     ;                            (println "attribute names: " (.getAttributeNames ed-id)))
-     ;                          (println "Didn't get editor text area element.")))
-
-     :reagent-render      (fn [content-atom]
-                            [:div {:class "editor-container"}
-                             [:div {:class "mde-content-label-div"}
-                              [:label {:class "form-label"
-                                       :for   "content"} "Markdown"]]
-                             [:textarea
-                              {:class     "editor-textarea"
-                               :id        (:editor-textarea-id state)
-                               :value     @content-atom
-                               :on-change (fn [arg]
-                                            (let [new-content (-> arg .-target .-value)]
-                                              (reset! content-atom new-content)
-                                              (mark-page-dirty state)
-                                              (when (:send-every-keystroke state)
-                                                (ws/send-message! [:hey-server/content-updated
-                                                                   {:data new-content}]))
-                                              new-content))}]])}))
-
-(defn highlight-code
-  "Highlights any <pre><code></code></pre> blocks in the html."
-  [html-node]
-  (trace "highlight-code")
-  (let [nodes (.querySelectorAll html-node "pre code")]
-    (loop [i (.-length nodes)]
-      (when-not (neg? i)
-        (when-let [item (.item nodes i)]
-          (.highlightBlock js/hljs item))
-        (recur (dec i))))))
-
-(defn typeset-latex
-  "Typeset any mathematics in the text."
-  [latex-node]
-  (js/MathJax.Hub.Queue #js ["Typeset" js/MathJax.Hub latex-node]))
-
-(defn markdown-component
-  "Set the content in the preview pane, optionally highlighting it."
-  [content]
-  [(with-meta
-     (fn []
-       [:div {:dangerouslySetInnerHTML
-              {:__html (-> content str js/marked)}}])
-     {:component-did-mount
-      (fn [this]
-        (let [node (r/dom-node this)]
-          (typeset-latex node)
-          (highlight-code node)))})])
+     :reagent-render (fn [content-atom]
+                       [:div {:class "editor-container"}
+                        [:div {:class "mde-content-label-div"}
+                         [:label {:class "form-label"
+                                  :for   "content"} "Markdown"]]
+                        [:textarea
+                         {:class     "editor-textarea"
+                          :id        (:editor-textarea-id state)
+                          :value     @content-atom
+                          :on-change (fn [arg]
+                                       (let [new-content (-> arg .-target .-value)]
+                                         (reset! content-atom new-content)
+                                         (mark-page-dirty state)
+                                         (when (:send-every-keystroke state)
+                                           (ws/send-message! [:hey-server/content-updated
+                                                              {:data new-content}]))
+                                         new-content))}]])}))
 
 (defn layout-preview-pane
   "The preview div."
@@ -585,12 +617,13 @@
                                     options)]
 
             (kbs/bind-shortcut-keys editor-state)
-            [:div {:class "inner-editor-container"}
+            [:div {:class "inner-editor-container" :id inner-editor-container-id}
              [layout-editor-header title-atom tags-atom-vector editor-state]
              [layout-editor-and-preview-section content-atom editor-state]
              [layout-editor-bottom-button-bar editor-state]
              [layout-unsaved-changes-warning-dialog editor-state]
              [layout-duplicate-page-warning-dialog]
+             [layout-markdown-help-dialog]
              [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))))
 
 (defn reload []

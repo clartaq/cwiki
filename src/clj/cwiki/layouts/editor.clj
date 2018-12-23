@@ -47,16 +47,26 @@
    sidebar
    article])
 
+(defn get-markdown-help-html
+  "Return the content of the 'Markdown Help' page as Markdown for use by the
+  editor. The title of the help page is hardcoded here."
+  ;TODO: Put title of Markdown help page in the program options.
+  []
+  (when-let [page-id (db/title->page-id "Markdown Help")]
+    (db/page-id->content page-id)))
+
 (defn layout-editor-page
   "Create the base page layout and plug the content into it."
   [post-map req]
   (reset! post-map-for-editing post-map)
   (let [id (db/page-map->id @post-map-for-editing)
         tags (vec (db/get-tag-names-for-page id))
-        options (db/get-option-map)]
+        options (db/get-option-map)
+        help-html (get-markdown-help-html)]
     ;; The tags and options are attached to the page map here.
     (swap! post-map-for-editing assoc :tags tags)
     (swap! post-map-for-editing assoc :options options)
+    (swap! post-map-for-editing assoc :markdown-help help-html)
     (html5
       {:ng-app "CWiki" :lang "en"}
       (base/standard-head (get-post-map-for-editing) :editor-highlighter)

@@ -16,3 +16,4 @@ cwiki.iml
 /resources/public/db/
 /notes/
 /exported-pages/
+/push-to-bitbucket.sh

@@ -2,7 +2,7 @@
 author: CWiki
 title: Markdown Help
 date: 2018-11-18T15:39:33.103-05:00
-modified: 2018-12-19T11:25:55.787-05:00
+modified: 2018-12-23T16:07:10.676-05:00
 tags:
   - help
   - Markdown
@@ -27,7 +27,8 @@ This list is largely copied and adapted from the
 [Horizontal Rule](#hr)  
 [Line Breaks](#lines)  
 
-## Headers <a name="headers"></a> ##
+<a name="headers"></a>
+## Headers ##
 
 To create a header, precede it with a number of
 octothorpes (pound signs) indicating its level.
@@ -50,7 +51,8 @@ octothorpes (pound signs) indicating its level.
 
 The trailing markers are totally optional. I tend to use them so I don't have to keep track of which markers require closure and which don't.
 
-## Emphasis <a name="emphasis"></a> ##
+<a name="emphasis"></a>
+## Emphasis ##
 
 Here are some examples of adding emphasis.
 
@@ -78,9 +80,11 @@ Emphasis can be combined with **asterisks and _underscores_**.
 
 Markdown does not include syntax for underlining text. At the time the HTML tags for underlining were deprecated. They are not deprecated in HTML 5. But to still have to insert the tags for underline (`<u>...</u>`) manually to <u>underline</u> where you want it.
 
+
 Strikethrough uses two tildes. ~~Scratch this.~~
 
-## Lists <a name="lists"></a> ##
+<a name="lists"></a> 
+## Lists ##
 
 (In this example, leading and trailing spaces are shown with dots: ⋅)
 
@@ -125,7 +129,8 @@ trailing spaces are not required.)
 - Or minuses
 + Or pluses
 
-## Links <a name="links"></a> ##
+<a name="links"></a> 
+## Links ##
 
 There are two ways to create links.
 
@@ -178,7 +183,8 @@ Some text to show that the reference links can follow later.
 [link text itself]: http://www.reddit.com
 
 
-## Images <a name="images"></a> ##
+<a name="images"></a> 
+## Images ##
 
 ```
 Here's a logo from the [Markdown Here](https://github.com/adam-p/markdown-here) site, where I cribbed most of this help text from (hover to see the title text):
@@ -210,7 +216,8 @@ Here's a logo from CWiki demonstrating how a local image can be loaded too. This
 
 ![A 150x150 pixel version of the CWiki icon](/img/favicon/mstile-150x150.png "One of the CWiki icon files used as a favicon.")
 
-## Code and Syntax Highlighting <a name="code"></a> ##
+<a name="code"></a> 
+## Code and Syntax Highlighting ##
 
 Code blocks are part of the Markdown spec, but syntax highlighting isn't. However, many renderers -- like Github's and CWiki's -- support syntax highlighting. Which languages are supported and how those language names should be written will vary from renderer to renderer. CWiki supports highlighting for dozens of languages (and not-really-languages, like diffs and HTTP headers); to see the complete list, and how to write the language names, see the [highlight.js demo page](http://softwaremaniacs.org/media/soft/highlight/test.html).
 
@@ -258,7 +265,8 @@ No language indicated, so no syntax highlighting in CWiki
 (varies on Github). 
 But let's throw in a <b>tag</b>.
 ```
-## Mathematics <a name="mathematics"></a> ##
+<a name="mathematics"></a> 
+## Mathematics ##
 
 You can also enter mathematics using the familiar  [[About TeX|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
 
@@ -272,11 +280,13 @@ $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 
 For inline math, use single dollar signs, `$`, to surround the math. For example, here is the markup for the same equation as above `$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$` which renders as $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$.
 
-## Tables of Contents <a name="toc"></a> ##
+<a name="toc"></a> 
+## Tables of Contents ##
 
 CWiki does not include any extensions to produce Tables of Contents since they can be created quickly in almost any Markdown editor. See [[How to Make a Table of Contents]] for example.
 
-## Tables <a name="tables"></a> ##
+<a name="tables"></a> 
+## Tables ##
 
 Tables aren't part of the core Markdown spec, but they are part
 of GFM and CWiki supports them. They are an easy way of
@@ -316,7 +326,8 @@ Markdown | Less | Pretty
 *Still* | `renders` | **nicely**
 1 | 2 | 3
 
-## Blockquotes <a name="blockquotes"></a> ##
+<a name="blockquotes"></a> 
+## Blockquotes ##
 
 ```nohighlight
 > Blockquotes are very handy to call out text from another source or authority.
@@ -334,7 +345,8 @@ Here is a break in the quoted text.
 
 > This is a very long line that will still be quoted properly when it wraps. Oh boy, let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote. 
 
-## Inline HTML <a name="html"></a> ##
+<a name="html"></a> 
+## Inline HTML ##
 
 You can also use raw HTML in your Markdown, and it'll mostly work pretty well. 
 
@@ -357,7 +369,8 @@ You can also use raw HTML in your Markdown, and it'll mostly work pretty well.
 </dl>
 
 
-## Horizontal Rule <a name="hr"></a> ##
+<a name="hr"></a> 
+## Horizontal Rule ##
 
 ```nohighlight
 Three or more...
@@ -390,7 +403,8 @@ ___
 Underscores
 
 
-## Line Breaks <a name="lines"></a> ##
+<a name="lines"></a> 
+## Line Breaks ##
 
 My basic recommendation for learning how line breaks work is to
 experiment and discover -- hit &lt;Enter&gt; once (_i.e._, insert one newline), 
