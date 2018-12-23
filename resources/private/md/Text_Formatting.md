@@ -2,13 +2,14 @@
 author: CWiki
 title: Text Formatting
 date: 2017-10-24T08:57:33.000-04:00
-modified: 2018-10-06T15:48:20.791-04:00
+modified: 2018-12-23T16:24:47.417-05:00
 tags:
   - formatting
   - Markdown
   - MathJax
   - TeX
 ---
+
 
 Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, especially some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
 
@@ -18,11 +19,13 @@ Markdown provides a wealth of ways to quickly format your content. For the detai
 3. [Mathematics](#mathematics)
 4. [Tables of Contents](#toc)
 
-## Strikethrough <a name="strikethrough"></a> ##
+<a name="strikethrough"></a> 
+## Strikethrough ##
 
 Markdown has some ways to emphasize text in a paragraph: bold, italic, underline and combinations. For some reason, it does not have a method for formatting text with a strikethrough, something very useful in collaborative editing. GFM _does_ include an extension to support formatting with strikethrough. Surround the text with two tildes. For example, `~~strikethrough~~` will produce ~~strikethrough~~.
 
-## Code Listings <a name="code-listings"></a> ##
+<a name="code-listings"></a> 
+## Code Listings ##
 
 CWiki handles code listings too. 
 
@@ -77,7 +80,8 @@ The markup above will render as:
 
 There are a couple of additional ways to show code listings too. They aren't described here, but you can look at [[Code Formatting and Highlighting]] for more details
 
-## Tables <a name="tables"></a> ##
+<a name="tables"></a> 
+## Tables ##
 
 Tables are not a part of the original Markdown. However, they are handy and available in many of the dialects of Markdown. CWiki implements the Github Flavored Markdown (GFM) version of tables.
 
@@ -114,7 +118,8 @@ Less | Pretty | Markdown
 1 | 2 | 3
 
 
-## Mathematics <a name="mathematics"></a> ##
+<a name="mathematics"></a> 
+## Mathematics ##
 
 You can also enter mathematics using the familiar  [[About TeX|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
 
@@ -128,6 +133,7 @@ $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 
 For inline math, use single dollar signs, `$`, to surround the math. For example, here is the markup for the same equation as above `$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$` which renders as $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$.
 
-## Tables of Contents <a name="toc"></a> ##
+<a name="toc"></a> 
+## Tables of Contents ##
 
 CWiki does not include any extensions to produce Tables of Contents since they can be created quickly in almost any Markdown editor. See [[How to Make a Table of Contents]] for example.
