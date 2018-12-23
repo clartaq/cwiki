@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2018-12-23T16:00:21.147-05:00
+modified: 2018-12-23T16:30:57.670-05:00
 tags:
   - cwiki
   - design
@@ -21,6 +21,10 @@ This page is the on-going saga of working on the CWiki program.
 - ~~Fix the issue with illegal characters in the title.~~ See [[Technical Note on Encoding Page Titles]].
 - Seems like it's getting to be time to split out "commands", "keyboard-shortcuts", and "buttons" into their own namespaces in the editor. Getting to be like Java, 25 Nov 2018, 05:37:45 pm.
 - When exiting the editor, the program should check if the page being edited was a seed page. If so, it should offer to save it to a file (so I don't forget to do it before erasing the page database for testing or release), 17 Dec 2018, 04:25:32 pm.
+
+##### Noticed that I've been Advocating Building TOCs in a Style I Don't Like, 23 Dec 2018, 04:29:24 pm. #####
+
+I like to jump to a location where the section heading is visible. Now I'm changing the pages that have TOCs to that style. Before, clicking on a TOC item took you to the correct place, but it showed things just below the heading.
 
 ##### Resizing the Markdown Help Dialog, 23 Dec 2018, 03:52:45 pm. #####
 
