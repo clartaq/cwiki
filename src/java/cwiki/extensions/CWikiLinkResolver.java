@@ -1,6 +1,6 @@
 package cwiki.extensions;
 
-import com.vladsch.flexmark.ast.Node;
+import com.vladsch.flexmark.util.ast.Node;
 import com.vladsch.flexmark.ext.wikilink.WikiLink;
 import com.vladsch.flexmark.html.LinkResolver;
 import com.vladsch.flexmark.html.LinkResolverFactory;
