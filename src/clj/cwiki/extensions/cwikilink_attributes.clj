@@ -19,7 +19,7 @@
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :refer [is-admin-only? is-generated?
                                         is-special?]])
-  (:import (com.vladsch.flexmark.ast Node)
+  (:import (com.vladsch.flexmark.util.ast Node)
            (com.vladsch.flexmark.ext.wikilink WikiLink)
            (com.vladsch.flexmark.html AttributeProviderFactory
                                       HtmlRenderer$Builder

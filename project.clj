@@ -8,6 +8,7 @@
                  [org.clojure/clojurescript "1.10.439" :scope "provided"]
                  [org.clojure/core.async "0.4.490"]
                  [org.clojure/java.jdbc "0.7.8"]
+                 [org.clojure/spec.alpha "0.2.176"]
 
                  [buddy/buddy-auth "2.1.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [buddy/buddy-hashers "1.3.0"]
@@ -18,11 +19,11 @@
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [com.taoensso/sente "1.13.1"]
                  [com.taoensso/timbre "4.10.0"]
-                 [com.vladsch.flexmark/flexmark "0.35.0"]
-                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.35.0"]
-                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.35.0"]
-                 [com.vladsch.flexmark/flexmark-ext-tables "0.35.0"]
-                 [com.vladsch.flexmark/flexmark-ext-wikilink "0.35.0"]
+                 [com.vladsch.flexmark/flexmark "0.40.0"]
+                 [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.40.0"]
+                 [com.vladsch.flexmark/flexmark-ext-footnotes "0.40.0"]
+                 [com.vladsch.flexmark/flexmark-ext-tables "0.40.0"]
+                 [com.vladsch.flexmark/flexmark-ext-wikilink "0.40.0"]
                  [compojure "1.6.1" :exclusions [clout instaparse]]
                  [environ "1.1.0"]
                  [hiccup "1.0.5"]
@@ -81,7 +82,7 @@
                        :prep-tasks   ["javac" ["compile" "cwiki.extensions.cwikilink-attributes"]]
 
                        :plugins      [[lein-doo "0.1.10"]
-                                      [lein-figwheel "0.5.16"]]
+                                      [lein-figwheel "0.5.17"]]
                        ; Leave this alone. IntelliJ has issues otherwise.
                        :test-paths   ["test/cljs"]
                        :env          {:profile-type "development"
@@ -108,7 +109,7 @@
   :cljsbuild {:builds
               [
                {:id           "min"
-                :source-paths ["src/cljs" "env/prod/cljs"]
+                :source-paths ["src/cljs" "env/prod/cljs" "src/cljc"]
                 :compiler     {:output-to       "resources/public/js/compiled/cwiki-mde.js"
                                :output-dir      "resources/public/js/compiled/min"
                                :elide-asserts   true
