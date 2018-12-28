@@ -4,22 +4,20 @@
 ;;;;
 
 (ns cwiki-mde.core
-  (:require [clojure.string :refer [blank?]]
+  (:require [cljs.core.async :as async :refer [chan]]
+            [clojure.string :refer [blank?]]
             [cljs.pprint :as pprint]
             [cwiki-mde.keyboard-shortcuts :as kbs]
             [cwiki-mde.tag-editor :as te]
             [cwiki-mde.ws :as ws]
             [reagent.core :as r]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]))
+                                     trace debug info warn error]])
+  (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Global variables.
 ;;;
-
-;; The global page map is set when the server sends it over. It is used when
-;; setting up the innner editor container.
-(defonce ^{:private true} glbl-page-map (r/atom nil))
 
 ;; The delay-handle stores the handle to the autosave countdown timer.
 (def ^{:private true} glbl-delay-handle (atom nil))
@@ -38,9 +36,13 @@
 ;; new page to be saved if the user changes page titles between saved.
 (def ^{:private true} glbl-id-for-next-save (atom nil))
 
-(def ^{:private true} glbl-markdown-help-html (atom nil))
-
+;; A string constant to avoid spelling mistakes in various parts of the
+;; program where this ID is used.
 (def inner-editor-container-id "inner-editor-container-id")
+
+;; A channel used to retrieve the page map asynchronously when it becomes
+;; available from the websocket.
+(def got-page-channel (chan))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Utility functions.
@@ -151,8 +153,9 @@
                                              (tracef "editor-message-handler: the-data: %s"
                                                      (with-out-str
                                                        (pprint/pprint page-map)))
-                                             ; This is where the global page map is set.
-                                             (reset! glbl-page-map page-map))
+                                             ; This is where the page map is
+                                             ; put on the channel asynchronously.
+                                             (go (>! got-page-channel page-map)))
       (= message-id
          :hey-editor/here-is-the-id) (reset! glbl-id-for-next-save (second ?data))
 
@@ -273,7 +276,7 @@
 
 (defn layout-markdown-help-dialog
   "Layout the dialog to contain the Markdown help and return it."
-  []
+  [page-map]
   (let [state (r/atom nil)]
     (r/create-class
       {:display-name        "markdown-help-dialog"
@@ -288,7 +291,7 @@
                                 (reset! state {:width dw :height dh})))
 
        :reagent-render      (fn []
-                              (let [help-html (:markdown-help @glbl-page-map)
+                              (let [help-html (:markdown-help page-map)
                                     width (:width @state)
                                     height (:height @state)]
                                 [:div {:class "modal closed"
@@ -507,9 +510,7 @@
 
     [:button.editor-button-bar--button.popup
      {:title    "Get help with Markdown"
-      :on-click #(do
-                   (println "Saw click on help button.")
-                   (toggle-markdown-help-modal))}
+      :on-click #(toggle-markdown-help-modal)}
      [:i.editor-button-bar--icon.question-circle-o-icon]]]])
 
 (defn layout-editor-pane
@@ -581,18 +582,18 @@
   "Lays out the section of the wiki page containing the editor, including the
   heading (title, tags, etc.) at the top, and the editor and preview panes
   side-by-side at the bottom. Returns the layout."
-  [page-map-atom]
-  (tracef "layout-inner-editor-container: @page-map-atom: " @page-map-atom)
+  [page-map]
+  (tracef "layout-inner-editor-container: page-map: " page-map)
   (fn []
-    (when @page-map-atom
-      (let [pm @page-map-atom
-            title-atom (r/atom (:page_title pm))
-            tags-atom-vector (r/atom (:tags pm))
-            content-atom (r/atom (:page_content pm))
-            options (:options pm)]
+    (when page-map
+      (let [title-atom (r/atom (:page_title page-map))
+            tags-atom-vector (r/atom (:tags page-map))
+            content-atom (r/atom (:page_content page-map))
+            options (:options page-map)]
         (letfn [(re-assembler-fn []
-                  (let [page-map-id (or (:page_id pm) @glbl-id-for-next-save)
-                        re-assembled-page-map (merge @page-map-atom
+                  (let [page-map-id (or (:page_id page-map)
+                                        @glbl-id-for-next-save)
+                        re-assembled-page-map (merge page-map
                                                      {:page_id      page-map-id
                                                       :page_title   @title-atom
                                                       :tags         @tags-atom-vector
@@ -623,12 +624,16 @@
              [layout-editor-bottom-button-bar editor-state]
              [layout-unsaved-changes-warning-dialog editor-state]
              [layout-duplicate-page-warning-dialog]
-             [layout-markdown-help-dialog]
+             [layout-markdown-help-dialog page-map]
              [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))))
 
 (defn reload []
-  (r/render [layout-inner-editor-container glbl-page-map]
-            (get-element-by-id "outer-editor-container")))
+  (go
+    (println "waiting...")
+    (let [pm (<! got-page-channel)]
+      (println "rendering...")
+      (r/render [layout-inner-editor-container pm]
+                (get-element-by-id "outer-editor-container")))))
 
 (defn ^:export main []
   (reload))
