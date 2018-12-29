@@ -4,7 +4,7 @@
 ;;;;
 
 (ns cwiki-mde.core
-  (:require [cljs.core.async :as async :refer [chan]]
+  (:require [cljs.core.async :as async :refer [chan <! >!]]
             [clojure.string :refer [blank?]]
             [cljs.pprint :as pprint]
             [cwiki-mde.keyboard-shortcuts :as kbs]
@@ -88,24 +88,6 @@
     (when (and close-button overlay)
       (.toggle (.-classList close-button) "closed")
       (.toggle (.-classList overlay) "closed"))))
-
-(defn toggle-unsaved-changes-modal
-  "Toggle the display state of the modal dialog that is shown when there
-  are unsaved changes."
-  []
-  (toggle-modal "unsaved-changes-modal"))
-
-(defn toggle-duplicate-title-modal
-  "Toggle the display state of the modal dialog that is shown when the
-  user is trying to save a new page with a title that duplicates a page
-  already in the wiki."
-  []
-  (toggle-modal "duplicate-title-modal"))
-
-(defn toggle-markdown-help-modal
-  "Toggle visibility of the Markdown help dialog."
-  []
-  (toggle-modal "markdown-help-modal"))
 
 (defn tell-server-to-quit
   [state]
@@ -205,6 +187,12 @@
 ;;; Dialogs
 ;;;
 
+(defn toggle-unsaved-changes-modal
+  "Toggle the display state of the modal dialog that is shown when there
+  are unsaved changes."
+  []
+  (toggle-modal "unsaved-changes-modal"))
+
 (defn layout-unsaved-changes-warning-dialog
   "Brings up a modal dialog that informs the user that there are unsaved
   changes to the page. Asks them what to do before exiting and losing
@@ -245,6 +233,13 @@
                              (reset! glbl-ok-to-exit nil)
                              (toggle-unsaved-changes-modal))}]]]]))
 
+(defn toggle-duplicate-title-modal
+  "Toggle the display state of the modal dialog that is shown when the
+  user is trying to save a new page with a title that duplicates a page
+  already in the wiki."
+  []
+  (toggle-modal "duplicate-title-modal"))
+
 (defn layout-duplicate-page-warning-dialog
   "Notify the user that a page with the same title already exists in the
   wiki and allow them to return to the editor."
@@ -273,6 +268,11 @@
                 :value    "Ok. Return to the Editor."
                 :title    "Close this dialog and return to the editor"
                 :on-click #(toggle-duplicate-title-modal)}]]]]))
+
+(defn toggle-markdown-help-modal
+  "Toggle visibility of the Markdown help dialog."
+  []
+  (toggle-modal "markdown-help-modal"))
 
 (defn layout-markdown-help-dialog
   "Layout the dialog to contain the Markdown help and return it."
@@ -333,7 +333,7 @@
                      {:type      "text"
                       :class     "mde-form-title-field"
                       :name      "page-title"
-                      :id        (:editor-title-input-id options) ;"mde-form-title-field-id"
+                      :id        (:editor-title-input-id options)
                       :autoFocus "true"
                       :value     (if-let [title @title-atom]
                                    (do
