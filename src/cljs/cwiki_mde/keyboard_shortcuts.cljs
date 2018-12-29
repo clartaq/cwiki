@@ -1,9 +1,6 @@
 (ns cwiki-mde.keyboard-shortcuts
-  (:require [clojure.string :as s]
-            [cljs-time.coerce :as c]
-            [cljs-time.core :as t]
+  (:require [cljs-time.core :as t]
             [cljs-time.format :as f]
-            [cwiki-mde.tag-editor :as te]
             [keybind.core :as kbs]))
 
 ;;------------------------------------------------------------------------------
@@ -18,16 +15,23 @@
   []
   (f/unparse custom-formatter (t/time-now)))
 
+
 (defn insert-text-into-input
   "Inserts the text into the element wherever the cursor happens to be."
   [ele txt input-atom editor-state]
-  (let [start (.-selectionStart ele)
-        end (.-selectionEnd ele)
-        val (.-value ele)
-        before (.substring val 0 start)
-        after (.substring val end (.-length val))]
-    (reset! input-atom (str before txt after))
-    ((:dirty-editor-notifier editor-state) editor-state)))
+  (.focus ele)
+  (if-not (exists? js/InstallTrigger)
+    (let [start (.-selectionStart ele)
+          end (.-selectionEnd ele)
+          val (.-value ele)
+          before (.substring val 0 start)
+          after (.substring val end (.-length val))]
+      (println "Firefox insert")
+      (reset! input-atom (str before txt after)))
+    (when txt
+      (println "Not Firefox")
+      (.execCommand js/document "insertText" false txt)))
+  ((:dirty-editor-notifier editor-state) editor-state))
 
 (defn- ele->input-atom
   "Return the input atom embedded in the given html element. Returns
@@ -83,10 +87,10 @@
                      formatted-now (get-formatted-now)
                      input-atom (ele->input-atom ele editor-state)]
                  (when (and ele formatted-now input-atom))
-                   (insert-text-into-input ele
-                                           formatted-now
-                                           input-atom
-                                           editor-state)))));)
+                 (insert-text-into-input ele
+                                         formatted-now
+                                         input-atom
+                                         editor-state)))))
 
 (defn unbind-shortcut-keys
   "Un-bind all of the shortcut keys."
