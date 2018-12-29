@@ -2,15 +2,15 @@
 author: CWiki
 title: Markdown Help
 date: 2018-11-18T15:39:33.103-05:00
-modified: 2018-12-23T16:07:10.676-05:00
+modified: 2018-12-28T12:59:04.708-05:00
 tags:
   - help
   - Markdown
 ---
 
-
+<a name="top"></a>
 This list is largely copied and adapted from the
-[Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+[Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). (**Note:** If you are viewing this help in the editor, wikilinks will not be displayed correctly.)
 
 ## Table of Contents ##
 [Headers](#headers)  
@@ -51,6 +51,8 @@ octothorpes (pound signs) indicating its level.
 
 The trailing markers are totally optional. I tend to use them so I don't have to keep track of which markers require closure and which don't.
 
+[Back to Top](#top)
+
 <a name="emphasis"></a>
 ## Emphasis ##
 
@@ -80,8 +82,9 @@ Emphasis can be combined with **asterisks and _underscores_**.
 
 Markdown does not include syntax for underlining text. At the time the HTML tags for underlining were deprecated. They are not deprecated in HTML 5. But to still have to insert the tags for underline (`<u>...</u>`) manually to <u>underline</u> where you want it.
 
-
 Strikethrough uses two tildes. ~~Scratch this.~~
+
+[Back to Top](#top)
 
 <a name="lists"></a> 
 ## Lists ##
@@ -128,6 +131,8 @@ trailing spaces are not required.)
 * Unordered list can use asterisks
 - Or minuses
 + Or pluses
+
+[Back to Top](#top)
 
 <a name="links"></a> 
 ## Links ##
@@ -182,6 +187,7 @@ Some text to show that the reference links can follow later.
 [1]: http://slashdot.org
 [link text itself]: http://www.reddit.com
 
+[Back to Top](#top)
 
 <a name="images"></a> 
 ## Images ##
@@ -215,6 +221,8 @@ Reference-style:
 Here's a logo from CWiki demonstrating how a local image can be loaded too. This is the inline-style too.
 
 ![A 150x150 pixel version of the CWiki icon](/img/favicon/mstile-150x150.png "One of the CWiki icon files used as a favicon.")
+
+[Back to Top](#top)
 
 <a name="code"></a> 
 ## Code and Syntax Highlighting ##
@@ -265,6 +273,9 @@ No language indicated, so no syntax highlighting in CWiki
 (varies on Github). 
 But let's throw in a <b>tag</b>.
 ```
+
+[Back to Top](#top)
+
 <a name="mathematics"></a> 
 ## Mathematics ##
 
@@ -280,10 +291,14 @@ $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 
 For inline math, use single dollar signs, `$`, to surround the math. For example, here is the markup for the same equation as above `$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$` which renders as $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$.
 
+[Back to Top](#top)
+
 <a name="toc"></a> 
 ## Tables of Contents ##
 
 CWiki does not include any extensions to produce Tables of Contents since they can be created quickly in almost any Markdown editor. See [[How to Make a Table of Contents]] for example.
+
+[Back to Top](#top)
 
 <a name="tables"></a> 
 ## Tables ##
@@ -326,6 +341,8 @@ Markdown | Less | Pretty
 *Still* | `renders` | **nicely**
 1 | 2 | 3
 
+[Back to Top](#top)
+
 <a name="blockquotes"></a> 
 ## Blockquotes ##
 
@@ -344,6 +361,8 @@ Here is a break in the quoted text.
 Here is a break in the quoted text.
 
 > This is a very long line that will still be quoted properly when it wraps. Oh boy, let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote. 
+
+[Back to Top](#top)
 
 <a name="html"></a> 
 ## Inline HTML ##
@@ -368,6 +387,7 @@ You can also use raw HTML in your Markdown, and it'll mostly work pretty well.
   <dd>Does *not* work **very** well. Use HTML <em>tags</em>.</dd>
 </dl>
 
+[Back to Top](#top)
 
 <a name="hr"></a> 
 ## Horizontal Rule ##
@@ -402,6 +422,7 @@ ___
 
 Underscores
 
+[Back to Top](#top)
 
 <a name="lines"></a> 
 ## Line Breaks ##
@@ -433,3 +454,5 @@ This line also begins a separate paragraph, but...
 This line is only separated by a single newline, so it's a separate line in the *same paragraph*.
 
 License: [CC-BY](https://creativecommons.org/licenses/by/3.0/)
+
+[Back to Top](#top)
