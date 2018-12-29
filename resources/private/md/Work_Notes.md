@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2018-12-23T16:30:57.670-05:00
+modified: 2018-12-29T16:33:45.826-05:00
 tags:
   - cwiki
   - design
@@ -21,6 +21,48 @@ This page is the on-going saga of working on the CWiki program.
 - ~~Fix the issue with illegal characters in the title.~~ See [[Technical Note on Encoding Page Titles]].
 - Seems like it's getting to be time to split out "commands", "keyboard-shortcuts", and "buttons" into their own namespaces in the editor. Getting to be like Java, 25 Nov 2018, 05:37:45 pm.
 - When exiting the editor, the program should check if the page being edited was a seed page. If so, it should offer to save it to a file (so I don't forget to do it before erasing the page database for testing or release), 17 Dec 2018, 04:25:32 pm.
+
+##### Waiting for the WebSocket to Deliver the Document to the Editor, 29 Dec 2018, 04:01:59 pm. #####
+
+Early on in the development of the ClojureScript editor, I was puzzled about how to await the document contents before rendering the layout of the editor page. Usually (always?), the editor would render before any data arrived.
+
+Eventually, I just made the page data a reactive atom. Then the page re-rendered correctly when the WebSocket finally delivered the data.
+
+I finally got around to doing it right (well..., better) and it was trivial.
+* Just use `core.async` to create a channel.
+* Set up the WebSocket message handler to put the page data on the channel.
+* Then have the page `reload` function try to take the page map from the channel and block until it arrives.
+
+This trades one piece of global state (the map of page data) for another (the channel)​ but eliminates several uncontrolled references to the global page data scattered around the program.
+
+Fixing this came about as part of jumping down the "Rabbit Hole" of implementing a generic undo/redo. See [this](#24-Dec-2018-11:54:23-am).
+
+I also think the way I was loading the data before might have been related to a race condition. See [this](#17-Dec-2018-04:16:22-pm).
+
+<a name="24-Dec-2018-11:54:23-am"></a>
+##### Inserting Text in the Editor Programmatically can Break the Undo Chain, 24 Dec 2018, 11:54:23 am. #####
+
+Experimenting with keyboard shortcuts, I want to make sure that it is still possible to "undo" (ctrl/cmd-z) after inserting text programmatically, such as with the "insert timestamp" shortcut.
+
+However, doing so seems to break the "undo" chain; that is, undo is no longer available after doing the insert. A little research on [DuckDuckGo](https://duckduckgo.com) indicates that this should not be a problem if you use the `execCommand` function to do the insertion. And that seems to be the case for [Safari](https://www.apple.com/safari/).
+
+With the other browsers I regularly test with, it is more problematic.
+
+* With [Firefox (Developer Edition)](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Developer_Edition), nothing is inserted when using `execCommand`. I have to use a different method of inserting text which still breaks the "undo" stack. This is a [bug](https://bugzilla.mozilla.org/show_bug.cgi?id=1220696) for `textarea` elements.
+
+* When using [Brave](https://brave.com), the text is inserted but the "undo" stack is broken.
+
+* With [Opera](https://www.opera.com), the command inserts text as expected but the "undo" stack still breaks. Also, the shortcut key I have chosen for now (option-ctrl/cmd-t) seems to be used to switch browser tabs.
+
+**Roll Your Own Undo/Redo** 
+
+There is a blog discussing the topic [here](https://macwright.org/2016/02/07/undo-redo-clojurescript.html) along with example code. Unfortunately, it uses [Domina](https://github.com/levand/domina) to handle the DOM. (Domina doesn't appear to be under development or supported anymore.)
+
+There is also a simple [Reagent](https://reagent-project.github.io) example [here](https://reagent-project.github.io/news/cloact-reagent-undo-demo.html).
+
+And there is a Clojure/ClojureScript library [here](https://github.com/oakes/mistakes-were-made).
+
+A plethora of examples to examine, but none really seem applicable to a `textarea` under control of Reagent.
 
 ##### Noticed that I've been Advocating Building TOCs in a Style I Don't Like, 23 Dec 2018, 04:29:24 pm. #####
 
@@ -63,6 +105,7 @@ It also let me get rid of the dependency on `javax.xml.bind`, 19 Dec 2018, 11:01
 
 Ought to find out how and where this occurs.
 
+<a name="17-Dec-2018-04:16:22-pm"></a>
 ##### Noticed an Intermittent Error When Loading the Editor, 17 Dec 2018, 04:16:22 pm. #####
 
 For some time now, I have sometimes observed the editor fail to load the correct page. I _think_ that when this occurs, it is the first edit attempt after loading the wiki. I _know_ it occurs when running either from the REPL or an Uberjar.
