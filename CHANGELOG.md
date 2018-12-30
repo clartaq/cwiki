@@ -9,11 +9,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added ###
 
+- Markdown help is now available from a dialog in the editor.
+
 ### Changed ###
+
+- Now built with Clojure 10 and Java 11.
+- Multi-level lists look a little better because of changes in line spacing.
 
 ### Fixed ###
 
-- Resolved issue [#25: "https://bitbucket.org/David_Clark/cwiki/issues/25/modify-history-after-saving-a-seed-page"] in commit [0af5eb9facb8](https://bitbucket.org/David_Clark/cwiki/commits/0af5eb9facb8).
+- Resolved issue [#24: "Improve CSS Styling of Multi-level Lists"](https://bitbucket.org/David_Clark/cwiki/issues/24/improve-css-styling-of-multi-level-lists) in commit [1c96347](https://bitbucket.org/David_Clark/cwiki/commits/1c96347dbf3c33ddbc9b297ca0cc6c93872769d0).
+- Resolved issue [#25: "Modify History After Saving a Seed Page"](https://bitbucket.org/David_Clark/cwiki/issues/25/modify-history-after-saving-a-seed-page) in commit [0af5eb9facb8](https://bitbucket.org/David_Clark/cwiki/commits/0af5eb9facb8).
 
 ## [0.1.3] - 2018-11-17 ##
 

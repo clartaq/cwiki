@@ -124,6 +124,8 @@
   [{:keys [?data]}]
   (trace "Editor: Connection state changed!"))
 
+(declare toggle-duplicate-title-modal)
+
 (defn editor-message-handler
   [{:keys [?data]}]
   (when ?data
