@@ -37,7 +37,12 @@
   (kbs/bind! "alt-defmod-t" ::timestamp-shortcut
              (fn [evt]
                (let [ele (.-target evt)]
-                 (cmd/insert-time-stamp ele editor-state)))))
+                 (cmd/insert-time-stamp ele editor-state))))
+
+  (kbs/bind! "alt-defmod-p" ::percent-encode-shortcut
+             (fn [evt]
+               (cmd/percent-encode-selection (.-target evt) editor-state)))
+  )
 
 (defn unbind-shortcut-keys
   "Un-bind all of the shortcut keys."
