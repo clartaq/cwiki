@@ -2,13 +2,13 @@
 author: david
 title: A Dummy Test Page
 date: 2018-05-13T17:30:17.395-04:00
-modified: 2018-09-08T16:15:41.014-04:00
+modified: 2018-12-19T13:37:43.606-05:00
 tags:
   - A Tag for Testing
   - Second Tag
-  - Third Tag
   - Wamsutta
 ---
+
 
 
 
@@ -21,6 +21,16 @@ Here is a list of​ some of the things it can do.
 * It can do a live preview of Markdown, like **bold** and _italic_.
 * It can preview syntax highlighting.
 * It can preview math typesetting.
+
+A multi-level list:
+
++ Create a list by starting a line with `+`, `-`, or `*`
++ Sub-lists are made by indenting 2 spaces:
+  - Marker character change forces new list start:
+    * Ac tristique libero volutpat at
+    + Facilisis in pretium nisl aliquet
+    - Nulla volutpat aliquam velit
++ Very easy!
 
 Some inline code: `(+ 1 2 4 9)`.
 And a code block:

@@ -19,3 +19,8 @@
   []
   (main/stop-app!)
   (stop-figwheel!))
+
+(defn start-cljs-repl
+  []
+  (start-figwheel!)
+  (cljs-repl))

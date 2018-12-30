@@ -7,6 +7,7 @@
   (:require [cljs.core.async :as async :refer [chan <! >!]]
             [clojure.string :refer [blank?]]
             [cljs.pprint :as pprint]
+            [cwiki-mde.editor-commands :as cmd]
             [cwiki-mde.keyboard-shortcuts :as kbs]
             [cwiki-mde.tag-editor :as te]
             [cwiki-mde.ws :as ws]
@@ -445,42 +446,13 @@
       :disabled "true"}
      [:i.editor-button-bar--icon.indent-left-icon]]
 
-    ; from: K. Kilian Lindbergs answer to this question:
-    ; https://stackoverflow.com/questions/596481/is-it-possible-to-simulate-key-press-events-programmatically/19883789#19883789
-    ;
-    ;var pressthiskey = "q"/* <--- :) !? q for example */;
-    ;var e = new Event("keydown");
-    ;e.key = pressthiskey;
-    ;e.keyCode = e.key.charCodeAt(0);
-    ;e.which = e.keyCode;
-    ;e.altKey = false;
-    ;e.ctrlKey = true;
-    ;e.shiftKey = false;
-    ;e.metaKey = false;
-    ;e.bubbles = true;
-    ;document.dispatchEvent(e);
-
     [:button.editor-button-bar--button
      {:title    "Insert a timestamp"
       :on-click (fn [arg]
                   (let [target (get-element-by-id (:editor-textarea-id state))]
                     (println "Saw click on timestamp button.")
                     (println "target: " (.-id target))
-                    (let [evt (js/Event. "keydown")]
-                      (set! (.-key evt) "T")
-                      (set! (.-keyCode evt) (.charCodeAt (.-key evt) 0))
-                      (set! (.-which evt) (.-keyCode evt))
-                      (set! (.-altKey evt) "true")
-                      (set! (.-ctrlKey evt) nil)
-                      (set! (.-shiftKey evt) nil)
-                      (set! (.-metaKey evt) "true")
-                      (set! (.-bubbles evt) "true")
-                      (println "evt: " evt)
-                      (let [cancelled (.dispatchEvent target evt)]
-                        (println "cancelled: " cancelled)))))
-      ;#(println "Saw click on timestamp button.")
-      ;:disabled "true"
-      }
+                    (cmd/insert-time-stamp target state)))}
      [:i.editor-button-bar--icon.clock-icon]]
 
     [:span.editor-button-bar--gap]
@@ -504,7 +476,9 @@
      {:title    "Save revised content"
       :id       "save-button-id"
       :on-click #(when @glbl-editor-is-dirty
-                   ((:assemble-and-save-fn state)))
+                   (cmd/save-page-cmd state)
+                   ;((:assemble-and-save-fn state))
+                   )
       :disabled (not @glbl-editor-is-dirty)}
      [:i.editor-button-bar--icon.floppy-icon {:id "floppy-icon"}]]
 
