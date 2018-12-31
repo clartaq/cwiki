@@ -537,7 +537,8 @@
     [layout-editor-pane content-atom state]
     [layout-preview-pane content-atom]]])
 
-(defn quit-fn
+(defn quit-editor-fn
+  "Warn the user about any unsaved changes, if any. Otherwise, quit the editor."
   [state]
   (if @glbl-editor-is-dirty
     (toggle-unsaved-changes-modal)
@@ -552,7 +553,7 @@
             :name    "done-button"
             :value   "Done"
             :class   "form-button button-bar-item"
-            :onClick #(quit-fn state)}]])
+            :onClick #(cmd/quit-editor-cmd state)}]])
 
 (defn layout-inner-editor-container
   "Lays out the section of the wiki page containing the editor, including the
@@ -582,7 +583,7 @@
           (let [editor-state (merge {:re-assembler-fn       re-assembler-fn
                                      :doc-save-fn           doc-save-fn
                                      :assemble-and-save-fn  assemble-and-save-fn
-                                     :quit-fn               quit-fn
+                                     :quit-fn               quit-editor-fn
                                      :dirty-editor-notifier mark-page-dirty
                                      :editor-textarea-id    "editor-text-area-id"
                                      :editor-title-input-id "mde-form-title-field-id"
@@ -605,9 +606,7 @@
 
 (defn reload []
   (go
-    (println "waiting...")
     (let [pm (<! got-page-channel)]
-      (println "rendering...")
       (r/render [layout-inner-editor-container pm]
                 (get-element-by-id "outer-editor-container")))))
 

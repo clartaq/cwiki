@@ -1,3 +1,8 @@
+;;;;
+;;;; This namespace contains functions that map keyboard shortcuts to editor
+;;;; commands.
+;;;;
+
 (ns cwiki-mde.keyboard-shortcuts
   (:require [cljs-time.core :as t]
             [cljs-time.format :as f]
@@ -17,21 +22,12 @@
   [editor-state]
 
   ;; Save the page.
-  (letfn [(save-from-keyboard-fxn [evt]
-            (cmd/save-page-cmd editor-state)
-            (.preventDefault evt)
-            (.stopPropagation evt)
-            false)]
-    (kbs/bind! "defmod-s" ::save-shortcut save-from-keyboard-fxn))
-
-  ;; Quit the editor.
-  ;(let [quit-fxn (:quit-fn editor-state)]
-  ;  (letfn [(quit-from-keyboard-fxn [e editor-state]
-  ;           ; (quit-fxn editor-state)
-  ;            (.preventDefault e)
-  ;            (.stopPropagation e)
-  ;            false)]
-  ;    (kbs/bind! "defmod-w" ::quit-shortcut quit-from-keyboard-fxn)))
+  (kbs/bind! "defmod-s" ::save-shortcut
+             (fn [evt]
+               (cmd/save-page-cmd editor-state)
+               (.preventDefault evt)
+               (.stopPropagation evt)
+               false))
 
   ;; Insert a timestamp.
   (kbs/bind! "alt-defmod-t" ::timestamp-shortcut
@@ -39,9 +35,19 @@
                (let [ele (.-target evt)]
                  (cmd/insert-time-stamp ele editor-state))))
 
-  (kbs/bind! "alt-defmod-p" ::percent-encode-shortcut
+  ;; Percent encode the selection.
+  (kbs/bind! "alt-defmod-e" ::percent-encode-shortcut
              (fn [evt]
                (cmd/percent-encode-selection (.-target evt) editor-state)))
+
+  ;; Quit the editor.
+  (kbs/bind! "alt-defmod-x" ::quit-editor-shortcut
+             (fn [evt]
+               (cmd/quit-editor-cmd editor-state)
+               (.preventDefault evt)
+               (.stopPropagation evt)
+               false))
+
   )
 
 (defn unbind-shortcut-keys
