@@ -2,6 +2,7 @@
 ; Line that start with a semi-colon are considered comments and are ignored
 ; by the loader.
 Front_Page.md
+A_Tip_on_Linking_within_a_Page.md
 About.md
 About_Admin_Pages.md
 About_Backup_and_Restore.md
@@ -27,6 +28,8 @@ Admin.md
 Code_Formatting_and_Highlighting.md
 CWiki_FAQ.md
 Features.md
+How_to_Encode_a_String_in_the_Editor.md
+How_to_Insert_a_Timestamp_in_the_Editor.md
 How_to_Make_a_Table_of_Contents.md
 Limits.md
 Links_Primer.md
