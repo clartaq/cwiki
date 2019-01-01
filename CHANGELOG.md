@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added ###
 
 - Markdown help is now available from a dialog in the editor.
+- A couple more keyboard shortcuts in the editor.
 
 ### Changed ###
 
