@@ -1123,6 +1123,12 @@ div.one-column-list li {
     transition: all ease 0.2s;
 }
 
+/* Slight adjustments to the Done button to make it fit in better. */
+.editor-button-bar--done-button {
+    font-size: 1.2rem;
+    margin: 5px;
+}
+
 .editor-button-bar--icon {
     font-family: "cwiki-icons-26px", sans-serif;
     font-style: normal;
