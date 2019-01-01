@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2018-12-29T16:33:45.826-05:00
+modified: 2018-12-31T15:58:06.802-05:00
 tags:
   - cwiki
   - design
@@ -19,8 +19,13 @@ This page is the on-going saga of working on the CWiki program.
 - ~~Keystroke shortcuts.~~ See [[Technical Note on Keyboard Shortcuts]].
 - ~~Fix the damn CSS!~~ See [[Technical Note on the Editor CSS]].
 - ~~Fix the issue with illegal characters in the title.~~ See [[Technical Note on Encoding Page Titles]].
-- Seems like it's getting to be time to split out "commands", "keyboard-shortcuts", and "buttons" into their own namespaces in the editor. Getting to be like Java, 25 Nov 2018, 05:37:45 pm.
 - When exiting the editor, the program should check if the page being edited was a seed page. If so, it should offer to save it to a file (so I don't forget to do it before erasing the page database for testing or release), 17 Dec 2018, 04:25:32 pm.
+
+##### Get Rid of a Piece of Global State by Putting the Editor "Dirty Flag" in the Editor State Map, 31 Dec 2018, 03:57:58 pm. #####
+
+##### Separating Editor Commands into their Own Namespace, 31 Dec 2018, 03:49:02 pm. #####
+
+Back on 25 Nov 2018, 05:37:45 pm I mentioned that it might be time to split editor commands out into their own namespace. That would allow common commands to be used from toolbar buttons and keyboard shortcuts. That has now started happening.
 
 ##### Waiting for the WebSocket to Deliver the Document to the Editor, 29 Dec 2018, 04:01:59 pm. #####
 

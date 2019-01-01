@@ -2,7 +2,7 @@
 author: CWiki
 title: How to Make a Table of Contents
 date: 2017-12-04T13:14:29.000-05:00
-modified: 2018-12-23T16:27:28.738-05:00
+modified: 2018-12-31T15:36:32.805-05:00
 tags:
   - how-to
   - table of contents
@@ -66,3 +66,5 @@ This is a subparagraph​, formatted in heading 3 style
 <a name="Another_paragraph"></a>
 ## Another paragraph ##
 The second paragraph text
+
+Be sure to also look at this [[A Tip on Linking within a Page|tip]] for a way to use encoded timestamps as within-page links.
