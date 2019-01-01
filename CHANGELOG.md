@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Now built with Clojure 10 and Java 11.
 - Multi-level lists look a little better because of changes in line spacing.
+- Put the editor "Done" button in the toolbar with all the other buttons.
+   - Frees up some vertical space.
+   - All the buttons are in the same place.
+   - Now has a tooltip message like the other buttons.
 
 ### Fixed ###
 

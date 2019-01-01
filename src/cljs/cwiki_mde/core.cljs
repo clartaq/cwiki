@@ -365,12 +365,29 @@
    [layout-title-editor title-atom state]
    [te/layout-tag-list tags-atom-vector state]])
 
+(defn quit-editor-fn
+  "Warn the user about any unsaved changes, if any. Otherwise, quit the editor."
+  [state]
+  (if @glbl-editor-is-dirty
+    (toggle-unsaved-changes-modal)
+    (tell-server-to-quit state)))
+
 (defn layout-editor-button-bar
   "Layout the editor button bar. Tedious but trivial."
   [state]
   [:section {:class "editor-button-bar"}
    ;Buttons on the left side.
    [:section.editor-button-bar--left
+
+    [:input {:type    "button"
+             :id      "done-button"
+             :name    "done-button"
+             :value   "Done"
+             :title   "Quit the Editor"
+             :class   "form-button button-bar-item editor-button-bar--done-button"
+             :onClick #(cmd/quit-editor-cmd state)}]
+
+    [:span.editor-button-bar--gap]
 
     [:button.editor-button-bar--button
      {:title    "Make selection bold"
@@ -537,24 +554,6 @@
     [layout-editor-pane content-atom state]
     [layout-preview-pane content-atom]]])
 
-(defn quit-editor-fn
-  "Warn the user about any unsaved changes, if any. Otherwise, quit the editor."
-  [state]
-  (if @glbl-editor-is-dirty
-    (toggle-unsaved-changes-modal)
-    (tell-server-to-quit state)))
-
-(defn layout-editor-bottom-button-bar
-  "Layout the editor button bar."
-  [state]
-  [:section {:class "button-bar-container"}
-   [:input {:type    "button"
-            :id      "done-button"
-            :name    "done-button"
-            :value   "Done"
-            :class   "form-button button-bar-item"
-            :onClick #(cmd/quit-editor-cmd state)}]])
-
 (defn layout-inner-editor-container
   "Lays out the section of the wiki page containing the editor, including the
   heading (title, tags, etc.) at the top, and the editor and preview panes
@@ -598,7 +597,6 @@
             [:div {:class "inner-editor-container" :id inner-editor-container-id}
              [layout-editor-header title-atom tags-atom-vector editor-state]
              [layout-editor-and-preview-section content-atom editor-state]
-             [layout-editor-bottom-button-bar editor-state]
              [layout-unsaved-changes-warning-dialog editor-state]
              [layout-duplicate-page-warning-dialog]
              [layout-markdown-help-dialog page-map]

@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2018-12-31T15:58:06.802-05:00
+modified: 2019-01-01T15:33:35.761-05:00
 tags:
   - cwiki
   - design
@@ -20,6 +20,16 @@ This page is the on-going saga of working on the CWiki program.
 - ~~Fix the damn CSS!~~ See [[Technical Note on the Editor CSS]].
 - ~~Fix the issue with illegal characters in the title.~~ See [[Technical Note on Encoding Page Titles]].
 - When exiting the editor, the program should check if the page being edited was a seed page. If so, it should offer to save it to a file (so I don't forget to do it before erasing the page database for testing or release), 17 Dec 2018, 04:25:32 pm.
+
+##### It Feels Like the "Done" Button in the Editor Sticks Out Like a Sore Thumb, 01 Jan 2019, 03:08:32 pm.
+
+It's down there all by itself taking up vertical space. It's probably the most used button, but it's isolated down at the bottom of the page. It should be up with the other buttons.
+
+If we ever get to the point of being able to toggle parts of the editor in and out of visibility, it should be with the other buttons.
+
+Update: Removed the lower "Done" button and put it up in the editor toolbar. Made small adjustments to CSS to get it to "fit in" a little better.
+
+It still looks like the buttons elsewhere in the program, not like the other toolbar buttons, but I think that is good.
 
 ##### Get Rid of a Piece of Global State by Putting the Editor "Dirty Flag" in the Editor State Map, 31 Dec 2018, 03:57:58 pm. #####
 
