@@ -495,9 +495,7 @@
      {:title    "Save revised content"
       :id       "save-button-id"
       :on-click #(when @glbl-editor-is-dirty
-                   (cmd/save-page-cmd state)
-                   ;((:assemble-and-save-fn state))
-                   )
+                   (cmd/save-page-cmd state))
       :disabled (not @glbl-editor-is-dirty)}
      [:i.editor-button-bar--icon.floppy-icon {:id "floppy-icon"}]]
 
