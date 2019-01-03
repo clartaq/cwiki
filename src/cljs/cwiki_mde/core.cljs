@@ -24,7 +24,7 @@
 (def ^{:private true} glbl-delay-handle (atom nil))
 
 ;; A flag indicating whether or not the textarea has unsaved changes.
-(def ^{:private true} glbl-editor-is-dirty (r/atom nil))
+;(def ^{:private true} glbl-editor-is-dirty (r/atom nil))
 
 ;; Flag indicating that it is ok to exit the editor, even if there are
 ;; unsaved changes. Used by the "Unsaved Changes" modal dialog to indicate
@@ -51,6 +51,9 @@
 
 (defn- get-element-by-id [the-id]
   (.getElementById js/document the-id))
+
+(defn is-editor-dirty? [state]
+  @(:dirty-flag state))
 
 (defn highlight-code
   "Highlights any <pre><code></code></pre> blocks in the html."
@@ -110,7 +113,8 @@
   "Send a message to the server to save the document."
   [page-map]
   (ws/send-message! [:hey-server/save-doc {:data page-map}])
-  (reset! glbl-editor-is-dirty nil))
+  ;(reset! glbl-editor-is-dirty nil)
+  )
 
 (defn editor-handshake-handler
   "Handle the handshake event between the server and client. This function
@@ -148,7 +152,8 @@
          :hey-editor/that-page-already-exists) (do
                                                  (trace "Saw :hey-editor/that-page-already-exists")
                                                  (toggle-duplicate-title-modal)
-                                                 (reset! glbl-editor-is-dirty true))
+                                                 ;(reset! glbl-editor-is-dirty true)
+                                                 )
       (= message-id
          :hey-editor/shutdown-and-go-to) (when-let [new-location (str "/" (second ?data))]
                                            (tracef "The new location is: %s" new-location)
@@ -184,7 +189,15 @@
   "Mark the page as dirty and reset the autosave timer."
   [state]
   (notify-autosave state)
-  (reset! glbl-editor-is-dirty true))
+  (println "mark-page-dirty: before reset: @(:dirty-editor state): "
+           @(:dirty-flag state))
+  (reset! (:dirty-flag state) true)
+  (println "mark-page-dirty: after reset: @(:dirty-editor state): "
+           @(:dirty-flag state))
+
+  (reset! (:dirty-flag state) true)
+  ;(reset! glbl-editor-is-dirty true)
+  )
 
 ;;;-----------------------------------------------------------------------------
 ;;; Dialogs
@@ -368,7 +381,7 @@
 (defn quit-editor-fn
   "Warn the user about any unsaved changes, if any. Otherwise, quit the editor."
   [state]
-  (if @glbl-editor-is-dirty
+  (if @(:dirty-flag state) ;@glbl-editor-is-dirty
     (toggle-unsaved-changes-modal)
     (tell-server-to-quit state)))
 
@@ -494,9 +507,9 @@
     [:button.editor-button-bar--button
      {:title    "Save revised content"
       :id       "save-button-id"
-      :on-click #(when @glbl-editor-is-dirty
+      :on-click #(when (is-editor-dirty? state) ;@(:dirty-flag state) ;@glbl-editor-is-dirty
                    (cmd/save-page-cmd state))
-      :disabled (not @glbl-editor-is-dirty)}
+      :disabled (not (is-editor-dirty? state))} ;@(:dirty-flag state)) }
      [:i.editor-button-bar--icon.floppy-icon {:id "floppy-icon"}]]
 
     [:button.editor-button-bar--button.popup
@@ -563,6 +576,7 @@
       (let [title-atom (r/atom (:page_title page-map))
             tags-atom-vector (r/atom (:tags page-map))
             content-atom (r/atom (:page_content page-map))
+            dirty-editor (r/atom nil)
             options (:options page-map)]
         (letfn [(re-assembler-fn []
                   (let [page-map-id (or (:page_id page-map)
@@ -576,12 +590,14 @@
                 (assemble-and-save-fn []
                   (let [the-doc (re-assembler-fn)
                         sf doc-save-fn]
+                    (reset! dirty-editor nil)
                     (sf the-doc)))]
           (let [editor-state (merge {:re-assembler-fn       re-assembler-fn
                                      :doc-save-fn           doc-save-fn
                                      :assemble-and-save-fn  assemble-and-save-fn
                                      :quit-fn               quit-editor-fn
                                      :dirty-editor-notifier mark-page-dirty
+                                     :dirty-flag            dirty-editor
                                      :editor-textarea-id    "editor-text-area-id"
                                      :editor-title-input-id "mde-form-title-field-id"
                                      :editor-tag-id-prefix  "tag-bl-"
