@@ -23,9 +23,6 @@
 ;; The delay-handle stores the handle to the autosave countdown timer.
 (def ^{:private true} glbl-delay-handle (atom nil))
 
-;; A flag indicating whether or not the textarea has unsaved changes.
-;(def ^{:private true} glbl-editor-is-dirty (r/atom nil))
-
 ;; Flag indicating that it is ok to exit the editor, even if there are
 ;; unsaved changes. Used by the "Unsaved Changes" modal dialog to indicate
 ;; whether the use wants to exit and lose the changes.
@@ -112,9 +109,7 @@
 (defn doc-save-fn
   "Send a message to the server to save the document."
   [page-map]
-  (ws/send-message! [:hey-server/save-doc {:data page-map}])
-  ;(reset! glbl-editor-is-dirty nil)
-  )
+  (ws/send-message! [:hey-server/save-doc {:data page-map}]))
 
 (defn editor-handshake-handler
   "Handle the handshake event between the server and client. This function
@@ -151,9 +146,7 @@
       (= message-id
          :hey-editor/that-page-already-exists) (do
                                                  (trace "Saw :hey-editor/that-page-already-exists")
-                                                 (toggle-duplicate-title-modal)
-                                                 ;(reset! glbl-editor-is-dirty true)
-                                                 )
+                                                 (toggle-duplicate-title-modal))
       (= message-id
          :hey-editor/shutdown-and-go-to) (when-let [new-location (str "/" (second ?data))]
                                            (tracef "The new location is: %s" new-location)
@@ -189,15 +182,7 @@
   "Mark the page as dirty and reset the autosave timer."
   [state]
   (notify-autosave state)
-  (println "mark-page-dirty: before reset: @(:dirty-editor state): "
-           @(:dirty-flag state))
-  (reset! (:dirty-flag state) true)
-  (println "mark-page-dirty: after reset: @(:dirty-editor state): "
-           @(:dirty-flag state))
-
-  (reset! (:dirty-flag state) true)
-  ;(reset! glbl-editor-is-dirty true)
-  )
+  (reset! (:dirty-flag state) true))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Dialogs
@@ -381,7 +366,7 @@
 (defn quit-editor-fn
   "Warn the user about any unsaved changes, if any. Otherwise, quit the editor."
   [state]
-  (if @(:dirty-flag state) ;@glbl-editor-is-dirty
+  (if @(:dirty-flag state)
     (toggle-unsaved-changes-modal)
     (tell-server-to-quit state)))
 
@@ -507,9 +492,9 @@
     [:button.editor-button-bar--button
      {:title    "Save revised content"
       :id       "save-button-id"
-      :on-click #(when (is-editor-dirty? state) ;@(:dirty-flag state) ;@glbl-editor-is-dirty
+      :on-click #(when (is-editor-dirty? state)
                    (cmd/save-page-cmd state))
-      :disabled (not (is-editor-dirty? state))} ;@(:dirty-flag state)) }
+      :disabled (not (is-editor-dirty? state))}
      [:i.editor-button-bar--icon.floppy-icon {:id "floppy-icon"}]]
 
     [:button.editor-button-bar--button.popup

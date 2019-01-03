@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-01-01T15:33:35.761-05:00
+modified: 2019-01-01T16:33:53.159-05:00
 tags:
   - cwiki
   - design
@@ -14,24 +14,19 @@ tags:
 
 This page is the on-going saga of working on the CWiki program.
 
-## Some "To Do"s ##
-
-- ~~Keystroke shortcuts.~~ See [[Technical Note on Keyboard Shortcuts]].
-- ~~Fix the damn CSS!~~ See [[Technical Note on the Editor CSS]].
-- ~~Fix the issue with illegal characters in the title.~~ See [[Technical Note on Encoding Page Titles]].
-- When exiting the editor, the program should check if the page being edited was a seed page. If so, it should offer to save it to a file (so I don't forget to do it before erasing the page database for testing or release), 17 Dec 2018, 04:25:32 pm.
-
 ##### It Feels Like the "Done" Button in the Editor Sticks Out Like a Sore Thumb, 01 Jan 2019, 03:08:32 pm.
 
 It's down there all by itself taking up vertical space. It's probably the most used button, but it's isolated down at the bottom of the page. It should be up with the other buttons.
 
 If we ever get to the point of being able to toggle parts of the editor in and out of visibility, it should be with the other buttons.
 
-Update: Removed the lower "Done" button and put it up in the editor toolbar. Made small adjustments to CSS to get it to "fit in" a little better.
+**Update:** Removed the lower "Done" button and put it up in the editor toolbar. Made small adjustments to CSS to get it to "fit in" a little better.
 
 It still looks like the buttons elsewhere in the program, not like the other toolbar buttons, but I think that is good.
 
 ##### Get Rid of a Piece of Global State by Putting the Editor "Dirty Flag" in the Editor State Map, 31 Dec 2018, 03:57:58 pm. #####
+
+Doing the marking is easy; put a flag in the editor state and toggle it in `mark-page-dirty`. Resetting it after save is problematic. The `doc-save-function` doesn't have access to the editor state when it is called.
 
 ##### Separating Editor Commands into their Own Namespace, 31 Dec 2018, 03:49:02 pm. #####
 
@@ -48,7 +43,7 @@ I finally got around to doing it right (well..., better) and it was trivial.
 * Set up the WebSocket message handler to put the page data on the channel.
 * Then have the page `reload` function try to take the page map from the channel and block until it arrives.
 
-This trades one piece of global state (the map of page data) for another (the channel)​ but eliminates several uncontrolled references to the global page data scattered around the program.
+This trades one piece of global state (the map of page data) for another (the channel) but eliminates several uncontrolled references to the global page data scattered around the program.
 
 Fixing this came about as part of jumping down the "Rabbit Hole" of implementing a generic undo/redo. See [this](#24-Dec-2018-11:54:23-am).
 
@@ -116,6 +111,10 @@ The `uberjar` got a tiny bit bigger too.
 
 It also let me get rid of the dependency on `javax.xml.bind`, 19 Dec 2018, 11:01:22 am.
 
+##### Program Should Offer to Save Seed Pages when Exiting the Editor, 17 Dec 2018, 04:25:32 pm. #####
+
+When exiting the editor, the program should check if the page being edited was a seed page. If so, it should offer to save it to a file (so I don't forget to do it before erasing the page database for testing or release).
+
 ##### Have Seen on Occaision the HTTP Requests Contain Two Copies of Authentication and Authorization data, 18 Dec 2018, 04:18:40 pm. #####
 
 Ought to find out how and where this occurs.
@@ -125,7 +124,7 @@ Ought to find out how and where this occurs.
 
 For some time now, I have sometimes observed the editor fail to load the correct page. I _think_ that when this occurs, it is the first edit attempt after loading the wiki. I _know_ it occurs when running either from the REPL or an Uberjar.
 
-The one time I thought to record it, the editor attempted to load `js/compiled/dev/goog/deps.js`, which, of course,​ is one of the output files produced during compilation of the ClojureScript portion of the program.
+The one time I thought to record it, the editor attempted to load `js/compiled/dev/goog/deps.js`, which, of course, is one of the output files produced during compilation of the ClojureScript portion of the program.
 
 ##### Attempting to Switch to a Maintained Fork of `com.cemerick/url` Causes Issues, 03 Dec 2018, 04:54:38 pm. #####
 
@@ -164,6 +163,10 @@ For some reason, I keep deleting this. Without it, you can't start CWiki on a vi
 
 For example, `[[preferences|Preferences]]` works, but `[[preferences | Preferences]]` does not.
 
+##### Fix the Damn CSS!, 24 Nov 2018, 12:27:35 PM. #####
+
+See [[Technical Note on the Editor CSS]].
+
 ##### Newly created tags should begin with the newly created text highlighted so the user can just start typing, 24 Nov 2018, 01:34:56 pm. #####
 
 Added a click listener to each tag input that will highlight the entire tag when it is clicked, 24 Nov 2018, 04:36:43 pm. Not a complete solution, but it is an improvement.
@@ -171,6 +174,10 @@ Added a click listener to each tag input that will highlight the entire tag when
 ##### Move the keyboard shortcuts into their own namespace, 24 Nov 2018, 01:35:25 pm. #####
 
 Created the `keyboard-shortcuts` namespace and moved all keyboard shortcut code there, 24 Nov 2018, 03:52:14 pm. Made the core file a little less cluttered in anticipation of addition shortcut code.
+
+##### Start Adding some Keyboard Shortcuts, 22 Nov 2018, 04:54:22 PM. #####
+
+There has been a long-standing​ issue in the repository about adding some keyboard shortcuts in the editor. Finally started implementing​ them. See [[Technical Note on Keyboard Shortcuts]].
 
 ##### Update the icon fonts to include "shift left", "shift right" and "timestamp" icons, 24 Nov 2018, 01:37:08 pm. ###
 
