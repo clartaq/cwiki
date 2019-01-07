@@ -2,10 +2,10 @@
 author: david
 title: How to Insert a Timestamp in the Editor
 date: 2018-12-31T11:00:04.974-05:00
-modified: 2018-12-31T11:47:49.810-05:00
+modified: 2019-01-07T15:19:20.026-05:00
 tags:
   - editor
-  - how to
+  - how-to
   - timestamp
 ---
 
