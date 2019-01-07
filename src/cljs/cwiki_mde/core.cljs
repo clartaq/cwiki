@@ -109,6 +109,7 @@
 (defn doc-save-fn
   "Send a message to the server to save the document."
   [page-map]
+  (println "doc-save-fn")
   (ws/send-message! [:hey-server/save-doc {:data page-map}]))
 
 (defn editor-handshake-handler
@@ -550,6 +551,15 @@
     [layout-editor-pane content-atom state]
     [layout-preview-pane content-atom]]])
 
+(defn handle-visibility-change 
+  "Handle visibility change events. When the document becomes hidden,
+  save the editor contents."
+  [state]
+  (when (.-hidden js/document)
+    (let [save-fn (:assemble-and-save-fn state)]
+      (when (is-editor-dirty? state)
+        (save-fn state)))))
+
 (defn layout-inner-editor-container
   "Lays out the section of the wiki page containing the editor, including the
   heading (title, tags, etc.) at the top, and the editor and preview panes
@@ -593,6 +603,7 @@
                                     options)]
 
             (kbs/bind-shortcut-keys editor-state)
+            (.addEventListener js/document "visibilitychange" #(handle-visibility-change editor-state))
             [:div {:class "inner-editor-container" :id inner-editor-container-id}
              [layout-editor-header title-atom tags-atom-vector editor-state]
              [layout-editor-and-preview-section content-atom editor-state]
