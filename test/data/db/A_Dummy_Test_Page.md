@@ -2,13 +2,13 @@
 author: david
 title: A Dummy Test Page
 date: 2018-05-13T17:30:17.395-04:00
-modified: 2018-09-08T16:15:41.014-04:00
+modified: 2019-01-07T15:04:01.474-05:00
 tags:
   - A Tag for Testing
   - Second Tag
-  - Third Tag
   - Wamsutta
 ---
+
 
 
 
@@ -22,6 +22,16 @@ Here is a list of​ some of the things it can do.
 * It can preview syntax highlighting.
 * It can preview math typesetting.
 
+A multi-level list:
+
++ Create a list by starting a line with `+`, `-`, or `*`
++ Sub-lists are made by indenting 2 spaces:
+  - Marker character change forces new list start:
+    * Ac tristique libero volutpat at
+    + Facilisis in pretium nisl aliquet
+    - Nulla volutpat aliquam velit
++ Very easy!
+
 Some inline code: `(+ 1 2 4 9)`.
 And a code block:
 
@@ -31,7 +41,7 @@ And a code block:
   (+ 1 x))
 ```
 
-Here's a [link](https://google.com) to an external page out on the Internet.
+Here's a [link](https://google.com) to an external page out on the Internet. Notice the little "external page" icon that I got from Wikipedia​.
 
 Here's a [[wikilink]] to a page that doesn't exist.
 
