@@ -109,7 +109,6 @@
 (defn doc-save-fn
   "Send a message to the server to save the document."
   [page-map]
-  (println "doc-save-fn")
   (ws/send-message! [:hey-server/save-doc {:data page-map}]))
 
 (defn editor-handshake-handler
