@@ -5,12 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.1.4-SNAPSHOT] ##
+## [0.1.4] - 2019-01-07##
 
 ### Added ###
 
 - Markdown help is now available from a dialog in the editor.
 - A couple more keyboard shortcuts in the editor.
+- The editor will now save any unsaved work automatically when it is hidden, as when switching to another browser tab.
 - Small structural improvements
 
 ### Changed ###
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
    - Frees up some vertical space.
    - All the buttons are in the same place.
    - Now has a tooltip message like the other buttons.
+- Autosave is now enabled by default. After a period of one second of inactivity in the editor, changes will be saved.
 
 ### Fixed ###
 
