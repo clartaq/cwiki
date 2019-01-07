@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-01-01T16:33:53.159-05:00
+modified: 2019-01-07T14:43:18.565-05:00
 tags:
   - cwiki
   - design
@@ -13,6 +13,16 @@ tags:
 
 
 This page is the on-going saga of working on the CWiki program.
+
+##### When Editing, Save the Page when it is Hidden, 07 Jan 2019, 11:16:40 am. #####
+
+As it stands now, any unsaved work in the editor will be lost on any page reload.
+
+Added an event listener in the initialization of the editor page. It monitors visibility changes and saves the editor contents whenever the page is hidden, for example, when the user switches to another browser tab.
+
+##### Removing Some Global State, 03 Jan 2019, 10:13:03 am. #####
+
+Finally got rid of a piece of global state that could be more functional. The `glbl-editor-is-dirty` variable was removed.
 
 ##### It Feels Like the "Done" Button in the Editor Sticks Out Like a Sore Thumb, 01 Jan 2019, 03:08:32 pm.
 
