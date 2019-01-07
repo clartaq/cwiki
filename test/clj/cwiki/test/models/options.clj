@@ -123,7 +123,7 @@
       (is (nil? (get-option-value :random_value db-spec)))
       (is (true? (get-option-value :confirm_page_deletions db-spec)))
       (is (= "Front Page" (get-option-value :root_page db-spec)))
-      (is (= 0 (get-option-value :editor_autosave_interval db-spec))))))
+      (is (= 1 (get-option-value :editor_autosave_interval db-spec))))))
 
 (deftest set-option-value-test
   (testing "Testing the set-option-value function."
