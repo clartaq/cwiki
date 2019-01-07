@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-01-07T14:43:18.565-05:00
+modified: 2019-01-07T15:23:24.172-05:00
 tags:
   - cwiki
   - design
@@ -13,6 +13,14 @@ tags:
 
 
 This page is the on-going saga of working on the CWiki program.
+
+##### Investigate the status of Katex for Rendering LaTeX, 07 Jan 2019, 03:22:36 pm, #####
+
+Should look at Katex again to see if it offers any advantages over using MathJax from a remote server.
+
+##### Downloading Google Fonts and Serving Them from the Program Rather than Google, 07 Jan 2019, 03:21:07 pm. #####
+
+Investigate whether downloading the Google Fonts used by the program and serving them directly is an improvement in privacy.
 
 ##### When Editing, Save the Page when it is Hidden, 07 Jan 2019, 11:16:40 am. #####
 
