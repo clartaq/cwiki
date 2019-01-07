@@ -2,10 +2,11 @@
 author: david
 title: How to Encode a String in the Editor
 date: 2018-12-31T10:28:28.519-05:00
-modified: 2018-12-31T10:41:00.398-05:00
+modified: 2019-01-07T15:19:51.467-05:00
 tags:
   - editor
   - encoding
+  - how-to
   - shortcut
 ---
 
