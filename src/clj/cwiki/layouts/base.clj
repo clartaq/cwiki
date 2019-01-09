@@ -209,12 +209,15 @@
   ([post-map req]
    (wiki-hmenu-component post-map req {}))
   ([post-map req options]
+   (println "options: " options)
    (let [allow-editing (not (:editing options))
+         new-page-name (or (db/get-option-value :default-new-page-name)
+                           "New Page")
          title (db/page-map->title post-map)
          new-link (and post-map
                        allow-editing
                        (ath/can-create? req)
-                       [:a {:href "/New Page"} "New"])
+                       [:a {:href (str "/" new-page-name)} "New"])
          can-edit-and-delete (ath/can-edit-and-delete? req title)
          edit-link (and post-map
                         allow-editing
