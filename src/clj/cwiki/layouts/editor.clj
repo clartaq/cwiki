@@ -50,7 +50,6 @@
 (defn get-markdown-help-html
   "Return the content of the 'Markdown Help' page as Markdown for use by the
   editor. The title of the help page is hardcoded here."
-  ;TODO: Put title of Markdown help page in the program options.
   []
   (when-let [page-id (db/title->page-id "Markdown Help")]
     (db/page-id->content page-id)))
@@ -75,5 +74,5 @@
        (sidebar-and-editor
          (base/sidebar-aside req)
          [:section {:id "outer-editor-container" :class "outer-editor-container"}
-          [:p "The stuff from the ClojureScript editor should show up here."]])
+          [:p "One moment please. Loading the editor."]])
        (standard-end-of-body)])))
