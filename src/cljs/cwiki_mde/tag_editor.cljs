@@ -58,7 +58,7 @@
 
 (defn tag-change-listener
   "Return a new change listener for the specified tag."
-  [tags-vector-atom n single-tag-atom options]
+  [tags-vector-atom n single-tag-atom options tag-id]
   (fn [arg]
     (let [new-tag (-> arg .-target .-value)
           dirty-editor-notifier (:dirty-editor-notifier options)]
@@ -68,7 +68,10 @@
       (if (blank? new-tag)
         ; User deleted a tag.
         (delete-existing-tag tags-vector-atom n)
-        (swap! tags-vector-atom assoc n new-tag))
+        ; Just typing? Reset and resize.
+        (do
+          (swap! tags-vector-atom assoc n new-tag)
+          (resize-tag-input tag-id)))
       (when (:send-every-keystroke options)
         (ws/send-message! [:hey-server/tags-updated
                            {:data @tags-vector-atom}])))))
@@ -80,19 +83,20 @@
     (let [tag-of-interest (r/atom (nth @tags-vector-atom n ""))
           cnt (count @tag-of-interest)
           tag-id (tag-index->id n options)]
-      [:input {:type      "text"
-               :size      cnt
-               :class     "tag-editor--name-input"
-               :id        tag-id
-               :value     @tag-of-interest
-               :on-focus  #(resize-tag-input tag-id)
-               ; Don't really seem to need this too.
-              ; :on-blur   #(resize-tag-input tag-id)
-               :on-click (fn [arg]
-                           (let [ele (.-target arg)]
-                             (.setSelectionRange ele 0 (.-length (.-value ele)))))
-               :on-change (tag-change-listener tags-vector-atom n
-                                               tag-of-interest options)}])))
+
+      (r/create-class
+        {:name           "layout-tag-name-editor"
+
+         :reagent-render (fn [tags-vector-atom n options]
+                           [:input {:type      "text"
+                                    :size      cnt
+                                    :class     "tag-editor--name-input"
+                                    :id        tag-id
+                                    :value     @tag-of-interest
+                                    :on-change (tag-change-listener
+                                                 tags-vector-atom n
+                                                 tag-of-interest
+                                                 options tag-id)}])}))))
 
 (defn layout-tag-composite-lozenge
   "Return a function that will layout a composite element consisting of an input
