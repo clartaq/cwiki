@@ -103,6 +103,8 @@
    :editor_send_every_keystroke true
    :root_page                   "Front Page"
    :wiki_name                   "CWiki"
+   :default-new-page-name       "A New Page"
+   :default-new-tag-label       "A New Tag"
    :editor_editing_font         "Calibri"
    :confirm_page_deletions      true
    :editor_use_WYSIWYG_editor   false})
