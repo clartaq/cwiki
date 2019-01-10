@@ -209,7 +209,6 @@
   ([post-map req]
    (wiki-hmenu-component post-map req {}))
   ([post-map req options]
-   (println "options: " options)
    (let [allow-editing (not (:editing options))
          new-page-name (or (db/get-option-value :default-new-page-name)
                            "New Page")
