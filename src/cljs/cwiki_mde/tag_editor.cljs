@@ -3,7 +3,7 @@
 ;;;;
 
 (ns cwiki-mde.tag-editor
-  (:require [clojure.string :refer [blank? join]]
+  (:require [clojure.string :refer [blank?]]
             [reagent.core :as r]
             [cwiki-mde.ws :as ws]))
 
@@ -21,10 +21,6 @@
   [id]
   (.getElementById js/document id))
 
-(defn- vector-as-string
-  [v]
-  (str "[" (join ", " v) "]"))
-
 (defn- tag-index->id
   "Return a unique id for the tag input element based on the index of the tag
   and the default tag id prefix."
@@ -34,14 +30,10 @@
 (defn- delete-existing-tag
   "Delete an existing tag."
   [tags-vector-atom n]
-  (println "delete-existing-tag")
   (let [old-tag-vec @tags-vector-atom
         new-vec (vec (concat (subvec old-tag-vec 0 n)
                              (subvec old-tag-vec (inc n))))]
-    (println "  old-tag-vec: " (vector-as-string old-tag-vec))
-    (println "      new-vec: " (vector-as-string new-vec))
-    (reset! tags-vector-atom new-vec)
-    (println "@tags-vector-atom: " (vector-as-string @tags-vector-atom))))
+    (reset! tags-vector-atom new-vec)))
 
 ;-------------------------------------------------------------------------------
 ; Layout functions
@@ -64,11 +56,11 @@
      [:svg {:class    "tag-editor--add-button tag-editor--button-image"
             :on-click #(do
                          (swap! tags-vector-atom conj
-                                (:default-new-tag-label options)) ;"A New Tag")
+                                (:default-new-tag-label options))
                          ((:dirty-editor-notifier options) options))}]]))
 
 (defn- resize-tag-input
-  "Resize the tag input element based on its size."
+  "Resize the tag input element based on the size of its content."
   [tag-id]
   (let [target (get-element-by-id tag-id)]
     (when target
@@ -98,44 +90,39 @@
 (defn- layout-tag-name-editor
   "Return a function that will layout a tag input element."
   [tags-vector-atom n options]
-  (fn [tags-vector-atom]
-    (println "internal layout-tag-name-editor")
+  (r/create-class
+    {:name                "layout-tag-name-editor"
 
-    (let [tag-of-interest (r/atom (nth @tags-vector-atom n ""))
-          _ (println "internal-tag-name-editor: @tag-of-interest: " @tag-of-interest)
-          ch-cnt (count @tag-of-interest)
-          tag-id (tag-index->id n options)]
+     :component-did-mount (fn [this]
+                            (let [tag-idx (second (r/children this))
+                                  tag-id (tag-index->id tag-idx options)
+                                  ele (get-element-by-id tag-id)
+                                  val (.-value ele)]
+                              (when (= val (:default-new-tag-label options))
+                                (select-all ele)
+                                ; Need to focus for Firefox.
+                                (.focus ele))))
 
-      (r/create-class
-        {:name                "layout-tag-name-editor"
-
-         :component-did-mount (fn [this]
-                                (let [ele (get-element-by-id tag-id)
-                                      val (.-value ele)]
-                                  (when (= val (:default-new-tag-label options))
-                                    (select-all ele)
-                                    ; Need to focus for Firefox.
-                                    (.focus ele))))
-
-         :reagent-render      (fn [tags-vector-atom n options]
-                                (println "render tag-name-editor: @tag-of-interest: " @tag-of-interest)
-                                [:input {:type         "text"
-                                         :autoComplete "off"
-                                         :size         ch-cnt
-                                         :class        "tag-editor--name-input"
-                                         :id           tag-id
-                                         :value        @tag-of-interest
-                                         :on-change    (tag-change-listener
-                                                         tags-vector-atom n
-                                                         tag-of-interest
-                                                         options tag-id)}])}))))
+     :reagent-render      (fn [tags-vector-atom n options]
+                            (let [tag-of-interest (r/atom (nth @tags-vector-atom n ""))
+                                  tag-id (tag-index->id n options)
+                                  ch-cnt (count @tag-of-interest)]
+                              [:input {:type         "text"
+                                       :autoComplete "off"
+                                       :size         ch-cnt
+                                       :class        "tag-editor--name-input"
+                                       :id           tag-id
+                                       :value        @tag-of-interest
+                                       :on-change    (tag-change-listener
+                                                       tags-vector-atom n
+                                                       tag-of-interest
+                                                       options tag-id)}]))}))
 
 (defn- layout-tag-composite-lozenge
-  "Return a function that will layout a composite element consisting of an input
-  for editing tags and a button to delete the tag."
+  "Return a function that will layout a composite element consisting of a text
+  input for editing tags and a button to delete the tag."
   [tags-vector-atom n options]
   (fn [tags-vector-atom n options]
-    (println "internal layout-tag-composite-lozenge")
     [:div.tag-editor--composite-lozenge
      [layout-tag-name-editor tags-vector-atom n options]
      [layout-delete-tag-button tags-vector-atom n options]]))
@@ -144,8 +131,6 @@
   "Return a function that will layout a group of tag inputs."
   [tags-vector-atom options]
   (fn [tags-vector-atom options]
-    (println "internal layout-tag-list: @tags-vector-atom: "
-             (vector-as-string @tags-vector-atom))
     [:section.tag-editor--container
      [:label.tag-editor--label {:for "tag-list"} "Tags"]
      [:form {:name "tag-list"}
