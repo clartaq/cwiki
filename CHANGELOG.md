@@ -9,7 +9,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added ###
 
+- The autosave functionality will not save changes to a newly created page until the page title has been changed from the default provided during creation.
+
 ### Changed ###
+
+- Editing tags is smoother now. The cursor is placed correctly throughout the editing process.
+- When a new tag is created, it is selected within its text input ready to replace with the new tag name just by starting to type.
 
 ### Fixed ###
 

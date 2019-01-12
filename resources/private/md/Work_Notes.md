@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-01-07T15:23:24.172-05:00
+modified: 2019-01-11T16:24:32.621-05:00
 tags:
   - cwiki
   - design
@@ -11,8 +11,34 @@ tags:
   - technical note
 ---
 
-
 This page is the on-going saga of working on the CWiki program.
+
+##### Highlighting Newly Created Tags: Now Tag Deletions Doesn't Work Correctly, 09 Jan 2019, 05:36:02 pm, #####
+
+The reason for doing the component conversion mentioned [below](#09%20Jan%202019%2C%2005%3A27%3A12%20pm) is to detect and highlight the new tag after creating it. It has a default name when created and it should be changed as soon as possible.
+
+The highlighting works correctly. The new tag editing control is highlighted and focused immediately after the tag is created. However, something wonky is going on with tag deletion.
+- Deleting the last tag works as expected.
+- Deleting any other tag doesn't appear to work correctly. (It does work. If you save and exit the editor, the correct tags will show up in the page view.) But the appearance is wrong in the editor.
+
+**Update:** 11 Jan 2019, 04:19:14 pm. Turns out there were a few problems. In converting the `layout-tag-name-editor` to a "Form-3" Reagent component, I was returning a _function_ that returned a class, not the class. Also, in the `reagent-render` function of the class, I was using the `tag-of-interest` from the call to `layout-tag-name-editor` rather than re-creating a new `r/atom` during each call to the render function.
+
+<a href="09%20Jan%202019%2C%2005%3A27%3A12%20pm"></a>
+##### Converting to a Reagent Type 3 Component, 09 Jan 2019, 05:27:12 pm. #####
+
+Converted the `layout-tag-name-editor` function in `cwiki-mde.tag-editor` to a Reagent Type 3 component, that is, a component that returns a React class with life cycle functions. This is in preparation for doing some special manipulation of the component after it is created. For that, I need access to the `ComponentDidMount` lifecycle function.
+
+In doing so, I corrected some apparent problems in editing and resizing the tags on the fly. Much smoother now. There is no more confusion about the position of the cursor while editing.
+
+##### New Tags Should be Highlighted when Created, 07 Jan 2019, 05:54:27 pm. #####
+
+When a new tag is created, there is always an extra step of having to click on it to highlight it before typing the new tag text. Why not just highlight it and leave the cursor at the start. Typing would erase the existing placeholder and replace it with the newly typed tag name.
+
+I've tried to leave the tag highlighted in the past but it hasn't worked.
+
+##### Inline Tags?, 07 Jan 2019, 05:51:49 pm. #####
+
+Would it make sense to implement inline tags? It would certainly make take entry easier to use something like "@tag-name-here" as a syntax extension. Multi-word tags would be a bit difficult. I don't really want to restrict how tags are written.
 
 ##### Investigate the status of Katex for Rendering LaTeX, 07 Jan 2019, 03:22:36 pm, #####
 
@@ -156,9 +182,9 @@ This is part of issues [#21](https://bitbucket.org/David_Clark/cwiki/issues/21/c
 
 Probably should look into more standard ways to form the URIs for viewing pages. However, since I use an extension to [flexmark](https://github.com/vsch/flexmark-java) that handles wikilinks, it may be a bit tough.
 
-**07 Dec 2018, 05:46:08 pm.** If I hand encode the URL in the address bar, things work as intended, even with special characters. Creating, editing, linking, deleting all work. So, we "just" need a way to encode the links formed from the page titles. Probably need a custom `NodeRenderer`.
+**Update:** 07 Dec 2018, 05:46:08 pm.If I hand encode the URL in the address bar, things work as intended, even with special characters. Creating, editing, linking, deleting all work. So, we "just" need a way to encode the links formed from the page titles. Probably need a custom `NodeRenderer`.
 
-**17 Dec 2018, 11:08:26 am.** Turns out the `NodeRenderer` approach didn't work out so well. A custom `NodeResolver` did. See [[Technical Note on Encoding Page Titles]].
+**Update:** 17 Dec 2018, 11:08:26 am. Turns out the `NodeRenderer` approach didn't work out so well. A custom `NodeResolver` did. See [[Technical Note on Encoding Page Titles]].
 
 ##### Stop Deleting the Following Call from the Production Version of cwiki.middleware, 02 Dec 2018, 05:34:11 pm. #####
 

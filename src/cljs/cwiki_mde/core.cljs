@@ -170,13 +170,15 @@
 (defn notify-autosave
   "Notify the autosave functionality that a change has occurred. When the
   autosave duration is greater than zero, restarts the countdown until the
-  document is saved automatically."
-  [state]
-  (let [delay (* 1000 (:editor_autosave_interval state))
-        the-save-fn (:assemble-and-save-fn state)]
-    (when (pos? delay)
+  document is saved automatically. Will NOT perform autosave until the title
+  of new pages has been changed from the default for new pages."
+  [{:keys [editor_autosave_interval default-new-page-name
+          page-title-atom assemble-and-save-fn] :as state}]
+  (let [delay (* 1000 editor_autosave_interval)]
+    (when (and (pos? delay)
+               (not= default-new-page-name @page-title-atom))
       (clear-autosave-delay!)
-      (restart-autosave-delay! the-save-fn delay))))
+      (restart-autosave-delay! assemble-and-save-fn delay))))
 
 (defn mark-page-dirty
   "Mark the page as dirty and reset the autosave timer."
