@@ -5,6 +5,7 @@ Front_Page.md
 A_Tip_on_Linking_within_a_Page.md
 About.md
 About_Admin_Pages.md
+About_Autosave.md
 About_Backup_and_Restore.md
 About_Compressing_the_Database.md
 About_CWiki.md
