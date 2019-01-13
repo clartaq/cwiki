@@ -36,11 +36,11 @@
 
 ;; A string constant to avoid spelling mistakes in various parts of the
 ;; program where this ID is used.
-(def inner-editor-container-id "inner-editor-container-id")
+(def ^{:private true} inner-editor-container-id "inner-editor-container-id")
 
 ;; A channel used to retrieve the page map asynchronously when it becomes
 ;; available from the websocket.
-(def got-page-channel (chan))
+(def ^{:private true} got-page-channel (chan))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Utility functions.
@@ -49,10 +49,15 @@
 (defn- get-element-by-id [the-id]
   (.getElementById js/document the-id))
 
-(defn is-editor-dirty? [state]
+(defn- select-all
+  "Select the entire contents of the DOM element."
+  [ele]
+  (.setSelectionRange ele 0 (.-length (.-value ele))))
+
+(defn- is-editor-dirty? [state]
   @(:dirty-flag state))
 
-(defn highlight-code
+(defn- highlight-code
   "Highlights any <pre><code></code></pre> blocks in the html."
   [html-node]
   (trace "highlight-code")
@@ -63,12 +68,12 @@
           (.highlightBlock js/hljs item))
         (recur (dec i))))))
 
-(defn typeset-latex
+(defn- typeset-latex
   "Typeset any mathematics in the text."
   [latex-node]
   (js/MathJax.Hub.Queue #js ["Typeset" js/MathJax.Hub latex-node]))
 
-(defn markdown-component
+(defn- markdown-component
   "Set the content in the containing node, optionally highlighting it."
   [content]
   [(with-meta
@@ -81,7 +86,7 @@
           (typeset-latex node)
           (highlight-code node)))})])
 
-(defn toggle-modal
+(defn- toggle-modal
   "Toggle the display state of the modal dialog with the given id."
   [ele-id]
   (let [close-button (get-element-by-id ele-id)
@@ -90,7 +95,7 @@
       (.toggle (.-classList close-button) "closed")
       (.toggle (.-classList overlay) "closed"))))
 
-(defn tell-server-to-quit
+(defn- tell-server-to-quit
   [state]
   (let [fxn (:re-assembler-fn state)
         new-page-map (fxn)
@@ -106,26 +111,26 @@
 ;;; Websocket message handlers to work with the server.
 ;;;
 
-(defn doc-save-fn
+(defn- doc-save-fn
   "Send a message to the server to save the document."
   [page-map]
   (ws/send-message! [:hey-server/save-doc {:data page-map}]))
 
-(defn editor-handshake-handler
+(defn- editor-handshake-handler
   "Handle the handshake event between the server and client. This function
   sends the message to the server to send over the document for editing."
   [{:keys [?data]}]
   (trace "Editor: Connection established!")
   (ws/send-message! [:hey-server/send-document-to-editor {}]))
 
-(defn editor-state-handler
+(defn- editor-state-handler
   "Handle changes in the state of the editor."
   [{:keys [?data]}]
   (trace "Editor: Connection state changed!"))
 
 (declare toggle-duplicate-title-modal)
 
-(defn editor-message-handler
+(defn- editor-message-handler
   [{:keys [?data]}]
   (when ?data
     (tracef "?data %s" ?data))
@@ -158,29 +163,29 @@
 ;;; Auto-save-related functions.
 ;;;
 
-(defn clear-autosave-delay! []
+(defn- clear-autosave-delay! []
   "Clear the autosave countdown timer."
   (.clearTimeout js/window @glbl-delay-handle))
 
-(defn restart-autosave-delay!
+(defn- restart-autosave-delay!
   "Restart the autosave countdown timer."
   [the-save-fn delay-ms]
   (reset! glbl-delay-handle (.setTimeout js/window the-save-fn delay-ms)))
 
-(defn notify-autosave
+(defn- notify-autosave
   "Notify the autosave functionality that a change has occurred. When the
   autosave duration is greater than zero, restarts the countdown until the
   document is saved automatically. Will NOT perform autosave until the title
   of new pages has been changed from the default for new pages."
   [{:keys [editor_autosave_interval default-new-page-name
-          page-title-atom assemble-and-save-fn] :as state}]
+           page-title-atom assemble-and-save-fn] :as state}]
   (let [delay (* 1000 editor_autosave_interval)]
     (when (and (pos? delay)
                (not= default-new-page-name @page-title-atom))
       (clear-autosave-delay!)
       (restart-autosave-delay! assemble-and-save-fn delay))))
 
-(defn mark-page-dirty
+(defn- mark-page-dirty
   "Mark the page as dirty and reset the autosave timer."
   [state]
   (notify-autosave state)
@@ -190,13 +195,13 @@
 ;;; Dialogs
 ;;;
 
-(defn toggle-unsaved-changes-modal
+(defn- toggle-unsaved-changes-modal
   "Toggle the display state of the modal dialog that is shown when there
   are unsaved changes."
   []
   (toggle-modal "unsaved-changes-modal"))
 
-(defn layout-unsaved-changes-warning-dialog
+(defn- layout-unsaved-changes-warning-dialog
   "Brings up a modal dialog that informs the user that there are unsaved
   changes to the page. Asks them what to do before exiting and losing
   the new work."
@@ -236,14 +241,14 @@
                              (reset! glbl-ok-to-exit nil)
                              (toggle-unsaved-changes-modal))}]]]]))
 
-(defn toggle-duplicate-title-modal
+(defn- toggle-duplicate-title-modal
   "Toggle the display state of the modal dialog that is shown when the
   user is trying to save a new page with a title that duplicates a page
   already in the wiki."
   []
   (toggle-modal "duplicate-title-modal"))
 
-(defn layout-duplicate-page-warning-dialog
+(defn- layout-duplicate-page-warning-dialog
   "Notify the user that a page with the same title already exists in the
   wiki and allow them to return to the editor."
   []
@@ -272,12 +277,12 @@
                 :title    "Close this dialog and return to the editor"
                 :on-click #(toggle-duplicate-title-modal)}]]]]))
 
-(defn toggle-markdown-help-modal
+(defn- toggle-markdown-help-modal
   "Toggle visibility of the Markdown help dialog."
   []
   (toggle-modal "markdown-help-modal"))
 
-(defn layout-markdown-help-dialog
+(defn- layout-markdown-help-dialog
   "Layout the dialog to contain the Markdown help and return it."
   [page-map]
   (let [state (r/atom nil)]
@@ -326,7 +331,7 @@
 ;;; The editor components.
 ;;;
 
-(defn layout-title-editor
+(defn- layout-title-editor
   "Lay out the title editing control and return the layout."
   [title-atom state]
   (fn [title-atom options]
@@ -357,7 +362,7 @@
                  :for   "page-title"} "Page Title"]]
        [:input inp]])))
 
-(defn layout-editor-header
+(defn- layout-editor-header
   "Lay out the header section for the editor. Includes the title, tags, and
   button bar."
   [title-atom tags-atom-vector state]
@@ -365,14 +370,14 @@
    [layout-title-editor title-atom state]
    [te/layout-tag-list tags-atom-vector state]])
 
-(defn quit-editor-fn
+(defn- quit-editor-fn
   "Warn the user about any unsaved changes, if any. Otherwise, quit the editor."
   [state]
   (if @(:dirty-flag state)
     (toggle-unsaved-changes-modal)
     (tell-server-to-quit state)))
 
-(defn layout-editor-button-bar
+(defn- layout-editor-button-bar
   "Layout the editor button bar. Tedious but trivial."
   [state]
   [:section {:class "editor-button-bar"}
@@ -504,7 +509,7 @@
       :on-click #(toggle-markdown-help-modal)}
      [:i.editor-button-bar--icon.question-circle-o-icon]]]])
 
-(defn layout-editor-pane
+(defn- layout-editor-pane
   "This is the editing area, just a textarea. It sends an update message
   oover the websocket server when state are so configured."
   [content-atom state]
@@ -531,7 +536,7 @@
                                                               {:data new-content}]))
                                          new-content))}]])}))
 
-(defn layout-preview-pane
+(defn- layout-preview-pane
   "The preview div."
   [content-atom]
   (fn [content-atom]
@@ -543,7 +548,7 @@
       (when @content-atom
         (markdown-component @content-atom))]]))
 
-(defn layout-editor-and-preview-section
+(defn- layout-editor-and-preview-section
   "Lay out the side-by-side editing and preview panes for the editor."
   [content-atom state]
   [:section {:class "editor-and-button-bar"}
@@ -552,7 +557,7 @@
     [layout-editor-pane content-atom state]
     [layout-preview-pane content-atom]]])
 
-(defn handle-visibility-change 
+(defn- handle-visibility-change
   "Handle visibility change events. When the document becomes hidden,
   save the editor contents."
   [state]
@@ -567,51 +572,65 @@
   side-by-side at the bottom. Returns the layout."
   [page-map]
   (tracef "layout-inner-editor-container: page-map: " page-map)
-  (fn []
-    (when page-map
-      (let [title-atom (r/atom (:page_title page-map))
-            tags-atom-vector (r/atom (:tags page-map))
-            content-atom (r/atom (:page_content page-map))
-            dirty-editor (r/atom nil)
-            options (:options page-map)]
-        (letfn [(re-assembler-fn []
-                  (let [page-map-id (or (:page_id page-map)
-                                        @glbl-id-for-next-save)
-                        re-assembled-page-map (merge page-map
-                                                     {:page_id      page-map-id
-                                                      :page_title   @title-atom
-                                                      :tags         @tags-atom-vector
-                                                      :page_content @content-atom})]
-                    re-assembled-page-map))
-                (assemble-and-save-fn []
-                  (let [the-doc (re-assembler-fn)
-                        sf doc-save-fn]
-                    (reset! dirty-editor nil)
-                    (sf the-doc)))]
-          (let [editor-state (merge {:re-assembler-fn       re-assembler-fn
-                                     :doc-save-fn           doc-save-fn
-                                     :assemble-and-save-fn  assemble-and-save-fn
-                                     :quit-fn               quit-editor-fn
-                                     :dirty-editor-notifier mark-page-dirty
-                                     :dirty-flag            dirty-editor
-                                     :editor-textarea-id    "editor-text-area-id"
-                                     :editor-title-input-id "mde-form-title-field-id"
-                                     :editor-tag-id-prefix  "tag-bl-"
-                                     :page-title-atom       title-atom
-                                     :tags-atom-vector      tags-atom-vector
-                                     :page-content-ratom    content-atom}
+  (let [edit-area-id "editor-text-area-id"
+        title-area-id "mde-form-title-field-id"]
+    (r/create-class
+      {:name                "layout-inner-editor-container"
 
-                                    options)]
+       :component-did-mount (fn [this]
+                              (let [page-title (:page_title page-map)
+                                    def-page-title (get-in page-map [:options :default-new-page-name])]
+                                (if (= page-title def-page-title)
+                                  (let [ele-to-focus (get-element-by-id title-area-id)]
+                                    (select-all ele-to-focus)
+                                    (.focus ele-to-focus))
+                                  (.focus (get-element-by-id edit-area-id)))))
 
-            (kbs/bind-shortcut-keys editor-state)
-            (.addEventListener js/document "visibilitychange" #(handle-visibility-change editor-state))
-            [:div {:class "inner-editor-container" :id inner-editor-container-id}
-             [layout-editor-header title-atom tags-atom-vector editor-state]
-             [layout-editor-and-preview-section content-atom editor-state]
-             [layout-unsaved-changes-warning-dialog editor-state]
-             [layout-duplicate-page-warning-dialog]
-             [layout-markdown-help-dialog page-map]
-             [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))))))
+       :reagent-render      (fn []
+                              (when page-map
+                                (let [title-atom (r/atom (:page_title page-map))
+                                      tags-atom-vector (r/atom (:tags page-map))
+                                      content-atom (r/atom (:page_content page-map))
+                                      dirty-editor (r/atom nil)
+                                      options (:options page-map)]
+                                  (letfn [(re-assembler-fn []
+                                            (let [page-map-id (or (:page_id page-map)
+                                                                  @glbl-id-for-next-save)
+                                                  re-assembled-page-map (merge page-map
+                                                                               {:page_id      page-map-id
+                                                                                :page_title   @title-atom
+                                                                                :tags         @tags-atom-vector
+                                                                                :page_content @content-atom})]
+                                              re-assembled-page-map))
+                                          (assemble-and-save-fn []
+                                            (let [the-doc (re-assembler-fn)
+                                                  sf doc-save-fn]
+                                              (reset! dirty-editor nil)
+                                              (sf the-doc)))]
+                                    (let [editor-state (merge {:re-assembler-fn       re-assembler-fn
+                                                               :doc-save-fn           doc-save-fn
+                                                               :assemble-and-save-fn  assemble-and-save-fn
+                                                               :quit-fn               quit-editor-fn
+                                                               :dirty-editor-notifier mark-page-dirty
+                                                               :dirty-flag            dirty-editor
+                                                               :editor-textarea-id    edit-area-id
+                                                               :editor-title-input-id title-area-id
+                                                               :editor-tag-id-prefix  "tag-bl-"
+                                                               :page-title-atom       title-atom
+                                                               :tags-atom-vector      tags-atom-vector
+                                                               :page-content-ratom    content-atom}
+
+                                                              options)]
+
+                                      (kbs/bind-shortcut-keys editor-state)
+                                      (.addEventListener js/document "visibilitychange" #(handle-visibility-change editor-state))
+                                      [:div {:class "inner-editor-container" :id inner-editor-container-id}
+                                       [layout-editor-header title-atom tags-atom-vector editor-state]
+                                       [layout-editor-and-preview-section content-atom editor-state]
+                                       [layout-unsaved-changes-warning-dialog editor-state]
+                                       [layout-duplicate-page-warning-dialog]
+                                       [layout-markdown-help-dialog page-map]
+                                       [:div {:class "modal-overlay closed" :id "modal-overlay"}]])))))})))
 
 (defn reload []
   (go
