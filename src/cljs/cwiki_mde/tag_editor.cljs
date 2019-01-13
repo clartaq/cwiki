@@ -24,8 +24,8 @@
 (defn- tag-index->id
   "Return a unique id for the tag input element based on the index of the tag
   and the default tag id prefix."
-  [num options]
-  (str (:editor-tag-id-prefix options) (inc num)))
+  [num editor-state]
+  (str (:editor-tag-id-prefix editor-state) (inc num)))
 
 (defn- delete-existing-tag
   "Delete an existing tag."
@@ -41,23 +41,24 @@
 
 (defn- layout-delete-tag-button
   "Return a button to delete a tag."
-  [tags-vector-atom n options]
-  [:span {:title "Delete this tag"}
-   [:svg {:class    "tag-editor--delete-button tag-editor--button-image"
-          :on-click #(do
-                       (delete-existing-tag tags-vector-atom n)
-                       ((:dirty-editor-notifier options) options))}]])
+  [n editor-state]
+  (fn [n {:keys [tags-atom-vector] :as editor-state}]
+    [:span {:title "Delete this tag"}
+     [:svg {:class    "tag-editor--delete-button tag-editor--button-image"
+            :on-click #(do
+                         (delete-existing-tag tags-atom-vector n)
+                         ((:dirty-editor-notifier editor-state) editor-state))}]]))
 
 (defn- layout-add-tag-button
   "Return a button to initiate adding a tag."
-  [tags-vector-atom options]
-  (fn [tags-vector-atom]
+  [editor-state]
+  (fn [{:keys [tags-atom-vector] :as editor-state}]
     [:span {:title "Add a new tag"}
      [:svg {:class    "tag-editor--add-button tag-editor--button-image"
             :on-click #(do
-                         (swap! tags-vector-atom conj
-                                (:default-new-tag-label options))
-                         ((:dirty-editor-notifier options) options))}]]))
+                         (swap! tags-atom-vector conj
+                                (:default-new-tag-label editor-state))
+                         ((:dirty-editor-notifier editor-state) editor-state))}]]))
 
 (defn- resize-tag-input
   "Resize the tag input element based on the size of its content."
@@ -69,43 +70,43 @@
 
 (defn- tag-change-listener
   "Return a new change listener for the specified tag."
-  [tags-vector-atom n single-tag-atom options tag-id]
+  [n tag-id single-tag-atom {:keys [tags-atom-vector] :as editor-state}]
   (fn [arg]
     (let [new-tag (-> arg .-target .-value)
-          dirty-editor-notifier (:dirty-editor-notifier options)]
+          dirty-editor-notifier (:dirty-editor-notifier editor-state)]
       (reset! single-tag-atom new-tag)
       (when dirty-editor-notifier
-        (dirty-editor-notifier options))
+        (dirty-editor-notifier editor-state))
       (if (blank? new-tag)
         ; User deleted a tag.
-        (delete-existing-tag tags-vector-atom n)
+        (delete-existing-tag tags-atom-vector n)
         ; Just typing? Reset and resize.
         (do
-          (swap! tags-vector-atom assoc n new-tag)
+          (swap! tags-atom-vector assoc n new-tag)
           (resize-tag-input tag-id)))
-      (when (:send-every-keystroke options)
+      (when (:send-every-keystroke editor-state)
         (ws/send-message! [:hey-server/tags-updated
-                           {:data @tags-vector-atom}])))))
+                           {:data @tags-atom-vector}])))))
 
 (defn- layout-tag-name-editor
   "Return a function that will layout a tag input element."
-  [tags-vector-atom n options]
+  [n editor-state]
   (r/create-class
     {:name                "layout-tag-name-editor"
 
      :component-did-mount (fn [this]
-                            (let [tag-idx (second (r/children this))
-                                  tag-id (tag-index->id tag-idx options)
+                            (let [tag-idx (first (r/children this))
+                                  tag-id (tag-index->id tag-idx editor-state)
                                   ele (get-element-by-id tag-id)
                                   val (.-value ele)]
-                              (when (= val (:default-new-tag-label options))
+                              (when (= val (:default-new-tag-label editor-state))
                                 (select-all ele)
                                 ; Need to focus for Firefox.
                                 (.focus ele))))
 
-     :reagent-render      (fn [tags-vector-atom n options]
-                            (let [tag-of-interest (r/atom (nth @tags-vector-atom n ""))
-                                  tag-id (tag-index->id n options)
+     :reagent-render      (fn [n {:keys [tags-atom-vector] :as editor-state}]
+                            (let [tag-of-interest (r/atom (nth @tags-atom-vector n ""))
+                                  tag-id (tag-index->id n editor-state)
                                   ch-cnt (count @tag-of-interest)]
                               [:input {:type         "text"
                                        :autoComplete "off"
@@ -114,28 +115,27 @@
                                        :id           tag-id
                                        :value        @tag-of-interest
                                        :on-change    (tag-change-listener
-                                                       tags-vector-atom n
-                                                       tag-of-interest
-                                                       options tag-id)}]))}))
+                                                       n tag-id tag-of-interest
+                                                       editor-state)}]))}))
 
 (defn- layout-tag-composite-lozenge
   "Return a function that will layout a composite element consisting of a text
   input for editing tags and a button to delete the tag."
-  [tags-vector-atom n options]
-  (fn [tags-vector-atom n options]
+  [n editor-state]
+  (fn [n editor-state]
     [:div.tag-editor--composite-lozenge
-     [layout-tag-name-editor tags-vector-atom n options]
-     [layout-delete-tag-button tags-vector-atom n options]]))
+     [layout-tag-name-editor n editor-state]
+     [layout-delete-tag-button n editor-state]]))
 
 (defn layout-tag-list
   "Return a function that will layout a group of tag inputs."
-  [tags-vector-atom options]
-  (fn [tags-vector-atom options]
+  [editor-state]
+  (fn [{:keys [tags-atom-vector] :as editor-state}]
     [:section.tag-editor--container
      [:label.tag-editor--label {:for "tag-list"} "Tags"]
      [:form {:name "tag-list"}
       [:div.tag-editor--list
-       (for [n (range (count @tags-vector-atom))]
-         ^{:key (tag-index->id n options)}
-         [layout-tag-composite-lozenge tags-vector-atom n options])
-       [layout-add-tag-button tags-vector-atom options]]]]))
+       (for [n (range (count @tags-atom-vector))]
+         ^{:key (tag-index->id n editor-state)}
+         [layout-tag-composite-lozenge n editor-state])
+       [layout-add-tag-button editor-state]]]]))
