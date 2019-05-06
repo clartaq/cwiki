@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-01-11T16:24:32.621-05:00
+modified: 2019-05-06T16:32:53.109-04:00
 tags:
   - cwiki
   - design
@@ -12,6 +12,74 @@ tags:
 ---
 
 This page is the on-going saga of working on the CWiki program.
+
+##### Full Text Search is Broken, 06 May 2019, 04:31:44 pm. #####
+
+When did this happen? Just as well since H2 has updated and needs to change the way searching is indexed. (And uses updated versions of lucene. Yay!)
+
+##### Image Loading Doesn't Seem to Work Correctly Anymore, 06 May 2019, 04:30:43 pm. #####
+
+Found several places in the wiki where images no longer load correctly. No idea what changed.
+
+##### Multicolumn Pages Should put More Space between Items, 05 May 2019, 03:44:22 pm. #####
+
+When there are links or other contents that wrap to occupy multiple lines, as long page titles do, the spacing between lines and paragraphs appears the same. The spacing between items should be distinctive (larger) than the line spacing used for long items (like page titles.)
+
+##### Multicolumn Pages of Links Sometimes have Titles Overwrite the Column Divider, 05 May 2019, 03:42:02 pm. #####
+
+Generated multicolumn pages, such as those showing all of the page titles attributed to a particular user, sometimes show titles that overwrite the column divider.
+
+##### What has Happened to the Build System, 05 May 2019, 03:07:50 pm. #####
+
+Since trying to do some work on this program again, the build system seems to have gone berserk. All kinds of compatibility issues when trying to build for the REPL. Reminds me of DLL hell with Windows.
+
+##### Vertical Scroll Bars, 05 May 2019, 10:26:12 am, #####
+
+What happened to scroll bar?! I've been away from this project for awhile working a tree control for use in the sidebar. When I come back, I see these awful scroll bars on long articles. I also see them on code listings. When did that happen? Ick. I hate the look.
+
+I want to make the scroll bars invisible, only appearing when the user attempts to scroll or when hovering the mouse over the area where the scroll bars should appear.
+
+##### Variable Width Sidebar, 05 May 2019, 10:24:18 am. ######
+
+It should be possible to change the width of the sidebar interactively. As I spend time working on an hierarchical tree control for the sidebar, it is obvious that the user may want to change its width depending on the structure of the tree control that they set up.
+
+##### Thinking About Organization, 31 Jan 2019, 10:20:31 am. #####
+
+I've spend the past few days looking at how to organize the content in a wiki. To me, it seems like organizing things in a tree would be good. Arbitrary labels in the tree, arbitrary depth, duplication across branches, and so on. It doesn't look easy, so I'll be experimenting with it in another project for awhile.
+
+This came about because I'm now using this wiki as my main note-taking and knowledge management system.
+
+##### Doesn't Provide a Nice Printout from Browser, 30 Jan 2019, 04:18:43 pm. #####
+
+I just tried printing a page from the browser. Not what I expected. Didn't print the complete page either.
+
+##### Could Reduce Line Count and Number of Arguments by Using Destructuring, 13 Jan 2019, 09:58:09 am. #####
+
+I noticed that most of the functions in the tag editor are called with redundant information. Since most of them receive a copy of the editor state map, that map should be used instead of arguments that just contain a copy of stuff in the state map. Should use destructuring on the arguments to the functions.
+
+**Update:** 13 Jan 2019, 05:17:33 pm. As part of the work on deciding where to put the focus when the editor starts, I used destructuring on most of the function arguments in the editor and tag editor. All those changes only saved a couple of lines but did make the argument list shorter for many functions.
+
+##### What to Focus when Opening the Editor, 13 Jan 2019, 09:53:09 am. #####
+
+It is annoying to _always_ have to move the focus from the page title to the content when opening an existing page for editing. But when opening a new page, the title _should be selected and focused to give the user the hint that they should change the title right away.
+
+So, that's what I'll do. Will require converting the page layout function to a "Type 3" Reagent component.
+
+**Update:** 13 Jan 2019, 04:53:13 pm. Done. If it's a new page, the title is selected and focused. When it's an existing page, the focus is put at the beginning of the main content.
+
+##### Reducers Might Improve the Speed of Listing All Pages, 13 Jan 2019, 09:50:48 am, #####
+
+For some reason, listing "All Pages" is slower than listing "All Tags" even though page titles are indexed and there are more tags than pages. I'm missing something. Maybe the function that produces the "All Pages" page should use a reducer rather than just the core `reduce` function.
+
+**Update:** 13 Jan 2019, 05:27:11 pm. Actually, I mis-remembered this. The functions that compose the "All Pages" and "All Tags" pages are nearly identical with a few changed strings. In fact, they both use a set of common functions to create the page. The only difference is in the call to get the titles or tags from the database. That's the next place to look.
+
+**Update:** 14 Jan 2019, 09:01:34 am. Watching the two pages load in the browser, there is about half a second of additional network loading time for the "All Pages" page. The amount of data transferred is about the same, 470KB. All of the other phases of the page load look similar too. This is a real puzzler since both pages are built and displayed using similar or same functions and page templates.
+
+Requires some more thinking.
+
+##### I Keep Deleting Pages Instead of Editing Them, 13 Jan 2019, 09:47:49 am, #####
+
+I keep deleting pages accidentally when I intend to edit them or simply jump to the home page. Clearly the location of the "Delete" item on the menu needs to change or a confirmation dialog is needed. I'm of the opinion that the location should be moved.
 
 ##### Highlighting Newly Created Tags: Now Tag Deletions Doesn't Work Correctly, 09 Jan 2019, 05:36:02 pm, #####
 
@@ -23,7 +91,7 @@ The highlighting works correctly. The new tag editing control is highlighted and
 
 **Update:** 11 Jan 2019, 04:19:14 pm. Turns out there were a few problems. In converting the `layout-tag-name-editor` to a "Form-3" Reagent component, I was returning a _function_ that returned a class, not the class. Also, in the `reagent-render` function of the class, I was using the `tag-of-interest` from the call to `layout-tag-name-editor` rather than re-creating a new `r/atom` during each call to the render function.
 
-<a href="09%20Jan%202019%2C%2005%3A27%3A12%20pm"></a>
+<a name="09%20Jan%202019%2C%2005%3A27%3A12%20pm"></a>
 ##### Converting to a Reagent Type 3 Component, 09 Jan 2019, 05:27:12 pm. #####
 
 Converted the `layout-tag-name-editor` function in `cwiki-mde.tag-editor` to a Reagent Type 3 component, that is, a component that returns a React class with life cycle functions. This is in preparation for doing some special manipulation of the component after it is created. For that, I need access to the `ComponentDidMount` lifecycle function.
