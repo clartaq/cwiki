@@ -171,6 +171,7 @@ url("/public/fonts/STIX2Math.woff2") format("woff2"),
 }
 
 * {
+    font-size: 1em;
     margin: 0;
     padding: 0;
 }
@@ -344,14 +345,14 @@ body {
 
 .page-header {
     margin: 0;
-    padding: 0 1em;
+    padding: 0 1rem;
     background-color: var(--page-header-background-color);
 }
 
 .header-wrapper {
     flex: none;
     margin: 0;
-    padding: 0.5em 0;
+    padding: 0.7rem 0;
     line-height: 0;
     display: flex;
     flex-direction: row;
@@ -365,18 +366,18 @@ body {
 }
 
 .brand-title {
-    font-size: 1.5em;
+    font-size: 1.8rem;
     font-weight: bold;
-    line-height: 0.8em;
+    line-height: 1rem;
     color: var(--brand-title-color);
     margin: 0;
     padding-bottom: 0;
 }
 
 .brand-sub-title {
-    font-size: 0.8em;
+    font-size: 1rem;
     color: var(--brand-sub-title-color);
-    padding-top: 0.8em;
+    padding-top: 1rem;
 }
 
 .brand-sub-title > a:link {
@@ -394,7 +395,7 @@ body {
 
 .hmenu {
     margin: 0;
-    padding: 1.5em 0 0;
+    padding: 1.5rem 0 0;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -402,10 +403,10 @@ body {
 }
 
 .menu-item {
-    font-size: 0.8em;
+    font-size: 1rem;
     font-weight: bold;
     margin: 0;
-    padding: 0 0.5em;
+    padding: 0 0.25rem;
     color: var(--menu-item-color);
 }
 
@@ -414,7 +415,7 @@ body {
 .menu-item ul {
     list-style: none;
     padding: 0;
-    margin-left: -2em;
+    margin-left: -2rem;
 }
 
 .menu-item > ul > li {
@@ -430,23 +431,23 @@ body {
     position: absolute;
     top: 100%;
     left: 0;
-    margin-top: 0.6em;
+    margin-top: 0.45rem;
     white-space: nowrap;
     background: var(--menu-item-subnav-background);
 }
 
 .menu-item ul li.subNav:hover ul {
-    margin-left: -2em;
+    margin-left: -2rem;
     display: block;
 }
 
 .menu-item ul li.subNav ul li {
     margin-left: 0;
-    padding-top: 0.2em;
-    padding-bottom: 0.2em;
-    padding-left: 2em;
-    padding-right: 2em;
-    line-height: 1.7em;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    line-height: 1.7rem;
 }
 
 /* Styles for the search box. */
@@ -521,39 +522,39 @@ inside another flexbox. */
 }
 
 .left-aside {
-    flex: 0 0 10em;
-    padding: 1.5em;
+    flex: 0 0 12rem;
+    padding: 1.5rem;
     overflow: auto;
 }
 
 .left-aside h6 {
-    font-size: 0.8em;
+    font-size: 1.1rem;
     border-bottom: 1px solid var(--rule-color);
 }
 
 .left-aside p {
-    font-size: 0.85em;
-    line-height: 1.4em;
+    font-size: 1rem;
+    line-height: 1.3rem;
 }
 
 .left-aside li {
-    font-size: 0.8em;
+    font-size: 1rem;
     list-style-type: none;
-    margin-left: 0.5em;
-    line-height: 1.4em;
+    margin-left: 0.5rem;
+    line-height: 1.3rem;
 }
 
 .left-aside li:last-child {
-    padding-bottom: 0.5em;
+    padding-bottom: 0.5rem;
 }
 
 .left-aside li:first-child {
-    margin-top: -0.4em;
+    margin-top: -0.4rem;
 }
 
 .page-content {
     box-sizing: border-box;
-    padding: 0.5em 0.5em 0.5em 1.5em;
+    padding: 0.5rem 0.5rem 0.5rem 1.5rem;
     max-width: var(--content-max-width);
     border-left: 1px solid var(--rule-color);
     display: flex;
