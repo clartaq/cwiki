@@ -562,6 +562,34 @@ inside another flexbox. */
     overflow: auto;
 }
 
+/* From
+https://stackoverflow.com/questions/8631799/make-scrollbars-only-visible-when-a-div-is-hovered-over
+*/
+
+/*
+
+.scrollbox {
+    width: 10em;
+    height: 10em;
+    overflow: auto;
+    visibility: hidden;
+}
+
+.scrollbox-content,
+.scrollbox:hover,
+.scrollbox:focus {
+    visibility: visible;
+}
+
+.scrollbox-delayed {
+    transition: visibility 0.2s;
+}
+
+.scrollbox-delayed:hover {
+    transition: visibility 0s 0.2s;
+}
+*/
+
 /* The page title and meta info at the top of the page view. */
 .page-title-div {
     padding-bottom: 1.2rem;
