@@ -106,6 +106,7 @@
    :default-new-page-name       "A New Page"
    :default-new-tag-label       "A New Tag"
    :editor_editing_font         "Calibri"
+   :sidebar_width               "12rem"
    :confirm_page_deletions      true
    :editor_use_WYSIWYG_editor   false})
 
