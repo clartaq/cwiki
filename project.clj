@@ -5,16 +5,16 @@
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.10.439" :scope "provided"]
+                 [org.clojure/clojurescript "1.10.520" :scope "provided"]
                  [org.clojure/core.async "0.4.490"]
-                 [org.clojure/java.jdbc "0.7.8"]
-                 [org.clojure/spec.alpha "0.2.176"]
+                 [org.clojure/java.jdbc "0.7.9"]
+                 ;[org.clojure/spec.alpha "0.2.176"]
 
                  [buddy/buddy-auth "2.1.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [buddy/buddy-hashers "1.3.0"]
                  [com.cemerick/url "0.1.1"]
                  [com.h2database/h2 "1.4.197"]
-                 [circleci/clj-yaml "0.5.6"]
+                 [circleci/clj-yaml "0.6.0"]
                  [clj-time "0.15.1"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [com.taoensso/sente "1.13.1"]
@@ -70,11 +70,12 @@
   :profiles {:dev     {:repl-options {:init-ns          cwiki.repl
                                       :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
 
-                       :dependencies [[binaryage/devtools "0.9.10"]
-                                      [cider/piggieback "0.3.10"]
-                                      [figwheel-sidecar "0.5.17" :exclusions [org.clojure/tools.nrepl]]
-                                      [prone "1.6.1"]
-                                      [ring/ring-mock "0.3.2"]
+                       :dependencies [[org.clojure/tools.nrepl "0.2.13"]
+                                      [binaryage/devtools "0.9.10"]
+                                      [cider/piggieback "0.4.0"]
+                                      [figwheel-sidecar "0.5.16" :exclusions [org.clojure/tools.nrepl]]
+                                      [prone "1.6.3"]
+                                      [ring/ring-mock "0.4.0"]
                                       [ring/ring-devel "1.7.1"]]
 
                        :source-paths ["env/dev/clj"]
@@ -82,7 +83,7 @@
                        :prep-tasks   ["javac" ["compile" "cwiki.extensions.cwikilink-attributes"]]
 
                        :plugins      [[lein-doo "0.1.10"]
-                                      [lein-figwheel "0.5.17"]]
+                                      [lein-figwheel "0.5.16"]]
                        ; Leave this alone. IntelliJ has issues otherwise.
                        :test-paths   ["test/cljs"]
                        :env          {:profile-type "development"
@@ -102,7 +103,7 @@
                        ; This really shouldn't be required. There is some sort of
                        ; dependency version incompatibility somewhere that needs
                        ; to be fixed.
-                       :dependencies [[ring/ring-mock "0.3.2"]]
+                       :dependencies [[ring/ring-mock "0.4.0"]]
                        :env          {:profile-type "production"}}
              }
 
