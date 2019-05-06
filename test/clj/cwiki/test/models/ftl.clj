@@ -66,6 +66,7 @@
   (jdbc/execute! db-spec
                  ["CREATE ALIAS IF NOT EXISTS FTL_INIT FOR \"org.h2.fulltext.FullTextLucene.init\""])
   (jdbc/execute! db-spec ["CALL FTL_INIT()"])
+; h2 1.4.97 and before
   (jdbc/execute! db-spec ["CALL FTL_CREATE_INDEX('PUBLIC', 'PAGES', 'PAGE_CONTENT')"])
   ; End incantations.
   (init-admin-table! db-spec)
@@ -73,7 +74,10 @@
   (add-test-pages! db-spec)
   (add-initial-roles! db-spec)
   (add-initial-options! db-spec)
-  (set-admin-has-logged-in true db-spec))
+  (set-admin-has-logged-in true db-spec)
+; h2 1.4.98 and later  (jdbc/execute! db-spec ["CALL FTL_CREATE_INDEX('PUBLIC', 'PAGES', 'PAGE_CONTENT')"])
+
+  )
 
 (defn- init-test-db!
   "Initialize the database. Will create the database and tables."
