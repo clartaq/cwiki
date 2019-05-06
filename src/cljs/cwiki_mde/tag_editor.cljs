@@ -31,6 +31,8 @@
   "Delete an existing tag."
   [tags-vector-atom n]
   (let [old-tag-vec @tags-vector-atom
+        ; TRY THIS
+        ; new-vec (into (subvec v 0 i) (subvec v (inc n)))
         new-vec (vec (concat (subvec old-tag-vec 0 n)
                              (subvec old-tag-vec (inc n))))]
     (reset! tags-vector-atom new-vec)))
