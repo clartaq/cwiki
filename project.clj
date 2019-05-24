@@ -39,7 +39,7 @@
   :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
             [lein-environ "1.1.0"]
             [lein-ring "0.12.1"]
-            [lein-asset-minifier "0.2.7" :exclusions [org.clojure/clojure]]]
+            [lein-asset-minifier "0.4.6" :exclusions [org.clojure/clojure]]]
 
   :main cwiki.main
 
@@ -57,8 +57,8 @@
                                     "target"
                                     "test/js/compiled"]
 
-  :minify-assets {:assets
-                  {"resources/public/css/styles.min.css" "resources/public/css/styles.css"}}
+  :minify-assets [[:css {:source "resources/public/css/styles.min.css"
+                         :target "resources/public/css/styles.css"}]]
 
   :aliases {"test-cljs"  ["doo" "slimer" "test" "auto"]
             "start-prod" ["do" "clean," "cljsbuild" "once" "min," "run"]}
