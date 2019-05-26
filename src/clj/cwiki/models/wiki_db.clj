@@ -110,6 +110,30 @@
    :confirm_page_deletions      true
    :editor_use_WYSIWYG_editor   false})
 
+(defn get-new-initial-options
+  []
+  {:editor_autosave_interval    {:current 1
+                                 :default 1}
+
+   :editor_send_every_keystroke {:current true
+                                 :default true}
+   :root_page                   {:current "Front Page"
+                                 :default "Front Page"}
+   :wiki_name                   {:current "CWiki"
+                                 :default "CWiki"}
+   :default-new-page-name       {:current "A New Page"
+                                 :default "A New Page"}
+   :default-new-tag-label       {:current "A New Tag"
+                                 :default "A New Tag"}
+   :editor_editing_font         {:current "Calibri"
+                                 :default "Calibri"}
+   :sidebar_width               {:current "12rem"
+                                 :default "12rem"}
+   :confirm_page_deletions      {:current true
+                                 :default true}
+   :editor_use_WYSIWYG_editor   {:current false
+                                 :default false}})
+
 (defn- update-option-map
   "Update the database with the new map of options."
   [m db]
@@ -910,7 +934,10 @@
   (info "Adding full text search.")
   (jdbc/execute! db-spec
                  ["CREATE ALIAS IF NOT EXISTS FTL_INIT FOR \"org.h2.fulltext.FullTextLucene.init\""])
-  (jdbc/execute! db-spec ["CALL FTL_INIT()"])
+  (jdbc/execute! db-spec ["CALL FTL_INIT()"]))
+
+(defn- complete-full-text-search!
+  [db-spec]
   (jdbc/execute! db-spec ["CALL FTL_CREATE_INDEX('PUBLIC', 'PAGES', 'PAGE_CONTENT')"])
   (info "Done!"))
 
@@ -933,7 +960,8 @@
   (add-initial-pages! db-spec)
   (add-initial-roles! db-spec)
   (add-initial-options! db-spec)
-  (add-indices! db-spec))
+  (add-indices! db-spec)
+  (complete-full-text-search! db-spec))
 
 (defn- db-exists?
   "Return true if the wiki database already exists."
