@@ -14,6 +14,7 @@
                  [buddy/buddy-hashers "1.3.0"]
                  [com.cemerick/url "0.1.1"]
                  [com.h2database/h2 "1.4.197"]
+                 ;[com.h2database/h2 "1.4.199"]
                  [circleci/clj-yaml "0.6.0"]
                  [clj-time "0.15.1"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
@@ -32,6 +33,7 @@
                  ; We keep this old version to remain compatible with
                  ; full text search with the H2 database.
                  [org.apache.lucene/lucene-core "3.6.2"]
+                 ;[org.apache.lucene/lucene-core "7.7.1"]
                  [org.flatland/ordered "1.5.7"]
                  [reagent "0.8.1"]
                  [ring/ring-defaults "0.3.2"]]
@@ -57,8 +59,8 @@
                                     "target"
                                     "test/js/compiled"]
 
-  :minify-assets [[:css {:source "resources/public/css/styles.min.css"
-                         :target "resources/public/css/styles.css"}]]
+  :minify-assets [[:css {:source "resources/public/css/styles.css"
+                         :target "resources/public/css/styles.min.css"}]]
 
   :aliases {"test-cljs"  ["doo" "slimer" "test" "auto"]
             "start-prod" ["do" "clean," "cljsbuild" "once" "min," "run"]}
