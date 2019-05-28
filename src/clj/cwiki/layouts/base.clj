@@ -270,19 +270,42 @@
 
 (def required-field-hint [:p {:class "required-field-hint"} "Required fields are marked with a"])
 
-(defn- process-tags-to-links
-  "Return a vector of textual wikilinks from the list of tags."
-  [tags]
-  (if (zero? (count tags))
+(defn- remove-surrounding-paragraph-tags
+  "Remove the surrounding paragraph tags (<p></p>) that conversion to
+  Markdown adds to incomplete html docs."
+  [some-html]
+  (-> some-html
+      (s/replace-first "<p>" "")
+      (s/replace "</p>" "")))
+
+(defn- process-names-to-wikilinks
+  "Convert a group of names (authors, tags, etc) to textual wikilinks and
+  return them in a vector."
+  [names link-prefix]
+  (if (zero? (count names))
     ""
-    (let [leadin-str "[[/as-tag?tag="]
-      (mapv (fn [tag] (-> (StringBuilder.)
-                          (.append leadin-str)
-                          (.append tag)
-                          (.append "|")
-                          (.append tag)
-                          (.append "]]")
-                          (.toString))) tags))))
+    (mapv (fn [name] (-> (StringBuilder.)
+                         (.append "[[")
+                         (.append link-prefix)
+                         (.append name)
+                         (.append "|")
+                         (.append name)
+                         (.append "]]")
+                         (.toString))) names)))
+
+(defn- author-div-for-title-component
+  "Return a div with the author of the post as a clickable link for
+  insertion into the title area of a page view."
+  [post-map]
+  (let [author (db/page-map->author post-map)
+        ;; process-names-to-wikilinks expects a collection as the first arg.
+        links (process-names-to-wikilinks [author] "/as-user?user=")
+        as-html (-> (first links)
+                    (convert-markdown-to-html)
+                    (remove-surrounding-paragraph-tags))]
+    [:div
+     [:p {:class "author-line"}
+      [:span {:class "author-header"} "Author: "] as-html]]))
 
 (defn- tags-for-title-component
   "Return a div with a clickable list of tags for insertion into the title
@@ -291,13 +314,10 @@
   (let [tag-names (db/get-tag-names-for-page (db/page-map->id post-map))
         tag-str (if (or (nil? tag-names) (zero? (count tag-names)))
                   "None"
-                  (let [new-tag-links (process-tags-to-links tag-names)
-                        new-tags-as-html (-> (convert-markdown-to-html (s/join ", " new-tag-links))
-                                             ; Conversion to Markdown puts the contents in a
-                                             ; paragraph (<p></p>) that must be removed.
-                                             (s/replace "<p>" "")
-                                             (s/replace "</p>" ""))]
-                    new-tags-as-html))]
+                  (let [tag-links (process-names-to-wikilinks tag-names "/as-tag?tag=")
+                        tags-as-html (-> (convert-markdown-to-html (s/join ", " tag-links))
+                                         (remove-surrounding-paragraph-tags))]
+                    tags-as-html))]
     [:div
      [:p {:class "tag-line"}
       [:span {:class "tag-header"} "Tags: "]
@@ -308,13 +328,11 @@
   modification date for a post."
   [post-map]
   (let [title (db/page-map->title post-map)
-        author (db/page-map->author post-map)
         created (db/page-map->created-date post-map)
         modified (db/page-map->modified-date post-map)]
     [:div {:class "page-title-div"}
      [:h1 {:class "page-title-header"} title]
-     [:p {:class "author-line"}
-      [:span {:class "author-header"} "Author: "] author]
+     (author-div-for-title-component post-map)
      (tags-for-title-component post-map)
      [:p {:class "date-line"}
       [:span {:class "date-header"} "Created: "]
