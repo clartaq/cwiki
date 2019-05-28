@@ -270,24 +270,52 @@
 
 (def required-field-hint [:p {:class "required-field-hint"} "Required fields are marked with a"])
 
+(defn- process-tags-to-links
+  "Return a vector of textual wikilinks from the list of tags."
+  [tags]
+  (if (zero? (count tags))
+    ""
+    (let [leadin-str "[[/as-tag?tag="]
+      (mapv (fn [tag] (-> (StringBuilder.)
+                          (.append leadin-str)
+                          (.append tag)
+                          (.append "|")
+                          (.append tag)
+                          (.append "]]")
+                          (.toString))) tags))))
+
+(defn- tags-for-title-component
+  "Return a div with a clickable list of tags for insertion into the title
+  area of a page view."
+  [post-map]
+  (let [tag-names (db/get-tag-names-for-page (db/page-map->id post-map))
+        tag-str (if (or (nil? tag-names) (zero? (count tag-names)))
+                  "None"
+                  (let [new-tag-links (process-tags-to-links tag-names)
+                        new-tags-as-html (-> (convert-markdown-to-html (s/join ", " new-tag-links))
+                                             ; Conversion to Markdown puts the contents in a
+                                             ; paragraph (<p></p>) that must be removed.
+                                             (s/replace "<p>" "")
+                                             (s/replace "</p>" ""))]
+                    new-tags-as-html))]
+    [:div
+     [:p {:class "tag-line"}
+      [:span {:class "tag-header"} "Tags: "]
+      [:span {:class "tag-text"} tag-str]]]))
+
 (defn- limited-width-title-component
+  "Layout a div containing the title, author, tags, creation date, and last
+  modification date for a post."
   [post-map]
   (let [title (db/page-map->title post-map)
         author (db/page-map->author post-map)
-        tags (db/convert-seq-to-comma-separated-string
-               (db/get-tag-names-for-page (db/page-map->id post-map)))
-        tag-str (if (seq tags)
-                  tags
-                  "None")
         created (db/page-map->created-date post-map)
         modified (db/page-map->modified-date post-map)]
     [:div {:class "page-title-div"}
      [:h1 {:class "page-title-header"} title]
      [:p {:class "author-line"}
       [:span {:class "author-header"} "Author: "] author]
-     [:p {:class "tag-line"}
-      [:span {:class "tag-header"} "Tags: "]
-      [:span {:class "tag-text"} tag-str]]
+     (tags-for-title-component post-map)
      [:p {:class "date-line"}
       [:span {:class "date-header"} "Created: "]
       [:span {:class "date-text"} (get-formatted-time created) ", "]
@@ -627,7 +655,7 @@
 ;; page names or users.
 ;;
 
-(defn- process-item-set-to-list-of-wikilinks
+(defn- process-item-set-to-unnumbered-list-of-wikilinks
   "Process a set of items into a Markdown-formatted list of items and return it."
   [items uri-and-query]
   (if (zero? (count items))
@@ -653,7 +681,7 @@
   [titles]
   ; This builds bigger links than strictly necessary since it duplicates
   ; the page name in the link, but it uses a well-tested function to do it.
-  (process-item-set-to-list-of-wikilinks titles ""))
+  (process-item-set-to-unnumbered-list-of-wikilinks titles ""))
 
 (defn- process-tag-set
   "Process a sorted set of tag names into a Markdown-formatted
@@ -661,14 +689,16 @@
   in links that will generate a list of all pages containing
   the tag."
   [tags]
-  (process-item-set-to-list-of-wikilinks tags "/as-tag?tag="))
+  (println "process-tag-set: tags: " tags)
+  (println "(type tags): " (type tags))
+  (process-item-set-to-unnumbered-list-of-wikilinks tags "/as-tag?tag="))
 
 (defn- process-name-set
   "Process a sorted set of names into a Markdown-formatted
   unordered list and return it. If the set of names is empty,
   return an empty string."
   [names]
-  (process-item-set-to-list-of-wikilinks names "/as-user?user="))
+  (process-item-set-to-unnumbered-list-of-wikilinks names "/as-user?user="))
 
 (defn compose-all-pages-page
   "Return a page listing all of the pages in the wiki."
