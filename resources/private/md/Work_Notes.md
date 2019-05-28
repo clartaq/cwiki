@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-05-06T16:32:53.109-04:00
+modified: 2019-05-28T09:42:07.406-04:00
 tags:
   - cwiki
   - design
@@ -11,15 +11,42 @@ tags:
   - technical note
 ---
 
+
 This page is the on-going saga of working on the CWiki program.
+
+##### Clicking the Author Name on a Page View Should take the User to a New Page Listing all Pages Written by the Author, 28 May 2019, 09:39:48 am. #####
+
+Similar to "clickable tags", the name of the author/user shown on the page view should be a clickable link that takes the user to a new page showing the titles of all pages written by that author/user.
+
+**Update:** 28 May 2019, 09:41:05 am. Created issue [#40](https://bitbucket.org/David_Clark/cwiki/issues/40/the-author-user-name-shown-on-the-page) to track this enhancement.
+
+##### Deleting a Tag with Backspaces Should Require Two Backspaces to Delete the Tag, 27 May 2019, 10:07:32 am. #####
+
+The current behavior is that when a tag no longer has any characters, the editing control is removed. This can be extremely disconcerting.
+
+Instead, the UI element should only be removed after the user has tapped backspace on an empty control.
+
+##### Page Information Tags Should be Clickable, 27 May 2019, 10:03:44 am. #####
+
+When a page is displayed with associated tags, the tags should be clickable. Clicking a tag should bring up a list of all pages associated with that tag, just as it does on the [[All Tags]] page.
+
+**Update:** 28 May 2019, 09:37:50 am. Created issue [#39](https://bitbucket.org/David_Clark/cwiki/issues/39/tags-listed-in-the-page-view-should-be) to track this enhancement.
+
+##### Code Listing have Weird-Looking Scroll Bars Now, 06 May 2019, 05:32:09 pm. #####
+
+The title says it all. When did that happen?
 
 ##### Full Text Search is Broken, 06 May 2019, 04:31:44 pm. #####
 
-When did this happen? Just as well since H2 has updated and needs to change the way searching is indexed. (And uses updated versions of lucene. Yay!)
+When did this happen? Just as well since H2 has updated and needs to change the way searching is indexed. (And uses updated versions of Lucene​. Yay!)
+
+**Update:** 06 May 2019, 05:34:11 pm. Deleting the database, rebuilding the program and the database. Now it seems to work again. Might have been something I did with the database construction code, like adding a field for the sidebar width.
 
 ##### Image Loading Doesn't Seem to Work Correctly Anymore, 06 May 2019, 04:30:43 pm. #####
 
 Found several places in the wiki where images no longer load correctly. No idea what changed.
+
+**Update:** 06 May 2019, 05:54:01 pm. Seems like rebuilding the program and database fixed this, just like the "broken" full text search.
 
 ##### Multicolumn Pages Should put More Space between Items, 05 May 2019, 03:44:22 pm. #####
 
@@ -32,6 +59,8 @@ Generated multicolumn pages, such as those showing all of the page titles attrib
 ##### What has Happened to the Build System, 05 May 2019, 03:07:50 pm. #####
 
 Since trying to do some work on this program again, the build system seems to have gone berserk. All kinds of compatibility issues when trying to build for the REPL. Reminds me of DLL hell with Windows.
+
+**Update:** 26 May 2019, 04:47:41 pm. Well it seems to have "fixed itself."
 
 ##### Vertical Scroll Bars, 05 May 2019, 10:26:12 am, #####
 

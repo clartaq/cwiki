@@ -10,8 +10,11 @@ cwiki.iml
 .rebel_readline_history
 /test/data/db/testdatabase.db.mv.db
 /resources/public/css/styles.min.css
-/resources/public/db/
+/old_public/db/
 /notes/
 /exported-pages/
 /push-to-bitbucket.sh
 /cwiki-*.jar
+/resources/public/db/database.db.mv.db
+/resources/public/db/database.db.trace.db
+/resources/public/db/database.db/write.lock

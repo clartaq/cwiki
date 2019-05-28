@@ -1,14 +1,15 @@
 ---
-author: david
+author: CWiki
 title: A Tip on Linking within a Page
 date: 2018-12-31T10:23:22.012-05:00
-modified: 2018-12-31T15:33:20.543-05:00
+modified: 2019-05-27T09:59:15.238-04:00
 tags:
   - help
   - table of contents
-  - time stamp
+  - timestamp
   - tip
 ---
+
 
 Sometimes you want to link to sections within a page, in a [[How to Make a Table of Contents|Table of Contents]] for example.
 
@@ -40,4 +41,3 @@ Which looks like this:
 ### A Heading ###
 
 Here is a link to the [heading](#31%20Dec%202018%2C%2003%3A28%3A58%20pm).
-
