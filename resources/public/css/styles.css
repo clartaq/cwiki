@@ -258,7 +258,7 @@ html, body {
     --body-font-family: Palatino, "Palatino Linotype", "Palatino LT STD", "Book Antiqua", Georgia, serif;
     --fixed-font-family: Consolas, "Ubuntu Mono", Menlo, Monaco, "Lucida Console",
     "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono",
-    "Courier New", monospace, serif;
+    "Courier New", monospace;
     --form-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
     "Lucida Grande", Tahoma, Verdana, Helvetica, Arial, sans-serif;
     --tag-font-family: Calibri, "Segoe UI", Candara, "Helvetica Neue",
@@ -1302,6 +1302,7 @@ div.one-column-list li {
 
 .tag-editor--name-input {
     flex: 1;
+    display: inline-block;
 
     margin-bottom: 0.5rem;
     margin-right: 0;
