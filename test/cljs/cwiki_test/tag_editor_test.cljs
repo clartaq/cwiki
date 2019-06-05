@@ -37,5 +37,5 @@
 (deftest delete-existing-tag-test
   (testing "Correct operation of the 'delete-existing-tag' function.")
   (let [v ["a" "b" "c"]]
-    (= ["a" "b"] (te/delete-existing-tag v 2))
+    (= ["a" "b"] (te/delete-existing-tag (atom v) 2))
     (println "v now: " v)))
