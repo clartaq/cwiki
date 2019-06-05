@@ -4,8 +4,9 @@
 
 (ns cwiki-mde.tag-editor
   (:require [clojure.string :refer [blank?]]
-            [reagent.core :as r]
-            [cwiki-mde.ws :as ws]))
+            [cwiki-mde.ws :as ws]
+            [cwiki-mde.font-detection :as fd]
+            [reagent.core :as r]))
 
 ;-------------------------------------------------------------------------------
 ; Utilities
@@ -27,7 +28,7 @@
   [num editor-state]
   (str (:editor-tag-id-prefix editor-state) (inc num)))
 
-(defn- delete-existing-tag
+(defn delete-existing-tag
   "Delete an existing tag."
   [tags-vector-atom n]
   (let [old-tag-vec @tags-vector-atom
@@ -44,81 +45,107 @@
 (defn- layout-delete-tag-button
   "Return a button to delete a tag."
   [n editor-state]
-  (fn [n {:keys [tags-atom-vector] :as editor-state}]
+  (fn [n {:keys [tags-atom-vector dirty-editor-notifier] :as editor-state}]
     [:span {:title "Delete this tag"}
      [:svg {:class    "tag-editor--delete-button tag-editor--button-image"
             :on-click #(do
                          (delete-existing-tag tags-atom-vector n)
-                         ((:dirty-editor-notifier editor-state) editor-state))}]]))
+                         (dirty-editor-notifier editor-state) editor-state)}]]))
 
 (defn- layout-add-tag-button
   "Return a button to initiate adding a tag."
   [editor-state]
-  (fn [{:keys [tags-atom-vector] :as editor-state}]
+  (fn [{:keys [tags-atom-vector dirty-editor-notifier] :as editor-state}]
     [:span {:title "Add a new tag"}
      [:svg {:class    "tag-editor--add-button tag-editor--button-image"
             :on-click #(do
                          (swap! tags-atom-vector conj
                                 (:default-new-tag-label editor-state))
-                         ((:dirty-editor-notifier editor-state) editor-state))}]]))
+                         (dirty-editor-notifier editor-state) editor-state)}]]))
 
-(defn- resize-tag-input
-  "Resize the tag input element based on the size of its content."
-  [tag-id]
-  (let [target (get-element-by-id tag-id)]
-    (when target
-      (.setAttribute target "size" (-> target .-value .-length))
-      (.setAttribute target "style" "width:auto"))))
+(defn keydown-handler!
+  "Handle a keydown event for a tag editor. Watches if the tag is empty.
+  If so, and the user press the backspace or delete key, the editor
+  element will be removed from the list of tag editors."
+  [evt n {:keys [tags-atom-vector dirty-editor-notifier] :as editor-state}]
+  (let [tag-of-interest (nth @tags-atom-vector n)]
+    (when (and (or (= "Backspace" (.-key evt))
+                   (= "Delete" (.-key evt)))
+               (empty? tag-of-interest))
+      (delete-existing-tag tags-atom-vector n)
+      (dirty-editor-notifier editor-state)
+      (.stopPropagation evt))))
 
-(defn- tag-change-listener
+(defn- get-style
+  [ele rule]
+  (-> js/document
+      .-defaultView
+      (.getComputedStyle ele "")
+      (.getPropertyValue rule)))
+
+(defn- tag-change-listener!
   "Return a new change listener for the specified tag."
-  [n tag-id single-tag-atom {:keys [tags-atom-vector] :as editor-state}]
+  [n {:keys [tags-atom-vector dirty-editor-notifier] :as editor-state}]
   (fn [arg]
-    (let [new-tag (-> arg .-target .-value)
-          dirty-editor-notifier (:dirty-editor-notifier editor-state)]
-      (reset! single-tag-atom new-tag)
-      (when dirty-editor-notifier
-        (dirty-editor-notifier editor-state))
-      (if (blank? new-tag)
-        ; User deleted a tag.
-        (delete-existing-tag tags-atom-vector n)
-        ; Just typing? Reset and resize.
-        (do
-          (swap! tags-atom-vector assoc n new-tag)
-          (resize-tag-input tag-id)))
+    (let [new-tag (-> arg .-target .-value)]
+      (swap! tags-atom-vector assoc n new-tag)
+      (dirty-editor-notifier editor-state)
       (when (:send-every-keystroke editor-state)
         (ws/send-message! [:hey-server/tags-updated
                            {:data @tags-atom-vector}])))))
 
 (defn- layout-tag-name-editor
-  "Return a function that will layout a tag input element."
+  "A class that handles layout and behavior of a tag input element."
   [n editor-state]
-  (r/create-class
-    {:name                "layout-tag-name-editor"
+  (let [canvas (atom nil)
+        context (atom nil)
+        font-style (atom nil)]
 
-     :component-did-mount (fn [this]
-                            (let [tag-idx (first (r/children this))
-                                  tag-id (tag-index->id tag-idx editor-state)
-                                  ele (get-element-by-id tag-id)
-                                  val (.-value ele)]
-                              (when (= val (:default-new-tag-label editor-state))
-                                (select-all ele)
-                                ; Need to focus for Firefox.
-                                (.focus ele))))
+    (r/create-class
+      {:name                "layout-tag-name-editor"
 
-     :reagent-render      (fn [n {:keys [tags-atom-vector] :as editor-state}]
-                            (let [tag-of-interest (r/atom (nth @tags-atom-vector n ""))
-                                  tag-id (tag-index->id n editor-state)
-                                  ch-cnt (count @tag-of-interest)]
-                              [:input {:type         "text"
-                                       :autoComplete "off"
-                                       :size         ch-cnt
-                                       :class        "tag-editor--name-input"
-                                       :id           tag-id
-                                       :value        @tag-of-interest
-                                       :on-change    (tag-change-listener
-                                                       n tag-id tag-of-interest
-                                                       editor-state)}]))}))
+       :component-did-mount (fn [this]
+                              (let [tag-idx (first (r/children this))
+                                    tag-id (tag-index->id tag-idx editor-state)
+                                    ele (get-element-by-id tag-id)
+                                    _ (set! (.-className ele) "tag-editor--name-input")
+                                    val (.-value ele)]
+                                (when (nil? @canvas)
+                                  (reset! canvas (.createElement js/document "canvas"))
+                                  (reset! context (.getContext @canvas "2d"))
+                                  (let [ff (get-style ele "font-family")
+                                        fs (get-style ele "font-size")
+                                        font-to-use (fd/font-family->font-used ff)
+                                        ff-str (str fs " " font-to-use)]
+                                    (reset! font-style ff-str)
+                                    (set! (.-font @context) ff-str)))
+                                (when (= val (:default-new-tag-label editor-state))
+                                  (select-all ele)
+                                  ; Need to focus for Firefox.
+                                  (.focus ele))))
+
+       :reagent-render      (fn [n {:keys [tags-atom-vector] :as editor-state}]
+                              (let [tag-of-interest (nth @tags-atom-vector n)
+                                    tag-id (tag-index->id n editor-state)
+                                    ch-cnt (count tag-of-interest)
+                                    str-width (if (zero? ch-cnt)
+                                                ; Make sure a cursor is visible.
+                                                "5px"
+                                                (if (and @canvas @context)
+                                                  (str (.-width (.measureText @context tag-of-interest)) "px")
+                                                  (str ch-cnt "ch")))]
+                                [:input {:type         "text"
+                                         :tab-index    -1
+                                         :autoComplete "off"
+                                         :style        {:width str-width}
+                                         :class        "tag-editor--name-input"
+                                         :id           tag-id
+                                         :value        tag-of-interest
+                                         :on-keyDown   (fn [evt]
+                                                         (keydown-handler!
+                                                           evt n editor-state))
+                                         :on-change    (tag-change-listener!
+                                                         n editor-state)}]))})))
 
 (defn- layout-tag-composite-lozenge
   "Return a function that will layout a composite element consisting of a text
