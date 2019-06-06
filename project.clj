@@ -46,6 +46,7 @@
   :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
             [lein-environ "1.1.0"]
             [lein-ring "0.12.1"]
+            [lein-shell "0.5.0"]
             [lein-asset-minifier "0.4.6" :exclusions [org.clojure/clojure]]]
 
   :main cwiki.main
@@ -58,6 +59,7 @@
   :prep-tasks ["javac"]
 
   ; Leave this alone. IntelliJ has issues otherwise.
+  ; Note that test-paths doesn't work for ClojureScript tests.
   :test-paths ["test/clj"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled"
@@ -67,7 +69,7 @@
   :minify-assets [[:css {:source "resources/public/css/styles.css"
                          :target "resources/public/css/styles.min.css"}]]
 
-  :aliases {"test-cljs"  ["doo" "slimer" "test" "auto"]
+  :aliases {"test-cljs"  ["shell" "clojure" "-A:fig:test"]
             "start-prod" ["do" "clean," "cljsbuild" "once" "min," "run"]}
 
   :ring {:handler cwiki.handler/app}
