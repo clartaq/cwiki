@@ -1,4 +1,4 @@
-^{:watch-dirs ["test" "src"]
+^{:watch-dirs ["test/cljs" "src/cljs"]
   :css-dirs ["resources/public/css"]
   :auto-testing true}
 {:main cwiki.main}
