@@ -73,7 +73,7 @@
   first name in the list that is actually installed. Return nil if none of
   the fonts in the list are installed."
   [font-family]
-  (let [names (string/split font-family #",")]
+  (let [names (mapv string/trim (string/split font-family #","))]
     (some #(when (font-available? %) %) names)))
 
 ;; (println "Selected from headline font family: " (font-family->font-used "\"Century Gothic\", Muli, \"Segoe UI\", Arial, sans-serif"))
