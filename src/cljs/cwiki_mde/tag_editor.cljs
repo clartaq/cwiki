@@ -118,7 +118,13 @@
                                         font-to-use (fd/font-family->font-used ff)
                                         ff-str (str fs " " font-to-use)]
                                     (reset! font-style ff-str)
-                                    (set! (.-font @context) ff-str)))
+                                    (set! (.-font @context) ff-str))
+                                  ;; Force another render now that we can measure
+                                  ;; correctly. This has the effect of correctly
+                                  ;; displaying even some pathological tags, like
+                                  ;; one containing many "W"s or other wide
+                                  ;; characters for example.
+                                  (r/after-render #(r/force-update this)))
                                 (when (= val (:default-new-tag-label editor-state))
                                   (select-all ele)
                                   ; Need to focus for Firefox.
