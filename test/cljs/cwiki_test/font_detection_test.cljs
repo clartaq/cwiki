@@ -19,7 +19,7 @@
 
 (deftest font-family->font-used-test
   (testing "Correct selection of and installed font from a font family.")
-  (is (= "Muli" (ft/font-family->font-used "\"Century Gothic\", Muli, \"Segoe UI\", Arial, sans-serif")))
-  (is (= "Palatino" (ft/font-family->font-used "Palatino, \\\"Palatino Linotype\\\", \\\"Palatino LT STD\\\", \\\"Book Antiqua\\\", Georgia, serif")))
-  (is (= "Ubuntu Mono" (ft/font-family->font-used "Consolas, \"Ubuntu Mono\", Menlo, Monaco, \"Lucida Console\",\n    \"Liberation Mono\", \"DejaVu Sans Mono\", \"Bitstream Vera Sans Mono\",\n    \"Courier New\", monospace, serif")))
-  (is (= "Helvetica Neue" (ft/font-family->font-used "Calibri, \"Segoe UI\", Candara, \"Helvetica Neue\",\n    \"Lucida Grande\", Tahoma, Verdana, Helvetica, Arial, sans-serif"))))
+  (is (= "Muli" (ft/font-family->font-used "Century Gothic, Muli, Segoe UI, Arial, sans-serif")))
+  (is (= "Palatino" (ft/font-family->font-used "Palatino, Palatino Linotype, Palatino LT STD, Book Antiqua, Georgia, serif")))
+  (is (= "Ubuntu Mono" (ft/font-family->font-used "Consolas, Ubuntu Mono, Menlo, Monaco, Lucida Console,\n    Liberation Mono, DejaVu Sans Mono, Bitstream Vera Sans Mono,\n    Courier New, monospace, serif")))
+  (is (= "Helvetica Neue" (ft/font-family->font-used "Calibri, Segoe UI, Candara, Helvetica Neue,\n    Lucida Grande, Tahoma, Verdana, Helvetica, Arial, sans-serif"))))
