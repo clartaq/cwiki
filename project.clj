@@ -4,7 +4,7 @@
   :license {:name         "Simplfied BSD"
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
-  :dependencies [[org.clojure/clojure "1.10.0"]
+  :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/clojurescript "1.10.520" :scope "provided"]
                  [org.clojure/core.async "0.4.490"]
                  [org.clojure/java.jdbc "0.7.9"]
