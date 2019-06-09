@@ -443,10 +443,7 @@ body {
 
 .menu-item ul li.subNav ul li {
     margin-left: 0;
-    padding-top: 0.2rem;
-    padding-bottom: 0.2rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding: 0.2rem 2rem;
     line-height: 1.7rem;
 }
 
@@ -1118,10 +1115,7 @@ div.one-column-list li {
     width: 100%;
     box-sizing: border-box;
     font-size: 1rem;
-    padding-right: 0.1rem;
-    padding-top: 0.2rem;
-    padding-left: 0.1rem;
-    padding-bottom: 0.3rem;
+    padding: 0.2rem 0.1rem 0.3rem;
 }
 
 .editor-button-bar {
@@ -1302,7 +1296,6 @@ div.one-column-list li {
 
 .tag-editor--name-input {
     flex: 1;
-    display: inline-block;
 
     margin-bottom: 0.5rem;
     margin-right: 0;
