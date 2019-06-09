@@ -1,7 +1,7 @@
 (ns cwiki-test.runner
     (:require [cwiki-test.font-detection-test]
               [cwiki-test.tag-editor-test]
-              [figwheel.main.testing :refer [run-tests-async]]))
+              [doo.runner :refer-macros [doo-tests]]))
 
-(defn -main [& args]
-  (run-tests-async 5000))
+(doo-tests 'cwiki-test.font-detection-test
+           'cwiki-test.tag-editor-test)
