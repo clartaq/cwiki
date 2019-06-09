@@ -32,10 +32,7 @@
   "Delete an existing tag."
   [tags-vector-atom n]
   (let [old-tag-vec @tags-vector-atom
-        ; TRY THIS
-        ; new-vec (into (subvec v 0 i) (subvec v (inc n)))
-        new-vec (vec (concat (subvec old-tag-vec 0 n)
-                             (subvec old-tag-vec (inc n))))]
+        new-vec (into (subvec old-tag-vec 0 n) (subvec old-tag-vec (inc n)))]
     (reset! tags-vector-atom new-vec)))
 
 ;-------------------------------------------------------------------------------
@@ -138,7 +135,9 @@
                                                 ; Make sure a cursor is visible.
                                                 "5px"
                                                 (if (and @canvas @context)
+                                                  ; Use real measurement.
                                                   (str (.-width (.measureText @context tag-of-interest)) "px")
+                                                  ; Use a "pretty close" measure.
                                                   (str ch-cnt "ch")))]
                                 [:input {:type         "text"
                                          :tab-index    -1
