@@ -14,9 +14,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed ###
 
 - Editing tags is smoother now. The cursor is placed correctly throughout the editing process.
-- When a new tag is created, it is selected within its text input ready to replace with the new tag name just by starting to type.
+- When a new tag is created, it is selected with its text input ready to replace with the new tag name just by starting to type.
+- ClojureScript testing has been revamped. More details are in the `README.md` file.
+- Updated project dependencies.
 
 ### Fixed ###
+
+- Measurements of tag widths are more accurate -- even those containing especially wide characters like "W"s and "M"s.
 
 ## [0.1.4] - 2019-01-07 ##
 
