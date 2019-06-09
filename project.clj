@@ -44,6 +44,7 @@
                  [ring/ring-defaults "0.3.2"]]
 
   :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
+            [lein-doo "0.1.11"]
             [lein-environ "1.1.0"]
             [lein-ring "0.12.1"]
             [lein-shell "0.5.0"]
@@ -69,7 +70,7 @@
   :minify-assets [[:css {:source "resources/public/css/styles.css"
                          :target "resources/public/css/styles.min.css"}]]
 
-  :aliases {"test-cljs"  ["shell" "clojure" "-A:fig:test"]
+  :aliases {"test-cljs"  ["do" "clean," "doo" "firefox-headless" "test" "once"]
             "start-prod" ["do" "clean," "cljsbuild" "once" "min," "run"]}
 
   :ring {:handler cwiki.handler/app}
@@ -91,7 +92,7 @@
 
                        :prep-tasks   ["javac" ["compile" "cwiki.extensions.cwikilink-attributes"]]
 
-                       :plugins      [[lein-doo "0.1.10"]
+                       :plugins      [[lein-doo "0.1.11"]
                                       [lein-figwheel "0.5.16"]]
                        ; Leave this alone. IntelliJ has issues otherwise.
                        :test-paths   ["test/cljs"]
