@@ -93,23 +93,49 @@ java -jar target/cwiki.jar
 
 ## Running Tests ##
 
-### Prerequisites ###
+### Clojure ###
 
-Just as with running the program, Java 8 or later is required.
-
-Running the tests for ClojureScript requires a little more setup. You must install [SlimerJS](https://slimerjs.org) and a compatible version of [Firefox](https://www.mozilla.org/en-US/firefox/). At the time this is written, I am using SlimerJS version 1.0.0 with Firefox version 59.0b9. This is the last version of Firefox supported by SlimerJS. I don't use it for browsing, just testing.
-
-### From a Terminal ###
-
-To run the tests on the Clojure code:
+To run tests on the Clojure code, open a terminal in the project directory and enter:
 
 `lein test`
 
-To run the tests on the ClojureScript code:
+### ClojureScript ###
 
-`lein test-cljs`
+Once configured (see below), you can run tests on the ClojureScript code by opening a terminal and typing:
 
-Note that the ClojureScript testing framework will remain active and repeat the tests whenever a change in the source files is detected. You can end it by typing `Ctrl-C`.
+`lein cljs-test`
+
+#### Prerequisites ####
+
+Configuring your environment for testing is a little more complicated for ClojureScript. My main development environment these days is macOS and these instructions apply to that environment. They are probably similar in Windows and Linux. I used this [article](https://lispcast.com/testing-clojurescript/) and this [repository](https://github.com/cloojure/cljs-template) for guidance.
+
+##### Node #####
+
+Now you must have [Nodejs](https://nodejs.org/en/) installed. I used [Homebrew](https://brew.sh) in a terminal to install it:
+
+`brew install node`
+
+That will install the current version, which is not neccessarily the one recommended for most users.
+
+##### Set Up the Karma Test Environment #####
+
+In a terminal change to the project directory and enter:
+
+```bash
+npm install karma-cli -g
+npm install karma karma-cljs-test  --save-dev
+npm install karma-junit-reporter   --save-dev
+npm install karma-opera-launcher  karma-firefox-launcher  karma-safari-launcher  --save-dev
+```
+I use the Firefox Developer Edition on my system as well as Safari, Opera, and Brave. (No launcher for Brave at the moment.) The Karma launcher doesn't know how to launch Firefox Developer Edition. For that to work I had to add the following to my `.bash_profile` to tell the launcher where to look.
+
+`export FIREFOX_BIN=/Applications/"Firefox Developer Edition.app"/Contents/MacOS/firefox`
+
+Don't forget the double quotes.
+
+##### The ClojureScript Testing Alias #####
+
+The `test-cljs` alias in the project file uses the `firefox-headless` environment for testing. I also have used the `safari` and `opera` test environments. Note that some of the expected results will change when using Safari. See `font-detection-test.cljs` for details.
 
 ## License ##
 
