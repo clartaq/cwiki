@@ -1,5 +1,5 @@
 (ns cwiki-test.tag-editor-test
-  (:require [clojure.test :refer-macros [deftest testing is]]
+  (:require [cljs.test :refer-macros [deftest testing is]]
             [cwiki-mde.tag-editor :as te]))
 
 ;(deftest add-tag-to-set-test
@@ -37,5 +37,4 @@
 (deftest delete-existing-tag-test
   (testing "Correct operation of the 'delete-existing-tag' function.")
   (let [v ["a" "b" "c"]]
-    (= ["a" "b"] (te/delete-existing-tag (atom v) 2))
-    (println "v now: " v)))
+    (is (= ["a" "b"] (te/delete-existing-tag (atom v) 2)))))
