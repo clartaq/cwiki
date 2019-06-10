@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-05-28T09:42:07.406-04:00
+modified: 2019-06-01T10:22:25.938-04:00
 tags:
   - cwiki
   - design
@@ -14,11 +14,21 @@ tags:
 
 This page is the on-going saga of working on the CWiki program.
 
+#### When editing a new page, completing the first tag by pressing the `Enter` key causes an error, 28 May 2019, 05:38:03 pm ####
+
+When editing a new page, after changing the title, creating the first tag and pressing `Enter` or `Return` causes the new page editor to load, losing all entered information.
+
+On an existing page with no tags, editing it, adding a tag, and pressing `Enter` causes the editor to exit, but does not show the new tag, just the default "A New Tag".
+
+Editing an existing page with tags, deleting all the tags, adding a new one and completing it by pressing the `Enter` key, exits the editor, but the new tag shows up correctly.
+
 ##### Clicking the Author Name on a Page View Should take the User to a New Page Listing all Pages Written by the Author, 28 May 2019, 09:39:48 am. #####
 
 Similar to "clickable tags", the name of the author/user shown on the page view should be a clickable link that takes the user to a new page showing the titles of all pages written by that author/user.
 
 **Update:** 28 May 2019, 09:41:05 am. Created issue [#40](https://bitbucket.org/David_Clark/cwiki/issues/40/the-author-user-name-shown-on-the-page) to track this enhancement.
+
+**Update:** 28 May 2019, 04:44:28 pm. This enhancment was completed in changeset [d613628bd3d7](https://bitbucket.org/David_Clark/cwiki/commits/d613628bd3d7)
 
 ##### Deleting a Tag with Backspaces Should Require Two Backspaces to Delete the Tag, 27 May 2019, 10:07:32 am. #####
 
@@ -26,11 +36,15 @@ The current behavior is that when a tag no longer has any characters, the editin
 
 Instead, the UI element should only be removed after the user has tapped backspace on an empty control.
 
+**Update:** 01 Jun 2019, 10:21:43 am. Created issue [#41](https://bitbucket.org/David_Clark/cwiki/issues/41/deleting-a-tag-with-repeated-backspace) to track progress on this enhancement.
+
 ##### Page Information Tags Should be Clickable, 27 May 2019, 10:03:44 am. #####
 
 When a page is displayed with associated tags, the tags should be clickable. Clicking a tag should bring up a list of all pages associated with that tag, just as it does on the [[All Tags]] page.
 
 **Update:** 28 May 2019, 09:37:50 am. Created issue [#39](https://bitbucket.org/David_Clark/cwiki/issues/39/tags-listed-in-the-page-view-should-be) to track this enhancement.
+
+**Update:**28 May 2019, 03:49:48 pm. This enhancement was completed in changeset [e30de897606e](https://bitbucket.org/David_Clark/cwiki/commits/e30de897606e).
 
 ##### Code Listing have Weird-Looking Scroll Bars Now, 06 May 2019, 05:32:09 pm. #####
 
