@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-06-10T08:51:56.299-04:00
+modified: 2019-06-10T17:47:40.397-04:00
 tags:
   - cwiki
   - design
@@ -17,6 +17,8 @@ This page is the on-going saga of working on the CWiki program.
 #### Some Change in the Tag Editor Screwed Up the Layout in Firefox, 10 Jun 2019, 08:50:52 am. ####
 
 Somewhere in the changes made to the tag editor, the layout of the tags in Firefox got screwed up. It works fine in Safari, Opera, and Brave, but Firefox gets really messed up.
+
+**Update:** 10 Jun 2019, 05:46:56 pm. It turns out that Firefox requires the `max-width` style attribute to be set as well as `width`.
 
 #### When editing a new page, completing the first tag by pressing the `Enter` key causes an error, 28 May 2019, 05:38:03 pm ####
 
