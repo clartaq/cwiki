@@ -143,7 +143,8 @@
                                          :tab-index    -1
                                          :autoComplete "off"
                                          :style        {:width str-width
-                                                        ; Firefox requires max-width to work
+                                                        ; Firefox also requires
+                                                        ; max-width to work
                                                         :max-width str-width}
                                          :class        "tag-editor--name-input"
                                          :id           tag-id
