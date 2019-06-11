@@ -135,8 +135,11 @@
                                                 ; Make sure a cursor is visible.
                                                 "5px"
                                                 (if (and @canvas @context)
-                                                  ; Use real measurement.
-                                                  (str (.-width (.measureText @context tag-of-interest)) "px")
+                                                  ; Use real measurement. Add
+                                                  ; about 5px to account for the
+                                                  ; editing cursor pushing text
+                                                  ; aside.
+                                                  (str (+ 5 (.-width (.measureText @context tag-of-interest))) "px")
                                                   ; Use a "pretty close" measure.
                                                   (str ch-cnt "ch")))]
                                 [:input {:type         "text"
