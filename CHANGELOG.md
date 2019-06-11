@@ -24,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Resolved issue [#39: "Tags listed in the page view should be clickable"](https://bitbucket.org/David_Clark/cwiki/issues/39/tags-listed-in-the-page-view-should-be) in commit [e30de89](https://bitbucket.org/David_Clark/cwiki/commits/e30de897606e8d23f562e8699e60f265063d947f).
 - Resolved issue [#40: :"The author/user name shown on the page view should be clickable"](https://bitbucket.org/David_Clark/cwiki/issues/40/the-author-user-name-shown-on-the-page) in commit [d613628](https://bitbucket.org/David_Clark/cwiki/commits/d613628bd3d7858b799f9116bda2a4b2ffa7c957).
+- Resolved issue [#41: "Deleting a Tag with Repeated Backspace/Delete Key Presses Should Show an Empty Editor Before Removing the Tag Editor
+"](https://bitbucket.org/David_Clark/cwiki/issues/41/deleting-a-tag-with-repeated-backspace) in commit [27e5793](https://bitbucket.org/David_Clark/cwiki/commits/27e579364bcb).
 - Measurements of tag widths are more accurate -- even those containing especially wide characters like "W"s and "M"s.
 
 ## [0.1.4] - 2019-01-07 ##
