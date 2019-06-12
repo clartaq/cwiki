@@ -981,7 +981,7 @@ pre code {
     border: 0;
     background: transparent;
     font-size: 100%;
-    overflow: scroll;
+    overflow: visible;
     padding: 0;
 }
 
@@ -991,7 +991,7 @@ pre {
     background-color: var(--code-highlight-color);
     font-size: 85%;
     line-height: 1.4rem;
-    overflow: scroll;
+    overflow: auto;
     margin-bottom: 1.8rem;
 }
 
