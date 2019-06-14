@@ -374,6 +374,9 @@
   [sidebar article]
   [:div {:class "sidebar-and-article"}
    sidebar
+   [:div {:class "vertical-page-divider"}]
+   [:div {:class "vertical-page-splitter" :id "splitter"}
+    [:img {:src "img/dimples.png"}]]
    [:article {:class "page-content"}
     article]])
 
