@@ -518,6 +518,35 @@ inside another flexbox. */
     overflow: hidden;
 }
 
+/* Fading in display and opacity
+https://stackoverflow.com/questions/8449933/animation-css3-display-opacity
+ */
+
+/* Doing simple drag
+https://github.com/lingtalfi/simpledrag
+ */
+
+.vertical-page-divider {
+    border-left: 1px solid var(--rule-color);
+}
+.vertical-page-splitter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 10px;
+    max-width: 10px;
+    background-color: var(--rule-color);
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.vertical-page-splitter:hover {
+    cursor: col-resize;
+    opacity: 1;
+}
+
 .left-aside {
     flex: 0 0 12rem;
     padding: 1.5rem;
@@ -553,7 +582,6 @@ inside another flexbox. */
     box-sizing: border-box;
     padding: 0.5rem 0.5rem 0.5rem 1.5rem;
     max-width: var(--content-max-width);
-    border-left: 1px solid var(--rule-color);
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -1069,7 +1097,6 @@ div.one-column-list li {
     box-sizing: border-box;
     overflow: hidden;
     padding: 0.5rem 1rem 0.5rem 1rem;
-    border-left: 1px solid var(--rule-color);
 }
 
 /*
