@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-06-10T17:47:40.397-04:00
+modified: 2019-06-12T16:35:53.526-04:00
 tags:
   - cwiki
   - design
@@ -10,6 +10,7 @@ tags:
   - shortcut
   - technical note
 ---
+
 
 
 This page is the on-going saga of working on the CWiki program.
@@ -44,6 +45,8 @@ Instead, the UI element should only be removed after the user has tapped backspa
 
 **Update:** 01 Jun 2019, 10:21:43 am. Created issue [#41](https://bitbucket.org/David_Clark/cwiki/issues/41/deleting-a-tag-with-repeated-backspace) to track progress on this enhancement.
 
+**Update:** 11 Jun 2019, 04:19:08 pm. This enhancement was completed in changeset [27e579364bcb](https://bitbucket.org/David_Clark/cwiki/commits/27e579364bcb).
+
 ##### Page Information Tags Should be Clickable, 27 May 2019, 10:03:44 am. #####
 
 When a page is displayed with associated tags, the tags should be clickable. Clicking a tag should bring up a list of all pages associated with that tag, just as it does on the [[All Tags]] page.
@@ -55,6 +58,8 @@ When a page is displayed with associated tags, the tags should be clickable. Cli
 ##### Code Listing have Weird-Looking Scroll Bars Now, 06 May 2019, 05:32:09 pm. #####
 
 The title says it all. When did that happen?
+
+**Update:** 12 Jun 2019, 04:30:49 pm. Changed some of the CSS for `pre` and `code` tags to improve appearance in changeset [8a6f45c](https://bitbucket.org/David_Clark/cwiki/commits/8a6f45c4da518e3e9f47d77a789f895f87a0876d).
 
 ##### Full Text Search is Broken, 06 May 2019, 04:31:44 pm. #####
 
