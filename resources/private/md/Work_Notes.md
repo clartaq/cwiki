@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-06-12T16:35:53.526-04:00
+modified: 2019-06-16T17:29:36.456-04:00
 tags:
   - cwiki
   - design
@@ -11,9 +11,17 @@ tags:
   - technical note
 ---
 
-
-
 This page is the on-going saga of working on the CWiki program.
+
+#### The Scrollbars on Long Articles are Distracting, 16 Jun 2019, 04:44:07 pm, ####
+
+When viewing/reading a long page (like this one), the scroll bars to the right of the text can be distracting. They should fade away unless the mouse is over the text, ready to scroll it.
+
+**Update:** 16 Jun 2019, 04:52:03 pm. After a little web searching, I came across [this link](https://stackoverflow.com/questions/8631799/make-scrollbars-only-visible-when-a-div-is-hovered-over) on StackOverflow. The answer by "kizu" (about half way down the page), though not the "accepted" answer, seems like the right approach.
+
+There was also an interesting answer about fading components in and out [here](https://stackoverflow.com/questions/8631799/make-scrollbars-only-visible-when-a-div-is-hovered-over). But that doesn't seem to apply to scrollbars.
+
+**Update:** 16 Jun 2019, 05:29:34 pm. Adding a `div` of class `scrollbox-content` to the functions `short-form-template`, `view-wiki-page` and `view-list-page` in `cwiki.layouts.base` seems to be all that is required to add the disappearing/appearing scrollbars.
 
 #### Some Change in the Tag Editor Screwed Up the Layout in Firefox, 10 Jun 2019, 08:50:52 am. ####
 
