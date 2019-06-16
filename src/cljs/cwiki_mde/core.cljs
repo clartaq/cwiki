@@ -382,36 +382,41 @@
      ;Buttons on the left side.
      [:section.editor-button-bar--left
 
-      [:input {:type    "button"
-               :id      "done-button"
-               :name    "done-button"
-               :value   "Done"
-               :title   "Quit the Editor"
-               :class   "form-button button-bar-item editor-button-bar--done-button"
-               :onClick #(cmd/quit-editor-cmd editor-state)}]
+      [:input {:type     "button"
+               :id       "done-button"
+               :name     "done-button"
+               :tabIndex 0
+               :value    "Done"
+               :title    "Quit the Editor"
+               :class    "form-button button-bar-item editor-button-bar--done-button"
+               :onClick  #(cmd/quit-editor-cmd editor-state)}]
 
       [:span.editor-button-bar--gap]
 
       [:button.editor-button-bar--button
        {:title    "Make selection bold"
+        :tabIndex 0
         :on-click #(println "Saw click on bold button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.bold-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Make selection italic"
+        :tabIndex 0
         :on-click #(println "Saw click on italic button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.italic-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Underline selection"
+        :tabIndex 0
         :on-click #(println "Saw click on underline button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.underline-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Strike through selection"
+        :tabIndex 0
         :on-click #(println "Saw click on strike-through button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.strike-icon]]
@@ -420,36 +425,42 @@
 
       [:button.editor-button-bar--button
        {:title    "Make selection a header"
+        :tabIndex 0
         :on-click #(println "Saw click on header button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.header-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Format selection as code"
+        :tabIndex 0
         :on-click #(println "Saw click on code button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.code-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Make a bulleted (unordered) list"
+        :tabIndex 0
         :on-click #(println "Saw click on bullet list button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.list-bullet-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Make a numbered (ordered) list"
+        :tabIndex 0
         :on-click #(println "Saw click on numbered list button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.list-numbered-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Make selection a quotation"
+        :tabIndex 0
         :on-click #(println "Saw click on quote button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.quote-left-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Insert a web link"
+        :tabIndex 0
         :on-click #(println "Saw click on web link button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.link-icon]]
@@ -458,18 +469,21 @@
 
       [:button.editor-button-bar--button
        {:title    "Indent"
+        :tabIndex 0
         :on-click #(println "Saw click on indent button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.indent-right-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Outdent"
+        :tabIndex 0
         :on-click #(println "Saw click on outdent button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.indent-left-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Insert a timestamp"
+        :tabIndex 0
         :on-click (fn [arg]
                     (let [target (get-element-by-id (:editor-textarea-id editor-state))]
                       (println "Saw click on timestamp button.")
@@ -481,12 +495,14 @@
 
       [:button.editor-button-bar--button
        {:title    "Undo the last action"
+        :tabIndex 0
         :on-click #(println "Saw click on undo button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.ccw-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Undo the last undo"
+        :tabIndex 0
         :on-click #(println "Saw click on redo button.")
         :disabled "true"}
        [:i.editor-button-bar--icon.cw-icon]]]
@@ -496,6 +512,7 @@
 
       [:button.editor-button-bar--button
        {:title    "Save revised content"
+        :tabIndex 0
         :id       "save-button-id"
         :on-click #(when (is-editor-dirty? editor-state)
                      (cmd/save-page-cmd editor-state))
@@ -504,6 +521,7 @@
 
       [:button.editor-button-bar--button.popup
        {:title    "Get help with Markdown"
+        :tabIndex 0
         :on-click #(toggle-markdown-help-modal)}
        [:i.editor-button-bar--icon.question-circle-o-icon]]]]))
 
@@ -524,6 +542,7 @@
                         [:textarea
                          {:class     "editor-textarea"
                           :id        (:editor-textarea-id editor-state)
+                          :tabIndex  0
                           :value     @page-content-ratom
                           :on-change (fn [arg]
                                        (let [new-content (-> arg .-target .-value)]
@@ -542,7 +561,8 @@
      [:div {:class "mde-content-label-div"}
       [:label {:class "form-label"
                :for   "content"} "Preview"]]
-     [:div {:class "mde-preview-class" :id "mde-preview-id"}
+     [:div {:class    "mde-preview-class" :id "mde-preview-id"
+            :tabIndex 0}
       (when @content-atom
         (markdown-component @content-atom))]]))
 

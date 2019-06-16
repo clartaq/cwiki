@@ -55,6 +55,7 @@
   (fn [{:keys [tags-atom-vector dirty-editor-notifier] :as editor-state}]
     [:span {:title "Add a new tag"}
      [:svg {:class    "tag-editor--add-button tag-editor--button-image"
+            :tabIndex 0
             :on-click #(do
                          (swap! tags-atom-vector conj
                                 (:default-new-tag-label editor-state))
@@ -143,9 +144,9 @@
                                                   ; Use a "pretty close" measure.
                                                   (str ch-cnt "ch")))]
                                 [:input {:type         "text"
-                                         :tab-index    -1
+                                         :tabIndex     0
                                          :autoComplete "off"
-                                         :style        {:width str-width
+                                         :style        {:width     str-width
                                                         ; Firefox also requires
                                                         ; max-width to work
                                                         :max-width str-width}
