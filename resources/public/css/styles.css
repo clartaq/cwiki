@@ -518,10 +518,6 @@ inside another flexbox. */
     overflow: hidden;
 }
 
-/* Fading in display and opacity
-https://stackoverflow.com/questions/8449933/animation-css3-display-opacity
- */
-
 /* Doing simple drag
 https://github.com/lingtalfi/simpledrag
  */
@@ -588,33 +584,18 @@ https://github.com/lingtalfi/simpledrag
     overflow: auto;
 }
 
-/* From
-https://stackoverflow.com/questions/8631799/make-scrollbars-only-visible-when-a-div-is-hovered-over
-*/
-
-/*
-
-.scrollbox {
-    width: 10em;
-    height: 10em;
+/* Things to make the scrollbars go away when mouse not over content. */
+article.page-content {
     overflow: auto;
     visibility: hidden;
+    transition: visibility 0.5s linear;
 }
 
 .scrollbox-content,
-.scrollbox:hover,
-.scrollbox:focus {
+article.page-content:hover,
+article.page-content:focus {
     visibility: visible;
 }
-
-.scrollbox-delayed {
-    transition: visibility 0.2s;
-}
-
-.scrollbox-delayed:hover {
-    transition: visibility 0s 0.2s;
-}
-*/
 
 /* The page title and meta info at the top of the page view. */
 .page-title-div {

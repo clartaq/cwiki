@@ -394,7 +394,8 @@
      (no-nav-header-component)
      (sidebar-and-article
        (no-content-aside)
-       content)
+       [:div {:class "scrollbox-content"}
+        content])
      (standard-end-of-body)]))
 
 (defn short-message
@@ -646,7 +647,8 @@
        (wiki-header-component post-map req)
        (sidebar-and-article
          (sidebar-aside req)
-         [:div (limited-width-title-component post-map)
+         [:div {:class "scrollbox-content"}
+          (limited-width-title-component post-map)
           (limited-width-content-component req content)])
        (standard-end-of-body)]
       (include-js "/js/onload.js"))))
@@ -666,9 +668,10 @@
        (wiki-header-component post-map req)
        (sidebar-and-article
          (sidebar-aside req)
-         [:div (limited-width-title-component post-map)
-          [:div {:class class-to-use}
-           (limited-width-content-component req content)]])
+         [:div {:class "scrollbox-content"}
+          [:div (limited-width-title-component post-map)
+           [:div {:class class-to-use}
+            (limited-width-content-component req content)]]])
        (standard-end-of-body)])))
 
 ;;
@@ -710,8 +713,6 @@
   in links that will generate a list of all pages containing
   the tag."
   [tags]
-  (println "process-tag-set: tags: " tags)
-  (println "(type tags): " (type tags))
   (process-item-set-to-unnumbered-list-of-wikilinks tags "/as-tag?tag="))
 
 (defn- process-name-set
