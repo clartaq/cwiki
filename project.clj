@@ -6,7 +6,7 @@
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/clojurescript "1.10.520" :scope "provided"]
-                 [org.clojure/core.async "0.4.490"]
+                 [org.clojure/core.async "0.4.500"]
                  [org.clojure/java.jdbc "0.7.9"]
                  ;[org.clojure/spec.alpha "0.2.176"]
 
