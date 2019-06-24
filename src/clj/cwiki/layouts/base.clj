@@ -161,7 +161,8 @@
   [:div {:class "standard-scripts"}
    (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
    (include-js "/js/mathjax-config.js")
-   (include-js "/js/highlight.pack.js")])
+   (include-js "/js/highlight.pack.js")
+   (include-js "/js/compiled/cwiki-mde.js")])
 
 (defn- drop-menu
   "Return the drop-down menu for use in the page header."
@@ -360,13 +361,13 @@
 (defn- no-content-aside
   "Return an aside section with no content."
   []
-  [:aside {:class "left-aside"} ""])
+  [:aside {:class "left-aside" :id "left-aside"} ""])
 
 (defn sidebar-aside
   "Return an aside with the content of the sidebar page."
   [req]
   (let [sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
-    [:aside {:class "left-aside"}
+    [:aside {:class "left-aside" :id "left-aside"}
      (limited-width-content-component req sidebar-content)]))
 
 (defn sidebar-and-article
@@ -375,8 +376,11 @@
   [:div {:class "sidebar-and-article"}
    sidebar
    [:div {:class "vertical-page-divider"}]
-   [:div {:class "vertical-page-splitter" :id "splitter"}
-    [:img {:src "img/dimples.png"}]]
+   [:div {:class "vertical-page-splitter"
+          :id "splitter"
+          ; Don't forget to translate the hyphen to an underscore. The false
+          ; return is required for correct behavior on Safari.
+          :onmousedown "cwiki_mde.dragger.onclick_handler(); return false;"}]
    [:article {:class "page-content"}
     article]])
 
