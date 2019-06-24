@@ -9,6 +9,8 @@
             [cljs.pprint :as pprint]
             [cwiki-mde.editor-commands :as cmd]
             [cwiki-mde.keyboard-shortcuts :as kbs]
+            ;; Include dragger so it gets bundled in output js file.
+            [cwiki-mde.dragger :as dr]
             [cwiki-mde.tag-editor :as te]
             [cwiki-mde.ws :as ws]
             [reagent.core :as r]

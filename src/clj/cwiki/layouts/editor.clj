@@ -46,8 +46,11 @@
   [:div {:class "sidebar-and-article"}
    sidebar
    [:div {:class "vertical-page-divider"}]
-   [:div {:class "vertical-page-splitter" :id "splitter"}
-    [:img {:src "img/dimples.png"}]]
+   [:div {:class "vertical-page-splitter"
+          :id "splitter"
+          ; Don't forget to translate the hyphen to an underscore. The false
+          ; return is required for correct behavior on Safari.
+          :onmousedown "cwiki_mde.dragger.onclick_handler(); return false;"}]
    article])
 
 (defn get-markdown-help-html

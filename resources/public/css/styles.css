@@ -523,13 +523,12 @@ inside another flexbox. */
     overflow: hidden;
 }
 
-/* Doing simple drag
-https://github.com/lingtalfi/simpledrag
- */
+/* Set up some indicators for dragging the boundary. */
 
 .vertical-page-divider {
     border-left: 1px solid var(--rule-color);
 }
+
 .vertical-page-splitter {
     display: flex;
     flex-direction: column;
@@ -546,6 +545,11 @@ https://github.com/lingtalfi/simpledrag
 .vertical-page-splitter:hover {
     cursor: col-resize;
     opacity: 1;
+}
+
+.vertical-page-splitter:active {
+    cursor: col-resize;
+    background-color: pink;
 }
 
 .left-aside {
@@ -1267,6 +1271,7 @@ div.one-column-list li {
     line-height: 1.8rem;
     padding-left: 10px;
     padding-right: 5px;
+    outline: none;
 }
 
 /*
