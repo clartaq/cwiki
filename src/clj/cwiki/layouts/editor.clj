@@ -78,7 +78,7 @@
       [:body {:class "page"}
        (base/wiki-header-component post-map req {:editing true})
        (sidebar-and-editor
-         (base/sidebar-aside req)
+         (base/sidebar-aside)
          [:section {:id "outer-editor-container" :class "outer-editor-container"}
           [:p "One moment please. Loading the editor."]])
        (standard-end-of-body)])))
