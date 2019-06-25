@@ -343,10 +343,10 @@
 
 (defn- limited-width-content-component
   "Center the content in a centered element and return it."
-  [req & content]
+  [content]
   [:div
    (if content
-     (convert-markdown-to-html (first content))
+     (convert-markdown-to-html content)
      [:p error-span "There is not centered content for this page."])])
 
 (defn footer-component
@@ -358,17 +358,26 @@
     [:p "Copyright \u00A9 2017-2018, David D. Clark"]
     [:p program-name-and-version]]])
 
+(defn- aside
+  "Return and aside (sidebar) component with the given content."
+  [content]
+  ; The only retrieval of the sidebar flex-basis width is here.
+  (let [sidebar-width (db/get-option-value :sidebar_width)
+        flex-basis (str sidebar-width "px")]
+    [:aside {:class "left-aside" :id "left-aside"
+             :style (str "flex-basis: " flex-basis ";")}
+     content]))
+
 (defn- no-content-aside
   "Return an aside section with no content."
   []
-  [:aside {:class "left-aside" :id "left-aside"} ""])
+  (aside ""))
 
 (defn sidebar-aside
   "Return an aside with the content of the sidebar page."
-  [req]
+  []
   (let [sidebar-content (db/page-map->content (db/find-post-by-title "Sidebar"))]
-    [:aside {:class "left-aside" :id "left-aside"}
-     (limited-width-content-component req sidebar-content)]))
+    (aside (limited-width-content-component sidebar-content))))
 
 (defn sidebar-and-article
   "Return a sidebar and article div with the given content."
@@ -376,8 +385,8 @@
   [:div {:class "sidebar-and-article"}
    sidebar
    [:div {:class "vertical-page-divider"}]
-   [:div {:class "vertical-page-splitter"
-          :id "splitter"
+   [:div {:class       "vertical-page-splitter"
+          :id          "splitter"
           ; Don't forget to translate the hyphen to an underscore. The false
           ; return is required for correct behavior on Safari.
           :onmousedown "cwiki_mde.dragger.onclick_handler(); return false;"}]
@@ -650,10 +659,10 @@
       [:body {:class "page"}
        (wiki-header-component post-map req)
        (sidebar-and-article
-         (sidebar-aside req)
+         (sidebar-aside)
          [:div {:class "scrollbox-content"}
           (limited-width-title-component post-map)
-          (limited-width-content-component req content)])
+          (limited-width-content-component content)])
        (standard-end-of-body)]
       (include-js "/js/onload.js"))))
 
@@ -671,11 +680,11 @@
       [:body {:class "page"}
        (wiki-header-component post-map req)
        (sidebar-and-article
-         (sidebar-aside req)
+         (sidebar-aside)
          [:div {:class "scrollbox-content"}
           [:div (limited-width-title-component post-map)
            [:div {:class class-to-use}
-            (limited-width-content-component req content)]]])
+            (limited-width-content-component content)]]])
        (standard-end-of-body)])))
 
 ;;
@@ -783,7 +792,9 @@
 
 (defn compose-get-options-age
   [req]
-  (let [delay (db/get-option-value :editor_autosave_interval)]
+  (let [delay (db/get-option-value :editor_autosave_interval)
+        sidebar-width (db/get-option-value :sidebar_width)]
+    (println "sidebar-width: " sidebar-width)
     (short-form-template
       [:div {:class "cwiki-form"}
        (form-to {:enctype      "multipart/form-data"
@@ -791,6 +802,8 @@
                 [:post "preferences"]
                 (hidden-field "referer" (get (:headers req) "referer"))
                 [:p {:class "form-title"} "Change Preferences"]
+
+                ; Autosave interval
                 [:div {:class "form-group"}
                  [:div {:class "form-label-div"}
                   [:label {:class "form-label"
@@ -810,6 +823,33 @@
                   "The default setting of one (1) second is recommended for safety.
                   If you switch away to a different browser tab without saving, all
                   new work will be lost."]]
+
+                ; Sidebar width
+                [:div {:class "form-group"}
+                 [:div {:class "form-label-div"}
+                  [:label {:class "form-label"
+                           :for   "sidebar-width"}
+                   "Sidebar Width (pixels)"]]
+                 (text-field {:class       "form-text-field"
+                              ;:autofocus   "autofocus"
+                              :placeholder "Enter the siedbar width in pixels"
+                              :value       (str sidebar-width)}
+                             "sidebar-width")
+                 [:p {:class "hint-field"}
+                  "Enter an integer representing the number of pixels to use for
+                  the width of the sidebar. This is actually the width of the
+                  sidebar element before adding any margin, border, or
+                  padding values used in the CSS to layout the element."]
+                 [:p {:class "hint-field"}
+                  "The default width (248px or 12rem) combines with a total
+                  left and right default padding value of 48px for a combined
+                  width of 290px."]
+                 [:p {:class "hint-field"}
+                  "As an alternative to setting this value manually, you can
+                  set it visually by hovering your mouse over the vertical
+                  rule between the sidebar and article, then press and hold
+                  the mouse button down while you drag the boundary to the
+                  desired location."]]
                 [:div {:class "button-bar-container"}
                  (submit-button {:id    "save-options-button"
                                  :class "form-button button-bar-item"} "Save")
