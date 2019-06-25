@@ -794,7 +794,6 @@
   [req]
   (let [delay (db/get-option-value :editor_autosave_interval)
         sidebar-width (db/get-option-value :sidebar_width)]
-    (println "sidebar-width: " sidebar-width)
     (short-form-template
       [:div {:class "cwiki-form"}
        (form-to {:enctype      "multipart/form-data"
@@ -809,11 +808,13 @@
                   [:label {:class "form-label"
                            :for   "autosave-interval"}
                    "Autosave Interval (seconds)"]]
-                 (text-field {:class       "form-text-field"
-                              :autofocus   "autofocus"
-                              :placeholder "Enter the autosave interval in seconds"
-                              :value       (str delay)}
-                             "autosave-interval")
+                 [:input {:type         "number" :min "0" :step "1" :pattern "\\d+"
+                          :class        "form-text-field"
+                          :name         "autosave-interval"
+                          :autofocus    "autofocus"
+                          :autocomplete "off"
+                          :placeholder  "Enter the autosave interval in seconds"
+                          :value        (str delay)}]
                  [:p {:class "hint-field"}
                   "Enter an integer representing the number of seconds after
                   the last keypress before saving the edits to a document. A
@@ -830,20 +831,21 @@
                   [:label {:class "form-label"
                            :for   "sidebar-width"}
                    "Sidebar Width (pixels)"]]
-                 (text-field {:class       "form-text-field"
-                              ;:autofocus   "autofocus"
-                              :placeholder "Enter the siedbar width in pixels"
-                              :value       (str sidebar-width)}
-                             "sidebar-width")
+                 [:input {:type         "number" :min "150" :step "1" :pattern "\\d+"
+                          :class        "form-text-field"
+                          :name         "sidebar-width"
+                          :autocomplete "off"
+                          :placeholder  "Enter the sidebar width in pixels"
+                          :value        (str sidebar-width)}]
                  [:p {:class "hint-field"}
                   "Enter an integer representing the number of pixels to use for
-                  the width of the sidebar. This is actually the width of the
-                  sidebar element before adding any margin, border, or
-                  padding values used in the CSS to layout the element."]
+                  the width of the sidebar. <b>The minium value is 150px.</b>"]
                  [:p {:class "hint-field"}
-                  "The default width (248px or 12rem) combines with a total
-                  left and right default padding value of 48px for a combined
-                  width of 290px."]
+                  "This is actually the width of the sidebar element before
+                  adding any margin, border, or padding values used in the CSS
+                  to layout the element.The default width (248px or 12rem)
+                  combines with a total left and right default padding value of
+                  48px for a combined width of 290px."]
                  [:p {:class "hint-field"}
                   "As an alternative to setting this value manually, you can
                   set it visually by hovering your mouse over the vertical
