@@ -255,23 +255,21 @@
   (layout/compose-get-options-age req))
 
 (defn post-preferences
-  "Validate and save any changes to the options/preferences."
+  "Save the options/preferences."
   [req]
+  ; Assumes that form validation in the page layout has only let
+  ; valid settings through.
   (let [params (:multipart-params req)
         referer (get params "referer")
         interval (get params "autosave-interval")
-        result (safe-parse-int interval)]
-    (if (>= result 0)
-      (do
-        (db/set-option-value :editor_autosave_interval result)
-        (layout/short-message-return-to-referer
-          "Preferences Saved"
-          "All changes to the preferences have been saved." referer))
-      (layout/short-message-return-to-referer
-        "Problem with the Autosave Interval!"
-        "The autosave interval must be a positive integer number of seconds.
-        No new values have been saved."
-        referer))))
+        new-interval (max 0 (safe-parse-int interval))
+        sidebar-width (get params "sidebar-width")
+        new-width (max 150 (safe-parse-int sidebar-width))]
+    (db/set-option-value :editor_autosave_interval new-interval)
+    (db/set-option-value :sidebar_width new-width)
+    (layout/short-message-return-to-referer
+      "Preferences Saved"
+      "All changes to the preferences have been saved." referer)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
