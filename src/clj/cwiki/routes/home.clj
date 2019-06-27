@@ -10,7 +10,8 @@
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]))
+                                     trace debug info warn error]])
+  (:import (org.httpkit BytesInputStream)))
 
 (defn- build-response
   "Build a response structure, possibly with a non-200 return code."
@@ -243,9 +244,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defn- safe-parse-int
-  "Convert a string to an integer. Return -1 on exception."
+  "Convert a string to an integer. Return -1 on exception. Parses the first
+  (and only the first) contiguous group of digits."
   [x]
-  (try (Integer/parseInt x)
+  (try (Integer/parseInt (re-find  #"\d+" x))
        (catch Exception _
          -1)))
 
@@ -271,6 +273,14 @@
       "Preferences Saved"
       "All changes to the preferences have been saved." referer)))
 
+(defn post-sidebar-basis
+  "Persist the sidebar width basis."
+  [req]
+  (let [body ^BytesInputStream (:body req)
+        new-basis (safe-parse-int (slurp (.bytes body)))]
+    (db/set-option-value :sidebar_width new-basis)
+    {:status  200}))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defroutes home-routes
@@ -295,4 +305,5 @@
                               (get params "content") request)))
            (POST "/search" request
              (let [params (request :multipart-params)]
-               (do-search (get params "search-text") request))))
+               (do-search (get params "search-text") request)))
+           (POST "/width-of-sidebar" request (post-sidebar-basis request)))
