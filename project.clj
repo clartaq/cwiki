@@ -17,6 +17,7 @@
                  ;[com.h2database/h2 "1.4.199"]
                  [circleci/clj-yaml "0.6.0"]
                  [clj-time "0.15.1"]
+                 [cljs-ajax "0.8.0"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [com.taoensso/sente "1.13.1"]
                  [com.taoensso/timbre "4.10.0"]
