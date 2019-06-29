@@ -532,8 +532,6 @@ inside another flexbox. */
 .vertical-page-splitter {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
 
     width: 10px;
     max-width: 10px;
@@ -897,7 +895,7 @@ blockquote footer {
 
 p {
     margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
 hr {
