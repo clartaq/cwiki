@@ -9,7 +9,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added ###
 
+- The width of the sidebar can now be set from the "Preferences" page or by dragging the border between the sidebar and the main article with the mouse.
+
 ### Changed ###
+
+- Updated dependencies.
+- Updated content.
+- Several small tweaks to the CSS.
 
 ### Fixed ###
 
