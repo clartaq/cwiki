@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-06-16T17:29:36.456-04:00
+modified: 2019-06-27T11:42:48.655-04:00
 tags:
   - cwiki
   - design
@@ -10,6 +10,7 @@ tags:
   - shortcut
   - technical note
 ---
+
 
 This page is the on-going saga of working on the CWiki program.
 
@@ -104,6 +105,10 @@ I want to make the scroll bars invisible, only appearing when the user attempts 
 ##### Variable Width Sidebar, 05 May 2019, 10:24:18 am. ######
 
 It should be possible to change the width of the sidebar interactively. As I spend time working on an hierarchical tree control for the sidebar, it is obvious that the user may want to change its width depending on the structure of the tree control that they set up.
+
+**Update:** 25 Jun 2019, 04:52:12 pm. Sidebar width can now be set from the "Preferences" page. The sidebar width can also be set visually by dragging the separator between the sidebar and article with the mouse. But the change does not persist yet.
+
+**Update:** 27 Jun 2019, 11:41:57 am. Sidebar width can now be set and persisted by dragging the separator with the mouse. Committed [here](https://bitbucket.org/David_Clark/cwiki/commits/9e582e1a90414db1f977159c34626780faf7f541).
 
 ##### Thinking About Organization, 31 Jan 2019, 10:20:31 am. #####
 
