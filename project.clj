@@ -10,8 +10,8 @@
                  [org.clojure/java.jdbc "0.7.9"]
                  ;[org.clojure/spec.alpha "0.2.176"]
 
-                 [buddy/buddy-auth "2.1.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
-                 [buddy/buddy-hashers "1.3.0"]
+                 [buddy/buddy-auth "2.2.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
+                 [buddy/buddy-hashers "1.4.0"]
                  [com.cemerick/url "0.1.1"]
                  [com.h2database/h2 "1.4.197"]
                  ;[com.h2database/h2 "1.4.199"]
@@ -83,9 +83,9 @@
 
                        :dependencies [[org.clojure/tools.nrepl "0.2.13"]
                                       [binaryage/devtools "0.9.10"]
-                                      [cider/piggieback "0.4.0"]
+                                      [cider/piggieback "0.4.1"]
                                       [figwheel-sidecar "0.5.16" :exclusions [org.clojure/tools.nrepl]]
-                                      [prone "1.6.3"]
+                                      [prone "1.6.4"]
                                       [ring/ring-mock "0.4.0"]
                                       [ring/ring-devel "1.7.1"]]
 
