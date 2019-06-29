@@ -4,9 +4,7 @@
 ;;;; sidebar with a mouse drag.
 
 (ns cwiki-mde.dragger
-  (:require [ajax.core :refer [ajax-request json-request-format json-response-format
-                               POST
-                               text-request-format
+  (:require [ajax.core :refer [ajax-request text-request-format
                                text-response-format]]))
 
 ;; The minimum allowable width for the sidebar.
@@ -27,8 +25,6 @@
 (def ^{:private true} starting-mouse-x (atom 0))
 (def ^{:private true} starting-basis (atom 0))
 (def ^{:private true} new-basis (atom "0px"))
-
-(enable-console-print!)
 
 (defn response-handler [[ok response]]
   (when-not ok
