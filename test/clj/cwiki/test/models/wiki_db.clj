@@ -168,7 +168,7 @@
 (defn insert-test-data
   [title content tags]
   (let [new-id (:page_id (db/insert-new-page! title content tags
-                                              (db/get-cwiki-user-id)
+                                              (db/get-cwiki-user-id (get-test-db-spec))
                                               (get-test-db-spec)))]
     new-id))
 

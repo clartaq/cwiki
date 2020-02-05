@@ -246,10 +246,8 @@
    [:header {:class "page-header"}
     [:div {:class "header-wrapper"}
      [:hgroup {:class "left-header-wrapper"}
-      [:h1 {:class "brand-title"} "CWiki"]
-      [:p {:class "brand-sub-title"}
-       "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
-                    "Wiki"]]]
+      [:h1 {:class "brand-title"} (db/get-option-value :wiki_name)]
+      [:p {:class "brand-sub-title"} (db/get-option-value :wiki_tagline)]]
      (wiki-hmenu-component post-map req options)]]))
 
 (defn no-nav-header-component
@@ -258,10 +256,8 @@
   [:header {:class "page-header"}
    [:div {:class "header-wrapper"}
     [:hgroup {:class "left-header-wrapper"}
-     [:h1 {:class "brand-title"} "CWiki"]
-     [:p {:class "brand-sub-title"}
-      "A Simple " [:a {:href "https://en.wikipedia.org/wiki/Wiki"}
-                   "Wiki"]]]]])
+     [:h1 {:class "brand-title"} (db/get-option-value :wiki_name)]
+     [:p {:class "brand-sub-title"} (db/get-option-value :wiki_tagline)]]]])
 
 ; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
@@ -316,8 +312,8 @@
         tag-str (if (or (nil? tag-names) (zero? (count tag-names)))
                   "None"
                   (let [tag-links (process-names-to-wikilinks tag-names "/as-tag?tag=")
-                        tags-as-html (-> (convert-markdown-to-html (s/join ", " tag-links))
-                                         (remove-surrounding-paragraph-tags))]
+                        tags-as-html (remove-surrounding-paragraph-tags
+                                       (convert-markdown-to-html (s/join ", " tag-links)))]
                     tags-as-html))]
     [:div
      [:p {:class "tag-line"}
@@ -355,17 +351,16 @@
   []
   [:footer {:class "footer"}
    [:div {:class "footer-wrapper"}
-    [:p "Copyright \u00A9 2017-2018, David D. Clark"]
+    [:p "Copyright \u00A9 2017-2019, David D. Clark"]
     [:p program-name-and-version]]])
 
 (defn- aside
-  "Return and aside (sidebar) component with the given content."
+  "Return an aside (sidebar) component with the given content."
   [content]
-  ; The only retrieval of the sidebar flex-basis width is here.
-  (let [sidebar-width (db/get-option-value :sidebar_width)
-        flex-basis (str sidebar-width "px")]
+  ; The only retrieval of the sidebar flex-basis width happens here.
+  (let [sidebar-width (db/get-option-value :sidebar_width)]
     [:aside {:class "left-aside" :id "left-aside"
-             :style (str "flex-basis: " flex-basis ";")}
+             :style (str "flex-basis: " sidebar-width "px;")}
      content]))
 
 (defn- no-content-aside
@@ -792,7 +787,10 @@
 
 (defn compose-get-options-age
   [req]
-  (let [delay (db/get-option-value :editor_autosave_interval)
+  (let [wiki-name (db/get-option-value :wiki_name)
+        wiki-tagline (db/get-option-value :wiki_tagline)
+        delay (db/get-option-value :editor_autosave_interval)
+        article-width (db/get-option-value :article_width)
         sidebar-width (db/get-option-value :sidebar_width)]
     (short-form-template
       [:div {:class "cwiki-form"}
@@ -802,28 +800,54 @@
                 (hidden-field "referer" (get (:headers req) "referer"))
                 [:p {:class "form-title"} "Change Preferences"]
 
-                ; Autosave interval
+                ; Wiki name
                 [:div {:class "form-group"}
                  [:div {:class "form-label-div"}
                   [:label {:class "form-label"
-                           :for   "autosave-interval"}
-                   "Autosave Interval (seconds)"]]
-                 [:input {:type         "number" :min "0" :step "1" :pattern "\\d+"
+                           :for   "wiki-name"}
+                   "Wiki Name"]]
+                 [:input {:type         "text"
                           :class        "form-text-field"
-                          :name         "autosave-interval"
+                          :name         "wiki-name"
                           :autofocus    "autofocus"
                           :autocomplete "off"
-                          :placeholder  "Enter the autosave interval in seconds"
-                          :value        (str delay)}]
+                          :placeholder  "Enter the name to display for the wiki"
+                          :value        wiki-name}]
                  [:p {:class "hint-field"}
-                  "Enter an integer representing the number of seconds after
-                  the last keypress before saving the edits to a document. A
-                  value of zero (0) indicates that there should not be
-                  any automatic saving."]
+                  "This is the name of the wiki that will be displayed in the
+                  top left corner of the page."]]
+
+                ; Wiki tagline
+                [:div {:class "form-group"}
+                 [:div {:class "form-label-div"}
+                  [:label {:class "form-label"
+                           :for   "wiki-tagline"}
+                   "Wiki Tag Line"]]
+                 [:input {:type         "text"
+                          :class        "form-text-field"
+                          :name         "wiki-tagline"
+                          :autocomplete "off"
+                          :placeholder  "Enter the text to display for the wiki tag line"
+                          :value        wiki-tagline}]
                  [:p {:class "hint-field"}
-                  "The default setting of one (1) second is recommended for safety.
-                  If you switch away to a different browser tab without saving, all
-                  new work will be lost."]]
+                  "This text is displayed right below the name of the wiki in
+                  the top left corner of the page."]]
+
+                ; Article width
+                [:div {:class "form-group"}
+                 [:div {:class "form-label-div"}
+                  [:label {:class "form-label"
+                           :for   "article-width"}
+                   "Article Width (pixels)"]]
+                 [:input {:type         "number" :min "300" :step "1" :pattern "\\d+"
+                          :class        "form-text-field"
+                          :name         "article-width"
+                          :autocomplete "off"
+                          :placeholder  "Enter the width, in pixels, for the article viewing column"
+                          :value        (str article-width)}]
+                 [:p {:class "hint-field"}
+                  "Enter an integer representing the number of pixels to use for
+                  the width of the article viewing column. <b>The minium value is 300px.</b>"]]
 
                 ; Sidebar width
                 [:div {:class "form-group"}
@@ -843,22 +867,47 @@
                  [:p {:class "hint-field"}
                   "This is actually the width of the sidebar element before
                   adding any margin, border, or padding values used in the CSS
-                  to layout the element.The default width (248px or 12rem)
+                  to layout the element.The default width (240px or 15rem)
                   combines with a total left and right default padding value of
-                  48px for a combined width of 290px."]
+                  48px for a combined width of 288px."]
                  [:p {:class "hint-field"}
                   "As an alternative to setting this value manually, you can
                   set it visually by hovering your mouse over the vertical
                   rule between the sidebar and article, then press and hold
                   the mouse button down while you drag the boundary to the
                   desired location."]]
+
+                ; Autosave interval
+                [:div {:class "form-group"}
+                 [:div {:class "form-label-div"}
+                  [:label {:class "form-label"
+                           :for   "autosave-interval"}
+                   "Autosave Interval (seconds)"]]
+                 [:input {:type         "number" :min "0" :step "1" :pattern "\\d+"
+                          :class        "form-text-field"
+                          :name         "autosave-interval"
+                          :autocomplete "off"
+                          :placeholder  "Enter the autosave interval in seconds"
+                          :value        (str delay)}]
+                 [:p {:class "hint-field"}
+                  "Enter an integer representing the number of seconds after
+                  the last keypress before saving the edits to a document. A
+                  value of zero (0) indicates that there should not be
+                  any automatic saving."]
+                 [:p {:class "hint-field"}
+                  "The default setting of one (1) second is recommended for safety.
+                  If you switch away to a different browser tab without saving, all
+                  new work will be lost."]]
+
                 [:div {:class "button-bar-container"}
-                 (submit-button {:id    "save-options-button"
-                                 :class "form-button button-bar-item"} "Save")
-                 [:input {:type    "button" :name "cancel-button"
-                          :value   "Cancel"
-                          :class   "form-button button-bar-item"
-                          :onclick "window.history.back();"}]])])))
+                 (submit-button {:id       "save-options-button"
+                                 :tabIndex 0
+                                 :class    "form-button button-bar-item"} "Save")
+                 [:input {:type     "button" :name "cancel-button"
+                          :value    "Cancel"
+                          :tabIndex 0
+                          :class    "form-button button-bar-item"
+                          :onclick  "window.history.back();"}]])])))
 
 (defn confirm-saved-options
   "Return a page stating that the preferences have been saved."

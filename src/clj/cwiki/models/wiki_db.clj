@@ -100,13 +100,15 @@
   program starts."
   []
   {:editor_autosave_interval    1
-   :editor_send_every_keystroke true
+   :editor_send_every_keystroke false
    :root_page                   "Front Page"
    :wiki_name                   "CWiki"
+   :wiki_tagline                "A Simple <a href=https://en.wikipedia.org/wiki/Wiki>Wiki</a>"
    :default-new-page-name       "A New Page"
    :default-new-tag-label       "A New Tag"
    :editor_editing_font         "Calibri"
-   :sidebar_width               248
+   :sidebar_width               240
+   :article_width               735
    :confirm_page_deletions      true
    :editor_use_WYSIWYG_editor   false})
 
@@ -114,21 +116,24 @@
   []
   {:editor_autosave_interval    {:current 1
                                  :default 1}
-
-   :editor_send_every_keystroke {:current true
-                                 :default true}
+   :editor_send_every_keystroke {:current false
+                                 :default false}
    :root_page                   {:current "Front Page"
                                  :default "Front Page"}
    :wiki_name                   {:current "CWiki"
                                  :default "CWiki"}
+   :wiki_tagline                {:current "A Simple <a href=https://en.wikipedia.org/wiki/Wiki>Wiki</a>"
+                                 :default "A Simple <a href=https://en.wikipedia.org/wiki/Wiki>Wiki</a>"}
    :default-new-page-name       {:current "A New Page"
                                  :default "A New Page"}
    :default-new-tag-label       {:current "A New Tag"
                                  :default "A New Tag"}
    :editor_editing_font         {:current "Calibri"
                                  :default "Calibri"}
-   :sidebar_width               {:current "12rem"
-                                 :default "12rem"}
+   :sidebar_width               {:current 240
+                                 :default 240}
+   :article_width               {:current 735
+                                 :default 735}
    :confirm_page_deletions      {:current true
                                  :default true}
    :editor_use_WYSIWYG_editor   {:current false
@@ -194,8 +199,10 @@
          (keyword colon-stripped))))))
 
 (defn get-cwiki-user-id
-  []
-  (user-name->user-id "CWiki"))
+  ([]
+   (user-name->user-id "CWiki" (get-h2-db-spec)))
+  ([db]
+   (user-name->user-id "CWiki" db)))
 
 (defn user-id->user-name
   "Given a user id, return a human-readable user name."
@@ -498,6 +505,7 @@
 (defn case-insensitive-comparator
   "Case-insensitive string comparator."
   [^String s1 ^String s2]
+  ;(infof "case-insensitive-comparator: s1: %s, s2: %s" s1 s2)
   (.compareToIgnoreCase s1 s2))
 
 (defn get-all-users

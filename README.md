@@ -2,6 +2,10 @@
 
 CWiki is a simple personal wiki application. You use your browser to view and edit the content. It runs on your local machine. You can link to external sites on the internet, but the content you create stays on your computer.
 
+## Note ##
+
+CWiki was moved from BitBucket using Mercurial to Github using git on 5 February, 2020. As a result, all history on tracked issues before that time was lost.
+
 ## Warning ##
 
 CWiki is alpha-quality software. It does useful things, but many planned features are not present. (The program will usually tell you so if you try to do something that it cannot accomplish yet. Or it might just crash.) Probably full of bugs too. See the "To Do" page and the "[Issues](https://bitbucket.org/David_Clark/cwiki/issues?status=new&status=open)" page in the project repository.
@@ -141,4 +145,4 @@ The `test-cljs` alias in the project file uses the `firefox-headless` environmen
 
 This software is licensed under the BSD Simplified 2-Clause License. See the [LICENSE.txt](https://bitbucket.org/David_Clark/cwiki/src/default/LICENSE.txt) file.
 
-Copyright © 2017-2018 David D. Clark
+Copyright © 2017-2020 David D. Clark

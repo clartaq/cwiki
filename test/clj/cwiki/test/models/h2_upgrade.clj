@@ -1,7 +1,7 @@
 ;;;;
 ;;;; This file provides a test to assure that the upgrade of the H2 database
 ;;;; from version 1.4.197 to 1.4.199, along with the concomitant upgrade of
-;;;; Lucene from version 3.6.2 to 7.7.1, works correctly.
+;;;; Lucene from version 3.6.2 to 5.5.5, works correctly.
 ;;;;
 
 (ns cwiki.test.models.h2-upgrade
@@ -70,6 +70,23 @@
 ;-------------------------------------------------------------------------------
 ; The test.
 ;-------------------------------------------------------------------------------
+
+(deftest hello-ftl-test
+  (testing "The simple 'Hello World' Lucene full text search demo from the H2 documentation."
+
+    ;; Delete any pre-existing versions of the test database files and
+    ;; directories. Then make sure the needed parent directories are present.
+    (delete-parent (get-test-db-file-name))
+    (make-parents (get-test-db-file-name))
+
+    (let [db-spec (get-test-db-spec)]
+      (jdbc/execute! db-spec ["CREATE ALIAS IF NOT EXISTS FTL_INIT FOR \"org.h2.fulltext.FullTextLucene.init\";"])
+      (jdbc/execute! db-spec ["CALL FTL_INIT();"])
+      (jdbc/execute! db-spec ["CREATE TABLE TEST(ID INT PRIMARY KEY, NAME VARCHAR);"])
+      (jdbc/execute! db-spec ["INSERT INTO TEST VALUES(1, 'Hello World');"])
+      (jdbc/execute! db-spec ["CALL FTL_CREATE_INDEX('PUBLIC', 'TEST', NULL);"])
+      (is (= 1 (count (jdbc/query db-spec ["SELECT * FROM FTL_SEARCH('Hello', 0, 0);"]))))
+      (jdbc/execute! db-spec ["CALL FTL_DROP_ALL()"]))))
 
 (deftest ftl-setup-test
   (testing "The ability to setup and use full text search with the H2 database 1.4.198 and later")

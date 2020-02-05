@@ -1,0 +1,30 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Clojure template
+pom.xml
+pom.xml.asc
+*.jar
+*.class
+/lib/
+/classes/
+/target/
+/checkouts/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.lein-failures
+.nrepl-port
+.cpcache/
+
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+.idea/.gitignore
+.idea/ClojureProjectResolveSettings.xml
+.idea/inspectionProfiles/
+.idea/misc.xml
+target/

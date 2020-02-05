@@ -1,22 +1,22 @@
 (defproject cwiki "0.1.6-SNAPSHOT"
   :description "A personal wiki written in Clojure and Clojurescript."
-  :url "https://bitbucket.org/David_Clark/cwiki"
+  :url "https://github.com/clartaq/cwiki"
   :license {:name         "Simplfied BSD"
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/clojurescript "1.10.520" :scope "provided"]
                  [org.clojure/core.async "0.4.500"]
-                 [org.clojure/java.jdbc "0.7.9"]
+                 [org.clojure/java.jdbc "0.7.10"]
                  ;[org.clojure/spec.alpha "0.2.176"]
 
                  [buddy/buddy-auth "2.2.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [buddy/buddy-hashers "1.4.0"]
                  [com.cemerick/url "0.1.1"]
-                 [com.h2database/h2 "1.4.197"]
-                 ;[com.h2database/h2 "1.4.199"]
+                 ;[com.h2database/h2 "1.4.197"]
+                 [com.h2database/h2 "1.4.199"]
                  [circleci/clj-yaml "0.6.0"]
-                 [clj-time "0.15.1"]
+                 [clj-time "0.15.2"]
                  [cljs-ajax "0.8.0"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [com.taoensso/sente "1.13.1"]
@@ -38,8 +38,13 @@
                  [keybind "2.2.0"]
                  ; We keep this old version to remain compatible with
                  ; full text search with the H2 database.
-                 [org.apache.lucene/lucene-core "3.6.2"]
-                 ;[org.apache.lucene/lucene-core "7.7.1"]
+                 ;[org.apache.lucene/lucene-core "3.6.2"]
+                 ; This question explains which versions of lucene that H2
+                 ; 1.4.199 is actually compatible with
+                 ;https://groups.google.com/forum/#!topic/h2-database/EjAgBCYpjdk
+                 [org.apache.lucene/lucene-core "5.5.5"]
+                 [org.apache.lucene/lucene-analyzers-common "5.5.5"]
+                 [org.apache.lucene/lucene-queryparser "5.5.5"]
                  [org.flatland/ordered "1.5.7"]
                  [reagent "0.8.1"]
                  [ring/ring-defaults "0.3.2"]]
@@ -84,8 +89,8 @@
                        :dependencies [[org.clojure/tools.nrepl "0.2.13"]
                                       [binaryage/devtools "0.9.10"]
                                       [cider/piggieback "0.4.1"]
-                                      [figwheel-sidecar "0.5.16" :exclusions [org.clojure/tools.nrepl]]
-                                      [prone "1.6.4"]
+                                      [figwheel-sidecar "0.5.19" :exclusions [org.clojure/tools.nrepl]]
+                                      [prone "2019-07-08"]
                                       [ring/ring-mock "0.4.0"]
                                       [ring/ring-devel "1.7.1"]]
 

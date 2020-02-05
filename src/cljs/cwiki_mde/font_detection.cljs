@@ -1,5 +1,5 @@
 ;;;;
-;;;; Utilities to help with determining what if particulare fonts are
+;;;; Utilities to help with determining what if particular fonts are
 ;;;; installed on the client system.
 ;;;;
 

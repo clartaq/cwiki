@@ -288,9 +288,14 @@
 (defn delete-user-page
   "Return a form to obtain information about a user to be deleted."
   [req]
+;  (println "delete-user-page")
   (let [all-users (db/get-all-users)
+ ;       _ (println "     all-users: " all-users)
+  ;      _ (println "     (type all-users): " (type all-users))
         current-user (ri/req->user-name req)
+   ;     _ (println "     about to disj...")
         cleaned-users (disj all-users "CWiki" current-user)]
+    ;(println "     cleaned-users: " cleaned-users)
     (if (zero? (count cleaned-users))
       (no-users-to-delete-page req)
       (base/short-form-template

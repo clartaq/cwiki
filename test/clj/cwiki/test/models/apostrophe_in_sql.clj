@@ -133,7 +133,7 @@
   (testing "Whether the test data page was added to the database."
     (let [res (find-post-by-title "No Content Here" (get-test-db-spec))]
       (is (seq res)))
-    (is (nil? (find-post-by-title "frambooly title")))))
+    (is (nil? (find-post-by-title "frambooly title" (get-test-db-spec))))))
 
 (deftest escape-apostrophes-test
   (testing "The escape-apostrophes function"

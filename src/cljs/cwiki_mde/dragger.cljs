@@ -47,7 +47,7 @@
     (let [movement (- (.-pageX evt) @starting-mouse-x)]
       (reset! new-basis (str (max min-sidebar-basis
                                   (+ @starting-basis movement)) "px"))
-      (set! (-> (.-style @sidebar-ele) .-flexBasis) @new-basis))))
+      (set! (.-flexBasis (.-style @sidebar-ele)) @new-basis))))
 
 (defn- stop-tracking [_]
   (when @dragging

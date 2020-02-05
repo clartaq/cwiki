@@ -263,12 +263,19 @@
   ; valid settings through.
   (let [params (:multipart-params req)
         referer (get params "referer")
-        interval (get params "autosave-interval")
-        new-interval (max 0 (safe-parse-int interval))
+        wiki-name (get params "wiki-name")
+        wiki-tagline (get params "wiki-tagline")
+        article-width (get params "article-width")
+        new-article-width (max 300 (safe-parse-int article-width))
         sidebar-width (get params "sidebar-width")
-        new-width (max 150 (safe-parse-int sidebar-width))]
+        new-sidebar-width (max 150 (safe-parse-int sidebar-width))
+        interval (get params "autosave-interval")
+        new-interval (max 0 (safe-parse-int interval))]
+    (db/set-option-value :wiki_name wiki-name)
+    (db/set-option-value :wiki_tagline wiki-tagline)
+    (db/set-option-value :article_width new-article-width)
+    (db/set-option-value :sidebar_width new-sidebar-width)
     (db/set-option-value :editor_autosave_interval new-interval)
-    (db/set-option-value :sidebar_width new-width)
     (layout/short-message-return-to-referer
       "Preferences Saved"
       "All changes to the preferences have been saved." referer)))

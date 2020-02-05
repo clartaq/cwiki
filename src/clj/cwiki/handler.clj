@@ -112,10 +112,25 @@
       (respond-to-page-request request)
       (redirect "/login"))))
 
+;; This function is used instead of `route/not-found` in the defroutes
+;; macro because the expansion of defroutes would require access to the
+;; database at compile time and the database may not always exist at
+;; compile time. This is actually a simplified version of the `not-found`
+;; function. It does not start the macro expansion toward the database
+;; because there are no arguments.
+(defn not-found-handler
+  "Return a handler that allways returns a 404 `not found` response."
+  []
+  (fn [request]
+    (status (response/render (layout/compose-404-page) request) 404)))
+
 (defroutes app-routes
            (route/resources "/")
            (page-finder-route)
-           (route/not-found (layout/compose-404-page)))
+           ; Belt and suspenders. Should never need a 404 page since the
+           ; page finder should prompt the user to create a new page
+           ; instead.
+           (not-found-handler))
 
 (def all-routes (routes admin-routes home-routes login-routes websocket-routes app-routes))
 
