@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2019-06-27T11:42:48.655-04:00
+modified: 2020-03-26T17:52:40.290-04:00
 tags:
   - cwiki
   - design
@@ -11,8 +11,59 @@ tags:
   - technical note
 ---
 
-
 This page is the on-going saga of working on the CWiki program.
+
+#### Updating Reagent Dependency to "0.10.0", 26 Mar 2020, 04:45:58 pm ####
+
+Reagent made some architectural changes that caused some deprecation warnings. Fixed those easily.
+
+Some other new warnings are present too. Setting the "autoFocus" and "disabled" attributes to `true` instead of "true" fixed most of them.
+
+There is also a `TypeError: 'handleEvent' property of event listener should be callable` but no indication of what is causing it or what it means.
+
+#### Back to Work, 25 Mar 2020, 03:22:05 pm ####
+
+After spending a lot of time getting some of the basics of the [clown](https://github.com/clartaq/clown) outliner/note-taker put together, needed to get back to some maintenance and development on this project.
+
+##### Need to make sure the build still works. #####
+
+- The version of macOS, where I do development has changed. 
+- Java 11 LTS has been released. 
+- Safari and Firefox have gone through multiple updates.
+- Leiningen has been updated.
+
+##### Immediate Changes #####
+
+- Updated default build jdk to AdoptOpenJDK 11.
+- Since the default terminal in macOS Catalina is now zsh, added the following line to my `.zshrc` file:
+
+```bash
+export FIREFOX_BIN=/Applications/"Firefox Developer Edition.app"/Contents/MacOS/firefox
+```
+
+##### Build Results #####
+
+- `lein test` works as expected.
+- `lein test-cljs` works as expected, but needs a better report.
+- Running `lein repl` and `(start)` from the repl seems to work as expected but React(?) throws some errors and warnings.
+- `lein run` will compile and run the Clojure portion of the program, but it does not build the ClojureScript portion if it is not already present Instead, the browser console shows the **spurious error message**: `Refused to execute http://localhost:1350/js/compiled/cwiki-mde.js as script because "X-Content-Type: nosniff" was given and its Content-Type is not a script MIME type.`
+
+    Instead, the sequence `lein clean && lein cljsbuild once min && lein run` runs things correctly.
+- My Cursive repl configurations in IntelliJ seem to be missing altogether. Added a new one. Seems to run fine after an uberjar has been built or the `lein start-prod` script has been run. But immediately after a `lein clean` it fails because it cannot build the `cwikilink-attributes` extension and complains about `Error loading complete.core: Could not locate complete/core__init.class, complete/core.clj or complete/core.cljc on classpath.`
+
+    To use the Cursive repl, run something like `lein cljsbuild once min` since the prep for the build creates the extension correctly. Then running the Cursive repl won't have to try and build it.
+
+- `lein start-prod` seems to be working as expected. Same sorts of warnings/error as running from the repl.
+
+- Building an uberjar and running it seems to work as expected.
+    - The Safari console shows Sente throwing warnings and errors.
+    - There is also a warning `TypeError: 'handleEvent' property of event listener should be callable` but no idea where it happens.
+
+##### What to do? What to do? #####
+
+There are plenty of things that are out of date now.
+
+Updating to the newest version of Reagent in hopes that it (or a newer version of React) will give better error messages pinpointing some of the reported errors.
 
 #### The Scrollbars on Long Articles are Distracting, 16 Jun 2019, 04:44:07 pm, ####
 
