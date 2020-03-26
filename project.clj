@@ -5,9 +5,9 @@
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/clojurescript "1.10.520" :scope "provided"]
-                 [org.clojure/core.async "0.4.500"]
-                 [org.clojure/java.jdbc "0.7.10"]
+                 [org.clojure/clojurescript "1.10.597" :scope "provided"]
+                 [org.clojure/core.async "0.7.559"]
+                 [org.clojure/java.jdbc "0.7.11"]
                  ;[org.clojure/spec.alpha "0.2.176"]
 
                  [buddy/buddy-auth "2.2.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
@@ -46,7 +46,7 @@
                  [org.apache.lucene/lucene-analyzers-common "5.5.5"]
                  [org.apache.lucene/lucene-queryparser "5.5.5"]
                  [org.flatland/ordered "1.5.7"]
-                 [reagent "0.8.1"]
+                 [reagent "0.10.0"]
                  [ring/ring-defaults "0.3.2"]]
 
   :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
@@ -87,12 +87,12 @@
                                       :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
 
                        :dependencies [[org.clojure/tools.nrepl "0.2.13"]
-                                      [binaryage/devtools "0.9.10"]
-                                      [cider/piggieback "0.4.1"]
+                                      [binaryage/devtools "1.0.0"]
+                                      [cider/piggieback "0.4.2"]
                                       [figwheel-sidecar "0.5.19" :exclusions [org.clojure/tools.nrepl]]
-                                      [prone "2019-07-08"]
+                                      [prone "2020-01-17"]
                                       [ring/ring-mock "0.4.0"]
-                                      [ring/ring-devel "1.7.1"]]
+                                      [ring/ring-devel "1.8.0"]]
 
                        :source-paths ["env/dev/clj"]
 
