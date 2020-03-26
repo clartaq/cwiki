@@ -22,7 +22,7 @@
    (include-js "/js/mathjax-config.js")
    (include-js "/js/highlight.pack.js")
    (include-js "/js/marked.min.js")
-   (include-js "js/compiled/cwiki-mde.js")
+   (include-js "/js/compiled/cwiki-mde.js")
    [:script "window.addEventListener(\"DOMContentLoaded\", cwiki_mde.core.main());"]])
 
 (def ^{:private true} post-map-for-editing (atom nil))
