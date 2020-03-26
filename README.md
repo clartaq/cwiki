@@ -33,7 +33,7 @@ CWiki is alpha-quality software. It does useful things, but many planned feature
 
 ### Prerequisites ###
 
-Java 8 or later must be installed to do development or run the program.
+Java 11 (AdoptOpenJDK 11) for development and testing. It should compile and run under version 8, but this is not tested. 
 
 ### Run a Prebuilt Jar ###
 
@@ -65,7 +65,7 @@ To stop the program, use:
 
 I ​run this way in IntelliJ using Cursive to start a REPL.
 
-**Note on Using the Cursive REPL**: After a `lein clean` or other operation that deletes the target files, the Cursive REPL will attempt to re-compile the `wiki-attributes.clj` file. It will apparently fail (but actually succeeds.) To continue, just click the "Stop REPL" button (the red square at the top of the REPL window), then click the "Reconnect" button. Things will proceed as normal.
+**Note on Using the Cursive REPL**: After a `lein clean` or other operation that deletes the target files, the Cursive REPL will attempt to re-compile the `wiki-attributes.clj` file. You will need to build the extension manually first. Use something like `lein cljsbuild once min` from the command line. Then you should be able to run the Cursive REPL. (The `cljsbuild` task incudes a `prep` task that builds the extension correctly.) Things will proceed as normal.
 
 Attempting to run from the `lein repl` command seems to work just fine.
 
@@ -73,7 +73,7 @@ Attempting to run from the `lein repl` command seems to work just fine.
 
 From a terminal in the project directory, type
 
-`lein run`
+`lein cljsbuild once min && lein run`
 
 to run, possibly with compilation first.
 
@@ -131,7 +131,7 @@ npm install karma karma-cljs-test  --save-dev
 npm install karma-junit-reporter   --save-dev
 npm install karma-opera-launcher  karma-firefox-launcher  karma-safari-launcher  --save-dev
 ```
-I use the Firefox Developer Edition on my system as well as Safari, Opera, and Brave. (No launcher for Brave at the moment.) The Karma launcher doesn't know how to launch Firefox Developer Edition. For that to work I had to add the following to my `.bash_profile` to tell the launcher where to look.
+I use the Firefox Developer Edition on my system as well as Safari, Opera, and Brave. (No launcher for Brave at the moment.) The Karma launcher doesn't know how to launch Firefox Developer Edition. For that to work I had to add the following to my `.bash_profile` or `.zshrc`to tell the launcher where to look.
 
 `export FIREFOX_BIN=/Applications/"Firefox Developer Edition.app"/Contents/MacOS/firefox`
 
