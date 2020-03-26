@@ -9,11 +9,12 @@
             [cljs.pprint :as pprint]
             [cwiki-mde.editor-commands :as cmd]
             [cwiki-mde.keyboard-shortcuts :as kbs]
-            ;; Include dragger so it gets bundled in output js file.
+    ;; Include dragger so it gets bundled in output js file.
             [cwiki-mde.dragger :as dr]
             [cwiki-mde.tag-editor :as te]
             [cwiki-mde.ws :as ws]
             [reagent.core :as r]
+            [reagent.dom :as rdom]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
@@ -80,7 +81,7 @@
               {:__html (-> content str js/marked)}}])
      {:component-did-mount
       (fn [this]
-        (let [node (r/dom-node this)]
+        (let [node (rdom/dom-node this)]
           (typeset-latex node)
           (highlight-code node)))})])
 
@@ -336,24 +337,24 @@
     (let [ro (when (= "Front Page" @page-title-atom)
                {:readOnly "readOnly"})
           inp (merge ro
-                     {:type      "text"
-                      :class     "mde-form-title-field"
-                      :name      "page-title"
-                      :id        (:editor-title-input-id editor-state)
-                      :autoFocus "true"
-                      :value     (if-let [title @page-title-atom]
-                                   (do
-                                     (when (= title "favicon.ico")
-                                       (info "Saw funky title request for favicon.icl"))
-                                     title)
-                                   "Enter a Title for the Page Here")
-                      :on-change (fn [arg]
-                                   (let [new-title (-> arg .-target .-value)]
-                                     (mark-page-dirty editor-state)
-                                     (reset! page-title-atom new-title)
-                                     (when (:send-every-keystroke editor-state)
-                                       (ws/send-message! [:hey-server/title-updated
-                                                          {:data new-title}]))))})]
+                     {:type       "text"
+                      :class      "mde-form-title-field"
+                      :name       "page-title"
+                      :id         (:editor-title-input-id editor-state)
+                      :auto-focus true
+                      :value      (if-let [title @page-title-atom]
+                                    (do
+                                      (when (= title "favicon.ico")
+                                        (info "Saw funky title request for favicon.icl"))
+                                      title)
+                                    "Enter a Title for the Page Here")
+                      :on-change  (fn [arg]
+                                    (let [new-title (-> arg .-target .-value)]
+                                      (mark-page-dirty editor-state)
+                                      (reset! page-title-atom new-title)
+                                      (when (:send-every-keystroke editor-state)
+                                        (ws/send-message! [:hey-server/title-updated
+                                                           {:data new-title}]))))})]
       [:section {:class "mde-title-edit-section"}
        [:div {:class "form-label-div"}
         [:label {:class "form-label required"
@@ -399,28 +400,28 @@
        {:title    "Make selection bold"
         :tabIndex 0
         :on-click #(println "Saw click on bold button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.bold-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Make selection italic"
         :tabIndex 0
         :on-click #(println "Saw click on italic button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.italic-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Underline selection"
         :tabIndex 0
         :on-click #(println "Saw click on underline button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.underline-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Strike through selection"
         :tabIndex 0
         :on-click #(println "Saw click on strike-through button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.strike-icon]]
 
       [:span.editor-button-bar--gap]
@@ -429,42 +430,42 @@
        {:title    "Make selection a header"
         :tabIndex 0
         :on-click #(println "Saw click on header button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.header-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Format selection as code"
         :tabIndex 0
         :on-click #(println "Saw click on code button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.code-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Make a bulleted (unordered) list"
         :tabIndex 0
         :on-click #(println "Saw click on bullet list button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.list-bullet-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Make a numbered (ordered) list"
         :tabIndex 0
         :on-click #(println "Saw click on numbered list button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.list-numbered-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Make selection a quotation"
         :tabIndex 0
         :on-click #(println "Saw click on quote button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.quote-left-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Insert a web link"
         :tabIndex 0
         :on-click #(println "Saw click on web link button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.link-icon]]
 
       [:span.editor-button-bar--gap]
@@ -473,14 +474,14 @@
        {:title    "Indent"
         :tabIndex 0
         :on-click #(println "Saw click on indent button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.indent-right-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Outdent"
         :tabIndex 0
         :on-click #(println "Saw click on outdent button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.indent-left-icon]]
 
       [:button.editor-button-bar--button
@@ -499,14 +500,14 @@
        {:title    "Undo the last action"
         :tabIndex 0
         :on-click #(println "Saw click on undo button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.ccw-icon]]
 
       [:button.editor-button-bar--button
        {:title    "Undo the last undo"
         :tabIndex 0
         :on-click #(println "Saw click on redo button.")
-        :disabled "true"}
+        :disabled true}
        [:i.editor-button-bar--icon.cw-icon]]]
 
      ; Buttons on the right side.
@@ -670,8 +671,8 @@
 (defn reload []
   (go
     (let [pm (<! got-page-channel)]
-      (r/render [layout-inner-editor-container pm]
-                (get-element-by-id "outer-editor-container")))))
+      (rdom/render [layout-inner-editor-container pm]
+                   (get-element-by-id "outer-editor-container")))))
 
 (defn ^:export main []
   (reload))
