@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-03-26T17:52:40.290-04:00
+modified: 2020-03-27T10:12:55.835-04:00
 tags:
   - cwiki
   - design
@@ -12,6 +12,10 @@ tags:
 ---
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Release 0.1.6, 27 Mar 2020, 10:12:02 am ####
+
+This is just a quick and dirty release to get a tagged release in the repository after upgrading the Java requirement to 11.
 
 #### Updating Reagent Dependency to "0.10.0", 26 Mar 2020, 04:45:58 pm ####
 

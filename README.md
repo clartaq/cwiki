@@ -37,6 +37,8 @@ Java 11 (AdoptOpenJDK 11) for development and testing. It should compile and run
 
 ### Run a Prebuilt Jar ###
 
+**NOTE**: This section is out of date. Sincde switching to git and GitHub, there are no longer prebuilt jars in the repository. (They were handled separately on BitBucket.) I'm leaving this section here to remind me to fix that soon.
+
 The easiest way to try things out is to download a [prebuilt jar](https://bitbucket.org/David_Clark/cwiki/downloads/) file from the repository. This will only work with CWiki version 0.0.11 or later.
 
 1. Copy the jar to whatever directory you would like. I use `~/cwiki`.
