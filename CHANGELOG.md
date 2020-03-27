@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [0.1.6]  - 2020-03-27 ##
 
-This is just a "quick and dirty" release to get something with the change to Java 11 tagged.
+This is just a "quick and dirty" release to mark the change to Java 11.
 
 ### Added ###
 
