@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased] ##
 
+### Added ###
+
+### Changed ###
+
+- Updated [Marked](https://github.com/markedjs/marked) to v0.8.2. (Did not record the version used earlier. It appeats to be 3.2.)
+- Updated [highlight.js](https://highlightjs.org) from v9.12.0 to 9.18.1. Did not update the styles.
+
+### Fixed ###
+
+- Removed deprecated Ring middleware.
+
 ## [0.1.6]  - 2020-03-27 ##
 
 This is just a "quick and dirty" release to mark the change to Java 11.

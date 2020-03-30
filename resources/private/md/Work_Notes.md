@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-03-30T10:41:37.152-04:00
+modified: 2020-03-30T14:03:10.299-04:00
 tags:
   - cwiki
   - design
@@ -14,11 +14,17 @@ tags:
 
 This page is the on-going saga of working on the CWiki program.
 
+#### Upgrading Version of HighlightJs, 30 Mar 2020, 02:00:53 pm ####
+
+Since I plan to update the version of MarkedJs, I might as well go ahead and update the version of [HighlightJs](https://highlightjs.org) used too.
+
+Looks like this is a "drop-in" replacement too. Upgraded from v9.12.0 to v9.18.1. Did **not** change the styles available.
+
 #### Upgrading Version of MarkedJs, 29 Mar 2020, 09:56:20 am ####
 
 The version of MarkedJs used is over four years old. Should probably update to current version before beginning work on synchronizing scrolling of editor and preview panes.
 
-Looks like this change is more than just a "drop-in" replacement of the distribution.
+Looks like this change is a "drop-in" replacement for the older distribution.
 
 #### Upgrading (NOT) H2 and Lucene,28 Mar 2020, 05:51:07 pm ####
 
