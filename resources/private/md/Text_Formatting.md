@@ -2,13 +2,14 @@
 author: CWiki
 title: Text Formatting
 date: 2017-10-24T08:57:33.000-04:00
-modified: 2018-12-23T16:24:47.417-05:00
+modified: 2020-03-30T10:53:18.770-04:00
 tags:
   - formatting
   - Markdown
   - MathJax
   - TeX
 ---
+
 
 
 Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, especially some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
@@ -29,7 +30,7 @@ Markdown has some ways to emphasize text in a paragraph: bold, italic, underline
 
 CWiki handles code listings too. 
 
-You can show code inline by surrounding it with the grave character (backquote) . For example, \`a = b + c*34;\` will render as: `a = b + c*34;`.
+You can show code inline by surrounding it with the grave character (backquote) . For example, \`a = b + c\*34;\` will render as: `a = b + c*34;`.
 
 For multi-line blocks of code, the simplest method to show the listing is to indent every line four spaces:
 
