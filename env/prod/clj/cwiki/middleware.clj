@@ -3,7 +3,6 @@
             [buddy.auth.middleware :refer [wrap-authentication]]
             [clojure.java.io :as io]
             [ring.middleware.file :refer [wrap-file]]
-            [ring.middleware.file-info :refer [wrap-file-info]]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.not-modified :refer [wrap-not-modified]]
             [ring.middleware.defaults :refer [site-defaults wrap-defaults]]))
@@ -18,11 +17,10 @@
   (-> handler
       (wrap-authentication (backends/session))
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
-      ; *** THIS DOES NOT ACTUALLY SEEM TO BE REQUIRED ***
       ; Makes static assets in $PROJECT_DIR/resources/public/ available.
+      ; If you take this out, editor icons won't load.
       (wrap-file "resources")
       ; Content-Type, Content-Length, and Last Modified headers for files in body.
       (wrap-content-type)
-      (wrap-not-modified)
-      (wrap-file-info)))
+      (wrap-not-modified)))
 

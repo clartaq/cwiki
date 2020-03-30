@@ -17,6 +17,7 @@
       (wrap-authentication backend)
       (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
       ; Makes static assets in $PROJECT_DIR/resources/public/ available.
+      ; If you take this out, editor icons won't load.
       (wrap-file "resources")
       ; Content-Type, Content-Length, and Last Modified headers for files in body.
       (wrap-content-type)
