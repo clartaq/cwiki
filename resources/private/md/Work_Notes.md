@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-03-27T10:12:55.835-04:00
+modified: 2020-03-30T10:41:37.152-04:00
 tags:
   - cwiki
   - design
@@ -11,7 +11,32 @@ tags:
   - technical note
 ---
 
+
 This page is the on-going saga of working on the CWiki program.
+
+#### Upgrading Version of MarkedJs, 29 Mar 2020, 09:56:20 am ####
+
+The version of MarkedJs used is over four years old. Should probably update to current version before beginning work on synchronizing scrolling of editor and preview panes.
+
+Looks like this change is more than just a "drop-in" replacement of the distribution.
+
+#### Upgrading (NOT) H2 and Lucene,28 Mar 2020, 05:51:07 pm ####
+
+Apparently H2 version 1.4.200 is compatible with Lucene versions up to 8. But it is not _binary_ compatible, meaning you would have to re-compile H2 to make it work. H2 is only _binary_ compatible with Lucene 5.5.5.
+
+Also, it seems like H2 1.4.200 is _incredibly slow_.
+
+So, for now we will stick with H2 1.4.199 and Lucene 5.5.5.
+
+#### Clean Up Middleware, 28 Mar 2020, 03:24:29 pm #####
+
+While looking into what is required to upgrade Sente, it became apparent that my middleware stack needs some love. Some elements have been deprecated. Some are redundant.
+
+#### Upgrading the Sente WebSocket Library, 27 Mar 2020, 05:23:21 pm ####
+
+Early versions of the [Sente](https://github.com/ptaoussanis/sente) WebSocket library have a CSRF token leak. That was fixed in version 0.14.0 and later.
+
+CWiki should incorporate this security improvement along with other improvements in newer versions of the library.
 
 #### Release 0.1.6, 27 Mar 2020, 10:12:02 am ####
 
