@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-03-30T14:03:10.299-04:00
+modified: 2020-03-30T14:31:38.427-04:00
 tags:
   - cwiki
   - design
@@ -13,6 +13,14 @@ tags:
 
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Backup and Restore, 30 Mar 2020, 02:28:18 pm ####
+
+Seems like a good time to implement a simple backup and restore functionality before making changes that will require re-writing the database, like adding additional preferences.
+
+To start out, it will be very like exporting all pages for the backup and reading all of those pages back in for the restore.
+
+Later issues to deal with will include compressing the backup, whether to overwrite during restore, _etc_.
 
 #### Upgrading Version of HighlightJs, 30 Mar 2020, 02:00:53 pm ####
 

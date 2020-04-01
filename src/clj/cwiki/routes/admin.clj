@@ -60,6 +60,48 @@
           referer)))))
 
 ;;
+;; Functions related to backup/restore.
+;;
+(defn- get-params-for-backup
+  "Based on the page name, get the page-map and tags required to do the
+  backup."
+  [page-name]
+  (let [page-map (db/find-post-by-title page-name)
+        author-name (db/page-map->author page-map)
+        page-id (db/page-map->id page-map)
+        tags (db/get-tag-names-for-page page-id)]
+    {:page-map page-map :author-name author-name :tags tags}))
+
+(defn- get-backup-database
+  "Put up a page asking the user if the want to backup the database."
+  [req]
+  (layout/compose-backup-database-page req))
+
+;; This should go into the program options.
+(def delete-intermediate-files true)
+
+(defn- post-backup-database
+  "Backup all pages (except generated pages) in the database. NO ERROR CHECKING!"
+  [req]
+  (let [params (:multipart-params req)
+        referer (get params "referer")
+        page-names (db/get-all-page-names-in-db)
+        d (files/get-backup-directory)]
+    ;; Export database pages to markdown files in backup directory.
+    (mapv (fn [name-map]
+            (let [title (:page_title name-map)
+                  param-map (get-params-for-backup title)]
+              (files/backup-page (:page-map param-map)
+                                 (:author-name param-map)
+                                 (:tags param-map)))) page-names)
+    ;; Compress markdown files into zip file.
+    (files/backup-compressed-database)
+    ;; Delete the intermediate markdown files.
+    (when delete-intermediate-files
+      (files/delete-all-files-with-ext d "md"))
+    (layout/confirm-backup-database (str "\"" d "\"") referer)))
+
+;;
 ;; Functions related to creating a new user.
 ;;
 
@@ -240,7 +282,9 @@
            (GET "/save-seed-page" request (get-save-seed-page request))
            (POST "/save-seed-page" [] post-save-seed-page)
            (GET "/compress" [] (layout/compose-not-yet-view "compress"))
-           (GET "/backup" [] (layout/compose-not-yet-view "backup"))
+          ; (GET "/backup" [] (layout/compose-not-yet-view "backup"))
+           (GET "/backup" request (get-backup-database request))
+           (POST "/backup" request (post-backup-database request))
            (GET "/restore" [] (layout/compose-not-yet-view "restore"))
            (GET "/create-user" request (get-create-user request))
            (POST "/create-user" [] post-create-user)

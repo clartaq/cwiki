@@ -641,6 +641,41 @@
                           :onclick   "window.history.back();"}]])])))
 
 ;;
+;; Functions related to backup/restore of database.
+;;
+
+(defn confirm-backup-database
+  "Return a page stating that the database has been backed up."
+  [dir-name referer]
+  (short-message-return-to-referer
+    "Backup Complete"
+    (str "All pages in the database have been backed up in the directory " dir-name ".") referer))
+
+(defn compose-backup-database-page
+  [req]
+  (let [referer (get (:headers req) "referer")]
+    (short-form-template
+      [:div {:class "cwiki-form"}
+       (form-to {:enctype      "multipart/form-data"
+                 :autocomplete "off"}
+                [:post "backup"]
+                (hidden-field "referer" referer)
+                [:p {:class "form-title"} "Backup Database"]
+                [:div {:class "form-group"}
+                 [:div {:class "form-label-div"}
+                  [:label {:class "form-label"
+                           :for   "filename"} "Backup the Database?"]]]
+                [:div {:class "button-bar-container"}
+                 (submit-button {:id    "backup-button"
+                                 :class "form-button button-bar-item"}
+                                "Backup")
+                 [:input {:type      "button" :name "cancel-button"
+                          :value     "Cancel"
+                          :class     "form-button button-bar-item"
+                          :autofocus "autofocus"
+                          :onclick   "window.history.back();"}]])])))
+
+;;
 ;; Functions related to viewing or editing wiki pages.
 ;;
 

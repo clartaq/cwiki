@@ -1,6 +1,6 @@
 ;;;
 ;;; This namespace contains functions related to handling files on the
-;;; server side. It also contains some string-related function for
+;;; server side. It also contains some string-related functions for
 ;;; historical reasons.
 ;;;
 
@@ -8,10 +8,22 @@
   (:require [clj-yaml.core :as yaml]
             [clojure.java.io :as io]
             [clojure.string :as s]
-            [cwiki.util.datetime :as dt])
+            [cwiki.util.datetime :as dt]
+            [cwiki.util.zip])
   (:import (java.io BufferedReader InputStreamReader File)))
 
 (def ^:const sep (File/separator))
+
+;;;
+;;; Some string-related utilities for playing with directory and file
+;;; names and paths.
+;;;
+
+(defn in?
+  "Return true if coll contains elm. Too, works when searching for a character
+  in a string, but not a string within another string."
+  [elm coll]
+  (some #(= elm %) coll))
 
 (defn file-name-from-parts
   "Return a file name built from the parts in v using the
@@ -54,6 +66,122 @@
   (drop-lines-while
     (fn [line] (or (empty? line)
                    (s/blank? line))) coll))
+
+(defn trim-leading-and-trailing-underscores
+  "Return a copy of the string in which any leading and trailing
+  underscores have been removed."
+  [s]
+  (when s
+    (s/replace
+      (s/replace-first s (re-pattern "^\\_+") "")
+      (re-pattern "\\_+$")
+      "")))
+
+;;;
+;;; These directories should probably be in the preferences rather than
+;;; hard-coded.
+;;;
+
+(defn get-execution-directory
+  "Return the canonical path where the program is executing."
+  []
+  (.getCanonicalPath (File. ".")))
+
+(defn- get-private-resource-directory
+  "Return the canonical path to where the private Markdown resources are
+  saved."
+  []
+  (.getCanonicalPath (File. ^String (file-name-from-parts
+                                      ["." "resources" "private" "md"]))))
+
+(defn get-exported-page-directory
+  "Return the canonical path to the directory where exported pages are saved."
+  []
+  (.getCanonicalPath (File. ^String (file-name-from-parts
+                                      ["." "exported-pages"]))))
+
+(defn get-backup-directory
+  []
+  (.getCanonicalPath (File. ^String (file-name-from-parts
+                                      ["." "backups"]))))
+;;;
+;;; Functions for working with files and file names.
+;;;
+
+; Characters that are illegal in file names in some operating systems.
+(def ^:const illegal-chars [\newline, \space, \tab, \formfeed, \backspace,
+                            \return \/ \\ \u0000 \` \' \" \? \| \* \< \> \:])
+
+; Device names that are reserved on some operating systems. From
+; org.eclipse.core.resources.IWorkspace.validateName(String, int)
+(def ^:const reserved-dev-names ["aux" "clock$ " "com1" "com2" "com3" "com4"
+                                 "com5" "com6" "com7" "com8" "com9" "con"
+                                 "lpt1" "lpt2" "lpt3" "lpt4" "lpt5" "lpt6"
+                                 "lpt7" "lpt8" "lpt9" "nul" "prn"])
+
+(defn- red-fun
+  "A helper function for the following reduction. Replaces illegal characters
+  with an underscore."
+  [accum elm]
+  (if (in? elm illegal-chars)
+    (.append accum \_)
+    (.append accum elm)))
+
+(defn remove-illegal-file-name-chars
+  "Return a version of the sting where illegal characters have been
+  replaces with underscores."
+  [s]
+  (str (reduce red-fun (StringBuilder.) s)))
+
+(defn remove-reserved-device-names
+  "Return an empty string if 's' is equal (case-insensitive) to any of the
+  reserved device names. Otherwise return 's'."
+  [s]
+  (if (some #(= (.toLowerCase s) %) reserved-dev-names)
+    ""
+    s))
+
+(defn sanitize-page-name
+  "If possible, return a version of the page name with problematic characters
+  and other issues translated to a version that can be used on any
+  operating system."
+  [page-name]
+  (let [sanitary-name (-> (remove-illegal-file-name-chars page-name)
+                          (trim-leading-and-trailing-underscores)
+                          (remove-reserved-device-names))]
+    sanitary-name))
+
+(defn files-in-directory
+  "Return a sequence of all of the files (including other directories) in 'dir-name'."
+  [dir-name]
+  (let [directory (io/file dir-name)
+        files (file-seq directory)]
+    files))
+
+(defn just-files-no-directories
+  "Return a sequence of files from the directory where any subdirectories
+  have been filtered out."
+  [dir-name]
+  (let [files-and-directories (files-in-directory dir-name)
+        files-only (filter #(.isFile %) files-and-directories)]
+    files-only))
+
+(defn files-with-ext
+  "Return a filtered sequence of `files` which have the extension `ext'."
+  [files ext]
+  (let [filtered-files (filter #(s/ends-with? (.getName %) ext) files)]
+    filtered-files))
+
+(defn delete-all-files-with-ext
+  [dir-name ext]
+  (let [file-list (just-files-no-directories dir-name)
+        of-list (files-with-ext file-list ext)
+        path-list (map #(.getCanonicalPath %) of-list)]
+    (mapv #(io/delete-file %) path-list)))
+
+;;;
+;;; Functions for working with pages.
+;;;
 
 (defn split-front-matter-from-body
   "Given a collection of text lines, split any front matter from the body
@@ -115,65 +243,6 @@
   (when (.exists file)
     (load-markdown-from-url (io/as-url file))))
 
-; Characters that are illegal in file names in some operating systems.
-(def ^:const illegal-chars [\newline, \space, \tab, \formfeed, \backspace,
-                            \return \/ \\ \u0000 \` \' \" \? \| \* \< \> \:])
-
-; Device names that are reserved on some operating systems. From
-; org.eclipse.core.resources.IWorkspace.validateName(String, int)
-(def ^:const reserved-dev-names ["aux" "clock$ " "com1" "com2" "com3" "com4"
-                                 "com5" "com6" "com7" "com8" "com9" "con"
-                                 "lpt1" "lpt2" "lpt3" "lpt4" "lpt5" "lpt6"
-                                 "lpt7" "lpt8" "lpt9" "nul" "prn"])
-
-(defn trim-leading-and-trailing-underscores
-  "Return a copy of the string in which any leading and trailing
-  underscores have been removed."
-  [s]
-  (when s
-    (s/replace
-      (s/replace-first s (re-pattern "^\\_+") "")
-      (re-pattern "\\_+$")
-      "")))
-
-(defn in?
-  "Return true if coll contains elm. Too, works when searching for a character
-  in a string, but not a string within another string."
-  [elm coll]
-  (some #(= elm %) coll))
-
-(defn- red-fun
-  "A helper function for the following reduction. Replaces illegal characters
-  with an underscore."
-  [accum elm]
-  (if (in? elm illegal-chars)
-    (.append accum \_)
-    (.append accum elm)))
-
-(defn remove-illegal-file-name-chars
-  "Return a version of the sting where illegal characters have been
-  replaces with underscores."
-  [s]
-  (str (reduce red-fun (StringBuilder.) s)))
-
-(defn remove-reserved-device-names
-  "Return an empty string if 's' is equal (case-insensitive) to any of the
-  reserved device names. Otherwise return 's'."
-  [s]
-  (if (some #(= (.toLowerCase s) %) reserved-dev-names)
-    ""
-    s))
-
-(defn sanitize-page-name
-  "If possible, return a version of the page name with problematic characters
-  and other issues translated to a version that can be used on any
-  operating system."
-  [page-name]
-  (let [sanitary-name (-> (remove-illegal-file-name-chars page-name)
-                          (trim-leading-and-trailing-underscores)
-                          (remove-reserved-device-names))]
-    sanitary-name))
-
 (defn build-tag-yaml
   "Return the tags section of the YAML front matter."
   [tag-set]
@@ -197,24 +266,6 @@
       (.append (str "modified: " modified "\n"))
       (.append (build-tag-yaml tags)))
     (str (.append yaml "---\n\n"))))
-
-(defn get-execution-directory
-  "Return the canonical path where the program is executing."
-  []
-  (.getCanonicalPath (File. ".")))
-
-(defn- get-private-resource-directory
-  "Return the canonical path to where the private Markdown resources are
-  saved."
-  []
-  (.getCanonicalPath (File. ^String (file-name-from-parts
-                                      ["." "resources" "private" "md"]))))
-
-(defn get-exported-page-directory
-  "Return the canonical path to the directory where exported pages are saved."
-  []
-  (.getCanonicalPath (File. ^String (file-name-from-parts
-                                      ["." "exported-pages"]))))
 
 (defn- save-page
   "Save the page described in the page-map to a file."
@@ -243,7 +294,35 @@
   [page-map author-name tags]
   (save-page page-map author-name tags (get-private-resource-directory)))
 
-(defn- filter-predicate
+(defn backup-page
+  "Backup the page described in the page-map to a file. Similar to doing
+  an export, but goes into the designated backup directory."
+  [page-map author-name tags]
+  (save-page page-map author-name tags (get-backup-directory)))
+
+(defn zip-directory-of
+  "Create a zip of all the files ending with 'of' in the directory 'dir-name'
+  and output a file named 'output-file-name' in the same directory."
+  [dir-name of output-file-name]
+  (let [file-list (just-files-no-directories dir-name)
+        of-list (files-with-ext file-list of)
+        path-list (map #(.getCanonicalPath %) of-list)]
+    (cwiki.util.zip/zip-files output-file-name path-list)))
+
+(defn backup-compressed-database
+  "Compress all of the markdown files in the backup directory into a single
+  zip file in the backup directory."
+  []
+  (let [timestamp (dt/get-file-timestamp)
+        output-path (str (file-name-from-parts [(get-backup-directory)
+                                                "backup"]) "-" timestamp ".zip")]
+    (zip-directory-of (get-backup-directory) ".md" output-path)))
+
+;;;
+;;;
+;;;
+
+(defn- line-has-content?
   "Return true if the line is not empty and does not start with a semi-colon"
   [line]
   (and (seq line)
@@ -259,7 +338,7 @@
                       (BufferedReader.)
                       (line-seq)
                       (vec))
-        filtered-lines (filterv filter-predicate raw-lines)]
+        filtered-lines (filterv line-has-content? raw-lines)]
     filtered-lines))
 
 (defn- real-is-seed-page?

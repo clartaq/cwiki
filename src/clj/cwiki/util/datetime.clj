@@ -14,9 +14,12 @@
 (def markdown-pad-format (f/formatter-local "MM/dd/yyy h:mm:ss a"))
 ; Slightly different than any built in formatter.
 (def hugo-format (f/formatter-local "yyy-MM-dd'T'HH:mm:ss.SSSZZ"))
+; A format for adding timestamps to files.
+(def file-timestamp-format (f/formatter-local "yyy_MM_dd_HH_mm_ss_SSS"))
 ; All the formatters we know about.
 (def cwiki-formatters (merge f/formatters {:markdownpad-formatter markdown-pad-format
-                                           :hugo-formatter hugo-format}))
+                                           :hugo-formatter hugo-format
+                                           :timestamp-formatter file-timestamp-format}))
 
 ;; This is an almost direct copy of the same function from clj-time.format.
 ;; It uses the slightly extended set of formatters created above. It is
@@ -40,6 +43,11 @@
   [timestamp]
   (let [dt (DateTime. (Timestamp/valueOf ^String (str timestamp)))]
     (f/unparse hugo-format dt)))
+
+(defn get-file-timestamp
+  []
+  (let [dt (DateTime/now)]
+    (f/unparse file-timestamp-format dt)))
 
 (defn sql-now
   "Return a sql timestamp of the current instant."

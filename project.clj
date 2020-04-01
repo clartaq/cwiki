@@ -8,12 +8,10 @@
                  [org.clojure/clojurescript "1.10.597" :scope "provided"]
                  [org.clojure/core.async "0.7.559"]
                  [org.clojure/java.jdbc "0.7.11"]
-                 ;[org.clojure/spec.alpha "0.2.176"]
 
                  [buddy/buddy-auth "2.2.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [buddy/buddy-hashers "1.4.0"]
                  [com.cemerick/url "0.1.1"]
-                 ;[com.h2database/h2 "1.4.197"]
                  [com.h2database/h2 "1.4.199"]
                  [circleci/clj-yaml "0.6.0"]
                  [clj-time "0.15.2"]
@@ -26,11 +24,6 @@
                  [com.vladsch.flexmark/flexmark-ext-footnotes "0.42.12"]
                  [com.vladsch.flexmark/flexmark-ext-tables "0.42.12"]
                  [com.vladsch.flexmark/flexmark-ext-wikilink "0.42.12"]
-                 ;[com.vladsch.flexmark/flexmark "0.50.4"]
-                 ;[com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.50.4"]
-                 ;[com.vladsch.flexmark/flexmark-ext-footnotes "0.50.4"]
-                 ;[com.vladsch.flexmark/flexmark-ext-tables "0.50.4"]
-                 ;[com.vladsch.flexmark/flexmark-ext-wikilink "0.50.4"]
                  [compojure "1.6.1" :exclusions [clout instaparse]]
                  [environ "1.1.0"]
                  [hiccup "1.0.5"]
@@ -38,7 +31,6 @@
                  [keybind "2.2.0"]
                  ; We keep this old version to remain compatible with
                  ; full text search with the H2 database.
-                 ;[org.apache.lucene/lucene-core "3.6.2"]
                  ; This question explains which versions of lucene that H2
                  ; 1.4.199 is actually compatible with
                  ;https://groups.google.com/forum/#!topic/h2-database/EjAgBCYpjdk
