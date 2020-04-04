@@ -8,7 +8,7 @@ CWiki was moved from BitBucket using Mercurial to Github using git on 5 February
 
 ## Warning ##
 
-CWiki is alpha-quality software. It does useful things, but many planned features are not present. (The program will usually tell you so if you try to do something that it cannot accomplish yet. Or it might just crash.) Probably full of bugs too. See the "To Do" page and the "[Issues](https://bitbucket.org/David_Clark/cwiki/issues?status=new&status=open)" page in the project repository.
+CWiki is alpha-quality software. It does useful things, but many planned features are not present. (The program will usually tell you so if you try to do something that it cannot accomplish yet. Or it might just crash.) Probably full of bugs too. See the "[Issues](https://github.com/clartaq/cwiki/issues)" page in the project repository.
 
 ## Features ##
 
@@ -37,7 +37,7 @@ Java 11 (AdoptOpenJDK 11) for development and testing. It should compile and run
 
 ### Run a Prebuilt Jar ###
 
-**NOTE**: This section is out of date. Sincde switching to git and GitHub, there are no longer prebuilt jars in the repository. (They were handled separately on BitBucket.) I'm leaving this section here to remind me to fix that soon.
+**NOTE**: This section is out of date. Since switching to git and GitHub, there are no longer prebuilt jars in the repository. (They were handled separately on BitBucket.) I'm leaving this section here to remind me to fix that soon.
 
 The easiest way to try things out is to download a [prebuilt jar](https://bitbucket.org/David_Clark/cwiki/downloads/) file from the repository. This will only work with CWiki version 0.0.11 or later.
 
@@ -55,7 +55,7 @@ If you have a copy of the repository, you can run from the source code as descri
 
 #### From the REPL ####
 
-You will need the [Leiningen](https://github.com/technomancy/leiningen) build tool, version 1.7.0 or above, installed. From a terminal in the project directory, start a Leiningen REPL. Leiningen will take care of downloading all the dependencies for you. The REPL will begin in the `dev` namespace, which has some functions to start and stop the app quickly.
+You will need the [Leiningen](https://github.com/technomancy/leiningen) build tool, version 1.7.0 or above, installed. From a terminal in the project directory, start a Leiningen REPL. Leiningen will take care of downloading all the dependencies for you. The REPL will begin in the `cwiki.repl` namespace, which has some functions to start and stop the app quickly.
 
 To start the program, use:
 
@@ -81,7 +81,7 @@ to run, possibly with compilation first.
 
 Use
 
-`lein start-build`
+`lein start-prod`
 
 to clean, recompile, and run the minimized (production) build. 
 
@@ -95,7 +95,10 @@ After the build process finishes, you can run the program from the command line 
 java -jar target/cwiki.jar
 ```
 
+## Running the First Time ##
  When running for the very first time, there will be a pause of several seconds as the database containing the initial wiki content is created. The program will start a local web server and start up your default web browser to display the initial content of the wiki.
+
+ Since the program has never run before, you will be asked to sign in as the "admin" user. Just follow the instructions on the screen.
 
 ## Running Tests ##
 

@@ -675,6 +675,45 @@
                           :autofocus "autofocus"
                           :onclick   "window.history.back();"}]])])))
 
+(defn confirm-restore-database
+  "Return a page stating that the database has been backed up."
+  [dir-name referer]
+  (short-message-return-to-referer
+    "Restore Complete"
+    (str "All pages in the backup directory " dir-name
+         " have been imported into the database.") referer))
+
+(defn compose-restore-database-page
+  "Compose and return a page that allows the user to choose a backup file to
+  restore from."
+  [req]
+  (short-form-template
+    [:div {:class "cwiki-form"}
+     (form-to {:enctype      "multipart/form-data"
+               :autocomplete "off"}
+              [:post "restore"]
+              (hidden-field "referer" (get (:headers req) "referer"))
+              [:p {:class "form-title"} "Restore Database"]
+              [:div {:class "form-group"}
+               [:div {:class "form-label-div"}
+                [:label {:class "form-label"
+                         :for   "filename"} "Select the Backup file to Restore"]]
+               [:p "First select a backup file to restore, then press the \"Restore\" button."]
+               [:label
+                [:input {:type   "file"
+                         :id     "file-info"
+                         :name   "file-info"
+                         :accept ".zip"}]]]
+              [:div {:class "button-bar-container"}
+               (submit-button {:id    "restore-button"
+                               :class "form-button button-bar-item"}
+                              "Restore")
+               [:input {:type      "button" :name "cancel-button"
+                        :value     "Cancel"
+                        :class     "form-button button-bar-item"
+                        :autofocus "autofocus"
+                        :onclick   "window.history.back();"}]])]))
+
 ;;
 ;; Functions related to viewing or editing wiki pages.
 ;;

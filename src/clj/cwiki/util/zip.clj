@@ -6,7 +6,9 @@
 
 (ns cwiki.util.zip
   (:require [clojure.java.io :as io])
-  (:import (java.io ByteArrayOutputStream File)))
+  (:import (java.io ByteArrayOutputStream File PipedOutputStream
+                    PipedInputStream PrintStream)
+           (java.util.zip ZipFile ZipEntry ZipOutputStream)))
 
 ;; Once you've started a JVM, that JVM's working directory is set in stone
 ;; and cannot be changed. This library will provide a way to simulate a
@@ -14,7 +16,7 @@
 ;; directory for functions in this library. Unfortunately, this will only
 ;; apply to functions inside this library since we can't change the JVM's
 ;; actual working directory.
-(def ^{:doc "Current working directory. This cannot be changed in the JVM.
+(def ^{:doc     "Current working directory. This cannot be changed in the JVM.
              Changing this will only change the working directory for functions
              in this library."
        :dynamic true}
@@ -43,10 +45,10 @@
 
 (defn- add-zip-entry
   "Add a zip entry. Works for strings and byte-arrays."
-  [^java.util.zip.ZipOutputStream zip-output-stream [^String name content & remain]]
-  (.putNextEntry zip-output-stream (java.util.zip.ZipEntry. name))
-  (if (string? content) ;string and byte-array must have different methods
-    (doto (java.io.PrintStream. zip-output-stream true)
+  [^ZipOutputStream zip-output-stream [^String name content & remain]]
+  (.putNextEntry zip-output-stream (ZipEntry. name))
+  (if (string? content)                                     ;string and byte-array must have different methods
+    (doto (PrintStream. zip-output-stream true)
       (.print content))
     (.write zip-output-stream ^bytes content))
   (.closeEntry zip-output-stream)
@@ -63,10 +65,10 @@
   to disk."
   [& filename-content-pairs]
   (let [file
-        (let [pipe-in (java.io.PipedInputStream.)
-              pipe-out (java.io.PipedOutputStream. pipe-in)]
+        (let [pipe-in (PipedInputStream.)
+              pipe-out (PipedOutputStream. pipe-in)]
           (future
-            (with-open [zip (java.util.zip.ZipOutputStream. pipe-out)]
+            (with-open [zip (ZipOutputStream. pipe-out)]
               (add-zip-entry zip (flatten filename-content-pairs))))
           pipe-in)]
     (io/input-stream file)))
@@ -87,18 +89,37 @@
       (.toByteArray out))))
 
 (defn make-zip-stream-from-files
-  "Like make-zip-stream but takes a sequential of file paths and builds filename-content-pairs
-   based on those"
+  "Like make-zip-stream but takes a sequential of file paths and builds
+  filename-content-pairs based on those"
   [fpaths]
   (let [filename-content-pairs (map (juxt base-name slurp-bytes) fpaths)]
     (make-zip-stream filename-content-pairs)))
 
 (defn zip-files
-  "Zip files provided in argument vector to a single zip. Converts the argument list:
+  "Zip files provided in argument vector to a single zip. Converts the argument
+  list:
   ```(fpath1 fpath2...)```
-  into filename-content -pairs, using the original file's basename as the filename in zip`and slurping the content:
+  into filename-content -pairs, using the
+  original file's basename as the filename in zip`and slurping the content:
   ```([fpath1-basename fpath1-content] [fpath2-basename fpath2-content]...)``"
   [filename fpaths]
   (io/copy (make-zip-stream-from-files fpaths)
            (cw-file filename)))
 
+(defn unzip-to-path
+  "Takes a path to a zip file `source` and unzips its contents into the
+  `dest-path` directory. Returns a sequence of File objects for all of the
+   files that were unzipped."
+  [zip-file-path dest-path]
+  (let [file-list-seq (atom nil)]
+    (with-open [zf (ZipFile. (io/file zip-file-path))]
+      (doseq [^ZipEntry ze (enumeration-seq (.entries zf))]
+        (let [fname (.getName ze)
+              fpath (str dest-path (File/separator) fname)
+              inp-strm (.getInputStream zf ze)
+              out-strm (io/output-stream fpath)]
+          (io/copy inp-strm out-strm)
+          (.close inp-strm)
+          (.close out-strm)
+          (swap! file-list-seq conj (File. fpath)))))
+    @file-list-seq))

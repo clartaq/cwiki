@@ -73,7 +73,7 @@
     {:page-map page-map :author-name author-name :tags tags}))
 
 (defn- get-backup-database
-  "Put up a page asking the user if the want to backup the database."
+  "Put up a page asking the user if they want to backup the database."
   [req]
   (layout/compose-backup-database-page req))
 
@@ -98,8 +98,40 @@
     (files/backup-compressed-database)
     ;; Delete the intermediate markdown files.
     (when delete-intermediate-files
-      (files/delete-all-files-with-ext d "md"))
+      (files/delete-all-files-with-ext d ".md"))
     (layout/confirm-backup-database (str "\"" d "\"") referer)))
+
+(defn- get-restore-database
+  "Put up a page asking the user if they want to restore the database."
+  [req]
+  (layout/compose-restore-database-page req))
+
+(defn- post-restore-database
+  "Restore all pages in the backup to the database. NO ERROR CHECKING!"
+  [req]
+  (println "post-restore-database")
+  (let [params (:multipart-params req)
+        backup-file-name (get-in params ["file-info" :filename])
+        referer (get params "referer")
+        def-author (db/get-cwiki-user-id)
+        d (files/get-backup-directory)]
+    ;; Clear the backup directory of any spurious markdown files.
+    (files/delete-all-files-with-ext d ".md")
+    (let [file-name-list (files/restore-compressed-pages backup-file-name)
+          of-list (files/files-with-ext file-name-list ".md")]
+      (if-not (seq? of-list)
+        (build-response (layout/no-files-to-import-page referer) req 400)
+        (do
+          ;;(when restore-from-scratch
+          ;;  (println "Emptying all of the pages in the database.")
+          (println "restore, restore, restore...")
+          (doseq [fyle of-list]
+            (let [import-map (files/load-markdown-from-file fyle)
+                  file-name-only (.getName fyle)
+                  enhanced-map (assoc import-map :file-name file-name-only)]
+              (db/add-page-from-map enhanced-map def-author)))
+          (files/delete-all-files-with-ext d ".md")
+          (layout/confirm-restore-database (str "\"" d "\"") referer))))))
 
 ;;
 ;; Functions related to creating a new user.
@@ -282,10 +314,12 @@
            (GET "/save-seed-page" request (get-save-seed-page request))
            (POST "/save-seed-page" [] post-save-seed-page)
            (GET "/compress" [] (layout/compose-not-yet-view "compress"))
-          ; (GET "/backup" [] (layout/compose-not-yet-view "backup"))
+           ; (GET "/backup" [] (layout/compose-not-yet-view "backup"))
            (GET "/backup" request (get-backup-database request))
            (POST "/backup" request (post-backup-database request))
-           (GET "/restore" [] (layout/compose-not-yet-view "restore"))
+           ;(GET "/restore" [] (layout/compose-not-yet-view "restore"))
+           (GET "/restore" request (get-restore-database request))
+           (POST "/restore" request (post-restore-database request))
            (GET "/create-user" request (get-create-user request))
            (POST "/create-user" [] post-create-user)
            (GET "/select-profile" request (get-user-to-edit request))

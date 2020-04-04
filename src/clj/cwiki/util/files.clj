@@ -318,6 +318,15 @@
                                                 "backup"]) "-" timestamp ".zip")]
     (zip-directory-of (get-backup-directory) ".md" output-path)))
 
+(defn restore-compressed-pages
+  "Unzip all of the files in a compressed database and put them in the backup
+  directory. Will uncompress all files in the zip, not just markdown pages.
+  Returns a sequence (via unzip-to-path) of paths to all the pages restored."
+  [backup-file-name]
+  (let [backedup-file-path (file-name-from-parts
+                             [(get-backup-directory) backup-file-name])]
+    (cwiki.util.zip/unzip-to-path backedup-file-path (get-backup-directory))))
+
 ;;;
 ;;;
 ;;;
