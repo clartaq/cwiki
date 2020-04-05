@@ -1,8 +1,8 @@
-;;;
-;;; This namespace contains definitions for basic layouts used
-;;; in the application. It also contains the program name and
-;;; version. It controls the type of Markdown understood by the
-;;; application.
+;;;;
+;;;; This namespace contains definitions for basic layouts used
+;;;; in the application. It also contains the program name and
+;;;; version. It controls the type of Markdown understood by the
+;;;; application.
 
 (ns cwiki.layouts.base
   (:require [cemerick.url :as u]
@@ -56,9 +56,9 @@
                  (.set Parser/EXTENSIONS (ArrayList.
                                            [(FootnoteExtension/create)
                                             (StrikethroughExtension/create)
-                                            ; Order is important here.
-                                            ; Our custom link resolver must
-                                            ; preceed the default resolver.
+                                            ;; Order is important here.
+                                            ;; Our custom link resolver must
+                                            ;; precede the default resolver.
                                             (CWikiLinkResolverExtension/create)
                                             (WikiLinkExtension/create)
                                             (CWikiLinkAttributeExtension/create)
@@ -75,7 +75,7 @@
        (.parse parser)
        (.render renderer)))
 
-; Format a DateTime object nicely in the current time zone.
+;; Format a DateTime object nicely in the current time zone.
 (def custom-formatter (f/with-zone
                         (f/formatter "dd MMM yyyy, hh:mm:ss aa")
                         (t/default-time-zone)))
@@ -259,13 +259,14 @@
      [:h1 {:class "brand-title"} (db/get-option-value :wiki_name)]
      [:p {:class "brand-sub-title"} (db/get-option-value :wiki_tagline)]]]])
 
-; A span element with a bold, red "Error:" in it.
+;; A span element with a bold, red "Error:" in it.
 (def error-span [:span {:style {:color "red"}} [:strong "Error: "]])
 
-; A span element with a bold, red "Warning:" at the beginning.
+;; A span element with a bold, red "Warning:" at the beginning.
 (def warning-span [:span {:style {:color "red"}} [:strong "Warning: "]])
 
-(def required-field-hint [:p {:class "required-field-hint"} "Required fields are marked with a"])
+(def required-field-hint [:p {:class "required-field-hint"}
+                          "Required fields are marked with a"])
 
 (defn- remove-surrounding-paragraph-tags
   "Remove the surrounding paragraph tags (<p></p>) that conversion to
@@ -357,7 +358,7 @@
 (defn- aside
   "Return an aside (sidebar) component with the given content."
   [content]
-  ; The only retrieval of the sidebar flex-basis width happens here.
+  ;; The only retrieval of the sidebar flex-basis width happens here.
   (let [sidebar-width (db/get-option-value :sidebar_width)]
     [:aside {:class "left-aside" :id "left-aside"
              :style (str "flex-basis: " sidebar-width "px;")}
@@ -382,15 +383,15 @@
    [:div {:class "vertical-page-divider"}]
    [:div {:class       "vertical-page-splitter"
           :id          "splitter"
-          ; Don't forget to translate the hyphen to an underscore. The false
-          ; return is required for correct behavior on Safari.
+          ;; Don't forget to translate the hyphen to an underscore. The false
+          ;; return is required for correct behavior on Safari.
           :onmousedown "cwiki_mde.dragger.onclick_handler(); return false;"}]
    [:article {:class "page-content"}
     article]])
 
-;;
-;; Pages that show no sidebar information.
-;;
+;;;
+;;; Pages that show no sidebar information.
+;;;
 
 (defn short-form-template
   "A page template for short messages, no sidebar content, no nav."
@@ -485,9 +486,9 @@
   []
   (short-message "Forbidden" "You are not allowed to perform that action."))
 
-;;
-;; Import/Export related pages.
-;;
+;;;
+;;; Import/Export related pages.
+;;;
 
 (defn no-files-to-import-page
   "Create a page stating that there are no files to import."
@@ -572,8 +573,8 @@
   to export a page to."
   [req]
   (let [referer (get (:headers req) "referer")
-        ; First figure out if they are trying to export the Front Page or
-        ; a 'regular' page.
+        ;; First figure out if they are trying to export the Front Page or
+        ;; a 'regular' page.
         file-name (.getFile (URL. referer))
         page-title (if (= "/" file-name)
                      "Front Page"
@@ -640,9 +641,9 @@
                           :autofocus "autofocus"
                           :onclick   "window.history.back();"}]])])))
 
-;;
-;; Functions related to backup/restore of database.
-;;
+;;;
+;;; Functions related to backup/restore of database.
+;;;
 
 (defn confirm-backup-database
   "Return a page stating that the database has been backed up."
@@ -714,9 +715,9 @@
                         :autofocus "autofocus"
                         :onclick   "window.history.back();"}]])]))
 
-;;
-;; Functions related to viewing or editing wiki pages.
-;;
+;;;
+;;; Functions related to viewing or editing wiki pages.
+;;;
 
 (defn view-wiki-page
   "Return a 'regular' wiki page view."
@@ -756,10 +757,10 @@
             (limited-width-content-component content)]]])
        (standard-end-of-body)])))
 
-;;
-;; Pages and utilities that show all there are of something, like
-;; page names or users.
-;;
+;;;
+;;; Pages and utilities that show all there are of something, like
+;;; page names or users.
+;;;
 
 (defn- process-item-set-to-unnumbered-list-of-wikilinks
   "Process a set of items into a Markdown-formatted list of items and return it."
@@ -785,8 +786,8 @@
   "Process a sorted set of page titles into a Markdown-formatted
   unordered list and return it"
   [titles]
-  ; This builds bigger links than strictly necessary since it duplicates
-  ; the page name in the link, but it uses a well-tested function to do it.
+  ;; This builds bigger links than strictly necessary since it duplicates
+  ;; the page name in the link, but it uses a well-tested function to do it.
   (process-item-set-to-unnumbered-list-of-wikilinks titles ""))
 
 (defn- process-tag-set
@@ -855,9 +856,9 @@
                    (str "All Pages with Tag \"" tag "\"") content)]
     (view-list-page post-map query-results req)))
 
-;;
-;; Pages and utilities that allow the user to change option/preference settings.
-;;
+;;;
+;;; Pages and utilities that allow the user to change option/preference settings.
+;;;
 
 (defn compose-get-options-age
   [req]
@@ -874,7 +875,7 @@
                 (hidden-field "referer" (get (:headers req) "referer"))
                 [:p {:class "form-title"} "Change Preferences"]
 
-                ; Wiki name
+                ;; Wiki name
                 [:div {:class "form-group"}
                  [:div {:class "form-label-div"}
                   [:label {:class "form-label"
@@ -891,7 +892,7 @@
                   "This is the name of the wiki that will be displayed in the
                   top left corner of the page."]]
 
-                ; Wiki tagline
+                ;; Wiki tagline
                 [:div {:class "form-group"}
                  [:div {:class "form-label-div"}
                   [:label {:class "form-label"
@@ -907,7 +908,7 @@
                   "This text is displayed right below the name of the wiki in
                   the top left corner of the page."]]
 
-                ; Article width
+                ;; Article width
                 [:div {:class "form-group"}
                  [:div {:class "form-label-div"}
                   [:label {:class "form-label"
@@ -923,7 +924,7 @@
                   "Enter an integer representing the number of pixels to use for
                   the width of the article viewing column. <b>The minium value is 300px.</b>"]]
 
-                ; Sidebar width
+                ;; Sidebar width
                 [:div {:class "form-group"}
                  [:div {:class "form-label-div"}
                   [:label {:class "form-label"
@@ -951,7 +952,7 @@
                   the mouse button down while you drag the boundary to the
                   desired location."]]
 
-                ; Autosave interval
+                ;; Autosave interval
                 [:div {:class "form-group"}
                  [:div {:class "form-label-div"}
                   [:label {:class "form-label"

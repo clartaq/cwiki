@@ -22,7 +22,6 @@
    {:name "Dead Links" :editable? nil :deletable? nil :generated? true}
    {:name "preferences" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "Admin" :editable? true :deletable? true :generated? nil :admin-only? true}
-   {:name "compress" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "backup" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "restore" :editable? nil :deletable? nil :generated? true :admin-only? true}
    {:name "create-user" :editable? nil :deletable? nil :generated? true :admin-only? true}

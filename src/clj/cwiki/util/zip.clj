@@ -47,7 +47,8 @@
   "Add a zip entry. Works for strings and byte-arrays."
   [^ZipOutputStream zip-output-stream [^String name content & remain]]
   (.putNextEntry zip-output-stream (ZipEntry. name))
-  (if (string? content)                                     ;string and byte-array must have different methods
+  ;; String and byte-array must have different methods.
+  (if (string? content)
     (doto (PrintStream. zip-output-stream true)
       (.print content))
     (.write zip-output-stream ^bytes content))

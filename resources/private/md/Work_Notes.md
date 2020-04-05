@@ -2,7 +2,7 @@
 author: CWiki
 title: Work Notes
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-03-30T14:31:38.427-04:00
+modified: 2020-04-05T12:37:33.885-04:00
 tags:
   - cwiki
   - design
@@ -12,7 +12,14 @@ tags:
 ---
 
 
+
 This page is the on-going saga of working on the CWiki program.
+
+#### Removing References to Database Compression, 05 Apr 2020, 09:26:59 am ####
+
+From the beginning, some of the explanatory information in the seed pages has mentioned "compression" of the database as a maintenance task.
+
+Using the H2 database, there is really no such thing. Removed references to this task.
 
 #### Backup and Restore, 30 Mar 2020, 02:28:18 pm ####
 
@@ -21,6 +28,8 @@ Seems like a good time to implement a simple backup and restore functionality be
 To start out, it will be very like exporting all pages for the backup and reading all of those pages back in for the restore.
 
 Later issues to deal with will include compressing the backup, whether to overwrite during restore, _etc_.
+
+**Update:** 05 Apr 2020, 12:37:00 pm. Implemented minimal backup/restore scheme. Needs work on several preferences.
 
 #### Upgrading Version of HighlightJs, 30 Mar 2020, 02:00:53 pm ####
 

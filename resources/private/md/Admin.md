@@ -1,17 +1,17 @@
 ---
-title: Admin
 author: CWiki
-date: 11/09/2017 9:24:01 AM
-updated: 1/8/2018 4:31:58 PM 
+title: Admin
+date: 2017-11-09T09:24:01.000-05:00
+modified: 2020-04-04T17:56:24.918-04:00
 tags:
   - admin
   - special pages
 ---
 
+
 This page is basically just a menu pointing to admin maintenance pages.
 
 * [[preferences|Preferences]] let's you change some settings used by the wiki.
-* [[compress|Compress]] and clean the database.
 * [[backup|Backup]] the database.
 * [[restore|Restore]] a saved database.
 * [[create-user|Create User]] to create a new user account.

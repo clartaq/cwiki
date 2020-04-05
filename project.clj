@@ -57,8 +57,8 @@
 
   :prep-tasks ["javac"]
 
-  ; Leave this alone. IntelliJ has issues otherwise.
-  ; Note that test-paths doesn't work for ClojureScript tests.
+  ;; Leave this alone. IntelliJ has issues otherwise.
+  ;; Note that test-paths doesn't work for ClojureScript tests.
   :test-paths ["test/clj"]
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled"
@@ -92,7 +92,7 @@
 
                        :plugins      [[lein-doo "0.1.11"]
                                       [lein-figwheel "0.5.16"]]
-                       ; Leave this alone. IntelliJ has issues otherwise.
+                       ;; Leave this alone. IntelliJ has issues otherwise.
                        :test-paths   ["test/cljs"]
                        :env          {:profile-type "development"
                                       :debugging-css "true"}}
@@ -108,9 +108,9 @@
                                       ["compile" "cwiki.extensions.cwikilink-attributes"]
                                       "compile"
                                       ["cljsbuild" "once" "min"]]
-                       ; This really shouldn't be required. There is some sort of
-                       ; dependency version incompatibility somewhere that needs
-                       ; to be fixed.
+                       ;; This really shouldn't be required. There is some sort
+                       ;; of dependency version incompatibility somewhere that
+                       ;; needs to be fixed.
                        :dependencies [[ring/ring-mock "0.4.0"]]
                        :env          {:profile-type "production"}}
              }

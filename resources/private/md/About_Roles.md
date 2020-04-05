@@ -2,11 +2,12 @@
 author: CWiki
 title: About Roles
 date: 2017-11-15T09:10:33.000-05:00
-modified: 2018-08-15T16:32:17.755-04:00
+modified: 2020-04-04T17:58:37.763-04:00
 tags:
   - about
   - roles
 ---
+
 
 
 CWiki supports different roles for different users. The different roles have different capabilities regarding what the user is allowed to do.
@@ -26,7 +27,7 @@ Users assigned the role of **editors**, in addition to all of the capabilities o
 
 ## Admin ##
 
-An **admin** can do everything that an editor can do and a few particular kinds of tasks. An admin can handle user-related tasks such as​ creating new users and deleting departed users. Also, the admin can run maintenance-type tasks such as cleaning/compressing the wiki database and making backups of the database.
+An **admin** can do everything that an editor can do and a few particular kinds of tasks. An admin can handle user-related tasks such as​ creating new users and deleting departed users. Also, the admin can run maintenance-type tasks such as making backups of the database.
 
 If you are having problems that you don't understand, consult with an admin.
 

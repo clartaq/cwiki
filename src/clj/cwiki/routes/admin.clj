@@ -1,3 +1,8 @@
+;;;;
+;;;; This namespace contains functionality that only an admin user should
+;;;; have access to.
+;;;;
+
 (ns cwiki.routes.admin
   (:require [buddy.hashers :as hashers]
             [clj-time.coerce :as c]
@@ -23,9 +28,9 @@
        (status stat)
        (assoc :body body))))
 
-;;
-;; Functions related to saving a seed page.
-;;
+;;;
+;;; Functions related to saving a seed page.
+;;;
 
 (defn- get-save-seed-page
   [req]
@@ -59,9 +64,10 @@
           "The page was not saved correctly."
           referer)))))
 
-;;
-;; Functions related to backup/restore.
-;;
+;;;
+;;; Functions related to backup/restore.
+;;;
+
 (defn- get-params-for-backup
   "Based on the page name, get the page-map and tags required to do the
   backup."
@@ -124,7 +130,7 @@
         (do
           ;;(when restore-from-scratch
           ;;  (println "Emptying all of the pages in the database.")
-          (println "restore, restore, restore...")
+          ;(println "restore, restore, restore...")
           (doseq [fyle of-list]
             (let [import-map (files/load-markdown-from-file fyle)
                   file-name-only (.getName fyle)
@@ -133,9 +139,9 @@
           (files/delete-all-files-with-ext d ".md")
           (layout/confirm-restore-database (str "\"" d "\"") referer))))))
 
-;;
-;; Functions related to creating a new user.
-;;
+;;;
+;;; Functions related to creating a new user.
+;;;
 
 (defn- get-create-user
   "Get a create-user page and return it."
@@ -156,9 +162,9 @@
         (admin-layout/confirm-creation-page username referer)
         req 201))))
 
-;;
-;; Functions related to letting an admin edit a user profile.
-;;
+;;;
+;;; Functions related to letting an admin edit a user profile.
+;;;
 
 (defn get-user-to-edit
   "Get an edit-profile page and return it."
@@ -177,7 +183,7 @@
           (let [new-session (assoc (redirect "/edit-profile")
                               :session (assoc session :edit-user-info user-info))]
             new-session)
-          ; should never happen
+          ;; should never happen
           (do
             (build-response (admin-layout/cannot-find-user req) req 500)
             (if referer
@@ -199,10 +205,10 @@
   "Return a digest for the new password or nil if the proposed change
   violates any rules."
   [old-digest proposed-password]
-  ; Don't make any changes if they've left the password field empty.
-  ; If they've added something, compare the digest of the old password,
-  ; already in 'old-digest', with the digest of the proposed password.
-  ; If they differ, return the digest of the new password.
+  ;; Don't make any changes if they've left the password field empty.
+  ;; If they've added something, compare the digest of the old password,
+  ;; already in 'old-digest', with the digest of the proposed password.
+  ;; If they differ, return the digest of the new password.
   (when (seq proposed-password)
     (let [new-digest (hashers/derive proposed-password)]
       (when (not= old-digest new-digest)
@@ -211,11 +217,11 @@
 (defn get-new-role
   "Return a new role or nil if the proposed change violates any rules."
   [old-role proposed-role]
-  ; The proposed-role will always be a non-empty string selected from a
-  ; drop-down of available roles. If the proposed-role is different from
-  ; the old-role, return a keyword-ized version of the new role.
-  ; Note that even though we return a keyword, it is stored as a
-  ; string.
+  ;; The proposed-role will always be a non-empty string selected from a
+  ;; drop-down of available roles. If the proposed-role is different from
+  ;; the old-role, return a keyword-ized version of the new role.
+  ;; Note that even though we return a keyword, it is stored as a
+  ;; string.
   (when (not= proposed-role old-role)
     (keyword proposed-role)))
 
@@ -223,8 +229,8 @@
   "Return a new email address or nil if the proposed change violoates
   any rules."
   [old-email proposed-email]
-  ; No restrictions. We just pass back the new email if it differs
-  ; from the old.
+  ;; No restrictions. We just pass back the new email if it differs
+  ;; from the old.
   (when (not= old-email proposed-email)
     proposed-email))
 
@@ -233,14 +239,14 @@
   [{{new-name "new-user-name" new-password "new-password"
      new-role "new-role" new-email "new-email"} :multipart-params
     session                                     :session :as req}]
-  ; No matter how we return, we should use a modified request where the
-  ; profile information about the user being modified has been removed.
+  ;; No matter how we return, we should use a modified request where the
+  ;; profile information about the user being modified has been removed.
   (let [new-session (atom (dissoc session :edit-user-info))
         new-req (assoc req :session @new-session)]
     (if-not (seq new-name)
       ; Should never happen since this is a required field in the form.
       (build-response (admin-layout/must-not-be-empty-page) new-req 400)
-      ; Normal code path.
+      ;; Normal code path.
       (let [changes (atom {})
             existing-user-info (:edit-user-info session)
             existing-user-id (:user_id existing-user-info)
@@ -254,7 +260,7 @@
             old-password (:user_password existing-user-info)
             original-referer (:original-referer existing-user-info)]
 
-        ; Run the functions to check the new settings against the rules.
+        ;; Run the functions to check the new settings against the rules.
         (if (and (not= old-name new-name)
                  (proposed-name-same-as-existing-name? new-name))
           (build-response (admin-layout/compose-user-already-exists-page) new-req 409)
@@ -272,7 +278,8 @@
               (let [cleaned-existing (dissoc existing-user-info :original-referer)
                     merged-changes (merge cleaned-existing @changes)]
                 (db/update-user existing-user-id merged-changes)
-                ; If the user is updating their own profile, update the session too.
+                ;; If the user is updating their own profile, update the
+                ;; session too.
                 (when same-as-logged-in-user
                   (swap! new-session
                          assoc :identity (dissoc merged-changes :user_password)))))
@@ -313,11 +320,8 @@
 (defroutes admin-routes
            (GET "/save-seed-page" request (get-save-seed-page request))
            (POST "/save-seed-page" [] post-save-seed-page)
-           (GET "/compress" [] (layout/compose-not-yet-view "compress"))
-           ; (GET "/backup" [] (layout/compose-not-yet-view "backup"))
            (GET "/backup" request (get-backup-database request))
            (POST "/backup" request (post-backup-database request))
-           ;(GET "/restore" [] (layout/compose-not-yet-view "restore"))
            (GET "/restore" request (get-restore-database request))
            (POST "/restore" request (post-restore-database request))
            (GET "/create-user" request (get-create-user request))

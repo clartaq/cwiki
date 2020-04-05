@@ -1,15 +1,15 @@
-;;;
-;;; This namespace contains functions related to handling files on the
-;;; server side. It also contains some string-related functions for
-;;; historical reasons.
-;;;
+;;;;
+;;;; This namespace contains functions related to handling files on the
+;;;; server side. It also contains some string-related functions for
+;;;; historical reasons.
+;;;;
 
 (ns cwiki.util.files
   (:require [clj-yaml.core :as yaml]
             [clojure.java.io :as io]
             [clojure.string :as s]
             [cwiki.util.datetime :as dt]
-            [cwiki.util.zip])
+            [cwiki.util.zip :as zip])
   (:import (java.io BufferedReader InputStreamReader File)))
 
 (def ^:const sep (File/separator))
@@ -108,18 +108,18 @@
 ;;; Functions for working with files and file names.
 ;;;
 
-; Characters that are illegal in file names in some operating systems.
+;; Characters that are illegal in file names in some operating systems.
 (def ^:const illegal-chars [\newline, \space, \tab, \formfeed, \backspace,
                             \return \/ \\ \u0000 \` \' \" \? \| \* \< \> \:])
 
-; Device names that are reserved on some operating systems. From
-; org.eclipse.core.resources.IWorkspace.validateName(String, int)
+;; Device names that are reserved on some operating systems. From
+;; org.eclipse.core.resources.IWorkspace.validateName(String, int)
 (def ^:const reserved-dev-names ["aux" "clock$ " "com1" "com2" "com3" "com4"
                                  "com5" "com6" "com7" "com8" "com9" "con"
                                  "lpt1" "lpt2" "lpt3" "lpt4" "lpt5" "lpt6"
                                  "lpt7" "lpt8" "lpt9" "nul" "prn"])
 
-(defn- red-fun
+(defn- replace-illegal-chars
   "A helper function for the following reduction. Replaces illegal characters
   with an underscore."
   [accum elm]
@@ -131,7 +131,7 @@
   "Return a version of the sting where illegal characters have been
   replaces with underscores."
   [s]
-  (str (reduce red-fun (StringBuilder.) s)))
+  (str (reduce replace-illegal-chars (StringBuilder.) s)))
 
 (defn remove-reserved-device-names
   "Return an empty string if 's' is equal (case-insensitive) to any of the
@@ -152,7 +152,8 @@
     sanitary-name))
 
 (defn files-in-directory
-  "Return a sequence of all of the files (including other directories) in 'dir-name'."
+  "Return a sequence of all of the files (including other directories) in
+  'dir-name'."
   [dir-name]
   (let [directory (io/file dir-name)
         files (file-seq directory)]
@@ -276,7 +277,7 @@
       (println "Problem with translating the page name")
       (let [path (str dir sep sanitized-name ".md")
             content (:page_content page-map)]
-        ; Needed when saving seed pages while running from an uberjar.
+        ;; Needed when saving seed pages while running from an uberjar.
         (io/make-parents path)
         (spit path (str (build-yaml page-map author-name tags) content))
         path))))
@@ -325,10 +326,10 @@
   [backup-file-name]
   (let [backedup-file-path (file-name-from-parts
                              [(get-backup-directory) backup-file-name])]
-    (cwiki.util.zip/unzip-to-path backedup-file-path (get-backup-directory))))
+    (zip/unzip-to-path backedup-file-path (get-backup-directory))))
 
 ;;;
-;;;
+;;; Misc.
 ;;;
 
 (defn- line-has-content?
