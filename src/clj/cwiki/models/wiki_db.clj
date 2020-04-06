@@ -51,8 +51,10 @@
 
 (defn get-valid-roles [] ["cwiki" "admin" "editor" "writer" "reader"])
 
+(defn get-cwiki-user-name [] "CWki")
+
 (defn get-initial-users []
-  [{:user_name              "CWiki"
+  [{:user_name              (get-cwiki-user-name)
     :user_role              "cwiki"
     :user_password          (hashers/derive (str (UUID/randomUUID)))
     :user_new_password      nil
@@ -102,7 +104,7 @@
   {:editor_autosave_interval    1
    :editor_send_every_keystroke false
    :root_page                   "Front Page"
-   :wiki_name                   "CWiki"
+   :wiki_name                   (get-cwiki-user-name)
    :wiki_tagline                "A Simple <a href=https://en.wikipedia.org/wiki/Wiki>Wiki</a>"
    :default-new-page-name       "A New Page"
    :default-new-tag-label       "A New Tag"
@@ -120,8 +122,8 @@
                                  :default false}
    :root_page                   {:current "Front Page"
                                  :default "Front Page"}
-   :wiki_name                   {:current "CWiki"
-                                 :default "CWiki"}
+   :wiki_name                   {:current (get-cwiki-user-name)
+                                 :default (get-cwiki-user-name)}
    :wiki_tagline                {:current "A Simple <a href=https://en.wikipedia.org/wiki/Wiki>Wiki</a>"
                                  :default "A Simple <a href=https://en.wikipedia.org/wiki/Wiki>Wiki</a>"}
    :default-new-page-name       {:current "A New Page"
@@ -179,6 +181,7 @@
   ([user-name]
    (user-name->user-id user-name (get-h2-db-spec)))
   ([user-name db]
+   (println "user-name->user-id: user-name: " user-name)
    (:user_id (first (jdbc/query
                       db
                       ["select user_id from users where user_name=?" user-name])))))
@@ -200,9 +203,9 @@
 
 (defn get-cwiki-user-id
   ([]
-   (user-name->user-id "CWiki" (get-h2-db-spec)))
+   (user-name->user-id (get-cwiki-user-name) (get-h2-db-spec)))
   ([db]
-   (user-name->user-id "CWiki" db)))
+   (user-name->user-id (get-cwiki-user-name) db)))
 
 (defn user-id->user-name
   "Given a user id, return a human-readable user name."
@@ -741,13 +744,16 @@
 
 (defn- get-author-from-import-meta-data
   "Return the author id based on the content of the meta-data. If there is no
-  author or they do not have the appropriate role, return the default id."
-  [meta-data default-author-id db]
+  author or they do not have the appropriate role, return the default id
+  for the default author."
+  [meta-data default-author-name db]
+  (println "get-author-from-import-meta-data: default-author-name: " default-author-name)
   (let [author-name (:author meta-data)
         author-id (user-name->user-id author-name db)]
+    (println "    author-id: " author-id)
     (if (or (nil? author-id)
             (= "reader" (user-name->user-role author-name db)))
-      (user-name->user-id default-author-id db)
+      (user-name->user-id default-author-name db)
       author-id)))
 
 (defn add-page-from-map
@@ -761,7 +767,9 @@
   ([m default-author]
    (add-page-from-map m default-author (get-h2-db-spec)))
   ([m default-author db]
+   (println "add-page-from-map: default-author: " default-author)
    (let [meta (:meta m)
+         _ (println "add-page-from-map: meta: " meta)
          author-id (get-author-from-import-meta-data meta default-author db)
          title (or (:title meta)
                    (:file-name m)
@@ -795,7 +803,7 @@
   [file-name db]
   (let [resource-prefix "private/md/"
         m (files/load-markdown-from-resource (str resource-prefix file-name))]
-    (add-page-from-map m "CWiki" db)))
+    (add-page-from-map m (get-cwiki-user-name) db)))
 
 (defn- insert-user!
   "Utility function to insert a user (specified in a mp) into the specified
