@@ -181,7 +181,6 @@
   ([user-name]
    (user-name->user-id user-name (get-h2-db-spec)))
   ([user-name db]
-   (println "user-name->user-id: user-name: " user-name)
    (:user_id (first (jdbc/query
                       db
                       ["select user_id from users where user_name=?" user-name])))))
@@ -747,10 +746,8 @@
   author or they do not have the appropriate role, return the default id
   for the default author."
   [meta-data default-author-name db]
-  (println "get-author-from-import-meta-data: default-author-name: " default-author-name)
   (let [author-name (:author meta-data)
         author-id (user-name->user-id author-name db)]
-    (println "    author-id: " author-id)
     (if (or (nil? author-id)
             (= "reader" (user-name->user-role author-name db)))
       (user-name->user-id default-author-name db)
@@ -767,9 +764,7 @@
   ([m default-author]
    (add-page-from-map m default-author (get-h2-db-spec)))
   ([m default-author db]
-   (println "add-page-from-map: default-author: " default-author)
    (let [meta (:meta m)
-         _ (println "add-page-from-map: meta: " meta)
          author-id (get-author-from-import-meta-data meta default-author db)
          title (or (:title meta)
                    (:file-name m)
