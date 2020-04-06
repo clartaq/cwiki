@@ -119,7 +119,6 @@
   (let [params (:multipart-params req)
         backup-file-name (get-in params ["file-info" :filename])
         referer (get params "referer")
-        def-author (db/get-cwiki-user-id)
         d (files/get-backup-directory)]
     ;; Clear the backup directory of any spurious markdown files.
     (files/delete-all-files-with-ext d ".md")
@@ -127,14 +126,16 @@
           of-list (files/files-with-ext file-name-list ".md")]
       (if-not (seq? of-list)
         (build-response (layout/no-files-to-import-page referer) req 400)
-        (do
+        (let [def-author (db/get-cwiki-user-name)]
           ;;(when restore-from-scratch
           ;;  (println "Emptying all of the pages in the database.")
-          ;(println "restore, restore, restore...")
           (doseq [fyle of-list]
             (let [import-map (files/load-markdown-from-file fyle)
                   file-name-only (.getName fyle)
-                  enhanced-map (assoc import-map :file-name file-name-only)]
+                  enhanced-map (assoc import-map :file-name file-name-only)
+                  page-title (get-in import-map [:meta :title])]
+              (when-let [existing-id (db/title->page-id page-title)]
+                (db/delete-page-by-id! existing-id))
               (db/add-page-from-map enhanced-map def-author)))
           (files/delete-all-files-with-ext d ".md")
           (layout/confirm-restore-database (str "\"" d "\"") referer))))))
