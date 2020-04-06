@@ -115,7 +115,6 @@
 (defn- post-restore-database
   "Restore all pages in the backup to the database. NO ERROR CHECKING!"
   [req]
-  (println "post-restore-database")
   (let [params (:multipart-params req)
         backup-file-name (get-in params ["file-info" :filename])
         referer (get params "referer")
