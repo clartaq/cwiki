@@ -137,7 +137,8 @@
                 (db/delete-page-by-id! existing-id))
               (db/add-page-from-map enhanced-map def-author)))
           (files/delete-all-files-with-ext d ".md")
-          (layout/confirm-restore-database (str "\"" d "\"") referer))))))
+          (layout/confirm-restore-database (str "\"" backup-file-name "\"")
+                                           referer))))))
 
 ;;;
 ;;; Functions related to creating a new user.

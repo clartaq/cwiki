@@ -678,10 +678,10 @@
 
 (defn confirm-restore-database
   "Return a page stating that the database has been backed up."
-  [dir-name referer]
+  [backup-file-name referer]
   (short-message-return-to-referer
     "Restore Complete"
-    (str "All pages in the backup directory " dir-name
+    (str "The contents of the backup file " backup-file-name
          " have been imported into the database.") referer))
 
 (defn compose-restore-database-page
