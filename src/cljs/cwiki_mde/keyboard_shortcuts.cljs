@@ -30,10 +30,12 @@
                false))
 
   ;; Insert a timestamp.
-  (kbs/bind! "alt-defmod-t" ::timestamp-shortcut
+  (kbs/bind! "defmod-k" ::timestamp-shortcut
              (fn [evt]
                (let [ele (.-target evt)]
-                 (cmd/insert-time-stamp ele editor-state))))
+                 (cmd/insert-time-stamp ele editor-state)
+                 (.preventDefault evt)
+                 (.stopPropagation evt))))
 
   ;; Percent encode the selection.
   (kbs/bind! "alt-defmod-e" ::percent-encode-shortcut

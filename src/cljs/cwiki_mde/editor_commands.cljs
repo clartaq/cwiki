@@ -93,14 +93,13 @@
 (defn insert-time-stamp
   "Insert a timestamp into the input component."
   [ele editor-state]
-  (let [
-        formatted-now (get-formatted-now)
+  (let [formatted-now (get-formatted-now)
         input-atom (ele->input-atom ele editor-state)]
-    (when (and ele formatted-now input-atom))
-    (insert-text-cmd ele
-                     formatted-now
-                     input-atom
-                     editor-state)))
+    (when (and ele formatted-now input-atom)
+      (insert-text-cmd ele
+                       formatted-now
+                       input-atom
+                       editor-state))))
 
 (defn percent-encode-selection
   "Replace the hightlighted text in the input component with a percent

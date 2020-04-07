@@ -1,8 +1,8 @@
 ---
-author: CWiki
+author: CWki
 title: Markdown Help
 date: 2018-11-18T15:39:33.103-05:00
-modified: 2018-12-28T12:59:04.708-05:00
+modified: 2020-04-07T14:21:47.868-04:00
 tags:
   - help
   - Markdown
@@ -33,7 +33,7 @@ This list is largely copied and adapted from the
 To create a header, precede it with a number of
 octothorpes (pound signs) indicating its level.
 
-```nohighlight
+```plaintext
 # H1 #
 ## H2 ##
 ### H3 ###
@@ -58,7 +58,7 @@ The trailing markers are totally optional. I tend to use them so I don't have to
 
 Here are some examples of adding emphasis.
 
-```nohighlight
+```plaintext
 An emphasis, aka italics, is created with *asterisks* or 
 _underscores_.
 
@@ -91,7 +91,7 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 
 (In this example, leading and trailing spaces are shown with dots: ⋅)
 
-```nohighlight
+```plaintext
 1. First ordered list item
 2. Another item
 ⋅⋅⋅* Unordered sub-list. 
@@ -139,7 +139,7 @@ trailing spaces are not required.)
 
 There are two ways to create links.
 
-```nohighlight
+```plaintext
 [I'm an inline-style link](https://www.google.com)
 
 [I'm an inline-style link with a title](https://www.google.com 
@@ -229,7 +229,7 @@ Here's a logo from CWiki demonstrating how a local image can be loaded too. This
 
 Code blocks are part of the Markdown spec, but syntax highlighting isn't. However, many renderers -- like Github's and CWiki's -- support syntax highlighting. Which languages are supported and how those language names should be written will vary from renderer to renderer. CWiki supports highlighting for dozens of languages (and not-really-languages, like diffs and HTTP headers); to see the complete list, and how to write the language names, see the [highlight.js demo page](http://softwaremaniacs.org/media/soft/highlight/test.html).
 
-```nohighlight
+```plaintext
 Inline `code` has `back-ticks around` it.
 ```
 
@@ -309,7 +309,7 @@ adding tables to your text -- a task that would otherwise require copy-pasting f
 
 Colons can be used to align columns.
 
-```nohighlight
+```plaintext
 | Tables        | Are           | Cool  |
 | ------------- |:-------------:| -----:|
 | col 3 is      | right-aligned | $1600 |
@@ -346,7 +346,7 @@ Markdown | Less | Pretty
 <a name="blockquotes"></a> 
 ## Blockquotes ##
 
-```nohighlight
+```plaintext
 > Blockquotes are very handy to call out text from another source or authority.
 > This line is part of the same quote.
 
@@ -392,7 +392,7 @@ You can also use raw HTML in your Markdown, and it'll mostly work pretty well.
 <a name="hr"></a> 
 ## Horizontal Rule ##
 
-```nohighlight
+```plaintext
 Three or more...
 
 ---
@@ -434,7 +434,7 @@ soon learn to get what you want. Or place two spaces before the newline
 to create a line break within the current paragraph.
 Here are some things to try out:
 
-```nohighlight
+```plaintext
 Here's a line for us to start with.
 
 This line is separated from the one above by two newlines, so it
