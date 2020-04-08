@@ -51,7 +51,7 @@
 
 (defn get-valid-roles [] ["cwiki" "admin" "editor" "writer" "reader"])
 
-(defn get-cwiki-user-name [] "CWki")
+(defn get-cwiki-user-name [] "CWiki")
 
 (defn get-initial-users []
   [{:user_name              (get-cwiki-user-name)
