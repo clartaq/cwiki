@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] ##
+## [0.1.7] - 2020-04-07 ##
 
 This release is primarily intended to provide a simple backup and restore functionality. As further work is done, some incompatible changes may be made to the database. Using this backup and restore will let you keep any content you have created and restore it in the new version.
 
@@ -17,6 +17,7 @@ This release is primarily intended to provide a simple backup and restore functi
 
 - Updated [Marked](https://github.com/markedjs/marked) to v0.8.2. (Did not record the version used earlier. It appeats to be 3.2.)
 - Updated [highlight.js](https://highlightjs.org) from v9.12.0 to 9.18.1. Did not update the styles.
+- Shortcut key to insert timestamp in editor is now ctrl/cmd-k.
 
 ### Fixed ###
 
