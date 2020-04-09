@@ -224,7 +224,7 @@
             (when (not-empty (:front parts))
               (let [meta (yaml->map (s/join "\n" (:front parts)))]
                 (reset! result (assoc @result :meta meta))))
-            (reset! result (assoc @result :body (s/join "\n" (:body parts))))))))
+            (reset! result (assoc @result :body (s/trim (s/join "\n" (:body parts)))))))))
     @result))
 
 (defn load-markdown-from-resource
