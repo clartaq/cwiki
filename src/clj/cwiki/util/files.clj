@@ -7,8 +7,10 @@
 (ns cwiki.util.files
   (:require [clj-yaml.core :as yaml]
             [clojure.java.io :as io]
+            [clojure.set :refer [intersection]]
             [clojure.string :as s]
             [cwiki.util.datetime :as dt]
+            [cwiki.util.percent-encode :as pe]
             [cwiki.util.zip :as zip])
   (:import (java.io BufferedReader InputStreamReader File)))
 
@@ -248,8 +250,9 @@
   "Return the tags section of the YAML front matter."
   [tag-set]
   (if (seq tag-set)
-    (let [sb (StringBuffer. "tags:\n")]
-      (mapv #(.append sb (str "  - " % "\n")) tag-set)
+    (let [sb (StringBuffer. "tags:\n")
+          ts (into #{} (mapv yaml/generate-string tag-set))]
+      (mapv #(.append sb (str "  - " % "\n")) ts)
       (str sb))
     ""))
 
@@ -261,12 +264,13 @@
         modified (dt/get-formatted-date-time (:page_modified page-map))
         yaml (StringBuffer. "---\n")]
     (doto yaml
-      (.append (str "author: " author-name "\n"))
-      (.append (str "title: " title "\n"))
+      (.append (str "author: " (yaml/generate-string author-name) "\n"))
+      (.append (str "title: " (yaml/generate-string title) "\n"))
       (.append (str "date: " created "\n"))
       (.append (str "modified: " modified "\n"))
-      (.append (build-tag-yaml tags)))
-    (str (.append yaml "---\n\n"))))
+      (.append (build-tag-yaml tags))
+      (.append "---\n\n"))
+    (.toString yaml)))
 
 (defn- save-page
   "Save the page described in the page-map to a file."
