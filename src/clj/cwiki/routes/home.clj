@@ -6,6 +6,7 @@
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.files :as files]
+            [cwiki.util.percent-encode :as pe]
             [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
@@ -139,7 +140,7 @@
         enhanced-map (assoc import-map :file-name file-name-only)
         imported-page-title (db/add-page-from-map enhanced-map ;import-map
                                                   (ri/req->user-name req))
-        new-referer (str "/" imported-page-title)]
+        new-referer (str "/" (pe/percent-encode imported-page-title))]
     (build-response (layout/confirm-import-page
                       file-name
                       imported-page-title new-referer) req)))
