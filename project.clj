@@ -13,7 +13,7 @@
                  [buddy/buddy-hashers "1.4.0"]
                  [com.cemerick/url "0.1.1"]
                  [com.h2database/h2 "1.4.199"]
-                 [circleci/clj-yaml "0.6.0"]
+                 [clj-commons/clj-yaml "0.7.0"]
                  [clj-time "0.15.2"]
                  [cljs-ajax "0.8.0"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
