@@ -1361,6 +1361,7 @@ div.one-column-list li {
 .tag-editor--add-button {
     margin-left: 1rem;
     background-image: url('../img/shrunken-454545-add-circular-button.svg');
+    outline: none;
 }
 
 .tag-editor--button-image {
