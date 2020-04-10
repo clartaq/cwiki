@@ -30,7 +30,7 @@
                false))
 
   ;; Insert a timestamp.
-  (kbs/bind! "defmod-k" ::timestamp-shortcut
+  (kbs/bind! "alt-defmod-k" ::timestamp-shortcut
              (fn [evt]
                (let [ele (.-target evt)]
                  (cmd/insert-time-stamp ele editor-state)
