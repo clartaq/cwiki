@@ -503,36 +503,74 @@
     "Import Complete"
     (str "File \"" file-name "\" has been imported as \"" title "\".") referer))
 
-(defn compose-import-existing-page-warning
-  "Return a page stating that a page with the same title
-  already exists in the wik."
-  [import-map file-name referer]
-  (short-form-template
-    [:div {:class "cwiki-form"}
-     (form-to {:enctype      "multipart/form-data"
-               :autocomplete "off"}
-              [:post "proceed-with-import"]
-              (hidden-field "import-map" import-map)
-              (hidden-field "file-name" file-name)
-              (hidden-field "referer" referer)
-              [:p {:class "form-title"} "Page Already Exists"]
-              [:div {:class "form-group"}
-               [:p (str "A page with the title \"" (get-in import-map [:meta :title])
-                        "\" already exists in the wiki.")]
-               [:p (str "Click \"Proceed\" to delete the existing page and "
-                        "replace it with the contents of the imported file.")]
-               [:div {:class "button-bar-container"}
-                (submit-button {:id    "proceed-with-import-button"
-                                :class "form-button button-bar-item"}
-                               "Proceed")
-                [:input {:type      "button" :name "cancel-button"
-                         :value     "Cancel"
-                         :class     "form-button button-bar-item"
-                         :autofocus "autofocus"
-                         :onclick   "window.history.back();"}]]])]))
+;(defn compose-import-existing-page-warning
+;  "Return a page stating that a page with the same title
+;  already exists in the wik."
+;  [import-map file-name referer]
+;  (short-form-template
+;    [:div {:class "cwiki-form"}
+;     (form-to {:enctype      "multipart/form-data"
+;               :autocomplete "off"}
+;              [:post "proceed-with-import"]
+;              (hidden-field "import-map" import-map)
+;              (hidden-field "file-name" file-name)
+;              (hidden-field "referer" referer)
+;              [:p {:class "form-title"} "Page Already Exists"]
+;              [:div {:class "form-group"}
+;               [:p (str "A page with the title \"" (get-in import-map [:meta :title])
+;                        "\" already exists in the wiki.")]
+;               [:p (str "Click \"Proceed\" to delete the existing page and "
+;                        "replace it with the contents of the imported file.")]
+;               [:div {:class "button-bar-container"}
+;                (submit-button {:id    "proceed-with-import-button"
+;                                :class "form-button button-bar-item"}
+;                               "Proceed")
+;                [:input {:type      "button" :name "cancel-button"
+;                         :value     "Cancel"
+;                         :class     "form-button button-bar-item"
+;                         :autofocus "autofocus"
+;                         :onclick   "window.history.back();"}]]])]))
 
-(defn compose-import-file-page
-  "Compose and return a page that allows the user to choose a file to import."
+;(defn compose-import-file-page
+;  "Compose and return a page that allows the user to choose a file to import."
+;  [req]
+;  (short-form-template
+;    [:div {:class "cwiki-form"}
+;     (form-to {:enctype      "multipart/form-data"
+;               :autocomplete "off"}
+;              [:post "import"]
+;              (hidden-field "referer" (get (:headers req) "referer"))
+;              [:p {:class "form-title"} "Import a File"]
+;              [:div {:class "form-group"}
+;               [:div {:class "form-label-div"}
+;                [:label {:class "form-label"
+;                         :for   "filename"} "Select the file to Import"]]
+;               [:p "First select a file to import, then press the \"Import\" button."]
+;               [:label
+;                [:input {:type   "file"
+;                         :id     "file-info"
+;                         :name   "file-info"
+;                         :accept ".txt,.md"}]]]
+;              [:div {:class "button-bar-container"}
+;               (submit-button {:id    "import-button"
+;                               :class "form-button button-bar-item"}
+;                              "Import")
+;               [:input {:type      "button" :name "cancel-button"
+;                        :value     "Cancel"
+;                        :class     "form-button button-bar-item"
+;                        :autofocus "autofocus"
+;                        :onclick   "window.history.back();"}]])]))
+
+(defn confirm-multi-file-import-page
+  "Return a page stating that the file has been imported."
+  [referer]
+  (short-message-return-to-referer
+    "Import Complete"
+    (str "The requested files have been imported.") referer))
+
+(defn compose-multi-file-import-page
+  "Compose and return a page that allows the user to choose multiple
+  files to import."
   [req]
   (short-form-template
     [:div {:class "cwiki-form"}
@@ -540,20 +578,48 @@
                :autocomplete "off"}
               [:post "import"]
               (hidden-field "referer" (get (:headers req) "referer"))
-              [:p {:class "form-title"} "Import a File"]
+              [:p {:class "form-title"} "Import Files"]
               [:div {:class "form-group"}
                [:div {:class "form-label-div"}
                 [:label {:class "form-label"
-                         :for   "filename"} "Select the file to Import"]]
-               [:p "First select a file to import, then press the \"Import\" button."]
+                         :for   "filename"} "Select the files to Import"]]
+               [:p "First click the \"Browse...\" button to select the file(s)
+                   to import, " [:br] "then click the \"Import\" button."]
+               [:div {:class "button-bar-container"}
+                [:input {:type    "button" :name "browse-button"
+                         :value   "Browse..."
+                         :class   "form-button button-bar-item"
+                         :tabindex "0"
+                         :onclick "document.getElementById('file-info').click();"}]
+                [:p {:id    "files-selected"
+                     :class "form-file-selection-text"}
+                 "No file(s) selected"]]
                [:label
-                [:input {:type   "file"
-                         :id     "file-info"
-                         :name   "file-info"
-                         :accept ".txt,.md"}]]]
+                [:input {:type     "file"
+                         :id       "file-info"
+                         :name     "file-info"
+                         ;; Yes, this is more complicated than it needs to be,
+                         ;; but it is easier for me to understand.
+                         :onchange "lookAtFiles();\n
+                                    function lookAtFiles() {\n
+                                        let fs = document.getElementById('file-info').files;\n
+                                        let numFiles = fs.length;\n
+                                        let msgStr = 'A Message';\n
+                                        if (numFiles === 1) {\n
+                                            msgStr = document.getElementById('file-info').files[0].name;\n
+                                        } else {\n
+                                            msgStr = numFiles + ' files selected';\n
+                                        }\n
+                                        document.getElementById('files-selected').textContent = msgStr;\n
+                                        if (numFiles > 0) {\n
+                                            document.getElementById('import-button').disabled = false;\n
+                                        }\n}"
+                         :multiple "multiple"
+                         :accept   ".txt,.md"}]]]
               [:div {:class "button-bar-container"}
-               (submit-button {:id    "import-button"
-                               :class "form-button button-bar-item"}
+               (submit-button {:id       "import-button"
+                               :class    "form-button button-bar-item"
+                               :disabled "disabled"}
                               "Import")
                [:input {:type      "button" :name "cancel-button"
                         :value     "Cancel"

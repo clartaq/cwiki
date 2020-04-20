@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unrelease]
+
+### Added ###
+
+### Changed ###
+
+- Import now allows importing of multiple files at once. Existing pages with the same name are silently overwritten.
+
+### Fixed ###
+
 ## [0.1.7] - 2020-04-07 ##
 
 This release is primarily intended to provide a simple backup and restore functionality. As further work is done, some incompatible changes may be made to the database. Using this backup and restore will let you keep any content you have created and restore it in the new version.

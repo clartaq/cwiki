@@ -1,12 +1,17 @@
 ---
 author: CWiki
+
 title: Front Page
+
 date: 2017-10-01T17:45:07.000-04:00
-modified: 2018-09-08T17:44:34.172-04:00
+modified: 2020-04-20T13:26:08.548-04:00
 tags:
-  - about
-  - front page
   - help
+
+  - front page
+
+  - about
+
 ---
 
 This is the **Front Page** of your new [wiki](https://en.wikipedia.org/wiki/Wiki). This particular wiki goes by the name of [[About CWiki|CWiki]].

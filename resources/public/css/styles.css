@@ -706,6 +706,16 @@ article.page-content:focus {
     padding-left: 0.1rem;
     padding-bottom: 0.3rem;
 }
+.form-file-selection-text {
+    font-family: var(--form-font-family);
+    font-size: 1.1rem;
+    margin: 0;
+    margin-left: 0.5rem;
+}
+
+#file-info {
+    display: none;
+}
 
 .long-form-text-field {
     width: var(--content-max-width);

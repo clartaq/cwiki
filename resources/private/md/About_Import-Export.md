@@ -1,14 +1,27 @@
 ---
 author: CWiki
+
 title: About Import-Export
+
 date: 2017-12-10T09:47:06.000-05:00
-modified: 2018-12-01T13:20:53.681-05:00
+modified: 2020-04-20T14:00:24.405-04:00
 tags:
-  - about
-  - export
   - help
+
+  - export
+
+  - about
+
   - import
+
 ---
+
+
+
+
+
+
+
 
 
 
@@ -29,7 +42,7 @@ This method can be more convenient in some cases. If your role is a "reader," it
 
 ### Importing
 
-When you have a Markdown file that you want to import into the wiki, hover over the "More" drop-down menu. The "Import" menu item will appear.  Click it. You should see a page asking you to select a file to import.
+When you have a Markdown file that you want to import into the wiki, hover over the "More" drop-down menu. The "Import" menu item will appear.  Click it. You should see a page asking you to select files to import.
 
 ### Things You Should Know About Importing
 
@@ -46,6 +59,12 @@ If the page has no author or the author is unknown to the system, or the author 
 #### Title
 
 If the metadata does not include a title, CWiki will attempt to create a title from the file name. If a suitable file name cannot be created, a random title will be generated. It will be hideous, so it should be easy to see on the [[All Pages]] page. All such pages have a title starting with "Title - " followed by some random characters.
+
+#### Overwriting Existing Pages
+
+If a page already exists in the database with the same title as a page being imported, the version in the database will be overwritten by the imported version with no warning.
+
+This may change in the future.
 
 #### Timestamps
 
