@@ -11,10 +11,7 @@
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]
-    ;[clojure.core.async :as a :refer [>! <! >!! <!! go chan close!
-    ;                                  thread alts! alts!! timeout]]
-            )
+                                     trace debug info warn error]])
   (:import (org.httpkit BytesInputStream)))
 
 (defn- build-response
@@ -130,11 +127,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(defn- get-import-file
-;  "Show a page asking the user to specify a file to upload."
-;  [req]
-;  (layout/compose-import-file-page req))
-
 (defn- add-imported-page-to-database
   "Add the imported file to the database and return the title of the page."
   [import-map file-name req]
@@ -143,56 +135,6 @@
         imported-page-title (db/add-page-from-map enhanced-map
                                                   (ri/req->user-name req))]
     imported-page-title))
-
-;(defn- do-the-import
-;  "Do the actual file import. Upon completion, notify the user that the
-;  import has succeeded. When acknowledged, display the imported page."
-;  [import-map file-name req]
-;  (let [imported-page-title (add-imported-page-to-database import-map file-name req)
-;        new-referer (str "/" (pe/percent-encode imported-page-title))]
-;    (build-response (layout/confirm-import-page
-;                      file-name
-;                      imported-page-title new-referer) req)))
-
-;(defn- post-import-page
-;  "Import the file specified in the upload dialog. Checks the page title
-;  against existing pages. If a page of the same name exists, asks for
-;  confirmation before importing."
-;  [{{file-info "file-info"
-;     referer   "referer"} :multipart-params :as req}]
-;  (let [file-name (:filename file-info)
-;        fyle (:tempfile file-info)]
-;    (if (or (nil? file-name)
-;            (empty? file-name))
-;      (build-response (layout/no-files-to-import-page referer) req 400)
-;      (let [import-map (files/load-markdown-from-file fyle)
-;            new-title (get-in import-map [:meta :title])
-;            existing-id (db/title->page-id new-title)]
-;        (if existing-id
-;          (build-response
-;            (layout/compose-import-existing-page-warning import-map file-name
-;                                                         referer)
-;            req)
-;          (do-the-import import-map file-name req))))))
-;
-;(defn- get-map-from-string
-;  "Utility to convert a map in a string to a real map and return it."
-;  [s]
-;  (binding [*read-eval* false]
-;    (read-string s)))
-;
-;(defn- post-proceed-with-import
-;  "Proceed with the import since the user has decided to overwrite an
-;  existing version of the page. Delete the existing version first, then
-;  import the new one."
-;  ; The maps are coming in as strings
-;  [{{import-map "import-map"
-;     file-name  "file-name"} :multipart-params :as req}]
-;  (let [im (get-map-from-string import-map)
-;        title (get-in im [:meta :title])
-;        page-id (db/title->page-id title)]
-;    (db/delete-page-by-id! page-id)
-;    (do-the-import im file-name req)))
 
 (defn- get-multi-file-import
   [req]
@@ -331,12 +273,6 @@
            (POST "/export-all" request (post-export-all-pages request))
            (GET "/import" request (get-multi-file-import request))
            (POST "/import" request (post-multi-file-import request))
-           ;(GET "/import" request (get-import-file request))
-           ;(POST "/import" request (post-import-page request))
-           ;(POST "/proceed-with-import" request (post-proceed-with-import request))
-           ;(GET "/multi-import" request (get-multi-file-import request))
-           ;(POST "/multi-import" request (post-multi-file-import request))
-           ;(POST "/proceed-with-multi-import" request (post-proceed-with-multi-file-import request))
            (GET "/preferences" request (get-preferences request))
            (POST "/preferences" request (post-preferences request))
            (POST "/save-edits" request
