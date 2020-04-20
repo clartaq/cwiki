@@ -521,11 +521,11 @@
                [:p "First click the \"Browse...\" button to select the file(s)
                    to import, " [:br] "then click the \"Import\" button."]
                [:div {:class "button-bar-container"}
-                [:input {:type    "button" :name "browse-button"
-                         :value   "Browse..."
-                         :class   "form-button button-bar-item"
+                [:input {:type     "button" :name "browse-button"
+                         :value    "Browse..."
+                         :class    "form-button button-bar-item"
                          :tabindex "0"
-                         :onclick "document.getElementById('file-info').click();"}]
+                         :onclick  "document.getElementById('file-info').click();"}]
                 [:p {:id    "files-selected"
                      :class "form-file-selection-text"}
                  "No file(s) selected"]]
@@ -701,14 +701,35 @@
                 [:label {:class "form-label"
                          :for   "filename"} "Select the Backup file to Restore"]]
                [:p "First select a backup file to restore, then press the \"Restore\" button."]
+               [:div {:class "button-bar-container"}
+                [:input {:type     "button" :name "browse-button"
+                         :value    "Browse..."
+                         :class    "form-button button-bar-item"
+                         :tabindex "0"
+                         :onclick  "document.getElementById('file-info').click();"}]
+                [:p {:id    "files-selected"
+                     :class "form-file-selection-text"}
+                 "No file(s) selected"]]
                [:label
-                [:input {:type   "file"
-                         :id     "file-info"
-                         :name   "file-info"
-                         :accept ".zip"}]]]
+                [:input {:type     "file"
+                         :id       "file-info"
+                         :name     "file-info"
+                         ;; Yes, this is more complicated than it needs to be,
+                         ;; but it is easier for me to understand.
+                         :onchange "lookAtFiles();\n
+                                    function lookAtFiles() {\n
+                                        let fs = document.getElementById('file-info').files;\n
+                                        let numFiles = fs.length;\n
+                                        let msgStr = document.getElementById('file-info').files[0].name;\n
+                                        document.getElementById('files-selected').textContent = msgStr;\n
+                                        if (numFiles > 0) {\n
+                                            document.getElementById('restore-button').disabled = false;\n
+                                        }\n}"
+                         :accept   ".zip"}]]]
               [:div {:class "button-bar-container"}
-               (submit-button {:id    "restore-button"
-                               :class "form-button button-bar-item"}
+               (submit-button {:id       "restore-button"
+                               :class    "form-button button-bar-item"
+                               :disabled "disabled"}
                               "Restore")
                [:input {:type      "button" :name "cancel-button"
                         :value     "Cancel"
