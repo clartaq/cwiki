@@ -141,6 +141,8 @@
   (layout/compose-multi-file-import-page req))
 
 (defn- post-multi-file-import
+  "Import the selected files, overwriting any existing pages in the
+  database with the same name."
   [{{file-info "file-info"} :multipart-params :as req}]
   (let [file-vec (if (map? file-info)
                    (conj [] file-info)
