@@ -334,6 +334,34 @@ body {
     margin: 0;
 }
 
+/* Some link styling. */
+/* Put it here so we can specialize it later if needed. */
+
+a:link {
+    color: var(--normal-link-color);
+    text-decoration: none;
+}
+
+a:focus {
+    color: var(--normal-link-color);
+    text-decoration: underline;
+}
+
+a:visited {
+    color: var(--normal-link-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--normal-link-color);
+    text-decoration: underline;
+}
+
+a:active {
+    color: var(--normal-link-color);
+    text-decoration: underline;
+}
+
 /* All of the visible content is held within a page div. */
 
 .page {
@@ -398,64 +426,138 @@ body {
     text-decoration: underline;
 }
 
+/*
+** This navigation/menu/dropdown CSS is based on that presented here:
+** https://dottedsquirrel.com/css/pure-css-dropdown-navigation/
+** posted 16 Apr 2020
+**
+** My modifications screwed up flyouts from submenus, but I'm too lazy
+** to fix them.
+**
+** It's important that these declarations appear _after_ the global
+** modifications to link appearance above.
+ */
+
+.nav ul {
+    background-color: var(--hmenu-background-color);
+    color: var(--menu-item-color);
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 0;
+}
+
+.nav li {
+    background-color: var(--hmenu-background-color);
+    color: var(--menu-item-color);
+    display: inline-block;
+    margin-left: 0;
+    padding-left: 2rem;
+    position: relative;
+}
+
+.nav a {
+    background-color: var(--hmenu-background-color);
+    color: var(--menu-item-link-color);
+    display: block;
+    padding: 1rem 0 1rem 0;
+    transition: 0.2s all linear;
+}
+
+.nav a:visited {
+    color: var(--menu-item-link-color);
+}
+
+.nav a:hover {
+    transition: 0.2s all linear;
+}
+
+.nav > ul > li > ul > li {
+    margin-left: -2rem;
+}
+
+.nav li > ul {
+    background-color: var(--hmenu-background-color);
+    display: none;
+    margin-left: 0;
+    margin-top: 0;
+    position: absolute;
+}
+
+.nav li > ul li {
+    display: block;
+}
+
+/* The width of the dropdown is a fixed value specified here. */
+.nav li:hover > ul {
+    display: block;
+    width: 110px;
+}
+
+.nav ul ul ul {
+    background: green;
+    left: 100%;
+    position: absolute;
+    top: 0;
+}
+
 .hmenu {
     margin: 0;
-    padding: 1.5rem 0 0;
+    padding: 1.0rem 0 0;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     background-color: var(--hmenu-background-color);
 }
 
-.menu-item {
-    font-size: 1rem;
-    font-weight: bold;
-    margin: 0;
-    padding: 0 0.25rem;
-    color: var(--menu-item-color);
-}
+/*.menu-item {*/
+/*    font-size: 1rem;*/
+/*    font-weight: bold;*/
+/*    margin: 0;*/
+/*    padding: 0 0.25rem;*/
+/*    color: var(--menu-item-color);*/
+/*}*/
 
-/* Styles for the "More" dropdown. */
+/*!* Styles for the "More" dropdown. *!*/
 
-.menu-item ul {
-    list-style: none;
-    padding: 0;
-    margin-left: -2rem;
-}
+/*.menu-item ul {*/
+/*    list-style: none;*/
+/*    padding: 0;*/
+/*    margin-left: -2rem;*/
+/*}*/
 
-.menu-item > ul > li {
-    display: inline-block;
-    position: relative;
-}
+/*.menu-item > ul > li {*/
+/*    display: inline-block;*/
+/*    position: relative;*/
+/*}*/
 
-.menu-item a {
-}
+/*.menu-item a {*/
+/*}*/
 
-.menu-item > ul > li.subNav ul {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    margin-top: 0.45rem;
-    white-space: nowrap;
-    background: var(--menu-item-subnav-background);
-}
+/*.menu-item > ul > li.subNav ul {*/
+/*    display: none;*/
+/*    position: absolute;*/
+/*    top: 100%;*/
+/*    left: 0;*/
+/*    margin-top: 0.45rem;*/
+/*    white-space: nowrap;*/
+/*    background: var(--menu-item-subnav-background);*/
+/*}*/
 
-.menu-item ul li.subNav:hover ul {
-    margin-left: -2rem;
-    display: block;
-}
+/*.menu-item ul li.subNav:hover ul {*/
+/*    margin-left: -2rem;*/
+/*    display: block;*/
+/*}*/
 
-.menu-item ul li.subNav ul li {
-    margin-left: 0;
-    padding: 0.2rem 2rem;
-    line-height: 1.7rem;
-}
+/*.menu-item ul li.subNav ul li {*/
+/*    margin-left: 0;*/
+/*    padding: 0.2rem 2rem;*/
+/*    line-height: 1.7rem;*/
+/*}*/
 
 /* Styles for the search box. */
 
 .search-container {
-    margin-top: -1.0rem;
+    /*margin-top: -1.0rem;*/
     margin-left: 2rem;
     margin-bottom: 0.5rem;
 }
@@ -710,8 +812,7 @@ article.page-content:focus {
 .form-file-selection-text {
     font-family: var(--form-font-family);
     font-size: 1.1rem;
-    margin: 0;
-    margin-left: 0.5rem;
+    margin: 0 0 0 0.5rem;
 }
 
 #file-info {
@@ -927,13 +1028,16 @@ li {
 img[src*='#left'] {
     float: left;
 }
+
 img[src*='#right'] {
     float: right;
 }
+
 img[src*='#center'] {
     display: block;
     margin: auto;
 }
+
 /*
 
 li:last-child {
@@ -943,33 +1047,6 @@ li:last-child {
 li:first-child {
 }
 */
-
-/* Some link styling. */
-
-a:link {
-    color: var(--normal-link-color);
-    text-decoration: none;
-}
-
-a:focus {
-    color: var(--normal-link-color);
-    text-decoration: underline;
-}
-
-a:visited {
-    color: var(--normal-link-color);
-    text-decoration: none;
-}
-
-a:hover {
-    color: var(--normal-link-color);
-    text-decoration: underline;
-}
-
-a:active {
-    color: var(--normal-link-color);
-    text-decoration: underline;
-}
 
 /* Mark external links with the Wikipedia icon for such. */
 a[href ^= 'http']:not([href *= 'yourdomain.']) {

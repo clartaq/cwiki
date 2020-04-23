@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed ###
 
 - Import now allows importing of multiple files at once. Existing pages with the same name are silently overwritten.
+- Changed implementation of header menus. Now smoother with no "gaps".
 
 ### Fixed ###
 

@@ -194,10 +194,10 @@
              :aria-label  "Search" :class "searchbox"
              :placeholder "Enter search terms ..."}]]])
 
-(defn- menu-item-span
-  "Return a span with CSS class 'menu-item' around the given content."
-  [content]
-  [:span {:class "menu-item"} content])
+;(defn- menu-item-span
+;  "Return a span with CSS class 'menu-item' around the given content."
+;  [content]
+;  [:span {:class "menu-item"} content])
 
 (defn- wiki-hmenu-component
   "Return the standard navigation menu component for the application.

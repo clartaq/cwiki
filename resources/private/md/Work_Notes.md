@@ -1,19 +1,30 @@
 ---
 author: CWiki
+
 title: Work Notes
+
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-04-05T12:37:33.885-04:00
+modified: 2020-04-23T14:05:55.235-04:00
 tags:
-  - cwiki
-  - design
-  - keyboard
-  - shortcut
   - technical note
+
+  - design
+
+  - cwiki
+
+  - keyboard
+
+  - shortcut
+
 ---
 
-
-
 This page is the on-going saga of working on the CWiki program.
+
+#### Improving Implementation of Menus, 23 Apr 2020, 02:03:40 pm ####
+
+The implementation of the menus in the header has bothered me for awhile, particularly the issue where you sometimes believe you are clicking the "Home" item only to discover that you weren't perfectly positioned when you clicked.
+
+Changed the implementation to something much simpler and more robust.
 
 #### Removing References to Database Compression, 05 Apr 2020, 09:26:59 am ####
 
