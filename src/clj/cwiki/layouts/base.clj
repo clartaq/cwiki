@@ -96,7 +96,7 @@
 
 (defn get-edit-link-for-page
   "Return a link to be used with a button or menu."
-  [post-map req]
+  [post-map]
   (let [page-title (db/page-map->title post-map)]
     (when (special/is-editable? page-title)
       (let [uri (str (u/url-encode page-title) "?edit=true")
@@ -106,7 +106,7 @@
 (defn get-delete-link-for-existing-page
   "Return a link to be used with a button or menu. If the page
   is special and cannot be deleted, return nil."
-  [post-map req]
+  [post-map]
   (let [page-title (db/page-map->title post-map)]
     (when (special/is-deletable? page-title)
       (let [uri (str (u/url-encode page-title) "?delete=true")
@@ -168,25 +168,21 @@
   "Return the drop-down menu for use in the page header."
   [req post-map options]
   (let [page-title (db/page-map->title post-map)]
-    [:div {:class "menu-item"}
-     [:ul
-      [:li {:class "subNav"}
-       [:a "More  ▾"]
-       [:ul
-        (when (db/find-post-by-title "About")
-          [:li [:a {:href "/About"} "About"]])
-        (when-not (ri/is-reader-user? req)
-          [:li [:a {:href "/import"} "Import"]])
-        (when-not (or (special/is-generated? page-title)
-                      (:editing options))
-          [:li [:a {:href "/export"} "Export"]])
-        [:li [:a {:href "/export-all"} "Export All"]]
-        (when (and (ri/is-admin-user? req)
-                   (is-seed-page? (:page_title post-map)))
-          [:li [:a {:href "/save-seed-page"} "Save Seed"]])
-        (when (ri/is-admin-user? req)
-          [:li [:a {:href "/Admin"} "Admin"]])
-        [:li [:a {:href "/logout"} "Sign Out"]]]]]]))
+    [:ul
+     (when (db/find-post-by-title "About")
+       [:li [:a {:href "/About"} "About"]])
+     (when-not (ri/is-reader-user? req)
+       [:li [:a {:href "/import"} "Import"]])
+     (when-not (or (special/is-generated? page-title)
+                   (:editing options))
+       [:li [:a {:href "/export"} "Export"]])
+     [:li [:a {:href "/export-all"} "Export All"]]
+     (when (and (ri/is-admin-user? req)
+                (is-seed-page? (:page_title post-map)))
+       [:li [:a {:href "/save-seed-page"} "Save Seed"]])
+     (when (ri/is-admin-user? req)
+       [:li [:a {:href "/Admin"} "Admin"]])
+     [:li [:a {:href "/logout"} "Sign Out"]]]))
 
 (defn- searchbox
   "Return the search box element for use in the page header."
@@ -211,31 +207,30 @@
    (wiki-hmenu-component post-map req {}))
   ([post-map req options]
    (let [allow-editing (not (:editing options))
+         title (db/page-map->title post-map)
+         can-edit-and-delete (ath/can-edit-and-delete? req title)
          new-page-name (or (db/get-option-value :default-new-page-name)
                            "New Page")
-         title (db/page-map->title post-map)
          new-link (and post-map
                        allow-editing
                        (ath/can-create? req)
                        [:a {:href (str "/" new-page-name)} "New"])
-         can-edit-and-delete (ath/can-edit-and-delete? req title)
          edit-link (and post-map
                         allow-editing
                         can-edit-and-delete
-                        (get-edit-link-for-page post-map req))
+                        (get-edit-link-for-page post-map))
          delete-link (and post-map
                           allow-editing
                           can-edit-and-delete
-                          (get-delete-link-for-existing-page post-map req))]
-     [:nav {:class "hmenu"}
-      (when new-link
-        (menu-item-span new-link))
-      (when edit-link
-        (menu-item-span edit-link))
-      (when delete-link
-        (menu-item-span delete-link))
-      (menu-item-span [:a {:href "/"} "Home"])
-      (drop-menu req post-map options)
+                          (get-delete-link-for-existing-page post-map))]
+     [:nav {:class "hmenu nav"}
+      [:ul
+       (when new-link [:li new-link])
+       (when edit-link [:li edit-link])
+       (when delete-link [:li delete-link])
+       [:li [:a {:href "/"} "Home"]]
+       [:li [:a {:href "#"} "More  ▾"]
+        (drop-menu req post-map options)]]
       (searchbox)])))
 
 (defn wiki-header-component
