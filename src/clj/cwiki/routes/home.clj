@@ -6,7 +6,6 @@
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
             [cwiki.util.files :as files]
-            [cwiki.util.percent-encode :as pe]
             [cwiki.util.pp :as pp]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
