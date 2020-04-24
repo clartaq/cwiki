@@ -116,7 +116,7 @@
     (let [res (load-markdown-from-resource
                 "private/test_data/post-with-front-matter.md")
           tags (into (sorted-set) (:tags (:meta res)))]
-      (is (= "\nThis is part of a post with front matter." (:body res)))
+      (is (= "This is part of a post with front matter." (:body res)))
       (is (not (nil? (:meta res))))
       (is (= 3 (count tags)))
       (is (= "Serving WordPress over HTTPS with Caddy Server"
@@ -149,7 +149,7 @@
                      (:changed meta)
                      (:modified meta))))
       (is (nil? (:tags meta)))
-      (is (= "\nA Markdown file without dates or tags in the metadata.\nBut it does have a remarkable title. It is remarkable\nin that is uses the word remarkable several times.\nRemarkable!\n" (:body m))))))
+      (is (= "A Markdown file without dates or tags in the metadata.\nBut it does have a remarkable title. It is remarkable\nin that is uses the word remarkable several times.\nRemarkable!" (:body m))))))
 
 (deftest trim-leading-and-trailing-underscores-test
   (testing "The trim-leading-and-trailing-underscores function."
