@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added ###
 
+- The "Backup", "Restore", "Import", and "Export All" pages display a short animation when the user clicks the button to proceed to indicate that _something_ is going on.
+
 ### Changed ###
 
 - Import now allows importing of multiple files at once. Existing pages with the same name are silently overwritten.

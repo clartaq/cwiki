@@ -1645,36 +1645,23 @@ div.one-column-list li {
     background: var(--overlay-color-and-transparency);
 }
 
-/* CSS for the loading animation. Apparently have to animate color on a
-** different element.
- */
+/* CSS for the loading animation. */
 
 @keyframes load {
     0% {
+        color: var(--brand-title-color);
         opacity: 0.08;
         filter: blur(5px);
         letter-spacing: 3px;
     }
     100% {
-    }
-}
-
-@keyframes color-change {
-    0% {
-        color: var(--brand-title-color);
-    }
-    100% {
         color: var(--form-button-focus-border-color);
+        opacity: 1;
     }
 }
 
 .animated-loading-div {
     animation: load 1.2s infinite 0s ease-in-out;
     animation-direction: alternate;
-    margin-left: 10px;
-}
-
-.animated-label {
-    animation: color-change 1.2s infinite 0s ease-in-out;
-    animation-direction: alternate;
+    margin-left: 0.5rem;
 }

@@ -517,6 +517,7 @@
                    to import, " [:br] "then click the \"Import\" button."]
                [:div {:class "button-bar-container"}
                 [:input {:type     "button" :name "browse-button"
+                         :id       "browse-button-id"
                          :value    "Browse..."
                          :class    "form-button button-bar-item"
                          :tabindex "0"
@@ -549,13 +550,21 @@
               [:div {:class "button-bar-container"}
                (submit-button {:id       "import-button"
                                :class    "form-button button-bar-item"
-                               :disabled "disabled"}
+                               :disabled "disabled"
+                               :onclick  "document.getElementById('browse-button-id').disabled = true;
+                                          document.getElementById('cancel-import-button-id').disabled = true;
+                                          document.getElementById('animated-loading-div').style.visibility = 'initial';"}
                               "Import")
                [:input {:type      "button" :name "cancel-button"
+                        :id        "cancel-import-button-id"
                         :value     "Cancel"
                         :class     "form-button button-bar-item"
                         :autofocus "autofocus"
-                        :onclick   "window.history.back();"}]])]))
+                        :onclick   "window.history.back();"}]]
+              [:div {:id    "animated-loading-div"
+                     :style "visibility:hidden;"
+                     :class "animated-loading-div animate button-bar-container"}
+               [:label {:class "button-bar-item"} "Importing..."]])]))
 
 (defn confirm-export-page
   "Return a page stating that the file has been exported."
@@ -628,14 +637,21 @@
                   [:label {:class "form-label"
                            :for   "filename"} "Export all pages?"]]]
                 [:div {:class "button-bar-container"}
-                 (submit-button {:id    "export-all-button"
-                                 :class "form-button button-bar-item"}
+                 (submit-button {:id      "export-all-button"
+                                 :class   "form-button button-bar-item"
+                                 :onclick "document.getElementById('cancel-export-button-id').disabled = true;
+                                           document.getElementById('animated-loading-div').style.visibility = 'initial';"}
                                 "Export All")
                  [:input {:type      "button" :name "cancel-button"
+                          :id        "cancel-export-button-id"
                           :value     "Cancel"
                           :class     "form-button button-bar-item"
                           :autofocus "autofocus"
-                          :onclick   "window.history.back();"}]])])))
+                          :onclick   "window.history.back();"}]]
+                [:div {:id    "animated-loading-div"
+                       :style "visibility:hidden;"
+                       :class "animated-loading-div animate button-bar-container"}
+                 [:label {:class "button-bar-item"} "Exporting..."]])])))
 
 ;;;
 ;;; Functions related to backup/restore of database.
@@ -663,14 +679,21 @@
                   [:label {:class "form-label"
                            :for   "filename"} "Backup the Database?"]]]
                 [:div {:class "button-bar-container"}
-                 (submit-button {:id    "backup-button"
-                                 :class "form-button button-bar-item"}
+                 (submit-button {:id      "backup-button"
+                                 :class   "form-button button-bar-item"
+                                 :onclick "document.getElementById('cancel-backup-button-id').disabled = true;
+                                           document.getElementById('animated-loading-div').style.visibility = 'initial';"}
                                 "Backup")
                  [:input {:type      "button" :name "cancel-button"
+                          :id        "cancel-backup-button-id"
                           :value     "Cancel"
                           :class     "form-button button-bar-item"
                           :autofocus "autofocus"
-                          :onclick   "window.history.back();"}]])])))
+                          :onclick   "window.history.back();"}]]
+                [:div {:id    "animated-loading-div"
+                       :style "visibility:hidden;"
+                       :class "animated-loading-div animate button-bar-container"}
+                 [:label {:class "button-bar-item"} "Backing Up..."]])])))
 
 (defn confirm-restore-database
   "Return a page stating that the database has been backed up."
@@ -698,6 +721,7 @@
                [:p "First select a backup file to restore, then press the \"Restore\" button."]
                [:div {:class "button-bar-container"}
                 [:input {:type     "button" :name "browse-button"
+                         :id       "browse-button-id"
                          :value    "Browse..."
                          :class    "form-button button-bar-item"
                          :tabindex "0"
@@ -725,9 +749,12 @@
                (submit-button {:id       "restore-button"
                                :class    "form-button button-bar-item"
                                :disabled "disabled"
-                               :onclick  "document.getElementById('animated-loading-div').style.visibility = 'initial';"}
+                               :onclick  "document.getElementById('browse-button-id').disabled = true;
+                                          document.getElementById('cancel-restore-button-id').disabled = true;
+                                          document.getElementById('animated-loading-div').style.visibility = 'initial';"}
                               "Restore")
                [:input {:type      "button" :name "cancel-button"
+                        :id        "cancel-restore-button-id"
                         :value     "Cancel"
                         :class     "form-button button-bar-item"
                         :autofocus "autofocus"
@@ -736,7 +763,7 @@
               [:div {:id    "animated-loading-div"
                      :style "visibility:hidden;"
                      :class "animated-loading-div animate button-bar-container"}
-               [:label {:class "animated-label button-bar-item"} "Restoring..."]])]))
+               [:label {:class "button-bar-item"} "Restoring..."]])]))
 
 ;;;
 ;;; Functions related to viewing or editing wiki pages.
