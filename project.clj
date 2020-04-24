@@ -5,15 +5,15 @@
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/clojurescript "1.10.597" :scope "provided"]
-                 [org.clojure/core.async "0.7.559"]
+                 [org.clojure/clojurescript "1.10.741" :scope "provided"]
+                 [org.clojure/core.async "1.1.587"]
                  [org.clojure/java.jdbc "0.7.11"]
 
                  [buddy/buddy-auth "2.2.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
                  [buddy/buddy-hashers "1.4.0"]
                  [com.cemerick/url "0.1.1"]
                  [com.h2database/h2 "1.4.199"]
-                 [clj-commons/clj-yaml "0.7.0"]
+                 [clj-commons/clj-yaml "0.7.1"]
                  [clj-time "0.15.2"]
                  [cljs-ajax "0.8.0"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
@@ -37,7 +37,7 @@
                  [org.apache.lucene/lucene-core "5.5.5"]
                  [org.apache.lucene/lucene-analyzers-common "5.5.5"]
                  [org.apache.lucene/lucene-queryparser "5.5.5"]
-                 [org.flatland/ordered "1.5.7"]
+                 [org.flatland/ordered "1.5.9"]
                  [reagent "0.10.0"]
                  [ring/ring-defaults "0.3.2"]]
 
