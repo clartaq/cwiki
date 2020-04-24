@@ -725,23 +725,18 @@
                (submit-button {:id       "restore-button"
                                :class    "form-button button-bar-item"
                                :disabled "disabled"
-                               :onclick  "document.getElementById('animated-loading-div').style.display = 'initial';"}
+                               :onclick  "document.getElementById('animated-loading-div').style.visibility = 'initial';"}
                               "Restore")
                [:input {:type      "button" :name "cancel-button"
                         :value     "Cancel"
                         :class     "form-button button-bar-item"
                         :autofocus "autofocus"
-                        :onclick   "window.history.back();"}]])
+                        :onclick   "window.history.back();"}]]
 
-     [:div {:id    "animated-loading-div"
-            :style "display:none;"}
-      [:div.circle]
-      [:div.circle-small]
-      [:div.circle-big]
-      [:div.circle-inner-inner]
-      [:div.circle-inner]]
-
-     ]))
+              [:div {:id    "animated-loading-div"
+                     :style "visibility:hidden;"
+                     :class "animated-loading-div animate button-bar-container"}
+               [:label {:class "animated-label button-bar-item"} "Restoring..."]])]))
 
 ;;;
 ;;; Functions related to viewing or editing wiki pages.
