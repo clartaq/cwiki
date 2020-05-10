@@ -15,6 +15,7 @@
             [cwiki.util.files :refer [is-seed-page?]]
             [cwiki.util.req-info :as ri]
             [cwiki.util.special :as special]
+            [cwiki.util.wc :as wc]
             [environ.core :refer [env]]
             [hiccup.core :as hc]
             [hiccup.element :refer [link-to]]
@@ -322,7 +323,12 @@
   [post-map]
   (let [title (db/page-map->title post-map)
         created (db/page-map->created-date post-map)
-        modified (db/page-map->modified-date post-map)]
+        modified (db/page-map->modified-date post-map)
+        wc (wc/count-words-in-markdown (db/page-map->content post-map))
+        words (:words wc)
+        formatted-words (format "%,d" words)
+        chars (:chars wc)
+        formatted-chars (format "%,d" chars)]
     [:div {:class "page-title-div"}
      [:h1 {:class "page-title-header"} title]
      (author-div-for-title-component post-map)
@@ -331,7 +337,12 @@
       [:span {:class "date-header"} "Created: "]
       [:span {:class "date-text"} (get-formatted-time created) ", "]
       [:span {:class "date-header"} "Last Modified: "]
-      [:span {:class "date-text"} (get-formatted-time modified)]]]))
+      [:span {:class "date-text"} (get-formatted-time modified)]]
+     [:p {:class "date-line"}
+      [:span {:class "date-header"} "Number of Words: "]
+      [:span {:class "date-text"} (str formatted-words ", ")]
+      [:span {:class "date-header"} "Number of Markdown Characters: "]
+      [:span {:class "date-text"} formatted-chars]]]))
 
 (defn- limited-width-content-component
   "Center the content in a centered element and return it."

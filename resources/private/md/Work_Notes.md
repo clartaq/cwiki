@@ -4,7 +4,7 @@ author: CWiki
 title: Work Notes
 
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-04-23T14:05:55.235-04:00
+modified: 2020-05-10T16:09:10.780-04:00
 tags:
   - technical note
 
@@ -20,11 +20,31 @@ tags:
 
 This page is the on-going saga of working on the CWiki program.
 
-#### Improving Implementation of Menus, 23 Apr 2020, 02:03:40 pm ####
+#### Counting the Words in a Page, 10 May 2020, 04:06:50 pm ####
 
-The implementation of the menus in the header has bothered me for awhile, particularly the issue where you sometimes believe you are clicking the "Home" item only to discover that you weren't perfectly positioned when you clicked.
+A word count has been added to the reading view of each page.
 
-Changed the implementation to something much simpler and more robust.
+There is little agreement about how to do such a thing for text in a complicated Markdown document.
+
+The way it works in CWiki is explained in a new seed page: [[About the Word Count]].
+
+#### Animated Activity Indicators for Long Processes, 25 Apr 2020, 10:13:22 am ####
+
+It always seemed a little jarring to start a long-running process, like restoring the database, and getting no feedback that anything was actually happening.
+
+There is finally a simple animation that is triggered when running a "Backup", "Restore", "Import" or "Export All". They don't give you any indication of progress, but it's something.
+
+It may be a good idea to replace separate "Export" and "Export All" with a single operation. Maybe not.
+
+#### Multi-File Import, 25 Apr 2020, 10:06:47 am ####
+
+When using the program, I have often found myself wanting to import multiple pages files at once.
+
+That was a bit of a problem. The earlier implementation, supporting only one-file-at-a-time import, checked if the new file would overwrite an existing page and warned the user before doing the import.
+
+I could not find a clever way to do that with multiple files. So the new implementation just overwrites any existing file without warning. That's useful for me, but not optimum.
+
+Some time in the future it will be reasonable to implement the warning page offering options of "Overwrite All", "Overwrite None", or "Overwrite Some" and providing a list of page names with checkboxes indicating that a particular page is ok to overwrite.
 
 #### Removing References to Database Compression, 05 Apr 2020, 09:26:59 am ####
 

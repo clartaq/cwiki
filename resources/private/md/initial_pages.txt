@@ -24,6 +24,7 @@ About_TeX.md
 About_the_Editor.md
 About_the_Editor_Icons.md
 About_the_Sidebar.md
+About_the_Word_Count.md
 Admin.md
 Code_Formatting_and_Highlighting.md
 CWiki_FAQ.md
