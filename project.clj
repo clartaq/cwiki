@@ -5,7 +5,7 @@
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/clojurescript "1.10.741" :scope "provided"]
+                 [org.clojure/clojurescript "1.10.758" :scope "provided"]
                  [org.clojure/core.async "1.1.587"]
                  [org.clojure/java.jdbc "0.7.11"]
 
@@ -25,7 +25,7 @@
                  [com.vladsch.flexmark/flexmark-ext-tables "0.42.12"]
                  [com.vladsch.flexmark/flexmark-ext-wikilink "0.42.12"]
                  [compojure "1.6.1" :exclusions [clout instaparse]]
-                 [environ "1.1.0"]
+                 [environ "1.2.0"]
                  [hiccup "1.0.5"]
                  [http-kit "2.3.0"]
                  [keybind "2.2.0"]
@@ -84,7 +84,7 @@
                                       [figwheel-sidecar "0.5.19" :exclusions [org.clojure/tools.nrepl]]
                                       [prone "2020-01-17"]
                                       [ring/ring-mock "0.4.0"]
-                                      [ring/ring-devel "1.8.0"]]
+                                      [ring/ring-devel "1.8.1"]]
 
                        :source-paths ["env/dev/clj"]
 
