@@ -278,7 +278,7 @@
   (let [page-name (:page_title page-map)
         sanitized-name (sanitize-page-name page-name)]
     (if (empty? sanitized-name)
-      (println "Problem with translating the page name")
+      (println "Problem with translating the page name: page-map: " page-map)
       (let [path (str dir sep sanitized-name ".md")
             content (:page_content page-map)]
         ;; Needed when saving seed pages while running from an uberjar.
