@@ -4,9 +4,9 @@
   :license {:name         "Simplfied BSD"
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
-  :dependencies [[org.clojure/clojure "1.10.1"]
-                 [org.clojure/clojurescript "1.10.758" :scope "provided"]
-                 [org.clojure/core.async "1.1.587"]
+  :dependencies [[org.clojure/clojure "1.10.1" :scope "provided"]
+                 [org.clojure/clojurescript "1.10.764" :scope "provided"]
+                 [org.clojure/core.async "1.2.603"]
                  [org.clojure/java.jdbc "0.7.11"]
 
                  [buddy/buddy-auth "2.2.0" :exclusions [com.fasterxml.jackson.core/jackson-core]]
@@ -80,8 +80,8 @@
 
                        :dependencies [[org.clojure/tools.nrepl "0.2.13"]
                                       [binaryage/devtools "1.0.0"]
-                                      [cider/piggieback "0.4.2"]
-                                      [figwheel-sidecar "0.5.19" :exclusions [org.clojure/tools.nrepl]]
+                                      [cider/piggieback "0.5.0"]
+                                      [figwheel-sidecar "0.5.20" :exclusions [org.clojure/tools.nrepl]]
                                       [prone "2020-01-17"]
                                       [ring/ring-mock "0.4.0"]
                                       [ring/ring-devel "1.8.1"]]
