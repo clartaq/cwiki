@@ -10,7 +10,6 @@
             [clojure.set :refer [intersection]]
             [clojure.string :as s]
             [cwiki.util.datetime :as dt]
-            [cwiki.util.percent-encode :as pe]
             [cwiki.util.zip :as zip])
   (:import (java.io BufferedReader InputStreamReader File)))
 
