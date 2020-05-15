@@ -4,8 +4,10 @@ author: david
 title: About the Word Count
 
 date: 2020-05-10T15:17:00.182-04:00
-modified: 2020-05-10T16:05:46.375-04:00
+modified: 2020-05-13T15:45:50.231-04:00
 tags:
+  - technical note
+
   - word count
 
   - about

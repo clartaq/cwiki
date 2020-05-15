@@ -127,8 +127,8 @@
 (defn get-production-css-path
   "Return the path to the minimized, production css file."
   []
-  ;(println "returning /css/styles.min.css")
-  (println "returning development css from get-production-css-path")
+;  (println "returning production /css/styles.min.css")
+;  (println "returning development css from get-production-css-path")
   (get-development-css-path))
 ;"/css/styles.min.css")
 
@@ -495,31 +495,54 @@
   []
   (short-message "Forbidden" "You are not allowed to perform that action."))
 
+;; This function is used to build the 'onsubmit' handler for the
+;; potentially long-running processes backup/restore and import-multi/
+;; export-all. It splices together a bunch of text that makes up the
+;; Javascript for a handler.
+;;
+;; It depends on the naming conventions for buttons and divs in the forms
+;; making up the pages for these operations.
+;;
+;; The function generated also prevents double submits by noting the
+;; first activation of the process and ignoring subsequent button clicks.
+;;
+;; The rigamarole with the loading animations is to assure that the
+;; animated text achieves the same colors at the extremes of the
+;; animation cycle. Otherwise, some browsers will vary in coloration
+;; depending on when the submit button is clicked.
+
 (defn build-onsubmit-handler-string
   "Build the 'onsubmit' handler Javascript text to be used for long-running
-  processes."
+  processes. The first argument is the 'name' of the operation and is used as
+  part of the identifier for the submit button and the cancel button. The
+  second argument is just a flag. `nil` means there is no browser button
+  to disable in the form. Anything else means disable the browser button
+  when submitting."
   [submit-btn browse-btn]
-  (let [res (str "(function (evt) {
-                      console.log('Enter on-submit');\n
-                      console.log('    evt: ' + evt);\n
+  (let [res (str "(function (evt) {\n
+                      //console.log('Enter on-submit');\n
+                      //console.log('    evt: ' + evt);\n
 
                       var btnEle = document.getElementById('" submit-btn "-button-id');\n
+                      var loaderBtn = document.getElementById('animated-loading-div');\n
                       var submittedFlag = btnEle.getAttribute('data-alreadySubmitted');\n
-                      console.log('    submittedFlag: ' + submittedFlag);\n
-                      console.log('btnEle: ' + btnEle);\n
+
+                      //console.log('    submittedFlag: ' + submittedFlag);\n
+                      //console.log('btnEle: ' + btnEle);\n
 
                       if (submittedFlag != 'true') {
-                          console.log('    not submitted before');\n
+                          //console.log('    not submitted before');\n
                           btnEle.setAttribute('data-alreadySubmitted', 'true');\n
                           document.getElementById('cancel-" submit-btn "-button-id').disabled = true;\n
                           document.getElementById('" submit-btn "-button-id').value = 'Please wait...';\n"
                  (when browse-btn
                    "document.getElementById('browse-button-id').disabled = true;\n")
-                 "document.getElementById('animated-loading-div').style.visibility = 'initial';\n
-                 console.log('Exit on-submit');\n
+                 "loaderBtn.style.visibility = 'visible';\n
+                 loaderBtn.classList.add('animated-loading-div');\n
+                 //console.log('Exit on-submit');\n
                  return true;\n
              } else {\n
-                 console.log('    already submitted.');\n
+                 //console.log('    already submitted.');\n
                  evt.preventDefault();\n
                  return false;\n
              }\n
@@ -551,30 +574,6 @@
     [:div {:class "cwiki-form"}
      (form-to {:enctype      "multipart/form-data"
                :onSubmit     (build-onsubmit-handler-string "import" "browse")
-               ;"(function (evt) {
-               ;                     console.log('Enter on-submit');\n
-               ;                     console.log('    evt: ' + evt);\n
-               ;
-               ;                     var btnEle = document.getElementById('import-button-id');\n
-               ;                     var submittedFlag = btnEle.getAttribute('data-alreadySubmitted');\n
-               ;                     console.log('    submittedFlag: ' + submittedFlag);\n
-               ;                     console.log('btnEle: ' + btnEle);\n
-               ;
-               ;                     if (submittedFlag != 'true') {
-               ;                         console.log('    not submitted before');\n
-               ;                         btnEle.setAttribute('data-alreadySubmitted', 'true');\n
-               ;                         document.getElementById('cancel-import-button-id').disabled = true;\n
-               ;                         document.getElementById('import-button-id').value = 'Please wait...';\n
-               ;                         document.getElementById('browse-button-id').disabled = true;\n
-               ;                         document.getElementById('animated-loading-div').style.visibility = 'initial';\n
-               ;                         console.log('Exit on-submit');\n
-               ;                         return true;\n
-               ;                     } else {\n
-               ;                         console.log('    already submitted.');\n
-               ;                         evt.preventDefault();\n
-               ;                         return false;\n
-               ;                     }\n
-               ;                  })(event);\n"
                :autocomplete "off"}
               [:post "import"]
               (hidden-field "referer" (get (:headers req) "referer"))
@@ -635,7 +634,7 @@
                         :onclick   "window.history.back();"}]]
               [:div {:id    "animated-loading-div"
                      :style "visibility:hidden;"
-                     :class "animated-loading-div animate button-bar-container"}
+                     :class "button-bar-container"}
                [:label {:class "button-bar-item"} "Importing..."]])]))
 
 (defn confirm-export-page
@@ -701,29 +700,6 @@
       [:div {:class "cwiki-form"}
        (form-to {:enctype      "multipart/form-data"
                  :onSubmit     (build-onsubmit-handler-string "export-all" nil)
-                               ;"(function (evt) {
-                               ;     console.log('Enter on-submit');\n
-                               ;     console.log('    evt: ' + evt);\n
-                               ;
-                               ;     var btnEle = document.getElementById('export-all-button-id');\n
-                               ;     var submittedFlag = btnEle.getAttribute('data-alreadySubmitted');\n
-                               ;     console.log('    submittedFlag: ' + submittedFlag);\n
-                               ;     console.log('btnEle: ' + btnEle);\n
-                               ;
-                               ;     if (submittedFlag != 'true') {
-                               ;         console.log('    not submitted before');\n
-                               ;         btnEle.setAttribute('data-alreadySubmitted', 'true');\n
-                               ;         document.getElementById('cancel-export-button-id').disabled = true;\n
-                               ;         document.getElementById('export-all-button-id').value = 'Please wait...';\n
-                               ;         document.getElementById('animated-loading-div').style.visibility = 'initial';\n
-                               ;         console.log('Exit on-submit');\n
-                               ;         return true;\n
-                               ;     } else {\n
-                               ;         console.log('    already submitted.');\n
-                               ;         evt.preventDefault();\n
-                               ;         return false;\n
-                               ;     }\n
-                               ;  })(event);\n"
                  :autocomplete "off"}
                 [:post "export-all"]
                 (hidden-field "referer" referer)
@@ -745,7 +721,7 @@
                           :onclick   "window.history.back();"}]]
                 [:div {:id    "animated-loading-div"
                        :style "visibility:hidden;"
-                       :class "animated-loading-div animate button-bar-container"}
+                       :class "button-bar-container"}
                  [:label {:class "button-bar-item"} "Exporting..."]])])))
 
 ;;;
@@ -766,29 +742,6 @@
       [:div {:class "cwiki-form"}
        (form-to {:enctype      "multipart/form-data"
                  :onSubmit     (build-onsubmit-handler-string "backup" nil)
-                               ;"(function (evt) {
-                               ;     console.log('Enter on-submit');\n
-                               ;     console.log('    evt: ' + evt);\n
-                               ;
-                               ;     var btnEle = document.getElementById('backup-button-id');\n
-                               ;     var submittedFlag = btnEle.getAttribute('data-alreadySubmitted');\n
-                               ;     console.log('    submittedFlag: ' + submittedFlag);\n
-                               ;     console.log('btnEle: ' + btnEle);\n
-                               ;
-                               ;     if (submittedFlag != 'true') {
-                               ;         console.log('    not submitted before');\n
-                               ;         btnEle.setAttribute('data-alreadySubmitted', 'true');\n
-                               ;         document.getElementById('cancel-backup-button-id').disabled = true;\n
-                               ;         document.getElementById('backup-button-id').value = 'Please wait...';\n
-                               ;         document.getElementById('animated-loading-div').style.visibility = 'initial';\n
-                               ;         console.log('Exit on-submit');\n
-                               ;         return true;\n
-                               ;     } else {\n
-                               ;         console.log('    already submitted.');\n
-                               ;         evt.preventDefault();\n
-                               ;         return false;\n
-                               ;     }\n
-                               ;  })(event);\n"
                  :autocomplete "off"}
                 [:post "backup"]
                 (hidden-field "referer" referer)
@@ -810,7 +763,7 @@
                           :onclick   "window.history.back();"}]]
                 [:div {:id    "animated-loading-div"
                        :style "visibility:hidden;"
-                       :class "animated-loading-div animate button-bar-container"}
+                       :class "button-bar-container"}
                  [:label {:class "button-bar-item"} "Backing Up..."]])])))
 
 (defn confirm-restore-database
@@ -829,30 +782,6 @@
     [:div {:class "cwiki-form"}
      (form-to {:enctype      "multipart/form-data"
                :onSubmit     (build-onsubmit-handler-string "restore" "browse")
-                             ;"(function (evt) {
-                             ;       console.log('Enter on-submit');\n
-                             ;       console.log('    evt: ' + evt);\n
-                             ;
-                             ;       var btnEle = document.getElementById('restore-button-id');\n
-                             ;       var submittedFlag = btnEle.getAttribute('data-alreadySubmitted');\n
-                             ;       console.log('    submittedFlag: ' + submittedFlag);\n
-                             ;       console.log('btnEle: ' + btnEle);\n
-                             ;
-                             ;       if (submittedFlag != 'true') {
-                             ;           console.log('    not submitted before');\n
-                             ;           btnEle.setAttribute('data-alreadySubmitted', 'true');\n
-                             ;           document.getElementById('cancel-restore-button-id').disabled = true;\n
-                             ;           document.getElementById('restore-button-id').value = 'Please wait...';\n
-                             ;           document.getElementById('browse-button-id').disabled = true;\n
-                             ;           document.getElementById('animated-loading-div').style.visibility = 'initial';\n
-                             ;           console.log('Exit on-submit');\n
-                             ;           return true;\n
-                             ;       } else {\n
-                             ;           console.log('    already submitted.');\n
-                             ;           evt.preventDefault();\n
-                             ;           return false;\n
-                             ;       }\n
-                             ;    })(event);\n"
                :autocomplete "off"}
               [:post "restore"]
               (hidden-field "referer" (get (:headers req) "referer"))
@@ -906,7 +835,7 @@
 
               [:div {:id    "animated-loading-div"
                      :style "visibility:hidden;"
-                     :class "animated-loading-div animate button-bar-container"}
+                     :class "button-bar-container"}
                [:label {:class "button-bar-item"} "Restoring..."]])]))
 
 ;;;

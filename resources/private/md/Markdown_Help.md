@@ -1,11 +1,19 @@
 ---
-author: CWki
+author: CWiki
+
 title: Markdown Help
+
 date: 2018-11-18T15:39:33.103-05:00
-modified: 2020-04-07T14:21:47.868-04:00
+modified: 2020-05-14T11:00:16.009-04:00
 tags:
   - help
+
+  - text formatting
+
   - Markdown
+
+  - formatting
+
 ---
 
 <a name="top"></a>

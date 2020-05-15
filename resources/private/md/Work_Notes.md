@@ -4,7 +4,7 @@ author: CWiki
 title: Work Notes
 
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-05-10T16:09:10.780-04:00
+modified: 2020-05-14T18:01:51.119-04:00
 tags:
   - technical note
 
@@ -19,6 +19,14 @@ tags:
 ---
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Bug in Minifying Assets, 14 May 2020, 05:57:36 pm ####
+
+There is a bug in minifying assets with `lein-asset-minifier`.
+
+- Using the development version of the CSS for the program works across browsers all of the time.
+- Using the production, minified version causes animations of the pulsing notifications for backup, restore, import and export to fail.
+- Replacing the minified CSS with the output from [CSS Minifier](https://cssminifier.com) produces working animations.
 
 #### Counting the Words in a Page, 10 May 2020, 04:06:50 pm ####
 

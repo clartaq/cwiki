@@ -46,7 +46,8 @@
             [lein-environ "1.1.0"]
             [lein-ring "0.12.1"]
             [lein-shell "0.5.0"]
-            [lein-asset-minifier "0.4.6" :exclusions [org.clojure/clojure]]]
+            ;[lein-asset-minifier "0.4.6" :exclusions [org.clojure/clojure]]
+            ]
 
   :main cwiki.main
 
@@ -65,8 +66,8 @@
                                     "target"
                                     "test/js/compiled"]
 
-  :minify-assets [[:css {:source "resources/public/css/styles.css"
-                         :target "resources/public/css/styles.min.css"}]]
+  ;:minify-assets [[:css {:source "resources/public/css/styles.css"
+  ;                       :target "resources/public/css/styles.min.css"}]]
 
   :aliases {"test-cljs"  ["do" "clean," "doo" "firefox-headless" "test" "once"]
             "start-prod" ["do" "clean," "cljsbuild" "once" "min," "run"]}
@@ -102,7 +103,7 @@
              :uberjar {:aot          :all
                        :omit-source  true
                        :source-paths ["env/prod/clj"]
-                       :hooks        [minify-assets.plugin/hooks]
+                       ;:hooks        [minify-assets.plugin/hooks]
                        :prep-tasks   ["clean"
                                       ["javac"]
                                       ["compile" "cwiki.extensions.cwikilink-attributes"]
