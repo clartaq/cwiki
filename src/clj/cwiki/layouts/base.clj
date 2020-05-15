@@ -129,8 +129,8 @@
 (defn get-production-css-path
   "Return the path to the minimized, production css file."
   []
-;  (println "returning production /css/styles.min.css")
-;  (println "returning development css from get-production-css-path")
+  ;  (println "returning production /css/styles.min.css")
+  ;  (println "returning development css from get-production-css-path")
   (get-development-css-path))
 ;"/css/styles.min.css")
 
@@ -535,8 +535,8 @@
                       if (submittedFlag != 'true') {
                           //console.log('    not submitted before');\n
                           btnEle.setAttribute('data-alreadySubmitted', 'true');\n
-                          document.getElementById('cancel-" submit-type "-button-id').disabled = true;\n
-                          document.getElementById('" submit-type "-button-id').value = 'Please wait...';\n"
+                          btnEle.value = 'Please wait...';\n
+                          document.getElementById('cancel-" submit-type "-button-id').disabled = true;\n"
                  (when browse-btn
                    "document.getElementById('browse-button-id').disabled = true;\n")
                  "loaderDiv.style.visibility = 'visible';\n
