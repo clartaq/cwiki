@@ -268,8 +268,7 @@ html, body {
     --content-max-width: 70ch;
     --tag-field-right-margin: 0.2rem;
     --form-component-max-width: calc(0.3 * var(--content-max-width));
-    --tag-field-width: calc((var(--content-max-width)
-    - (4 * var(--tag-field-right-margin))) / 5);
+    --tag-field-width: calc((var(--content-max-width) - (4 * var(--tag-field-right-margin))) / 5);
 }
 
 /* Some typography */
@@ -1649,14 +1648,14 @@ div.one-column-list li {
 
 @keyframes load {
     0% {
-        color: var(--brand-title-color);
+        color: var(--form-button-focus-border-color);
+        opacity: 1;
+    }
+    100% {
+        color: var(--body-background-color);
         opacity: 0.08;
         filter: blur(5px);
         letter-spacing: 3px;
-    }
-    100% {
-        color: var(--form-button-focus-border-color);
-        opacity: 1;
     }
 }
 
