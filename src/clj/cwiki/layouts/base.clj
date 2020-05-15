@@ -124,6 +124,8 @@
         cssp (str "/css/styles.css" q)]
     cssp))
 
+;; There is a bug in the asset minimizer used in the uberjar build.
+;; For now, that step has been removed.
 (defn get-production-css-path
   "Return the path to the minimized, production css file."
   []
