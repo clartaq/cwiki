@@ -513,20 +513,20 @@
 ;; animation cycle. Otherwise, some browsers will vary in coloration
 ;; depending on when the submit button is clicked.
 
-(defn build-onsubmit-handler-string
+(defn- build-onsubmit-handler-string
   "Build the 'onsubmit' handler Javascript text to be used for long-running
   processes. The first argument is the 'name' of the operation and is used as
   part of the identifier for the submit button and the cancel button. The
-  second argument is just a flag. `nil` means there is no browser button
+  second argument is a truthy flag. `nil` means there is no browser button
   to disable in the form. Anything else means disable the browser button
   when submitting."
-  [submit-btn browse-btn]
+  [submit-type browse-btn]
   (let [res (str "(function (evt) {\n
                       //console.log('Enter on-submit');\n
                       //console.log('    evt: ' + evt);\n
 
-                      var btnEle = document.getElementById('" submit-btn "-button-id');\n
-                      var loaderBtn = document.getElementById('animated-loading-div');\n
+                      var btnEle = document.getElementById('" submit-type "-button-id');\n
+                      var loaderDiv = document.getElementById('animated-loading-div');\n
                       var submittedFlag = btnEle.getAttribute('data-alreadySubmitted');\n
 
                       //console.log('    submittedFlag: ' + submittedFlag);\n
@@ -535,12 +535,12 @@
                       if (submittedFlag != 'true') {
                           //console.log('    not submitted before');\n
                           btnEle.setAttribute('data-alreadySubmitted', 'true');\n
-                          document.getElementById('cancel-" submit-btn "-button-id').disabled = true;\n
-                          document.getElementById('" submit-btn "-button-id').value = 'Please wait...';\n"
+                          document.getElementById('cancel-" submit-type "-button-id').disabled = true;\n
+                          document.getElementById('" submit-type "-button-id').value = 'Please wait...';\n"
                  (when browse-btn
                    "document.getElementById('browse-button-id').disabled = true;\n")
-                 "loaderBtn.style.visibility = 'visible';\n
-                 loaderBtn.classList.add('animated-loading-div');\n
+                 "loaderDiv.style.visibility = 'visible';\n
+                 loaderDiv.classList.add('animated-loading-div');\n
                  //console.log('Exit on-submit');\n
                  return true;\n
              } else {\n
