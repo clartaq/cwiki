@@ -1,12 +1,17 @@
 ---
-author: david
+author: CWiki
+
 title: About the Editor
+
 date: 2018-11-27T17:40:32.822-05:00
-modified: 2018-12-02T17:28:20.648-05:00
+modified: 2020-05-16T10:10:02.727-04:00
 tags:
-  - about
-  - editor
   - help
+
+  - editor
+
+  - about
+
 ---
 
 CWiki includes a simple Markdown editor with real-time preview. It is not fancy, but in my own work, it is very low friction.
@@ -16,8 +21,9 @@ The editor consists of three main areas.
 1. The title area lets you edit the page title.
 2. The tags area lets you manage the tags associated with a page.
    1. To edit a tag, click the tag and make your changes.
-   2. To delete a tag, click the circled "x" next to the tag.
-   3. To add a new tag, click the circled "+" at the end of the list of tags.
+   2. To delete a tag, click the circled "x" next to the tag. You can also backspace until the tag is erased.
+   3. To add a new tag, click the circled "+" at the end of the list of tags. You can also press the "Enter" key while editing a tag to create a new one.
+    4. You can navigate among the tags using the "Tab" and "Shift-Tab" keys.
 3. The main editing section is where you will spend most of your time.
 
 ## The Main Editing Section ##

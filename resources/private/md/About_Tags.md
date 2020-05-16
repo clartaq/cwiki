@@ -1,14 +1,18 @@
 ---
 author: CWiki
-title: About Tags
-date: 2018-01-22T17:45:17.000-05:00
-modified: 2018-10-30T10:34:44.269-04:00
-tags:
-  - about
-  - help
-  - tags
----
 
+title: About Tags
+
+date: 2018-01-22T17:45:17.000-05:00
+modified: 2020-05-15T17:54:00.701-04:00
+tags:
+  - help
+
+  - tags
+
+  - about
+
+---
 
 ​
 Tags are a convenience that lets you classify your information in some (hopefully) systematic way. They are just words or short phrases that you can associate with a page.
@@ -28,6 +32,8 @@ You can organize things such that pages with the same tag have some relationship
 And so on.
 
 When you create or edit a page, you can create or delete tags associated with that page. When you view a page, the tags for the page appear near the top. If the page has no tags, it will say "None."
+
+When working in the tag editing area, you can navigate between tags by pressing the "Tab" key to move forward or the "Shift Tab" key to move backward. As a convenience, when a tag editor is focused, you can press the "Enter" key to create a new tag and focus it. You can just start typing in the new tag editor.
 
 Some of the characteristics of tags include:
 

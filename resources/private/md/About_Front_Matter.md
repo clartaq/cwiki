@@ -1,16 +1,18 @@
 ---
 author: CWiki
+
 title: About Front Matter
+
 date: 2017-12-24T17:15:16.000-05:00
-modified: 2018-12-01T13:16:23.589-05:00
+modified: 2020-05-16T10:11:59.766-04:00
 tags:
-  - about
   - front matter
+
+  - about
+
   - metadata
+
 ---
-
-
-
 
 This information is relevant only if you use the [[About Import-Export|Import/Export]] capabilities of CWiki to read and save posts to and from disk.
 
@@ -33,9 +35,9 @@ tags:
 
 Note that the section starts and ends with three hyphen characters. This section is not shown​ in the wiki posts that you view. In fact, after loading a file, the front matter is discarded.
 
-The tags that CWiki understands include:
+The keys that CWiki understands include:
 
- | Tags  |  Description |
+ | Keys  |  Description |
  |--------|:------------|
  | `author`  | The author of the page.  |
  | `title`  |  The title of the page. | 

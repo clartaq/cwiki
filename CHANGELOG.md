@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - The "Backup", "Restore", "Import", and "Export All" pages display a short animation when the user clicks the button to proceed to indicate that _something_ is going on.
 - A word count has been added to the information at the top of each page.
+- New tags can be created by pressing the "Enter" key in an existing tag.
 
 ### Changed ###
 

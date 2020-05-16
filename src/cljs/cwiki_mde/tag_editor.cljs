@@ -49,6 +49,14 @@
                          (delete-existing-tag tags-atom-vector n)
                          (dirty-editor-notifier editor-state) editor-state)}]]))
 
+(defn- add-new-tag
+  "Create a new tag and add it to the vector of tags in the editor state.
+  Return the editor state."
+  [{:keys [tags-atom-vector dirty-editor-notifier] :as editor-state}]
+  (swap! tags-atom-vector conj (:default-new-tag-label editor-state))
+  (dirty-editor-notifier editor-state)
+  editor-state)
+
 (defn- layout-add-tag-button
   "Return a button to initiate adding a tag."
   [editor-state]
@@ -56,10 +64,7 @@
     [:span {:title "Add a new tag"}
      [:svg {:class    "tag-editor--add-button tag-editor--button-image"
             :tabIndex 0
-            :on-click #(do
-                         (swap! tags-atom-vector conj
-                                (:default-new-tag-label editor-state))
-                         (dirty-editor-notifier editor-state) editor-state)}]]))
+            :on-click #(add-new-tag editor-state)}]]))
 
 (defn keydown-handler!
   "Handle a keydown event for a tag editor. Watches if the tag is empty.
@@ -67,12 +72,20 @@
   element will be removed from the list of tag editors."
   [evt n {:keys [tags-atom-vector dirty-editor-notifier] :as editor-state}]
   (let [tag-of-interest (nth @tags-atom-vector n)]
-    (when (and (or (= "Backspace" (.-key evt))
-                   (= "Delete" (.-key evt)))
-               (empty? tag-of-interest))
-      (delete-existing-tag tags-atom-vector n)
-      (dirty-editor-notifier editor-state)
-      (.stopPropagation evt))))
+    (cond
+
+      ;; Pressing the Enter key in a tag editor creates a new tag.
+      (= "Enter" (.-key evt)) (do (.stopPropagation evt)
+                                  (.preventDefault evt)
+                                  (add-new-tag editor-state))
+
+      ;; Pressing Backspace or Delete in an empty tag editor
+      ;; deletes the tag.
+      (and (or (= "Backspace" (.-key evt))
+               (= "Delete" (.-key evt)))
+           (empty? tag-of-interest)) (do (delete-existing-tag tags-atom-vector n)
+                                         (dirty-editor-notifier editor-state)
+                                         (.stopPropagation evt)))))
 
 (defn- get-style
   [ele rule]
