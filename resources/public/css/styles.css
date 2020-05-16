@@ -1100,27 +1100,31 @@ pre {
 
 /* Styles for building a two-column list page. */
 
+div.one-column-list,
 div.two-column-list {
-    max-width: var(--content-max-width);
+    max-width: var(--content-max-width)
+}
+
+div.two-column-list {
     columns: 2;
-    column-gap: 2em;
+    column-gap: 2rem;
     column-rule: 1px solid var(--rule-color);
 }
 
+div.one-column-list li,
 div.two-column-list li {
     display: inline-block;
+    line-height: 130%;
+    margin-bottom: 0.75rem;
     margin-left: 0;
-    width: 34ch;
-}
-
-div.one-column-list {
-    max-width: var(--content-max-width);
 }
 
 div.one-column-list li {
-    display: inline-block;
-    margin-left: 0;
-    width: 50ch;
+    width: calc(var(--content-max-width) - 2ch);
+}
+
+div.two-column-list li {
+    width: calc((var(--content-max-width) / 2) - 4ch);
 }
 
 /* Styles for displaying the content of a map. */

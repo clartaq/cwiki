@@ -4,7 +4,7 @@ author: CWiki
 title: Work Notes
 
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-05-16T10:23:45.594-04:00
+modified: 2020-05-16T14:07:43.991-04:00
 tags:
   - technical note
 
@@ -19,6 +19,10 @@ tags:
 ---
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Scroll Bar Overwriting Content in "All Pages" Page, 16 May 2020, 02:05:30 pm ####
+
+Sometimes, parts of long page titles could be overwritten by the scroll bars. Turns out the CSS for the individual list items specified a width that let them do that. Now it's all calculated based on the setting for the maximum width of the content area.
 
 #### Adding Tags from the Keyboard, 16 May 2020, 10:22:15 am ####
 
