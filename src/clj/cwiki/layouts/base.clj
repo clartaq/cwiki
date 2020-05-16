@@ -363,7 +363,7 @@
   []
   [:footer {:class "footer"}
    [:div {:class "footer-wrapper"}
-    [:p "Copyright \u00A9 2017-2019, David D. Clark"]
+    [:p "Copyright \u00A9 2017-2020, David D. Clark"]
     [:p program-name-and-version]]])
 
 (defn- aside
