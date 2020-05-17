@@ -669,10 +669,10 @@
                                  [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))})))
 
 (defn reload []
-  (go
-    (let [pm (<! got-page-channel)]
-      (rdom/render [layout-inner-editor-container pm]
-                   (get-element-by-id "outer-editor-container")))))
+  (when-let [ele (get-element-by-id "outer-editor-container")]
+    (go
+      (let [pm (<! got-page-channel)]
+        (rdom/render [layout-inner-editor-container pm] ele)))))
 
 (defn ^:export main []
   (reload))
