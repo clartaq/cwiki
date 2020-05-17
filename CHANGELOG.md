@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - The "Backup", "Restore", "Import", and "Export All" pages display a short animation when the user clicks the button to proceed to indicate that _something_ is going on.
 - A word count has been added to the information at the top of each page.
 - New tags can be created by pressing the "Enter" key in an existing tag.
+- For development builds, added a check for Chromium-based browsers before installing devtools.
 
 ### Changed ###
 
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed Issue #10. Styling of the file input components for Import and Restore now match the rest of CWiki.
 - Multipl form submission for the "Backup", "Restore", "Import" and "Export All" functions is now prevented. 
 - Parts of some long page titles are no longer overwritten by the scroll bars on the "All Pages" page.
+- Resolved a couple of development issues that led to error messages in the browser when using development builds.
 
 ## [0.1.7] - 2020-04-07 ##
 
