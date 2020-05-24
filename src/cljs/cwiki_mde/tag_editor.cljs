@@ -102,7 +102,7 @@
       (swap! tags-atom-vector assoc n new-tag)
       (dirty-editor-notifier editor-state)
       (when (:send-every-keystroke editor-state)
-        (ws/send-message! [:hey-server/tags-updated
+        (ws/chsk-send! [:hey-server/tags-updated
                            {:data @tags-atom-vector}])))))
 
 (defn- layout-tag-name-editor
