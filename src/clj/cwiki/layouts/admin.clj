@@ -9,7 +9,8 @@
             [cwiki.models.wiki-db :as db]
             [hiccup.form :refer [drop-down email-field form-to hidden-field
                                  password-field
-                                 submit-button text-field]])
+                                 submit-button text-field]]
+            [ring.util.anti-forgery :refer [anti-forgery-field]])
   (:import (java.net URLDecoder URL)))
 
 ;;;
@@ -27,8 +28,8 @@
   "Compose and return a page that allows the user to save a seed page."
   [req]
   (let [referer (get (:headers req) "referer")
-        ; First figure out if they are trying to export the Front Page or
-        ; a 'regular' page.
+        ;; First figure out if they are trying to export the Front Page or
+        ;; a 'regular' page.
         file-name (.getFile (URL. referer))
         page-title (if (= "/" file-name)
                      "Front Page"
@@ -47,6 +48,7 @@
          (form-to {:enctype      "multipart/form-data"
                    :autocomplete "off"}
                   [:post "save-seed-page"]
+                  (anti-forgery-field)
                   (hidden-field "page-id" page-id)
                   (hidden-field "referer" referer)
                   [:p {:class "form-title"} "Save Seed Page"]
@@ -63,7 +65,6 @@
                             :class     "form-button button-bar-item"
                             :autofocus "autofocus"
                             :onclick   "window.history.back();"}]])]))))
-
 
 ;;
 ;; Functions related to creating a new user.
@@ -89,6 +90,7 @@
      (form-to {:enctype      "multipart/form-data"
                :autocomplete "off"}
               [:post "create-user"]
+              (anti-forgery-field)
               (hidden-field "referer" (get (:headers req) "referer"))
               [:p {:class "form-title"} "Create A New User"]
               [:p "Enter information describing the new user."]
@@ -168,6 +170,7 @@
          (form-to {:enctype      "multipart/form-data"
                    :autocomplete "off"}
                   [:post "select-profile"]
+                  (anti-forgery-field)
                   (hidden-field "referer" (get (:headers req) "referer"))
                   [:p {:class "form-title"} "Edit Profile"]
                   base/required-field-hint
@@ -209,6 +212,7 @@
          (form-to {:enctype      "multipart/form-data"
                    :autocomplete "off"}
                   [:post "edit-profile"]
+                  (anti-forgery-field)
                   [:p {:class "form-title"} "Edit the Profile of An Existing User"]
                   [:p (str "Make any modifications needed to "
                            user-name "'s profile.")]
@@ -288,14 +292,9 @@
 (defn delete-user-page
   "Return a form to obtain information about a user to be deleted."
   [req]
-;  (println "delete-user-page")
   (let [all-users (db/get-all-users)
- ;       _ (println "     all-users: " all-users)
-  ;      _ (println "     (type all-users): " (type all-users))
         current-user (ri/req->user-name req)
-   ;     _ (println "     about to disj...")
         cleaned-users (disj all-users "CWiki" current-user)]
-    ;(println "     cleaned-users: " cleaned-users)
     (if (zero? (count cleaned-users))
       (no-users-to-delete-page req)
       (base/short-form-template
@@ -303,6 +302,7 @@
          (form-to {:enctype      "multipart/form-data"
                    :autocomplete "off"}
                   [:post "delete-user"]
+                  (anti-forgery-field)
                   (hidden-field "referer" (get (:headers req) "referer"))
                   [:p {:class "form-title"} "Delete A User"]
                   [:p base/warning-span "This action cannot be undone."]
