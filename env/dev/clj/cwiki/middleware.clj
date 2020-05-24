@@ -15,7 +15,7 @@
 (defn wrap-middleware [handler]
   (-> handler
       (wrap-authentication backend)
-      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
+      (wrap-defaults site-defaults)
       ; Makes static assets in $PROJECT_DIR/resources/public/ available.
       ; If you take this out, editor icons won't load.
       (wrap-file "resources")
