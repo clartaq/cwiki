@@ -6,7 +6,7 @@
 (ns cwiki-mde.core
   (:require [cljs.core.async :as async :refer [chan <! >!]]
             [clojure.string :refer [blank?]]
-            [cljs.pprint :as pprint]
+            [cljs.pprint :as pprint ]
             [cwiki-mde.editor-commands :as cmd]
             [cwiki-mde.keyboard-shortcuts :as kbs]
     ;; Include dragger so it gets bundled in output js file.
@@ -15,8 +15,9 @@
             [cwiki-mde.ws :as ws]
             [reagent.core :as r]
             [reagent.dom :as rdom]
-            [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]])
+            [taoensso.timbre :as timbre :refer-macros [log trace debug info warn error fatal report
+                                                       logf tracef debugf infof warnf errorf fatalf reportf
+                                                       spy get-env]])
   (:require-macros [cljs.core.async.macros :refer [go]]))
 
 ;;;-----------------------------------------------------------------------------
@@ -39,7 +40,7 @@
 
 ;; A channel used to retrieve the page map asynchronously when it becomes
 ;; available from the websocket.
-(def ^{:private true} got-page-channel (chan))
+(defonce ^{:private true} got-page-channel (chan))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Utility functions.
@@ -101,7 +102,7 @@
         page_id (:page_id new-page-map)
         page_title (:page_title new-page-map)
         referrer (.-referrer js/document)]
-    (ws/send-message! [:hey-server/quit-editing
+    (ws/chsk-send! [:hey-server/quit-editing
                        {:page-id    page_id
                         :page-title page_title
                         :referrer   referrer}])))
@@ -113,14 +114,15 @@
 (defn- doc-save-fn
   "Send a message to the server to save the document."
   [page-map]
-  (ws/send-message! [:hey-server/save-doc {:data page-map}]))
+  (ws/chsk-send! [:hey-server/save-doc {:data page-map}]))
 
 (defn- editor-handshake-handler
   "Handle the handshake event between the server and client. This function
   sends the message to the server to send over the document for editing."
   [{:keys [?data]}]
-  (trace "Editor: Connection established!")
-  (ws/send-message! [:hey-server/send-document-to-editor {}]))
+  (debugf "Enter editor-handshake-handler: ?data: " ?data)
+  (ws/chsk-send! [:hey-server/send-document-to-editor {}])
+  (debug "Exit editor-handshake-handler"))
 
 (defn- editor-state-handler
   "Handle changes in the state of the editor."
@@ -130,15 +132,16 @@
 (declare toggle-duplicate-title-modal)
 
 (defn- editor-message-handler
-  [{:keys [?data]}]
+  [{:as ev-msg :keys [?data]}]
+  (debugf "editor-message-handler: ?data: %s" ?data)
   (when ?data
-    (tracef "?data %s" ?data))
+    (debugf "?data %s" ?data))
   (let [message-id (first ?data)]
-    (tracef "editor-message-handler: message-id: %s" message-id)
+    (debugf "editor-message-handler: message-id: %s" message-id)
     (cond
       (= message-id
          :hey-editor/here-is-the-document) (when-let [page-map (second ?data)]
-                                             (tracef "editor-message-handler: the-data: %s"
+                                             (debugf "editor-message-handler: the-data: %s"
                                                      (with-out-str
                                                        (pprint/pprint page-map)))
                                              ; This is where the page map is
@@ -353,7 +356,7 @@
                                       (mark-page-dirty editor-state)
                                       (reset! page-title-atom new-title)
                                       (when (:send-every-keystroke editor-state)
-                                        (ws/send-message! [:hey-server/title-updated
+                                        (ws/chsk-send! [:hey-server/title-updated
                                                            {:data new-title}]))))})]
       [:section {:class "mde-title-edit-section"}
        [:div {:class "form-label-div"}
@@ -552,7 +555,7 @@
                                          (reset! page-content-ratom new-content)
                                          (mark-page-dirty editor-state)
                                          (when (:send-every-keystroke editor-state)
-                                           (ws/send-message! [:hey-server/content-updated
+                                           (ws/chsk-send! [:hey-server/content-updated
                                                               {:data new-content}]))
                                          new-content))}]])}))
 
@@ -668,16 +671,57 @@
                                  [layout-markdown-help-dialog extended-page-map]
                                  [:div {:class "modal-overlay closed" :id "modal-overlay"}]]))})))
 
+;;;; Sente event handlers.
+
+(defmulti -event-msg-handler
+          "Multimethod to handle Sente `event-msg`s"
+          :id ; Dispatch on event-id
+          )
+
+(defn event-msg-handler
+  "Wraps `-event-msg-handler` with logging, error catching, etc."
+  [{:as ev-msg :keys [id ?data event]}]
+  (-event-msg-handler ev-msg))
+
+(defmethod -event-msg-handler
+  :default ; Default/fallback case (no other matching handler)
+  [{:as ev-msg :keys [event]}]
+  (debugf "Unhandled event: %s" event))
+
+(defmethod -event-msg-handler :chsk/state
+  [{:as ev-msg :keys [?data]}]
+  (let [[old-state-map new-state-map] ?data]
+    (if (:first-open? new-state-map)
+      (debugf "Channel socket successfully established!: %s" new-state-map)
+      (debugf "Channel socket state change: %s"              new-state-map))
+    (editor-state-handler ev-msg)))
+
+(defmethod -event-msg-handler :chsk/recv
+  [{:as ev-msg :keys [?data]}]
+  (debugf "Push event from server: %s" ?data)
+  (editor-message-handler ev-msg))
+
+(defmethod -event-msg-handler :chsk/handshake
+  [{:as ev-msg :keys [?data]}]
+  (let [[?uid ?csrf-token ?handshake-data] ?data]
+    (debugf "Handshake: %s" ?data)
+    (debugf "About to call editor-handshake-handler: ev-msg:\n %s" (pprint/pprint ev-msg))
+    (editor-handshake-handler ev-msg)))
+
 (defn reload []
+  (debug "Enter reload")
   (when-let [ele (get-element-by-id "outer-editor-container")]
+    (debugf "    ele: %s" ele)
     (go
+      (debug "    enter go block")
       (let [pm (<! got-page-channel)]
+        (debug "    got-page-channel has returned a page map")
         (rdom/render [layout-inner-editor-container pm] ele)))))
 
 (defn ^:export main []
   (reload))
 
 (defn init! []
-  (ws/start-router! editor-handshake-handler editor-state-handler
-                    editor-message-handler)
+  (debugf "Enter init!: event-msg-handler: %s" event-msg-handler)
+  (ws/start-router! event-msg-handler)
   (reload))
