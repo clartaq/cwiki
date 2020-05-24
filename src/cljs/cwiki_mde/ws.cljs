@@ -10,7 +10,7 @@
                                                        logf tracef debugf infof warnf errorf fatalf reportf
                                                        spy get-env]]))
 
-(timbre/set-level! :debug)
+(timbre/set-level! :info)
 
 ;;;; Util for logging output to on-screen console
 
