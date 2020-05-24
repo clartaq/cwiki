@@ -21,7 +21,9 @@
             [hiccup.element :refer [link-to]]
             [hiccup.form :refer [form-to hidden-field submit-button text-area
                                  text-field]]
-            [hiccup.page :refer [html5 include-css include-js]])
+            [hiccup.page :refer [html5 include-css include-js]]
+            [ring.middleware.anti-forgery :as anti-forgery]
+            [ring.util.anti-forgery :refer [anti-forgery-field]])
   (:import (cwiki.extensions CWikiLinkAttributeExtension)
            (cwiki.extensions CWikiLinkResolverExtension)
            (com.vladsch.flexmark.ext.gfm.strikethrough StrikethroughExtension)
@@ -75,6 +77,10 @@
   (->> mkdn
        (.parse parser)
        (.render renderer)))
+
+;;;
+;;; Useful utilities.
+;;;
 
 ;; Format a DateTime object nicely in the current time zone.
 (def custom-formatter (f/with-zone
@@ -199,11 +205,6 @@
     [:input {:type        "text" :id "search-text" :name "search-text"
              :aria-label  "Search" :class "searchbox"
              :placeholder "Enter search terms ..."}]]])
-
-;(defn- menu-item-span
-;  "Return a span with CSS class 'menu-item' around the given content."
-;  [content]
-;  [:span {:class "menu-item"} content])
 
 (defn- wiki-hmenu-component
   "Return the standard navigation menu component for the application.
@@ -407,16 +408,18 @@
 (defn short-form-template
   "A page template for short messages, no sidebar content, no nav."
   [content]
-  (html5
-    {:lang "en"}
-    (standard-head nil :no-highlighter)
-    [:body {:class "page"}
-     (no-nav-header-component)
-     (sidebar-and-article
-       (no-content-aside)
-       [:div {:class "scrollbox-content"}
-        content])
-     (standard-end-of-body)]))
+  (let [csrf-token (force anti-forgery/*anti-forgery-token*)]
+    (html5
+      {:lang "en"}
+      (standard-head nil :no-highlighter)
+      [:body {:class "page"}
+       [:div#sente-csrf-token {:data-csrf-token csrf-token}]
+       (no-nav-header-component)
+       (sidebar-and-article
+         (no-content-aside)
+         [:div {:class "scrollbox-content"}
+          content])
+       (standard-end-of-body)])))
 
 (defn short-message
   "Return a page with a title, message and 'Ok' button."
@@ -578,6 +581,7 @@
                :onSubmit     (build-onsubmit-handler-string "import" "browse")
                :autocomplete "off"}
               [:post "import"]
+              (anti-forgery-field)
               (hidden-field "referer" (get (:headers req) "referer"))
               [:p {:class "form-title"} "Import Files"]
               [:div {:class "form-group"}
@@ -671,6 +675,7 @@
          (form-to {:enctype      "multipart/form-data"
                    :autocomplete "off"}
                   [:post "export"]
+                  (anti-forgery-field)
                   (hidden-field "page-id" page-id)
                   (hidden-field "referer" referer)
                   [:p {:class "form-title"} "Export a Page"]
@@ -704,6 +709,7 @@
                  :onSubmit     (build-onsubmit-handler-string "export-all" nil)
                  :autocomplete "off"}
                 [:post "export-all"]
+                (anti-forgery-field)
                 (hidden-field "referer" referer)
                 [:p {:class "form-title"} "Export All Pages"]
                 [:div {:class "form-group"}
@@ -746,6 +752,7 @@
                  :onSubmit     (build-onsubmit-handler-string "backup" nil)
                  :autocomplete "off"}
                 [:post "backup"]
+                (anti-forgery-field)
                 (hidden-field "referer" referer)
                 [:p {:class "form-title"} "Backup Database"]
                 [:div {:class "form-group"}
@@ -786,6 +793,7 @@
                :onSubmit     (build-onsubmit-handler-string "restore" "browse")
                :autocomplete "off"}
               [:post "restore"]
+              (anti-forgery-field)
               (hidden-field "referer" (get (:headers req) "referer"))
               [:p {:class "form-title"} "Restore Database"]
               [:div {:class "form-group"}
@@ -847,11 +855,13 @@
 (defn view-wiki-page
   "Return a 'regular' wiki page view."
   [post-map req]
-  (let [content (db/page-map->content post-map)]
+  (let [content (db/page-map->content post-map)
+        csrf-token (force anti-forgery/*anti-forgery-token*)]
     (html5
       {:lang "en"}
       (standard-head post-map :page-highlighter)
       [:body {:class "page"}
+       [:div#sente-csrf-token {:data-csrf-token csrf-token}]
        (wiki-header-component post-map req)
        (sidebar-and-article
          (sidebar-aside)
@@ -866,6 +876,7 @@
   of columns depends on number of items."
   [post-map query-results req]
   (let [content (db/page-map->content post-map)
+        csrf-token (force anti-forgery/*anti-forgery-token*)
         class-to-use (if (> (count query-results) 10)
                        "two-column-list"
                        "one-column-list")]
@@ -873,6 +884,7 @@
       {:lang "en"}
       (standard-head post-map :no-highlighter)
       [:body {:class "page"}
+       [:div#sente-csrf-token {:data-csrf-token csrf-token}]
        (wiki-header-component post-map req)
        (sidebar-and-article
          (sidebar-aside)
@@ -997,6 +1009,7 @@
        (form-to {:enctype      "multipart/form-data"
                  :autocomplete "off"}
                 [:post "preferences"]
+                (anti-forgery-field)
                 (hidden-field "referer" (get (:headers req) "referer"))
                 [:p {:class "form-title"} "Change Preferences"]
 
