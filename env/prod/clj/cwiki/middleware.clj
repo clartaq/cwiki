@@ -16,7 +16,7 @@
   (io/make-parents "resources/random-file.txt")
   (-> handler
       (wrap-authentication (backends/session))
-      (wrap-defaults (assoc-in site-defaults [:security :anti-forgery] false))
+      (wrap-defaults site-defaults)
       ; Makes static assets in $PROJECT_DIR/resources/public/ available.
       ; If you take this out, editor icons won't load.
       (wrap-file "resources")
