@@ -11,6 +11,7 @@
             [hiccup.element :refer [link-to]]
             [hiccup.form :refer [submit-button]]
             [hiccup.page :refer [html5 include-css include-js]]
+            [ring.middleware.anti-forgery :as anti-forgery]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
                                      trace debug info warn error]]))
 
@@ -36,6 +37,7 @@
   "Update the editable content with new content. Might be called on
   every keystroke."
   [new-post-map]
+  (debugf "update-content-for-websocket: new-post-map: %s" new-post-map)
   (reset! post-map-for-editing new-post-map))
 
 (defn sidebar-and-editor
@@ -46,8 +48,8 @@
   [:div {:class "sidebar-and-article"}
    sidebar
    [:div {:class "vertical-page-divider"}]
-   [:div {:class "vertical-page-splitter"
-          :id "splitter"
+   [:div {:class       "vertical-page-splitter"
+          :id          "splitter"
           ; Don't forget to translate the hyphen to an underscore. The false
           ; return is required for correct behavior on Safari.
           :onmousedown "cwiki_mde.dragger.onclick_handler(); return false;"}]
@@ -67,7 +69,8 @@
   (let [id (db/page-map->id @post-map-for-editing)
         tags (vec (db/get-tag-names-for-page id))
         options (db/get-option-map)
-        help-html (get-markdown-help-html)]
+        help-html (get-markdown-help-html)
+        csrf-token (force anti-forgery/*anti-forgery-token*)]
     ;; The tags and options are attached to the page map here.
     (swap! post-map-for-editing assoc :tags tags)
     (swap! post-map-for-editing assoc :options options)
@@ -76,6 +79,7 @@
       {:ng-app "CWiki" :lang "en"}
       (base/standard-head (get-post-map-for-editing) :editor-highlighter)
       [:body {:class "page"}
+       [:div#sente-csrf-token {:data-csrf-token csrf-token}]
        (base/wiki-header-component post-map req {:editing true})
        (sidebar-and-editor
          (base/sidebar-aside)
