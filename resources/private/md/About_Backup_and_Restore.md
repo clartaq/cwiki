@@ -1,17 +1,22 @@
 ---
 author: CWiki
+
 title: About Backup and Restore
+
 date: 2017-12-03T10:12:36.000-05:00
-modified: 2020-04-04T17:39:55.278-04:00
+modified: 2020-05-24T12:31:39.879-04:00
 tags:
-  - about
-  - admin
   - backup
+
   - restore
+
+  - admin
+
   - special pages
+
+  - about
+
 ---
-
-
 
 Backing up and restoring the database file is pretty easy and can be accomplished in different ways.
 
@@ -44,6 +49,8 @@ The [[backup|Backup]] command will take all of the pages in the database and com
 If you would prefer additional safety, you can copy the saved file to a different location, perhaps off-site​.
 
 The [[restore|Restore]] link will let you choose among any saved zip files in the `backups` directory and retrieve any pages stored therein. The saved pages will overwrite any pages in the database with the same name.
+
+**<span style="color:red">WARNING</span>** Images are not included in backups. If they are stored externally and are loaded into a page you should be ok. If they are stored on your system, things will not work if they get deleted or you run the program from a different location.
 
 **Note** that any pages that exist in the current database, but are not present in the backup, will not be overwritten. (This will be an option in the future.
 
