@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Import now allows importing of multiple files at once. Existing pages with the same name are silently overwritten.
 - Changed implementation of header menus. Now smoother with no "gaps".
+- The Sente library, used for websocket communications between the server and client, has been updated. The new version includes a fix to a bug that didn't handle CSRF tokens correctly.
+- Pages that `POST` to the server, basically any form that sends information back to the server, now use an anti-forgery field in the page. This probably doesn't make any difference if you are running CWiki locally, like I do. Might make a difference if you run CWiki on a server.
 
 ### Fixed ###
 
@@ -33,7 +35,7 @@ This release is primarily intended to provide a simple backup and restore functi
 
 ### Added ###
 
-- Simple page backup and restore capability.
+- Simple page backup and restore capability. **WARNING**: Images are not included in backup files.
 
 ### Changed ###
 
