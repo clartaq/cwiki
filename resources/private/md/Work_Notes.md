@@ -4,7 +4,7 @@ author: CWiki
 title: Work Notes
 
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-05-17T16:00:07.742-04:00
+modified: 2020-05-24T09:42:50.874-04:00
 tags:
   - technical note
 
@@ -20,39 +20,13 @@ tags:
 
 This page is the on-going saga of working on the CWiki program.
 
-#### Another Warning "TypeError: Property 'handleEvent' is not callable.", 17 May 2020, 02:19:13 pm ####
+#### Updating Sente, 24 May 2020, 09:38:47 am ####
 
-This is another error I've noticed for awhile. It occurs when I click the "Edit" item in the navigation/menu bar at the top of the CWiki window. It also occurs after clicking "New". So, both of the things that start the editor.
+This has been on my list for some time. I've made a few stabs at it in the past and given up each time because of some errors on the client side that I was unable to trace.
 
-The above error message occurs with Firefox. For Safari it is "TypeError: 'handleEvent' property of event listener should be callable".
+No more. It's done. I'm just gonna "dog-food" it for awhile to see that everything works in my usual workflow.
 
-No message is generated on the Brave or Opera browsers.
-
-After trying to trace through this, it seems like this is due to an error trying to install `binaryage/devtools` or `cljs-devtools` on browsers that don't support them. No issues on browsers that install the tools: Opera and Brave. Error messages on those that don't: Safari and Firefox. Also, the errors do not occur on any browser when running from an uberjar, which does not include the devtools in the build.
-
-I'm going to close this issue.
-
-#### Persistent Errors from React, 17 May 2020, 01:20:33 pm ####
-
-For awhile now, I have been getting persistent errors from React about "Uncaught Error: Target container is not a DOM element". This seems to be related to the reloading function used after the editor is exited.
-
-The error message is not particularly helpful, but maybe I should look into the `cwiki-mde.core/reload` function.
-
-That function is called by figwheel every time code is loaded. On a page reload it appears that the function gets called twice.
-
-But in normal use, it seems that the function is usually called when I press the "Done" button in the editor.
-
-When running from an uberjar, when figwheel should not be present at all, exiting the editor still causes the issue, but with a slightly different message. This time the message comes from minified react and links to a web page with essentially the same message about attempting to render something that is not a DOM element.
-
-Putting a simple guard in the function to check for the `outer-editor-container` element seems to fix things.
-
-#### Typing Speed,17 May 2020, 01:12:24 pm ####
-
-As noted elsewhere, limitations on typing speed have become annoying. It seems that once the text gets beyond about 30k - 35k, the editor/preview cannot keep up with the typist.
-
-It is somewhat dependent on the browser, Safari being particularly slow.
-
-It may be time to consider a pre-made replacement for the editing component. Maybe even, _heaven forbid_!, Javascript.
+It was a slow go, mostly because of my own ignorance and stupidity. But it seems pretty solid now. There is just one more error message to track down and resolve. The web sockets disconnect on every page reload. It doesn't happen with the reference example of the Sente site. Obviously I don't know why it happens in CWiki.
 
 #### Scroll Bar Overwriting Content in "All Pages" Page, 16 May 2020, 02:05:30 pm ####
 
