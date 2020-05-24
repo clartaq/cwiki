@@ -96,7 +96,7 @@
   (let [url (URL. referrer)
         path (.getPath url)
         page-title (s/replace-first path #"/" "")]
-    (println "page-from-referrer returning: " page-title)
+    (debugf "page-from-referrer returning: %s" page-title)
     page-title))
 
 (defn- page-to-return-to
