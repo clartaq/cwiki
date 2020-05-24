@@ -13,7 +13,7 @@
 (defn login-page
   "Return a login page and gather the user name
   and password to log in."
-  [req]
+  []
   (base/short-form-template
     (let [csrf-token (force anti-forgery/*anti-forgery-token*)]
       [:div {:class "cwiki-form"}
