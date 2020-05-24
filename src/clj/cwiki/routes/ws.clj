@@ -11,10 +11,14 @@
             [ring.util.response :refer [redirect status]]
             [taoensso.sente :as sente]
             [taoensso.sente.server-adapters.http-kit :refer [get-sch-adapter]]
-            [taoensso.timbre :as log])
+            [taoensso.timbre :as log :refer [log trace debug info warn error fatal report
+                                             logf tracef debugf infof warnf errorf fatalf reportf
+                                             spy get-env]])
   (:import (java.net URL)))
 
-(let [{:keys [ch-recv send-fn                               ;;connected-uids
+(log/set-level! :info)
+
+(let [{:keys [ch-recv send-fn connected-uids
               ajax-post-fn ajax-get-or-ws-handshake-fn]}
       (sente/make-channel-socket!
         (get-sch-adapter)
@@ -22,9 +26,15 @@
 
   (def ring-ajax-post ajax-post-fn)
   (def ring-ajax-get-or-ws-handshake ajax-get-or-ws-handshake-fn)
-  (def ch-chsk ch-recv)                                     ;; ChannelSocket's receive channel
-  (def chsk-send! send-fn))                                 ;; ChannelSocket's send API fn
-;;  (def connected-uids connected-uids))                      ;; Watchable, read-only atom
+  (def ch-chsk ch-recv)                 ;; ChannelSocket's receive channel
+  (def chsk-send! send-fn)              ;; ChannelSocket's send API fn
+  (def connected-uids connected-uids))  ;; Watchable, read-only atom
+
+;; We can watch this atom for changes if we like
+;; (add-watch connected-uids :connected-uids
+;;            (fn [_ _ old new]
+;;              (when (not= old new)
+;;                (debugf "Connected uids changed: new: %s" new))))
 
 (defn- save-new-doc!
   "Save a completely new page to the database and display it. Return the
@@ -41,7 +51,7 @@
 (defn- save-doc!
   "Save new or edited content. Return the page id of the saved document."
   [client-id page-map]
-  (log/tracef "save-doc!: page-map: %s" page-map)
+  (log/debugf "save-doc!: page-map: %s" page-map)
   (when-let [post-map page-map]
     (let [id (db/page-map->id post-map)
           title (db/page-map->title post-map)
@@ -56,27 +66,30 @@
 (defn- send-document-to-editor
   "Get the post to be edited and send it to the editor."
   [client-id]
-  (log/trace "server sending document")
-  (chsk-send! client-id [:hey-editor/here-is-the-document
-                         (editor-layout/get-post-map-for-editing)]))
+  (log/debugf "Enter :hey-server/send-document-to-editor: client-id: %s" client-id)
+  (let [info-to-send (editor-layout/get-post-map-for-editing)]
+    (log/debugf "    info-to-send: %s" info-to-send)
+    (when info-to-send
+      (chsk-send! client-id [:hey-editor/here-is-the-document info-to-send])
+    (log/debug "Exit :hey-server/send-document-to-editor"))))
 
 (defn- content-updated!
   "When the content of the post being edited changes, do something with it
   here if desired."
   [?data]
-  (log/trace "Saw 'content updated' notification.")
+  (log/debug "Saw 'content updated' notification.")
   (when ?data
     (editor-layout/update-content-for-websocket ?data)))
 
 (defn- tags-updated!
   [?data]
-  (log/trace "Saw 'tags updated' notification.")
+  (log/debug "Saw 'tags updated' notification.")
   (when ?data
     (editor-layout/update-content-for-websocket ?data)))
 
 (defn- title-updated!
   [?data]
-  (log/trace "Saw 'title updated' notification. ?data: " ?data))
+  (log/debug "Saw 'title updated' notification. ?data: " ?data))
 
 (defn- page-from-referrer
   [referrer]
@@ -115,7 +128,7 @@
   "Handle any message that we know about. It is an error to send
   unrecognized messages."
   [{:keys [id client-id ?data]}]
-  (log/tracef "handle-message!: id: %s, client-id: %s" id client-id)
+  (log/debugf "handle-message!: id: %s, client-id: %s" id client-id)
   (cond
     (= id :hey-server/send-document-to-editor) (send-document-to-editor client-id)
     (= id :hey-server/content-updated) (content-updated! ?data)
