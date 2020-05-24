@@ -17,7 +17,7 @@
                  [clj-time "0.15.2"]
                  [cljs-ajax "0.8.0"]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
-                 [com.taoensso/sente "1.13.1"]
+                 [com.taoensso/sente "1.15.0"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.vladsch.flexmark/flexmark "0.42.12"]
                  [com.vladsch.flexmark/flexmark-ext-gfm-strikethrough "0.42.12"]
