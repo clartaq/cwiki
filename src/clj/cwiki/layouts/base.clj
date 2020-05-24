@@ -202,6 +202,7 @@
   [:div {:class "search-container"}
    [:form {:id      "searchbox" :action "/search" :method "post"
            :enctype "multipart/form-data"}
+    (anti-forgery-field)
     [:input {:type        "text" :id "search-text" :name "search-text"
              :aria-label  "Search" :class "searchbox"
              :placeholder "Enter search terms ..."}]]])
@@ -608,10 +609,10 @@
                          ;; but it is easier for me to understand.
                          :onchange "handleImportBrowseButtonClick();\n
                                     function handleImportBrowseButtonClick () {\n
-                                        console.log('Enter handleImportBrowseButtonClick');\n
+                                        //console.log('Enter handleImportBrowseButtonClick');\n
                                         let fs = document.getElementById('file-info').files;\n
                                         let numFiles = fs.length;\n
-                                        console.log('Number of file selected: ' + numFiles);\n
+                                        //console.log('Number of file selected: ' + numFiles);\n
                                         let msgStr = 'A Message';\n
                                         if (numFiles === 1) {\n
                                             msgStr = document.getElementById('file-info').files[0].name;\n
@@ -622,7 +623,7 @@
                                         if (numFiles > 0) {\n
                                             document.getElementById('import-button-id').disabled = false;\n
                                         }\n
-                                        console.log('Exit handleImportBrowseButtonClick');\n
+                                        //console.log('Exit handleImportBrowseButtonClick');\n
                                     }\n"
                          :multiple "multiple"
                          :accept   ".txt,.md"}]]]
@@ -819,7 +820,7 @@
                          ;; but it is easier for me to understand.
                          :onchange "handleRestoreOnChangeEvent();\n
                                     function handleRestoreOnChangeEvent () {\n
-                                        console.log('Enter handleRestoreOnChangeEvent');\n
+                                        //console.log('Enter handleRestoreOnChangeEvent');\n
                                         let fs = document.getElementById('file-info').files;\n
                                         let numFiles = fs.length;\n
                                         let msgStr = document.getElementById('file-info').files[0].name;\n
@@ -827,7 +828,7 @@
                                         if (numFiles > 0) {\n
                                             document.getElementById('restore-button-id').disabled = false;\n
                                         }\n
-                                        console.log('Exit handleRestoreOnChangeEvent');\n
+                                        //console.log('Exit handleRestoreOnChangeEvent');\n
                                     }\n"
                          :accept   ".zip"}]]]
               [:div {:class "button-bar-container"}
