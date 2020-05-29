@@ -154,6 +154,10 @@ url("/public/fonts/STIX2Math.woff2") format("woff2"),
     content: '\f0cd';
 }
 
+.columns-icon:before {
+    content: '\f0db';
+}
+
 .quote-left-icon:before {
     content: '\f10d';
 }
