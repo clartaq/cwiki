@@ -538,7 +538,7 @@
   (trace "Enter layout-editor-pane.")
   (r/create-class
     {
-     :name           "editor-pane"
+     :display-name           "editor-pane"
 
      :reagent-render (fn [_]
                        [:div {:class "editor-container"}
@@ -652,7 +652,7 @@
   (tracef "layout-inner-editor-container: extended-page-map: " extended-page-map)
   (let [editor-state (build-editor-state extended-page-map)]
     (r/create-class
-      {:name                "layout-inner-editor-container"
+      {:display-name                "layout-inner-editor-container"
 
        :component-did-mount (build-component-did-mount-function editor-state)
 
