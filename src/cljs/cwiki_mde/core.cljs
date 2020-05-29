@@ -6,7 +6,7 @@
 (ns cwiki-mde.core
   (:require [cljs.core.async :as async :refer [chan <! >!]]
             [clojure.string :refer [blank?]]
-            [cljs.pprint :as pprint ]
+            [cljs.pprint :as pprint]
             [cwiki-mde.editor-commands :as cmd]
             [cwiki-mde.keyboard-shortcuts :as kbs]
     ;; Include dragger so it gets bundled in output js file.
@@ -103,9 +103,9 @@
         page_title (:page_title new-page-map)
         referrer (.-referrer js/document)]
     (ws/chsk-send! [:hey-server/quit-editing
-                       {:page-id    page_id
-                        :page-title page_title
-                        :referrer   referrer}])))
+                    {:page-id    page_id
+                     :page-title page_title
+                     :referrer   referrer}])))
 
 ;;;-----------------------------------------------------------------------------
 ;;; Websocket message handlers to work with the server.
@@ -357,7 +357,7 @@
                                       (reset! page-title-atom new-title)
                                       (when (:send-every-keystroke editor-state)
                                         (ws/chsk-send! [:hey-server/title-updated
-                                                           {:data new-title}]))))})]
+                                                        {:data new-title}]))))})]
       [:section {:class "mde-title-edit-section"}
        [:div {:class "form-label-div"}
         [:label {:class "form-label required"
@@ -517,6 +517,17 @@
      [:section.editor-button-bar--right
 
       [:button.editor-button-bar--button
+       {:title    "Toggle preview mode"
+        :tabIndex 0
+        :id       "toggle-preview-button-id"
+        :on-click #(do
+                     (println "Saw preview toggle button.")
+                     (cmd/toggle-preview-cmd editor-state))
+        ;:disabled nil
+        }
+       [:i.editor-button-bar--icon.columns-icon]]
+
+      [:button.editor-button-bar--button
        {:title    "Save revised content"
         :tabIndex 0
         :id       "save-button-id"
@@ -538,7 +549,7 @@
   (trace "Enter layout-editor-pane.")
   (r/create-class
     {
-     :display-name           "editor-pane"
+     :display-name   "editor-pane"
 
      :reagent-render (fn [_]
                        [:div {:class "editor-container"}
@@ -556,7 +567,7 @@
                                          (mark-page-dirty editor-state)
                                          (when (:send-every-keystroke editor-state)
                                            (ws/chsk-send! [:hey-server/content-updated
-                                                              {:data new-content}]))
+                                                           {:data new-content}]))
                                          new-content))}]])}))
 
 (defn- layout-preview-pane
@@ -580,7 +591,8 @@
      [layout-editor-button-bar editor-state]
      [:section {:class "editor-and-preview-section"}
       [layout-editor-pane editor-state]
-      [layout-preview-pane page-content-ratom]]]))
+      (when @(:view-preview-ratom editor-state)
+        [layout-preview-pane page-content-ratom])]]))
 
 (defn- handle-visibility-change
   "Handle visibility change events. When the document becomes hidden,
@@ -624,7 +636,10 @@
                                  :editor-tag-id-prefix  "tag-bl-"
                                  :page-title-atom       title-atom
                                  :tags-atom-vector      tags-atom-vector
-                                 :page-content-ratom    content-atom}
+                                 :page-content-ratom    content-atom
+                                 ;; For now, always start with preview.
+                                 ;; Should be retrieved from an user option.
+                                 :view-preview-ratom    (r/atom "true")}
 
                                 options)]
         editor-state))))
@@ -652,7 +667,7 @@
   (tracef "layout-inner-editor-container: extended-page-map: " extended-page-map)
   (let [editor-state (build-editor-state extended-page-map)]
     (r/create-class
-      {:display-name                "layout-inner-editor-container"
+      {:display-name        "layout-inner-editor-container"
 
        :component-did-mount (build-component-did-mount-function editor-state)
 
@@ -675,7 +690,7 @@
 
 (defmulti -event-msg-handler
           "Multimethod to handle Sente `event-msg`s"
-          :id ; Dispatch on event-id
+          :id                                               ; Dispatch on event-id
           )
 
 (defn event-msg-handler
@@ -684,7 +699,7 @@
   (-event-msg-handler ev-msg))
 
 (defmethod -event-msg-handler
-  :default ; Default/fallback case (no other matching handler)
+  :default                                                  ; Default/fallback case (no other matching handler)
   [{:as ev-msg :keys [event]}]
   (debugf "Unhandled event: %s" event))
 
@@ -693,7 +708,7 @@
   (let [[old-state-map new-state-map] ?data]
     (if (:first-open? new-state-map)
       (debugf "Channel socket successfully established!: %s" new-state-map)
-      (debugf "Channel socket state change: %s"              new-state-map))
+      (debugf "Channel socket state change: %s" new-state-map))
     (editor-state-handler ev-msg)))
 
 (defmethod -event-msg-handler :chsk/recv

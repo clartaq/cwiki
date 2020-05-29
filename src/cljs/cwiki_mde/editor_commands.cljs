@@ -90,6 +90,16 @@
       (.execCommand js/document "insertText" false txt)))
   ((:dirty-editor-notifier editor-state) editor-state))
 
+(defn toggle-preview-cmd
+  "Toggles whether the editor should show a second column with a preview of
+  the page to the right of the editor pane."
+  [editor-state]
+  (let [vnr (:view-preview-ratom editor-state)
+        viewing-now @vnr]
+    (reset! vnr (not viewing-now))
+    ;;Send result to server to store in options.
+    ))
+
 (defn insert-time-stamp
   "Insert a timestamp into the input component."
   [ele editor-state]

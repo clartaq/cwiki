@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - A word count has been added to the information at the top of each page.
 - New tags can be created by pressing the "Enter" key in an existing tag.
 - For development builds, added a check for Chromium-based browsers before installing devtools.
+- The editor preview can be toggled on and off. Typing is substantially faster for long documents when the preview is off. Otherwise, it gets "laggy" at about 30k characters. Toggle the preview with the new icon on the editor button bar.
 
 ### Changed ###
 

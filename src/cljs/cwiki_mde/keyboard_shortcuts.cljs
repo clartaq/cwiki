@@ -29,6 +29,13 @@
                (.stopPropagation evt)
                false))
 
+  ;; Toggle visibility of editor preview pane.
+  (kbs/bind! "f9" ::toggle-preview-shortcut
+             (fn [evt]
+               (cmd/toggle-preview-cmd editor-state)
+               (.preventDefault evt)
+               (.stopPropagation evt)))
+
   ;; Insert a timestamp.
   (kbs/bind! "alt-defmod-k" ::timestamp-shortcut
              (fn [evt]
