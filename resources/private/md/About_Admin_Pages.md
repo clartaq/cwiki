@@ -1,22 +1,25 @@
 ---
 author: CWiki
+
 title: About Admin Pages
+
 date: 2017-11-20T13:51:44.000-05:00
-modified: 2020-04-04T17:57:24.171-04:00
+modified: 2020-05-31T15:47:54.713-04:00
 tags:
-  - about
   - admin
+
   - special pages
+
+  - about
+
 ---
-
-
 
 ​​
 Only a user in the admin role can accomplish administrative tasks. There should be at least one "admin" user created the first time the wiki is started and viewed. That user can also create other admin users if they so desire. If you are using CWiki strictly as a personal wiki and you are the only user, then you are the admin user. (If you can click any of the following links, you are an admin user. If the links are "grayed out" and not clickable, you are not an admin user.)
 
 * **Preferences**: A page to let you changes some settings controlling how the program operates. See also [[About Preferences]].
 * **Database Backup**: The [[backup|Backup]] page will let you make a copy of the database and store it somewhere safe. See the [[About Backup and Restore]] page for more information.
-* **Restore A Saved Database**: If the database gets screwed up or erased somehow, you can use the [[restore|Restore]] page to re-create it from a previously saved backup. [[About Backup and Restore]] page for more information
+* **Restore A Saved Database**: If the database gets screwed up or erased somehow, you can use the [[restore|Restore]] page to re-create it from a previously saved backup. See the [[About Backup and Restore]] page for more information
 * **Create a New User**: If you decide you want to allow another person(s) to access the wiki, you can click the [[create-user|Create User]] link to do so. You will be able to assign their username​, password, and an email address for password recovery.
 * **Edit the Profile of an Existing User**: If someone wants to change something about their account, like their password, you can do that on the [[select-profile|Edit User Profile]] page.
 * **Delete a User**: If a user no longer needs access to the wiki, you can delete their account on the [[delete-user|Delete User]] page.

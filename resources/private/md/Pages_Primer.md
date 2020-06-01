@@ -1,11 +1,15 @@
 ---
 author: CWiki
+
 title: Pages Primer
+
 date: 2017-10-24T08:48:43.000-04:00
-modified: 2018-12-16T10:50:47.988-05:00
+modified: 2020-05-31T16:17:20.189-04:00
 tags:
   - help
+
   - pages
+
 ---
 
 This "Pages Primer" is a brief introduction to creating, editing, and deleting pages in the wiki.
@@ -24,7 +28,7 @@ When you are editing a page and want to link to a page that doesn't exist yet, e
 
 ### 2. Click the "New" Link in the Navigation Bar (Recommended) ###
 
-At the top of the wiki window in your browser, there are a series of navigation links, including one that says "New." When you click that link, a new page will be created. Just change the title and enter the content you want. Finally, click the "Save Changes" button below the editor. The new page will be saved.
+At the top of the wiki window in your browser, there are a series of navigation links, including one that says "New." When you click that link, a new page will be created. Just change the title and enter the content you want. Finally, click the "Done" button at the left end of the button bar. The new page will be saved.
 
 This method is probably the quickest way to get started writing something, but you will still need to link the page into some other part of the wiki. Otherwise, you will have an "Orphan": a page that is not referred to by any other part of the wiki.
 
@@ -32,17 +36,17 @@ This method is probably the quickest way to get started writing something, but y
 
 If you look at the address bar in your browser, it should show something like `http://localhost:1350/Pages%20Primer`, that is, the title of the page is at the end of the address. You can change that address to the name of the page you want to create. If there is no other page with the same name in the wiki already, you will be shown an editor page to build it and then save it.
 
-Note also that some characters, there is a list [here](https://en.wikipedia.org/wiki/Percent-encoding), must be "percent-encoded", that is, certain characters cannot be present in a web address (known as a "[URL](https://en.wikipedia.org/wiki/URL)") and must be encoded as a percent sign followed by two hexadecimal digits. If you attempt this and screw it up, you may damage the database irreparably. That would require you to delete the database and start over.
+Note also that some characters, there is a list [here](https://en.wikipedia.org/wiki/Percent-encoding), must be "percent-encoded", that is, certain characters cannot be present in a web address (known as a "[URL](https://en.wikipedia.org/wiki/URL)") and must be encoded as a percent sign followed by two hexadecimal digits. If you attempt this and screw it up, you may damage the database irreparably. That would require you to delete the database and start over. (But you have a [[backup]], right?)
 
 This method is becoming less reliable. Many browsers now support search directly in the address bar. If this is the case, changing the address bar initiates a search rather than creating a new page.
 
 ## Page Content ##
 
-A "page" in the wiki consists of a couple of things.
+A "page" in the wiki consists of just a few things.
 
 ### The Title ###
 
-A page must have a title and content. It should be no more than 255 characters, possibly fewer.
+Every page must have a title. It should be no more than 255 characters, possibly fewer.
 
 The title must be unique within the wiki. The comparison for uniqueness is case-insensitive, so the titles "Title" and "title" are considered the same. Using titles that differ only by letter case can be confusing and is not allowed.
 
@@ -60,7 +64,7 @@ In addition to a title, a page must have content. Otherwise, what's the point? Y
 
 ## Editing Pages ##
 
-If you have the appropriate role (see [[About Roles]]), you can edit most pages in the wiki. When it is possible for you to edit the page you are viewing, there will be an "Edit" link in the navigation bar at the top of the program window. Click it and revise to your heart's content.
+If you have the appropriate role (see [[About Roles]]), you can edit most pages in the wiki. When it is possible for you to edit the page you are viewing, there will be an "Edit" link in the navigation bar at the top of the program window. Click it and revise to your hearts' content.
 
 You can edit something as often and as many times as you like.
 

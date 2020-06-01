@@ -1,13 +1,19 @@
 ---
 author: CWiki
+
 title: Text Formatting
+
 date: 2017-10-24T08:57:33.000-04:00
-modified: 2020-04-04T16:31:02.512-04:00
+modified: 2020-05-31T15:21:05.306-04:00
 tags:
-  - formatting
-  - Markdown
   - MathJax
-  - TeX
+
+  - LaTeX
+
+  - Markdown
+
+  - formatting
+
 ---
 
 Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, especially some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
@@ -120,7 +126,7 @@ Less | Pretty | Markdown
 <a name="mathematics"></a> 
 ## Mathematics ##
 
-You can also enter mathematics using the familiar  [[About TeX|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
+You can also enter mathematics using the familiar  [[About TeX and LaTeX|$\rm\LaTeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
 
 The markup to show an equation on a line by itself uses double dollar signs, `$$,` to start and end a block of $\rm\TeX$ like this.
 

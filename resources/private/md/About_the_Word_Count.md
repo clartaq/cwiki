@@ -4,10 +4,8 @@ author: david
 title: About the Word Count
 
 date: 2020-05-10T15:17:00.182-04:00
-modified: 2020-05-13T15:45:50.231-04:00
+modified: 2020-05-31T14:00:37.868-04:00
 tags:
-  - technical note
-
   - word count
 
   - about
@@ -28,7 +26,7 @@ So, here's how it works in [[About CWiki|CWiki]].
 6. Similarly, for wikilinks, only the text that is actually displayed is counted.
 7. For manually embedded HTML tags, nothing is counted. They don't show up when reading, so they don't count.
 8. For MultiMarkdown-style footnotes (which are not part of the original Markdown), the references are ignoreded, but the text of the footnote is included.
-9. For mathematics in [[About TeX|$\rm\TeX$]], everything is ignored. Unfortunately, this also has the effect that multiple prices listed in the same paragraph and all text between each pair, will not be counted.
+9. For mathematics in [[About TeX and LaTeX|$\rm\LaTeX$]], everything is ignored. Unfortunately, this also has the effect that multiple prices listed in the same paragraph and all text between each pair, will not be counted.
 10. There is a group of special characters (#, *, `, ~, –, ^, =, <, >, +, |, /, :) that are removed completely wherever they are found.
 11. Any "stand-alone" punctuation will not be counted. That is a punctuation mark surrounded by white space will not be counted.
 12. Likewise, any stand-alone numbers will not be counted.

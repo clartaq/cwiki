@@ -4,15 +4,11 @@ author: CWiki
 title: Markdown Help
 
 date: 2018-11-18T15:39:33.103-05:00
-modified: 2020-05-14T11:00:16.009-04:00
+modified: 2020-05-31T13:59:08.740-04:00
 tags:
   - help
 
-  - text formatting
-
   - Markdown
-
-  - formatting
 
 ---
 
@@ -287,9 +283,9 @@ But let's throw in a <b>tag</b>.
 <a name="mathematics"></a> 
 ## Mathematics ##
 
-You can also enter mathematics using the familiar  [[About TeX|$\rm\TeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
+You can also enter mathematics using the familiar  [[About TeX and LaTeX|$\rm\LaTeX$]] notation. The program uses [MathJax](https://www.mathjax.org/) to transform your input into nicely formatted math.
 
-The markup to show an equation on a line by itself uses double dollar signs, `$$,` to start and end a block of $\rm\TeX$ like this.
+The markup to show an equation on a line by itself uses double dollar signs, `$$,` to start and end a block of $\rm\LaTeX$ like this.
 
 `$$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$`
 

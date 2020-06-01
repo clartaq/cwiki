@@ -71,7 +71,7 @@
 (defn- typeset-latex
   "Typeset any mathematics in the text."
   [latex-node]
-  (js/MathJax.Hub.Queue #js ["Typeset" js/MathJax.Hub latex-node]))
+  (js/MathJax.typeset #js [latex-node]))
 
 (defn- markdown-component
   "Set the content in the containing node, optionally highlighting it."

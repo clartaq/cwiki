@@ -1,18 +1,24 @@
 ---
 author: CWiki
+
 title: Roadmap
+
 date: 2018-09-20T11:11:38.543-04:00
-modified: 2018-11-29T16:33:57.728-05:00
+modified: 2020-05-31T16:49:32.359-04:00
 tags:
-  - architecture
-  - cwiki
-  - editor
-  - enhancements
   - process
+
   - technical note
+
+  - cwiki
+
+  - editor
+
+  - enhancements
+
+  - architecture
+
 ---
-
-
 
 This project roadmap is an ever-evolving list of things to be changed and improved. Topic​s will appear and disappear from this page as development continues.
 
@@ -43,8 +49,6 @@ These topics fall into the following categories:
 ### Other <a name="other"></a> ###
 
 * Create a function that will update the existing database with new versions of the initial pages. Will not overwrite newer, edited versions of the initial pages, like an edited "About" page.
-
-* Any maintenance tasks like database compression, backup and restore, for example.
 
 * At some point, we are going to have to stop initializing the database from a bunch of Markdown files and add a pre-built database to the repository. 
 

@@ -4,7 +4,7 @@ author: CWiki
 title: About the Editor
 
 date: 2018-11-27T17:40:32.822-05:00
-modified: 2020-05-16T10:10:02.727-04:00
+modified: 2020-05-31T16:30:15.250-04:00
 tags:
   - help
 
@@ -24,7 +24,7 @@ The editor consists of three main areas.
    2. To delete a tag, click the circled "x" next to the tag. You can also backspace until the tag is erased.
    3. To add a new tag, click the circled "+" at the end of the list of tags. You can also press the "Enter" key while editing a tag to create a new one.
     4. You can navigate among the tags using the "Tab" and "Shift-Tab" keys.
-3. The main editing section is where you will spend most of your time.
+3. The main editing section, which is where you will spend most of your time.
 
 ## The Main Editing Section ##
 
@@ -54,7 +54,7 @@ Just like most editors, CWiki recognizes keyboard shortcuts. Some are fairly gen
 
 ### When You are Done ###
 
-When you are finished with your writing, click the "Done" button at the bottom of the page. If there are unsaved changes, CWiki will ask you to confirm your choice.
+When you are finished with your writing, click the "Done" button at the left end of the toolbar. If there are unsaved changes, CWiki will ask you to confirm your choice.
 
 ## Tips ##
 
@@ -62,8 +62,6 @@ Save your work often. If you navigate away from the editor, by refreshing the pa
 
 The preview pane can be very helpful when entering links to images. When the link is entered correctly, the image will show up in the Preview Pane, even for links to remote images.
 
+If you are working on a long page, editing may become sluggish. In that case, you can turn off the preview pane by clicking the "two column" icon near the right end of the toolbar. The editor should become responsive again, allowing you to enter much more text before it becomes sluggish again.
+
 If you have autosave enabled, once a save occurs, you cannot revert to an unmodified version of the page.
-
-## One More Thing ##
-
-In case you haven't noticed, I'm not the best writer in the world. To help me, I use [Grammarly](https://www.grammarly.com). Since the editor is based on an HTML `textarea`, it integrates easily. Just click in the Markdown editing area and Grammarly will load and start analyzing your work. Note that Grammarly compatibility seems to be browser dependent. I use it on Safari, where it works well.

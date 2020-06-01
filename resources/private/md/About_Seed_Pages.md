@@ -1,17 +1,20 @@
 ---
 author: CWiki
+
 title: About Seed Pages
+
 date: 2018-06-16T09:45:14.557-04:00
-modified: 2018-09-18T18:06:47.669-04:00
+modified: 2020-05-31T17:28:49.185-04:00
 tags:
-  - about
   - cwiki
-  - database
+
   - pages
+
+  - about
+
+  - database
+
 ---
-
-
-
 
 ​
 "Seed" pages, also known as "Initial" pages, are the wiki pages used to construct the database the first time the program starts.

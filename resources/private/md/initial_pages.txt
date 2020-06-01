@@ -20,7 +20,7 @@ About_Search.md
 About_Seed_Pages.md
 About_Keyboard_Shortcuts.md
 About_Tags.md
-About_TeX.md
+About_TeX_and_LaTeX.md
 About_the_Editor.md
 About_the_Editor_Icons.md
 About_the_Sidebar.md

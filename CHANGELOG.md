@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed implementation of header menus. Now smoother with no "gaps".
 - The Sente library, used for websocket communications between the server and client, has been updated. The new version includes a fix to a bug that didn't handle CSRF tokens correctly. This resolves issue #1.
 - Pages that `POST` to the server, basically any form that sends information back to the server, now use an anti-forgery field in the page. This probably doesn't make any difference if you are running CWiki locally, like I do. Might make a difference if you run CWiki on a server.
+- Updated to MathJax 3. In addition to keeping up with the technology, there is no more "MathJax Jitter" when editing documents with math and a live preview.
+- Now including the MathJax package in the jar file at the expense of adding about 2MB to its size. Now you don't have to be online to edit pages with math in them.
 
 ### Fixed ###
 

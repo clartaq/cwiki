@@ -171,7 +171,6 @@
   "Returns a div with the standard scripts to include in the page."
   []
   [:div {:class "standard-scripts"}
-   (include-js "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_SVG")
    (include-js "/js/mathjax-config.js")
    (include-js "/js/highlight.pack.js")
    (include-js "/js/compiled/cwiki-mde.js")])

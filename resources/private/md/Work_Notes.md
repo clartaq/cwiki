@@ -4,7 +4,7 @@ author: CWiki
 title: Work Notes
 
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-05-25T14:30:21.061-04:00
+modified: 2020-06-01T10:04:47.755-04:00
 tags:
   - technical note
 
@@ -19,6 +19,23 @@ tags:
 ---
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Editor Responsiveness on Large Pages, 01 Jun 2020, 09:51:17 am ####
+
+As I have remarked elsewhere, the responsiveness of the editor tends to start dragging on large pages (like this one). It turns out that the biggest drag is due to the live preview. It just can't handle reformats with every keystroke on pieces of text this large.
+
+And it isn't just CWiki that has this problem. I looked at alternative editors as well. For example, [EasyMDE](https://github.com/Ionaru/easy-markdown-editor) performs just the same. I even went as far as (almost) completing a branch using [CodeMirror](https://codemirror.net) as the editor. Same performance when live preview is used.
+
+So, what to do? There are a few things that might make a small difference, but the one big thing I can do is create an option to turn off the live preview in the editor. That's how I'm getting this typed. Have tried it on pieces of text greater than 10k words and it still seems Ok. (Trying to paste "War and Peace" breaks the browser.)
+
+There is now a new button up in the toolbar to switch between two column mode (with preview) and single column mode (without preview). Just have to persist the setting.
+
+#### Updating MathJax, 01 Jun 2020, 09:40:42 am ####
+
+Updating MathJax, the library used to format mathematics in CWiki, was pretty straightforward. 
+It required small changes to several files, but nothing too complicated. The biggest change that users might notice is that they no longer have to be online to format mathematics since the library is now included in the uberjar. I haven't actually tried this yet.
+
+One oddity that I ran into was that some examples need to be preceded by a `<p>` tag for break lines correctly. It may be a weirdness in the way line breaks are handled in the Markdown formatter.
 
 #### Updating Sente, 24 May 2020, 09:38:47 am ####
 
