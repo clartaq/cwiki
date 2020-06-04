@@ -97,7 +97,7 @@ url("/public/fonts/STIX2Math.woff2") format("woff2"),
 
 @font-face {
     font-family: 'cwiki-icons-26px';
-    src: url('/public/fonts/cwiki-icons-26px.woff2') format('woff2');
+    src: url('../fonts/cwiki-icons-26px.woff2') format('woff2');
     font-weight: normal;
     font-style: normal;
 }
