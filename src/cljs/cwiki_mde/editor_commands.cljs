@@ -6,7 +6,8 @@
 (ns cwiki-mde.editor-commands
   (:require [cljs-time.core :as t]
             [cljs-time.format :as f]
-            [clojure.string :refer [escape]]))
+            [clojure.string :refer [escape]]
+            [cwiki-mde.ws :as ws]))
 
 ;-------------------------------------------------------------------------------
 ; Utilities
@@ -95,10 +96,11 @@
   the page to the right of the editor pane."
   [editor-state]
   (let [vnr (:view-preview-ratom editor-state)
-        viewing-now @vnr]
-    (reset! vnr (not viewing-now))
+        viewing-now @vnr
+        not-now (not viewing-now)]
+    (reset! vnr not-now)
     ;;Send result to server to store in options.
-    ))
+    (ws/chsk-send! [:hey-server/save-option {:view_preview not-now}])))
 
 (defn insert-time-stamp
   "Insert a timestamp into the input component."

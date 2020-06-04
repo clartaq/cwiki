@@ -26,9 +26,9 @@
 
   (def ring-ajax-post ajax-post-fn)
   (def ring-ajax-get-or-ws-handshake ajax-get-or-ws-handshake-fn)
-  (def ch-chsk ch-recv)                 ;; ChannelSocket's receive channel
-  (def chsk-send! send-fn)              ;; ChannelSocket's send API fn
-  (def connected-uids connected-uids))  ;; Watchable, read-only atom
+  (def ch-chsk ch-recv)                                     ;; ChannelSocket's receive channel
+  (def chsk-send! send-fn)                                  ;; ChannelSocket's send API fn
+  (def connected-uids connected-uids))                      ;; Watchable, read-only atom
 
 ;; We can watch this atom for changes if we like
 ;; (add-watch connected-uids :connected-uids
@@ -63,6 +63,14 @@
           id)
         (save-new-doc! client-id title content tags (:page_author post-map))))))
 
+(defn- save-option!
+  "Persist the key and option in the data back to the server."
+  [data]
+  (let [the-key (first (keys data))]
+    ;; All valid keys for options are keywords.
+    (when (keyword? the-key)
+      (db/set-option-value the-key (the-key data)))))
+
 (defn- send-document-to-editor
   "Get the post to be edited and send it to the editor."
   [client-id]
@@ -71,7 +79,7 @@
     (log/debugf "    info-to-send: %s" info-to-send)
     (when info-to-send
       (chsk-send! client-id [:hey-editor/here-is-the-document info-to-send])
-    (log/debug "Exit :hey-server/send-document-to-editor"))))
+      (log/debug "Exit :hey-server/send-document-to-editor"))))
 
 (defn- content-updated!
   "When the content of the post being edited changes, do something with it
@@ -135,6 +143,7 @@
     (= id :hey-server/tags-updated) (tags-updated! ?data)
     (= id :hey-server/title-updated) (title-updated! ?data)
     (= id :hey-server/save-doc) (save-doc! client-id (:data ?data))
+    (= id :hey-server/save-option) (save-option! ?data)
     (= id :hey-server/quit-editing) (quit-editing! client-id ?data)
     (= id :chsk/uidport-open) (log/trace ":chsk/uidport-open")
     (= id :chsk/uidport-close) (log/trace ":chsk/uidport-close")

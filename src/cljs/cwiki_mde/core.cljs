@@ -520,11 +520,7 @@
        {:title    "Toggle preview mode"
         :tabIndex 0
         :id       "toggle-preview-button-id"
-        :on-click #(do
-                     (println "Saw preview toggle button.")
-                     (cmd/toggle-preview-cmd editor-state))
-        ;:disabled nil
-        }
+        :on-click #(cmd/toggle-preview-cmd editor-state)}
        [:i.editor-button-bar--icon.columns-icon]]
 
       [:button.editor-button-bar--button
@@ -639,7 +635,7 @@
                                  :page-content-ratom    content-atom
                                  ;; For now, always start with preview.
                                  ;; Should be retrieved from an user option.
-                                 :view-preview-ratom    (r/atom "true")}
+                                 :view-preview-ratom    (r/atom (:view_preview options))}
 
                                 options)]
         editor-state))))

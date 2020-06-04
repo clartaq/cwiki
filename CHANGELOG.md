@@ -28,9 +28,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Fixed Issue #18. Can now import multiple files at once.
 - Fixed Issue #10. Styling of the file input components for Import and Restore now match the rest of CWiki.
-- Multipl form submission for the "Backup", "Restore", "Import" and "Export All" functions is now prevented. 
+- Multiple form submission for the "Backup", "Restore", "Import" and "Export All" functions is now prevented. 
 - Parts of some long page titles are no longer overwritten by the scroll bars on the "All Pages" page.
 - Resolved a couple of development issues that led to error messages in the browser when using development builds.
+- Fixed Issue #11. Turning off realtime preview in the editor restores responsiveness to typing.
 
 ## [0.1.7] - 2020-04-07 ##
 

@@ -112,7 +112,8 @@
    :sidebar_width               240
    :article_width               735
    :confirm_page_deletions      true
-   :editor_use_WYSIWYG_editor   false})
+   :editor_use_WYSIWYG_editor   false
+   :view_preview                true})
 
 (defn get-new-initial-options
   []
@@ -139,7 +140,9 @@
    :confirm_page_deletions      {:current true
                                  :default true}
    :editor_use_WYSIWYG_editor   {:current false
-                                 :default false}})
+                                 :default false}}
+  :view_preview                 {:current true
+                                 :default true})
 
 (defn- update-option-map
   "Update the database with the new map of options."
