@@ -39,7 +39,12 @@
   (def chsk chsk)
   (def ch-chsk ch-recv) ; ChannelSocket's receive channel.
   (def chsk-send! send-fn) ; ChannelSockets's send API function.
-  (def chsk-state state))
+  (def chsk-state state)
+  ;; Stop Safari from throwing an error on page changes or reloads.
+  (set! (.-onbeforeunload js/window) #(do
+                                        ;; Doing this messes up Figwheel.
+                                        ;;(set! (.-onclose js/window) nil)
+                                        (sente/chsk-disconnect! chsk))))
 
 ;; We can watch this atom for changes if we like.
 ;; (add-watch chsk-state :connected-uids
