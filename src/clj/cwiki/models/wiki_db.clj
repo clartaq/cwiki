@@ -294,6 +294,8 @@
       (assoc frs :page_content (clob->string raw-content))
       frs)))
 
+;; TODO -- Rename this to something like `title->page-map` to be consistent
+;; with the naming of other functions.
 (defn find-post-by-title
   "Look up a post in the database with the given title. Return the page
   map for the post if found; nil otherwise. The lookup is case-insensitive."
