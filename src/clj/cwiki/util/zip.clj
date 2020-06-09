@@ -1,6 +1,6 @@
 ;;;;
 ;;;; This namespace includes functions to create a read compressed
-;;;; zip files in Clojure. It is largely a copy functions from
+;;;; zip files in Clojure. It is largely a copy of functions from
 ;;;; https://github.com/Raynes/fs/blob/master/src/me/raynes/fs/compression.clj
 ;;;;
 
