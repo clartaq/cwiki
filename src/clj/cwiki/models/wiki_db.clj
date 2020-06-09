@@ -688,6 +688,18 @@
 ;; End of tag functions.
 ;;
 
+(defn title->page-string
+  "Given a title, return a string containing the page as it would be stored
+  on disk."
+  ([title] (title->page-string title (get-h2-db-spec)))
+  ([title db]
+   (let [page-map (find-post-by-title title db)
+         content (page-map->content page-map)
+         author (page-map->author page-map db)
+         tags (page-map->tags page-map)
+         res (str (files/build-yaml page-map author tags) content)]
+     res)))
+
 (defn- get-ids-of-all-pages-with-user
   "Return a set of all the page ids for pages with the given user name."
   [user-name db]
