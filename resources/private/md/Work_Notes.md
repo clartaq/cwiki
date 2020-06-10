@@ -4,7 +4,7 @@ author: CWiki
 title: Work Notes
 
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-06-01T10:04:47.755-04:00
+modified: 2020-06-05T15:08:31.021-04:00
 tags:
   - technical note
 
@@ -19,6 +19,16 @@ tags:
 ---
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Thinking About Organization, 05 Jun 2020, 03:01:06 pm ####
+
+While working to improve editor responsiveness, in large part due to the size of these notes slowing things down, I got to wondering about the way these work notes are organized in the first place.
+
+They really don't represent a single line of reasoning or thought, they just happen to be a sort of chronological listing of what is going on in development. The chronology suggests an organization along a timeline, of course. Something like a daily journal. That way, individual topics could be broken out and linked together from smaller bits of information and thought.
+
+The thing that keeps me from doing that though is that this page is a little "special" in that it is part of the seed distribution of the program. This page is available right after you run the program for the first time. Creating this page from many smaller pages would cause ripples into how the program is built.
+
+Need to think about this for awhile.
 
 #### Editor Responsiveness on Large Pages, 01 Jun 2020, 09:51:17 am ####
 
