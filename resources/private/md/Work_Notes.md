@@ -4,7 +4,7 @@ author: CWiki
 title: Work Notes
 
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-06-05T15:08:31.021-04:00
+modified: 2020-06-10T16:45:06.646-04:00
 tags:
   - technical note
 
@@ -29,6 +29,12 @@ They really don't represent a single line of reasoning or thought, they just hap
 The thing that keeps me from doing that though is that this page is a little "special" in that it is part of the seed distribution of the program. This page is available right after you run the program for the first time. Creating this page from many smaller pages would cause ripples into how the program is built.
 
 Need to think about this for awhile.
+
+#### Lag in Clearing Browser Caches, 01 Jun 2020, 04:27:33 pm ####
+
+During development, you can be misled by results of changes because of the lag in clearing the browser caches. For example, Safari has a menu item to "Empty Caches" but it doesn't work very well. It took hours to clear parts of the editor button bar to show the new "columns" icon. It just showed a box. I thought there was something wrong with loading a font. Firefox was just about as bad. The Chromium-based browsers were better. They have a menu item under the program name that clears the data completely.
+
+But they all have to be invoked manually. If you see a problem, clear the caches before you believe it.
 
 #### Editor Responsiveness on Large Pages, 01 Jun 2020, 09:51:17 am ####
 
