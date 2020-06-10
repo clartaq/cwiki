@@ -4,8 +4,10 @@ author: CWiki
 title: About TeX and LaTeX
 
 date: 2017-12-09T13:06:22.000-05:00
-modified: 2020-05-31T13:43:26.144-04:00
+modified: 2020-06-10T14:21:05.516-04:00
 tags:
+  - MathJax
+
   - LaTeX
 
   - TeX
