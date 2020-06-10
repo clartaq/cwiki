@@ -13,11 +13,15 @@
             [cwiki.layouts.admin :as admin-layout]
             [cwiki.layouts.base :as layout]
             [cwiki.models.wiki-db :as db]
+            [cwiki.util.datetime :as dt]
             [cwiki.util.files :as files]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]))
+                                     trace debug info warn error]])
+  (:import (java.util.zip ZipOutputStream ZipEntry)
+           (java.io FileOutputStream File)
+           (java.nio.file FileSystems Path Files FileVisitOption)))
 
 (defn- build-response
   "Build a response structure, possibly with a non-200 return code."
@@ -68,77 +72,80 @@
 ;;; Functions related to backup/restore.
 ;;;
 
-(defn- get-params-for-backup
-  "Based on the page name, get the page-map and tags required to do the
-  backup."
-  [page-name]
-  (let [page-map (db/find-post-by-title page-name)
-        author-name (db/page-map->author page-map)
-        page-id (db/page-map->id page-map)
-        tags (db/get-tag-names-for-page page-id)]
-    {:page-map page-map :author-name author-name :tags tags}))
-
 (defn- get-backup-database
   "Put up a page asking the user if they want to backup the database."
   [req]
   (layout/compose-backup-database-page req))
 
-;; This should go into the program options.
-(def delete-intermediate-files true)
+(defn- backup-helper
+  "Create a sanitized, unique internal file name for a page and
+  write it to the zipped backup file."
+  [zos title n]
+  (when-let [safe-name (and (not (empty? title))
+                            (str (files/sanitize-page-name title) "-" n ".md"))]
+    (let [page-string (db/title->page-string title)]
+      (doto zos
+        (.putNextEntry (ZipEntry. ^String safe-name))
+        (.write (.getBytes page-string))
+        (.flush)
+        (.closeEntry)))))
+
+(defn- backup-database
+  "Create a backup of the entire database in a compressed zip file. Return
+  the name of the database."
+  []
+  (let [timestamp (dt/get-file-timestamp)
+        d (files/get-backup-directory)
+        zip-file-name (str (files/file-name-from-parts [d "backup"])
+                           "-" timestamp ".zip")
+        page-names (filter #(not (empty? %))
+                           (map :page_title (db/get-all-page-names-in-db)))]
+    (with-open [zos (ZipOutputStream. (FileOutputStream. ^String zip-file-name))]
+      (mapv (fn [pn idx]
+              (backup-helper zos pn idx)) page-names (iterate inc 0)))
+    zip-file-name))
 
 (defn- post-backup-database
   "Backup all pages (except generated pages) in the database. NO ERROR CHECKING!"
   [req]
   (let [params (:multipart-params req)
         referer (get params "referer")
-        page-names (db/get-all-page-names-in-db)
-        d (files/get-backup-directory)]
-    ;; Export database pages to markdown files in backup directory.
-    (mapv (fn [name-map]
-            (let [title (:page_title name-map)
-                  param-map (get-params-for-backup title)]
-              (files/backup-page (:page-map param-map)
-                                 (:author-name param-map)
-                                 (:tags param-map)))) page-names)
-    ;; Compress markdown files into zip file.
-    (files/backup-compressed-database)
-    ;; Delete the intermediate markdown files.
-    (when delete-intermediate-files
-      (files/delete-all-files-with-ext d ".md"))
-    (layout/confirm-backup-database (str "\"" d "\"") referer)))
+        zip-file-name (backup-database)]
+    (backup-database)
+    (layout/confirm-backup-database (str "\"" zip-file-name "\"") referer)))
 
 (defn- get-restore-database
   "Put up a page asking the user if they want to restore the database."
   [req]
   (layout/compose-restore-database-page req))
 
+(defn- restore-database
+  "Restore the database from the contents of the zip archive."
+  [backup-file-name]
+  (let [backup-dir (files/get-backup-directory)
+        backup-file-path-str (str backup-dir files/sep backup-file-name)
+        path (.toPath (File. backup-file-path-str))
+        fs (FileSystems/newFileSystem path nil)
+        root (first (.getRootDirectories fs))
+        strm (Files/walk root (into-array FileVisitOption nil))
+        default-author (db/get-cwiki-user-name)]
+    (doseq [item (iterator-seq (.iterator strm))]
+      (when (seq (.getFileName item))
+        (let [md-map (files/load-markdown-from-url (.toUri ^Path item))
+              title (get-in md-map [:meta :title])]
+          (when-let [existing-id (db/title->page-id title)]
+            (db/delete-page-by-id! existing-id))
+          (db/add-page-from-map md-map default-author))))))
+
 (defn- post-restore-database
   "Restore all pages in the backup to the database. NO ERROR CHECKING!"
   [req]
   (let [params (:multipart-params req)
         backup-file-name (get-in params ["file-info" :filename])
-        referer (get params "referer")
-        d (files/get-backup-directory)]
-    ;; Clear the backup directory of any spurious markdown files.
-    (files/delete-all-files-with-ext d ".md")
-    (let [file-name-list (files/restore-compressed-pages backup-file-name)
-          of-list (files/files-with-ext file-name-list ".md")]
-      (if-not (seq? of-list)
-        (build-response (layout/no-files-to-import-page referer) req 400)
-        (let [def-author (db/get-cwiki-user-name)]
-          ;;(when restore-from-scratch
-          ;;  (println "Emptying all of the pages in the database.")
-          (doseq [fyle of-list]
-            (let [import-map (files/load-markdown-from-file fyle)
-                  file-name-only (.getName fyle)
-                  enhanced-map (assoc import-map :file-name file-name-only)
-                  page-title (get-in import-map [:meta :title])]
-              (when-let [existing-id (db/title->page-id page-title)]
-                (db/delete-page-by-id! existing-id))
-              (db/add-page-from-map enhanced-map def-author)))
-          (files/delete-all-files-with-ext d ".md")
-          (layout/confirm-restore-database (str "\"" backup-file-name "\"")
-                                           referer))))))
+        referer (get params "referer")]
+    (restore-database backup-file-name)
+    (layout/confirm-restore-database (str "\"" backup-file-name "\"")
+                                     referer)))
 
 ;;;
 ;;; Functions related to creating a new user.

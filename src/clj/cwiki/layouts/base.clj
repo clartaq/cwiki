@@ -738,10 +738,10 @@
 
 (defn confirm-backup-database
   "Return a page stating that the database has been backed up."
-  [dir-name referer]
+  [file-name referer]
   (short-message-return-to-referer
     "Backup Complete"
-    (str "All pages in the database have been backed up in the directory " dir-name ".") referer))
+    (str "All pages in the database have been backed up in the file " file-name ".") referer))
 
 (defn compose-backup-database-page
   [req]
