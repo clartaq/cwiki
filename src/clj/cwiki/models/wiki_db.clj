@@ -695,10 +695,11 @@
   on disk."
   ([title] (title->page-string title (get-h2-db-spec)))
   ([title db]
-   (let [page-map (find-post-by-title title db)
+   (let [page-id (title->page-id title)
+         page-map (find-post-by-title title db)
          content (page-map->content page-map)
          author (page-map->author page-map db)
-         tags (page-map->tags page-map)
+         tags (get-tag-names-for-page page-id)
          res (str (files/build-yaml page-map author tags) content)]
      res)))
 
