@@ -5,7 +5,7 @@
             :url          "https://en.wikipedia.org/wiki/BSD_licenses#2-clause"
             :distribution :repo}
   :dependencies [[org.clojure/clojure "1.10.1" :scope "provided"]
-                 [org.clojure/clojurescript "1.10.764" :scope "provided"]
+                 [org.clojure/clojurescript "1.10.773" :scope "provided"]
                  [org.clojure/core.async "1.2.603"]
                  [org.clojure/java.jdbc "0.7.11"]
 
