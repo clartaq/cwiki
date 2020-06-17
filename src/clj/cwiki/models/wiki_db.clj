@@ -141,8 +141,8 @@
                                  :default true}
    :editor_use_WYSIWYG_editor   {:current false
                                  :default false}}
-  :view_preview                 {:current true
-                                 :default true})
+  :view_preview {:current true
+                 :default true})
 
 (defn- update-option-map
   "Update the database with the new map of options."
@@ -849,6 +849,31 @@
    (delete-user user-id (get-h2-db-spec)))
   ([user-id db]
    (jdbc/delete! db :users ["user_id=?" user-id])))
+
+;;;
+;;; Misc. functions.
+;;;
+
+(defn count-user-pages-in-db
+  ([] (count-user-pages-in-db (get-h2-db-spec)))
+  ([db] (count (get-all-page-names-in-db db))))
+
+(defn count-special-pages-in-db
+  ([] (count-special-pages-in-db (get-h2-db-spec)))
+  ([_] (count (special/get-all-special-page-names))))
+
+(defn count-pages-in-db
+  ([] (count-pages-in-db (get-h2-db-spec)))
+  ([db]
+   (+ (count-user-pages-in-db db) (count-special-pages-in-db db))))
+
+(defn count-users-in-db
+  ([] (count-users-in-db (get-h2-db-spec)))
+  ([db] (count (get-all-users db))))
+
+(defn count-tags-in-db
+  ([] (count-tags-in-db (get-h2-db-spec)))
+  ([db] (count (get-all-tag-names db))))
 
 ;!!! PROBLEM -- SHOULD SPECIFY DATABASE. This function is only called in
 ; one place. It assumes that it is always working with the default wiki

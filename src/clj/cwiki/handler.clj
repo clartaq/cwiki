@@ -83,11 +83,17 @@
       (= title "All Tags") (let [new-body (layout/compose-all-tags-page request)]
                              (build-response new-body request))
 
+      (= title "CWiki Stats") (let [new-body (layout/compose-cwiki-stats-page request)]
+                                (build-response new-body request))
+
       (= title "Orphan Pages") (let [new-body (layout/compose-not-yet-view "Orphan Pages")]
                             (build-response new-body request))
 
       (= title "Dead Links") (let [new-body (layout/compose-not-yet-view "Dead Links")]
                                  (build-response new-body request))
+
+      (= title "Back Links") (let [new-body (layout/compose-not-yet-view "Back Links")]
+                               (build-response new-body request))
 
       (= title "as-user") (let [author (get-in request [:params :user])
                                 new-body (layout/compose-all-pages-with-user author request)]

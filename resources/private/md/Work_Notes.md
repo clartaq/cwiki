@@ -4,7 +4,7 @@ author: CWiki
 title: Work Notes
 
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-06-10T16:45:06.646-04:00
+modified: 2020-06-17T10:27:35.849-04:00
 tags:
   - technical note
 
@@ -19,6 +19,14 @@ tags:
 ---
 
 This page is the on-going saga of working on the CWiki program.
+
+#### "CWiki Stats" and "Back Links" Pages, 17 Jun 2020, 10:23:47 am ####
+
+Added these two "Special" pages. Both are available from the default Sidebar and both are described in the "Special Pages" page (also linked in the Sidebar).
+
+The "CWiki Stats" page generates a short table showing the number of pages, tags, and users in the current database.
+
+The "Back Links" page is non-functional at the moment. The intent is to create a list of all of the other pages in the database with links to the current page. This seems a little clumsy in terms of interface (replacing the current page with the list). Needs some more thought in terms of the best way to display the pages with the back links.
 
 #### Thinking About Organization, 05 Jun 2020, 03:01:06 pm ####
 

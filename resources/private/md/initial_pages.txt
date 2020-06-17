@@ -6,6 +6,7 @@ A_Tip_on_Linking_within_a_Page.md
 About.md
 About_Admin_Pages.md
 About_Autosave.md
+About_Back_Links.md
 About_Backup_and_Restore.md
 About_CWiki.md
 About_Dead_Links.md

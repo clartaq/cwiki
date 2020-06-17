@@ -1,13 +1,16 @@
 ---
 author: CWiki
+
 title: Sidebar
+
 date: 2017-06-11T13:32:19.000-04:00
-modified: 2020-04-04T17:55:41.737-04:00
+modified: 2020-06-17T10:02:43.926-04:00
 tags:
   - sidebar
-  - special pages
----
 
+  - special pages
+
+---
 
 Here's your [[Sidebar]]. You can edit this page just like any other to put useful stuff here. Things like reminders of how to do things or useful links. See the [[About the Sidebar]] page for tips and information. Then, go ahead and edit it.
 
@@ -16,6 +19,7 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 * [[All Pages]]
 * [[All Users]]
 * [[All Tags]]
+* [[CWiki Stats]]
 * [[Special Pages]]
 * [[Roadmap]]
 * [[Work Notes]]
@@ -25,6 +29,7 @@ Here's your [[Sidebar]]. You can edit this page just like any other to put usefu
 
 * [[Orphan Pages]]
 * [[Dead Links]]
+* [[Back Links]]
 
 ###### Maintenance ######
 

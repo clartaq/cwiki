@@ -950,6 +950,21 @@
         post-map (db/create-new-post-map "All Pages" content)]
     (view-list-page post-map query-results req)))
 
+(defn compose-cwiki-stats-page
+  "Return a page listing some stats about the wiki contents."
+  [req]
+  (let [content (str
+                  "\n\n"
+                  "| Item          | Count |\n"
+                  "|--------------:|------:|\n"
+                  "| User Pages    | " (db/count-user-pages-in-db) "|\n"
+                  "| Special Pages | " (db/count-special-pages-in-db) "|\n"
+                  "| Total Pages   | " (db/count-pages-in-db) "|\n"
+                  "| Tags          | " (db/count-tags-in-db) "|\n"
+                  "| Users         | " (db/count-users-in-db) "|\n\n")
+        post-map (db/create-new-post-map "CWiki Stats" content)]
+    (view-wiki-page post-map req)))
+
 (defn compose-search-results-page
   "Return a page listing the page titles in the search results as links."
   [search-results req]
