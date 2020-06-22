@@ -700,7 +700,7 @@
          content (page-map->content page-map)
          author (page-map->author page-map db)
          tags (get-tag-names-for-page page-id)
-         res (str (files/build-yaml page-map author tags) content)]
+         res (str (files/build-front-matter page-map author tags) content)]
      res)))
 
 (defn- get-ids-of-all-pages-with-user

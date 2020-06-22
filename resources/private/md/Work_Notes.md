@@ -4,7 +4,7 @@ author: CWiki
 title: Work Notes
 
 date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-06-17T10:27:35.849-04:00
+modified: 2020-06-17T16:49:35.372-04:00
 tags:
   - technical note
 
@@ -19,6 +19,18 @@ tags:
 ---
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Switching Front Matter from YAML to TOML, 17 Jun 2020, 04:28:18 pm ####
+
+Back before I started working on CWiki, I created my blog with the [Hugo](https://gohugo.io) static site generator.
+
+At that time, Hugo used [YAML](https://yaml.org) to write its configuration files and front matter. It was only natural that I used YAML to create the front matter in the Markdown files used in CWiki. It was just much easier to turn the wiki pages into blog posts.
+
+But YAML is pretty heavy duty for the type of front-matter I use. It can be complicated to get right and can cause unexpected data type problems.
+
+Since I initially setup my blog, Hugo has started to support configuration files written in [TOML](https://github.com/toml-lang/toml). TOML is well-specified and much simpler, intended precisely for configuration files. It seems like that is a much better choice.
+
+As such, I will begin migration to TOML with the eventual goal of deprecating and eliminating the use of YAML.
 
 #### "CWiki Stats" and "Back Links" Pages, 17 Jun 2020, 10:23:47 am ####
 

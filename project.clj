@@ -39,7 +39,8 @@
                  [org.apache.lucene/lucene-queryparser "5.5.5"]
                  [org.flatland/ordered "1.5.9"]
                  [reagent "0.10.0"]
-                 [ring/ring-defaults "0.3.2"]]
+                 [ring/ring-defaults "0.3.2"]
+                 [toml "0.1.3"]]
 
   :plugins [[lein-cljsbuild "1.1.7" :exclusions [[org.clojure/clojure]]]
             [lein-doo "0.1.11"]

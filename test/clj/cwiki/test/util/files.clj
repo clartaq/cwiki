@@ -31,33 +31,56 @@
 (deftest split-front-matter-from-body-test
   (testing "split-front-matter-from-body function"
     (let [res (split-front-matter-from-body nil)]
-      (is (= {:body []} res)))
+      (is (= {:marker nil :body []} res)))
     (let [res (split-front-matter-from-body "")]
-      (is (= {:body []} res)))
+      (is (= {:marker nil :body []} res)))
     (let [res (split-front-matter-from-body [" "])]
-      (is (= {:body []} res)))
+      (is (= {:marker nil :body []} res)))
 
     (let [res (split-front-matter-from-body ["# Test #\n\n"
                                              "This is a **test** of the emergency data"])]
-      (is (= {:body ["# Test #\n\n"
+      (is (= {:marker nil :body ["# Test #\n\n"
                      "This is a **test** of the emergency data"]} res)))
 
     (let [res (split-front-matter-from-body ["---"
                                              "---"
                                              "# Test #\n\n"
                                              "This is a **test** of the emergency data"])]
-      (is (= {:front []
+      (is (= {:marker "---"
+              :front []
+              :body  ["# Test #\n\n"
+                      "This is a **test** of the emergency data"]} res)))
+
+    (let [res (split-front-matter-from-body ["+++"
+                                             "+++"
+                                             "# Test #\n\n"
+                                             "This is a **test** of the emergency data"])]
+      (is (= {:marker "+++"
+              :front []
               :body  ["# Test #\n\n"
                       "This is a **test** of the emergency data"]} res)))
 
     (let [res (split-front-matter-from-body ["---"
                                              "author: boogledy"
-                                             "date: 21 July 2025"
+                                             "date: 2020-05-29T12:50:20.131-04:00"
                                              "---"
                                              "# Test #\n\n"
                                              "This is a **test** of the emergency data"])]
-      (is (= {:front ["author: boogledy"
-                      "date: 21 July 2025"]
+      (is (= {:marker "---"
+              :front ["author: boogledy"
+                      "date: 2020-05-29T12:50:20.131-04:00"]
+              :body  ["# Test #\n\n"
+                      "This is a **test** of the emergency data"]} res)))
+
+    (let [res (split-front-matter-from-body ["+++"
+                                             "author = \"boogledy\""
+                                             "date = 2020-05-29T12:50:20.131-04:00"
+                                             "+++"
+                                             "# Test #\n\n"
+                                             "This is a **test** of the emergency data"])]
+      (is (= {:marker "+++"
+              :front ["author = \"boogledy\""
+                      "date = 2020-05-29T12:50:20.131-04:00"]
               :body  ["# Test #\n\n"
                       "This is a **test** of the emergency data"]} res)))
 
@@ -65,13 +88,14 @@
                                              "   "
                                              "---"
                                              "author: boogledy"
-                                             "date: 21 July 2025"
+                                             "date: 2020-05-29T12:50:20.131-04:00"
                                              "---"
                                              "# Test #\n\n"
                                              "   "
                                              "This is a **test** of the emergency data"])]
-      (is (= {:front ["author: boogledy"
-                      "date: 21 July 2025"]
+      (is (= {:marker "---"
+              :front ["author: boogledy"
+                      "date: 2020-05-29T12:50:20.131-04:00"]
               :body  ["# Test #\n\n"
                       "   "
                       "This is a **test** of the emergency data"]} res)))))
@@ -80,12 +104,12 @@
   (testing "yaml->map function"
     (is (nil? (yaml->map "")))
     (let [res (yaml->map (s/join "\n" ["author: boogledy"
-                                       "date: 21 July 2025"]))]
+                                       "date: 2020-06-17T17:35:56.719-04:00"]))]
       (is (= res {:author "boogledy"
-                  :date   "21 July 2025"})))
+                  :date   #inst "2020-06-17T17:35:56.719-04:00"})))
 
     (let [res (yaml->map (s/join "\n" ["title: First Light"
-                                       "date: 2017-08-15 14:03:02"
+                                       "date: 2020-06-17T17:40:40.605-04:00"
                                        "tags: blogging"
                                        ]))]
       (is (= (:title res) "First Light"))
@@ -97,7 +121,30 @@
                                          "- wordpress"
                                          "- blogging"
                                          "- caddy"
-                                         "date: 2016-08-19 18:02:38"]))]
+                                         "date: 2020-05-29T12:50:20.131-04:00"]))]
+        (is (= (:title res) "Serving HTTPS with Caddy Server"))
+        (is (= (count (:tags res)) 3))
+        (is (not (nil? (:date res))))))))
+
+(deftest toml->map-test
+  (testing "toml->map function"
+    (is (nil? (toml->map "")))
+    (let [res (toml->map (s/join "\n" ["author = \"boogledy\""
+                                       "date = 2020-06-17T17:35:56.719-04:00"]))]
+      (is (= res {:author "boogledy"
+                  :date   #inst "2020-06-17T17:35:56.719-04:00"})))
+
+    (let [res (toml->map (s/join "\n" ["title = \"First Light\""
+                                       "date = 2020-06-17T17:40:40.605-04:00"
+                                       "tags = \"blogging\""
+                                       ]))]
+      (is (= (:title res) "First Light"))
+      (is (not (nil? (:date res))))
+      (is (= (:tags res) "blogging"))
+
+      (let [res (toml->map (s/join "\n" ["title = \"Serving HTTPS with Caddy Server\""
+                                         "tags = [\"wordpress\", \"blogging\" , \"caddy\",]"
+                                         "date = 2020-05-29T12:50:20.131-04:00"]))]
         (is (= (:title res) "Serving HTTPS with Caddy Server"))
         (is (= (count (:tags res)) 3))
         (is (not (nil? (:date res))))))))
@@ -111,20 +158,38 @@
                                 " acquisition system.")}
            (load-markdown-from-resource "private/test_data/test.md")))))
 
-(deftest with-front-matter-test
-  (testing "The load-markdown-resource function on a file with front matter."
+(deftest with-yaml-front-matter-test
+  (testing "The load-markdown-resource function on a file with YAML front matter."
     (let [res (load-markdown-from-resource
-                "private/test_data/post-with-front-matter.md")
+                "private/test_data/post-with-yaml-front-matter.md")
           tags (into (sorted-set) (:tags (:meta res)))]
-      (is (= "This is part of a post with front matter." (:body res)))
+      (is (= "This is part of a post with YAML front matter." (:body res)))
       (is (not (nil? (:meta res))))
       (is (= 3 (count tags)))
       (is (= "Serving WordPress over HTTPS with Caddy Server"
              (:title (:meta res))))
       (is (= "david" (:author (:meta res))))
+      (is (= #inst "2016-08-19T18:02:38.000-00:00" (:date (:meta res))))
       (is (contains? tags "caddy"))
       (is (contains? tags "wordpress"))
       (is (contains? tags "blogging")))))
+
+(deftest with-toml-front-matter-test
+  (testing "The load-markdown-resource function on a file with TOML front matter."
+    (let [res (load-markdown-from-resource
+                "private/test_data/A_Test_File_with__TOML__Front_Matter.md")
+          tags (into (sorted-set) (:tags (:meta res)))]
+      (is (= "This is part of a post with \"TOML\" front matter." (:body res)))
+      (is (not (nil? (:meta res))))
+      (is (= 4 (count tags)))
+      (is (= "A Test File with \"TOML\" Front Matter"
+             (:title (:meta res))))
+      (is (= "david" (:author (:meta res))))
+      (is (= #inst "2016-08-19T14:02:38.000-04:00" (:date (:meta res))))
+      (is (contains? tags "caddy"))
+      (is (contains? tags "wordpress"))
+      (is (contains? tags "blogging"))
+      (is (contains? tags "A \"Quoted\" Tag")))))
 
 (deftest incomplete-content-test
   (testing "The load-markdown-from-file function on a file with parts missing."

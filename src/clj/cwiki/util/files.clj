@@ -10,7 +10,8 @@
             [clojure.set :refer [intersection]]
             [clojure.string :as s]
             [cwiki.util.datetime :as dt]
-            [cwiki.util.zip :as zip])
+            [cwiki.util.zip :as zip]
+            [toml.core :as toml])
   (:import (java.io BufferedReader InputStreamReader File)))
 
 (def ^:const sep (File/separator))
@@ -174,34 +175,63 @@
   (let [filtered-files (filter #(s/ends-with? (.getName %) ext) files)]
     filtered-files))
 
-(defn delete-all-files-with-ext
-  [dir-name ext]
-  (let [file-list (just-files-no-directories dir-name)
-        of-list (files-with-ext file-list ext)
-        path-list (map #(.getCanonicalPath %) of-list)]
-    (mapv #(io/delete-file %) path-list)))
+;(defn delete-all-files-with-ext
+;  [dir-name ext]
+;  (let [file-list (just-files-no-directories dir-name)
+;        of-list (files-with-ext file-list ext)
+;        path-list (map #(.getCanonicalPath %) of-list)]
+;    (mapv #(io/delete-file %) path-list)))
 
 ;;;
 ;;; Functions for working with pages.
 ;;;
 
+(def yaml-marker "---")
+(def toml-marker "+++")
+
 (defn split-front-matter-from-body
   "Given a collection of text lines, split any front matter from the body
   of the text. If present, the front matter must be the first thing appearing
-  in the text and marked by leading and trailing lines consisting of three
-  hypens ('---'). A map is returned containing the collection of lines
-  constituting the body under the :body key. If YAML front matter is present,
-  it is returned in the map under the key of :front."
+  in the text and marked by leading and trailing lines consisting of one of
+  the two known markers, `yaml-marker` or `toml-marker`. A map is returned
+  containing the collection of lines constituting the body under the :body
+  key. If front matter is present, it is returned in the map under the key
+  of :front and the particular marker (both YAML and TOML are recognized)
+  under the key :marker."
   [coll]
-  (let [lines (drop-lines-while-blank coll)]
-    (if (= (first lines) "---")
-      (let [[front sep-and-body] (split-with #(not= "---" %) (next lines))]
-        {:front (vec front) :body (vec (next sep-and-body))})
-      {:body (vec lines)})))
+  (let [lines (drop-lines-while-blank coll)
+        first-line (first lines)
+        fm-marker (cond
+                    (= first-line yaml-marker) yaml-marker
+                    (= first-line toml-marker) toml-marker
+                    :default nil)]
+    (cond (= fm-marker yaml-marker)
+          (let [[front sep-and-body] (split-with #(not= yaml-marker %) (next lines))]
+            {:marker fm-marker :front (vec front) :body (vec (next sep-and-body))})
+          (= fm-marker toml-marker)
+          (let [[front sep-and-body] (split-with #(not= toml-marker %) (next lines))]
+            {:marker fm-marker :front (vec front) :body (vec (next sep-and-body))})
+          :default {:marker nil :body (vec lines)})))
 
 (defn yaml->map
+  "Translate the string in YAML format to a map."
   [s]
   (yaml/parse-string s))
+
+(defn toml->map
+  "Translate the string in TOML format to a map."
+  [s]
+  (when (seq s)
+    (toml/read s :keywordize)))
+
+(defn front-matter->map
+  "Convert the front matter from a string to a map. The marker argument
+  determines the type of front matter to create: YAML or TOML."
+  [marker s]
+  (cond
+    (= marker yaml-marker) (yaml->map s)
+    (= marker toml-marker) (toml->map s)
+    :default nil))
 
 (defn load-markdown-from-url
   "Load a Markdown file, possibly with YAML front matter from a url.
@@ -221,7 +251,8 @@
         (when contents
           (let [parts (split-front-matter-from-body contents)]
             (when (not-empty (:front parts))
-              (let [meta (yaml->map (s/join "\n" (:front parts)))]
+              (let [meta (front-matter->map (:marker parts)
+                                            (s/join "\n" (:front parts)))]
                 (reset! result (assoc @result :meta meta))))
             (reset! result (assoc @result :body (s/trim (s/join "\n" (:body parts)))))))))
     @result))
@@ -245,7 +276,7 @@
   (when (.exists file)
     (load-markdown-from-url (io/as-url file))))
 
-(defn build-tag-yaml
+(defn- build-tag-yaml
   "Return the tags section of the YAML front matter."
   [tag-set]
   (if (seq tag-set)
@@ -255,7 +286,7 @@
       (str sb))
     ""))
 
-(defn build-yaml
+(defn- build-yaml-front-matter
   "Return the YAML front matter based on the metadata for the page."
   [page-map author-name tags]
   (let [title (:page_title page-map)
@@ -271,6 +302,45 @@
       (.append "---\n\n"))
     (.toString yaml)))
 
+(defn- build-tag-toml
+  "Return the tags section of the TOML front matter."
+  [tag-set]
+  (if (seq tag-set)
+    (let [sb (StringBuffer. "tags = [")]
+      ;; Trailing commas are ok in a TOML array.
+      (mapv #(.append sb (str "\"" % "\", ")) tag-set)
+      (.append sb "]")
+      (.toString sb))
+    ""))
+
+(defn- build-toml-front-matter
+  "Return the TOML front matter based on the metadata for the page."
+  [page-map author-name tags]
+  (let [title (:page_title page-map)
+        created (:page_created page-map)
+        modified (:page_modified page-map)
+        toml (StringBuffer. "+++\n")
+        m {:author author-name
+           :title  title
+           :tags   (vec tags)}]
+    ;(println "toml/write: " (toml/write m))
+    (doto toml
+      ;; Use the library to handle quotes correctly.
+      (.append (toml/write m))
+      ;; Handle dates ourselves. Can't seem to get it formatted correctly
+      ;; using library
+      (.append (str "date = " (dt/get-formatted-date-time created) "\n"))
+      (.append (str "modified = " (dt/get-formatted-date-time modified) "\n"))
+      (.append "+++\n\n"))
+    (.toString toml)))
+
+(defn build-front-matter
+  "Build and return a string containing front matter for the page. The
+  front matter is in the TOML configuration language."
+  [page-map author-name tags]
+  ;(build-yaml-front-matter page-map author-name tags)
+  (build-toml-front-matter page-map author-name tags))
+
 (defn- save-page
   "Save the page described in the page-map to a file."
   [page-map author-name tags dir]
@@ -282,7 +352,7 @@
             content (:page_content page-map)]
         ;; Needed when saving seed pages while running from an uberjar.
         (io/make-parents path)
-        (spit path (str (build-yaml page-map author-name tags) content))
+        (spit path (str (build-front-matter page-map author-name tags) content))
         path))))
 
 ;; The only difference between exporting a "normal" page and a "seed" page
