@@ -175,13 +175,6 @@
   (let [filtered-files (filter #(s/ends-with? (.getName %) ext) files)]
     filtered-files))
 
-;(defn delete-all-files-with-ext
-;  [dir-name ext]
-;  (let [file-list (just-files-no-directories dir-name)
-;        of-list (files-with-ext file-list ext)
-;        path-list (map #(.getCanonicalPath %) of-list)]
-;    (mapv #(io/delete-file %) path-list)))
-
 ;;;
 ;;; Functions for working with pages.
 ;;;
