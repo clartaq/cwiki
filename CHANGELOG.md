@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - For development builds, added a check for Chromium-based browsers before installing devtools.
 - The editor preview can be toggled on and off. Typing is substantially faster for long documents when the preview is off. Otherwise, it gets "laggy" at about 30k characters. Toggle the preview with the new icon on the editor button bar.
 - Two new "Special" pages. The "CWiki Stats" page generates a small table showing the number of pages, users, and tags in the database. The "Back Links" page is not functional yet, but the intent is to display a list of other pages in the database that link to the current page. Both pages have links in the default "Sidebar" page and a short description in the "Special Pages" page (also in the "Sidebar").
+- Front matter in TOML format can now be used in wiki pages. YAML is now deprecated and will be removed in a future release.
 
 ### Changed ###
 
