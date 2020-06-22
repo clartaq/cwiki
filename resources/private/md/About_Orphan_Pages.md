@@ -1,13 +1,10 @@
----
-author: CWiki
-title: About Orphan Pages
-date: 2018-09-19T10:26:50.252-04:00
-modified: 2018-09-19T10:26:50.252-04:00
-tags:
-  - about
-  - help
-  - orphans
----
++++
+author = "CWiki"
+title = "About Orphan Pages"
+tags = ["about" "help" "orphans"]
+date = 2018-09-19T10:26:50.252-04:00
+modified = 2018-09-19T10:26:50.252-04:00
++++
 
 **THIS IS NOT READY YET**
 

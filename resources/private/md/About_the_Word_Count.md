@@ -1,16 +1,10 @@
----
-author: david
-
-title: About the Word Count
-
-date: 2020-05-10T15:17:00.182-04:00
-modified: 2020-05-31T14:00:37.868-04:00
-tags:
-  - word count
-
-  - about
-
----
++++
+author = "CWiki"
+title = "About the Word Count"
+tags = ["about" "word count"]
+date = 2020-05-10T15:17:00.182-04:00
+modified = 2020-05-31T14:00:37.868-04:00
++++
 
 Up at the top of each page, below the author and creation/modification dates, there is a line showing the number of characters in the page along with an estimate of the number of words in the page.
 

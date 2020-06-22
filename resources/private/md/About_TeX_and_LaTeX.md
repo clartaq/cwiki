@@ -1,20 +1,10 @@
----
-author: CWiki
-
-title: About TeX and LaTeX
-
-date: 2017-12-09T13:06:22.000-05:00
-modified: 2020-06-10T14:21:05.516-04:00
-tags:
-  - MathJax
-
-  - LaTeX
-
-  - TeX
-
-  - about
-
----
++++
+author = "CWiki"
+title = "About TeX and LaTeX"
+tags = ["about" "LaTeX" "MathJax" "TeX"]
+date = 2017-12-09T13:06:22.000-05:00
+modified = 2020-06-10T14:21:05.516-04:00
++++
 
 TeX (often displayed as $\rm\TeX$) is a typesetting system initially​ developed by the famous computer scientist [Donald Knuth](https://en.wikipedia.org/wiki/Donald_Knuth). One of his main reasons for creating such a system was to be able to produce professionally typeset mathematics. Even though this system was designed and written in the late '70s, it is still popular today.
 

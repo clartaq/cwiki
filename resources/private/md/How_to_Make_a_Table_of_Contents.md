@@ -1,15 +1,10 @@
----
-author: CWiki
-title: How to Make a Table of Contents
-date: 2017-12-04T13:14:29.000-05:00
-modified: 2018-12-31T15:36:32.805-05:00
-tags:
-  - how-to
-  - table of contents
-  - TOC
----
-
-
++++
+author = "CWiki"
+title = "How to Make a Table of Contents"
+tags = ["how-to" "table of contents" "TOC"]
+date = 2017-12-04T13:14:29.000-05:00
+modified = 2018-12-31T15:36:32.805-05:00
++++
 
 Sometimes pages get pretty long. Finding specific parts of the page can be hard. In these cases, it would be nice to have a "Table of Contents" (TOC) for the page. There are a lot of extensions available for various Markdown editors. But if you want a method that is portable across just about any Markdown implementation, try something like the following. (Found this solution suggested in answer to a [question on Stack Overflow.](https://stackoverflow.com/questions/11948245/markdown-to-create-pages-and-table-of-contents)).
 

@@ -1,15 +1,10 @@
----
-author: CWiki
-title: A Tip on Linking within a Page
-date: 2018-12-31T10:23:22.012-05:00
-modified: 2019-05-27T09:59:15.238-04:00
-tags:
-  - help
-  - table of contents
-  - timestamp
-  - tip
----
-
++++
+author = "CWiki"
+title = "A Tip on Linking within a Page"
+tags = ["help" "table of contents" "timestamp" "tip"]
+date = 2018-12-31T10:23:22.012-05:00
+modified = 2019-05-27T09:59:15.238-04:00
++++
 
 Sometimes you want to link to sections within a page, in a [[How to Make a Table of Contents|Table of Contents]] for example.
 

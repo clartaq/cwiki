@@ -1,14 +1,10 @@
----
-author: CWiki
-title: CWiki FAQ
-date: 2017-10-27T10:21:37.000-04:00
-modified: 2018-09-17T16:35:53.246-04:00
-tags:
-  - cwiki
-  - FAQ
----
-
-
++++
+author = "CWiki"
+title = "CWiki FAQ"
+tags = ["cwiki" "FAQ"]
+date = 2017-10-27T10:21:37.000-04:00
+modified = 2018-09-17T16:35:53.246-04:00
++++
 
 This FAQ answers some common questions about CWiki.
 

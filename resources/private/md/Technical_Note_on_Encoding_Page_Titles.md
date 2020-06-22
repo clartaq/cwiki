@@ -1,14 +1,10 @@
----
-author: CWiki
-title: Technical Note on Encoding Page Titles
-date: 2018-12-16T16:48:54.307-05:00
-modified: 2018-12-16T17:54:30.162-05:00
-tags:
-  - links
-  - pages
-  - technical note
----
-
++++
+author = "CWiki"
+title = "Technical Note on Encoding Page Titles"
+tags = ["links" "pages" "technical note"]
+date = 2018-12-16T16:48:54.307-05:00
+modified = 2018-12-16T17:54:30.162-05:00
++++
 
 There were long-standing issues with using punctuation in page titles. (See issues [#21](https://bitbucket.org/David_Clark/cwiki/issues/21/cant-edit-files-with-slash-character-in) and [#31](https://bitbucket.org/David_Clark/cwiki/issues/31/editor-should-flag-illegal-characters-in) in the repository.)
 

@@ -1,16 +1,10 @@
----
-author: CWiki
-
-title: Features
-
-date: 2017-09-09T09:24:01.000-04:00
-modified: 2020-05-31T15:27:02.043-04:00
-tags:
-  - features
-
-  - cwiki
-
----
++++
+author = "CWiki"
+title = "Features"
+tags = ["cwiki" "features"]
+date = 2017-09-09T09:24:01.000-04:00
+modified = 2020-05-31T15:27:02.043-04:00
++++
 
 These are some features of CWiki.
 

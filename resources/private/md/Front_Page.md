@@ -1,18 +1,10 @@
----
-author: CWiki
-
-title: Front Page
-
-date: 2017-10-01T17:45:07.000-04:00
-modified: 2020-04-20T13:26:08.548-04:00
-tags:
-  - help
-
-  - front page
-
-  - about
-
----
++++
+author = "CWiki"
+title = "Front Page"
+tags = ["about" "front page" "help"]
+date = 2017-10-01T17:45:07.000-04:00
+modified = 2020-04-20T13:26:08.548-04:00
++++
 
 This is the **Front Page** of your new [wiki](https://en.wikipedia.org/wiki/Wiki). This particular wiki goes by the name of [[About CWiki|CWiki]].
 

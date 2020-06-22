@@ -1,14 +1,10 @@
----
-author: david
-title: Technical Note on Keyboard Shortcuts
-date: 2018-11-22T16:54:22.555-05:00
-modified: 2018-11-24T12:11:09.135-05:00
-tags:
-  - cwiki
-  - keyboard
-  - shortcut
-  - technical note
----
++++
+author = "CWiki"
+title = "Technical Note on Keyboard Shortcuts"
+tags = ["cwiki" "keyboard" "shortcut" "technical note"]
+date = 2018-11-22T16:54:22.555-05:00
+modified = 2018-11-24T12:11:09.135-05:00
++++
 
 I've wanted to implement some keyboard shortcuts for a couple of reasons. First, it would improve accessibility. Second, I want it for my use -- saving files is much more comfortable with a shortcut than moving the mouse to click the save icon. In fact, for one pathological page that I am working on, the editor pushes the preview pane, and the save icon at the right of the button bar way out of the window on the right. Without a shortcut to save the page, I have to scroll way off to the right, the scroll back left in the editor to continue editing.
 

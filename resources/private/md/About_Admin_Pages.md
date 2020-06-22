@@ -1,18 +1,10 @@
----
-author: CWiki
-
-title: About Admin Pages
-
-date: 2017-11-20T13:51:44.000-05:00
-modified: 2020-05-31T15:47:54.713-04:00
-tags:
-  - admin
-
-  - special pages
-
-  - about
-
----
++++
+author = "CWiki"
+title = "About Admin Pages"
+tags = ["about" "admin" "special pages"]
+date = 2017-11-20T13:51:44.000-05:00
+modified = 2020-05-31T15:47:54.713-04:00
++++
 
 ​​
 Only a user in the admin role can accomplish administrative tasks. There should be at least one "admin" user created the first time the wiki is started and viewed. That user can also create other admin users if they so desire. If you are using CWiki strictly as a personal wiki and you are the only user, then you are the admin user. (If you can click any of the following links, you are an admin user. If the links are "grayed out" and not clickable, you are not an admin user.)

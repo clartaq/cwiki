@@ -1,18 +1,10 @@
----
-author: CWiki
-
-title: About the Editor
-
-date: 2018-11-27T17:40:32.822-05:00
-modified: 2020-05-31T16:30:15.250-04:00
-tags:
-  - help
-
-  - editor
-
-  - about
-
----
++++
+author = "CWiki"
+title = "About the Editor"
+tags = ["about" "editor" "help"]
+date = 2018-11-27T17:40:32.822-05:00
+modified = 2020-05-31T16:30:15.250-04:00
++++
 
 CWiki includes a simple Markdown editor with real-time preview. It is not fancy, but in my own work, it is very low friction.
 

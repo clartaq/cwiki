@@ -1,16 +1,10 @@
----
-author: CWiki
-title: About the Sidebar
-date: 2017-06-11T16:39:37.000-04:00
-modified: 2018-08-15T17:23:26.910-04:00
-tags:
-  - about
-  - help
-  - sidebar
-  - special pages
----
-
-
++++
+author = "CWiki"
+title = "About the Sidebar"
+tags = ["about" "help" "sidebar" "special pages"]
+date = 2017-06-11T16:39:37.000-04:00
+modified = 2018-08-15T17:23:26.910-04:00
++++
 
 The [[Sidebar]] is a special location on the screen and one of the [[Special Pages]] used in this wiki. It's on the left side of the browser window. Things there look a little smaller than the page view where you're reading this.
 

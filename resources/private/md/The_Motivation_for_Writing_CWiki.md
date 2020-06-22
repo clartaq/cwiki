@@ -1,18 +1,10 @@
----
-author: CWiki
-
-title: The Motivation for Writing CWiki
-
-date: 2018-01-07T10:24:01.000-05:00
-modified: 2020-05-31T13:53:09.598-04:00
-tags:
-  - rationale
-
-  - technical note
-
-  - motivation
-
----
++++
+author = "CWiki"
+title = "The Motivation for Writing CWiki"
+tags = ["motivation" "rationale" "technical note"]
+date = 2018-01-07T10:24:01.000-05:00
+modified = 2020-05-31T13:53:09.598-04:00
++++
 
 You might rightly ask "Why does the world need another wiki program?" Well, CWiki probably isn't vital to the survival of civilization as we know it. But I was motivated by a few things.
 

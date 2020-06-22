@@ -1,12 +1,10 @@
----
-author: CWiki
-title: About
-date: 2017-10-24T08:46:39.000-04:00
-modified: 2020-04-08T13:54:32.502-04:00
-tags:
-  - about
-  - special pages
----
++++
+author = "CWiki"
+title = "About"
+tags = ["about" "special pages"]
+date = 2017-10-24T08:46:39.000-04:00
+modified = 2020-04-08T13:54:32.502-04:00
++++
 
 This is the "About" page for your wiki. It is just like any other page in the wiki except that there is always a link to it in the menu bar at the top of the browser window. It's in the "More" drop-down menu.
 

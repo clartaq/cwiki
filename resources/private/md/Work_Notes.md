@@ -1,22 +1,10 @@
----
-author: CWiki
-
-title: Work Notes
-
-date: 2018-11-18T10:10:30.985-05:00
-modified: 2020-06-17T16:49:35.372-04:00
-tags:
-  - technical note
-
-  - design
-
-  - cwiki
-
-  - keyboard
-
-  - shortcut
-
----
++++
+author = "CWiki"
+title = "Work Notes"
+tags = ["cwiki" "design" "keyboard" "shortcut" "technical note"]
+date = 2018-11-18T10:10:30.985-05:00
+modified = 2020-06-17T16:49:35.372-04:00
++++
 
 This page is the on-going saga of working on the CWiki program.
 

@@ -1,11 +1,10 @@
----
-author: david
-title: Running on a VPS
-date: 2018-08-14T16:21:19.722-04:00
-modified: 2018-08-14T17:36:54.868-04:00
-tags:
-  - VPS
----
++++
+author = "CWiki"
+title = "Running on a VPS"
+tags = ["VPS"]
+date = 2018-08-14T16:21:19.722-04:00
+modified = 2018-08-14T17:36:54.868-04:00
++++
 
 You _can_ run CWiki on a VPS (Virtual Private Server) and connect to it through your browser, almost like running it locally, but I wouldn't recommend it. (See below.)
 

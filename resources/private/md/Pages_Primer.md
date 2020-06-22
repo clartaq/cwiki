@@ -1,16 +1,10 @@
----
-author: CWiki
-
-title: Pages Primer
-
-date: 2017-10-24T08:48:43.000-04:00
-modified: 2020-05-31T16:17:20.189-04:00
-tags:
-  - help
-
-  - pages
-
----
++++
+author = "CWiki"
+title = "Pages Primer"
+tags = ["help" "pages"]
+date = 2017-10-24T08:48:43.000-04:00
+modified = 2020-05-31T16:17:20.189-04:00
++++
 
 This "Pages Primer" is a brief introduction to creating, editing, and deleting pages in the wiki.
 

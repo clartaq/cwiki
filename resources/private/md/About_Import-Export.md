@@ -1,30 +1,10 @@
----
-author: CWiki
-
-title: About Import-Export
-
-date: 2017-12-10T09:47:06.000-05:00
-modified: 2020-04-20T14:00:24.405-04:00
-tags:
-  - help
-
-  - export
-
-  - about
-
-  - import
-
----
-
-
-
-
-
-
-
-
-
-
++++
+author = "CWiki"
+title = "About Import-Export"
+tags = ["about" "export" "help" "import"]
+date = 2017-12-10T09:47:06.000-05:00
+modified = 2020-04-20T14:00:24.405-04:00
++++
 
 CWiki lets you import ([[About Roles|if you are allowed]]) and export content from the wiki to the file system and *vice versa*. There are two ways to do it, explained below.
 

@@ -1,18 +1,10 @@
----
-author: david
-
-title: About Back Links
-
-date: 2020-06-17T10:08:11.798-04:00
-modified: 2020-06-17T10:10:26.473-04:00
-tags:
-  - help
-
-  - back links
-
-  - about
-
----
++++
+author = "CWiki"
+title = "About Back Links"
+tags = ["about" "back links" "help"]
+date = 2020-06-17T10:08:11.798-04:00
+modified = 2020-06-17T10:10:26.473-04:00
++++
 
 **THIS IS NOT READY YET**
 

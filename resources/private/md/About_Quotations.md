@@ -1,17 +1,10 @@
----
-author: david
-title: About Quotations
-date: 2018-09-13T17:40:01.851-04:00
-modified: 2018-09-14T12:50:08.454-04:00
-tags:
-  - about
-  - block quote
-  - CSS
-  - help
-  - HTML
-  - quotations
-  - Tufte
----
++++
+author = "CWiki"
+title = "About Quotations"
+tags = ["about" "block quote" "CSS" "help" "HTML" "quotations" "Tufte"]
+date = 2018-09-13T17:40:01.851-04:00
+modified = 2018-09-14T12:50:08.454-04:00
++++
 
 Of course, Markdown supports short quotations through the use of quotation marks, just like any editor. Markdown also can create formatting for more extended quotes, called "blockquotes." They look like this:
 

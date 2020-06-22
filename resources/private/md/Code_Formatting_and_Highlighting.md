@@ -1,16 +1,10 @@
----
-author: CWiki
-title: Code Formatting and Highlighting
-date: 2018-03-07T17:40:28.000-05:00
-modified: 2019-05-27T17:51:47.017-04:00
-tags:
-  - cwiki
-  - Markdown
-  - technical note
-  - text formatting
----
-
-
++++
+author = "CWiki"
+title = "Code Formatting and Highlighting"
+tags = ["cwiki" "Markdown" "technical note" "text formatting"]
+date = 2018-03-07T17:40:28.000-05:00
+modified = 2019-05-27T17:51:47.017-04:00
++++
 
 Markdown has a few ways to format code built in. To get it to look right, you probably have to fiddle with the CSS of the site. It isn't a perfectly straightforward problem.
 

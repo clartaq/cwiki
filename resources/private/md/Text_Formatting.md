@@ -1,20 +1,10 @@
----
-author: CWiki
-
-title: Text Formatting
-
-date: 2017-10-24T08:57:33.000-04:00
-modified: 2020-05-31T15:21:05.306-04:00
-tags:
-  - MathJax
-
-  - LaTeX
-
-  - Markdown
-
-  - formatting
-
----
++++
+author = "CWiki"
+title = "Text Formatting"
+tags = ["formatting" "LaTeX" "Markdown" "MathJax"]
+date = 2017-10-24T08:57:33.000-04:00
+modified = 2020-05-31T15:21:05.306-04:00
++++
 
 Markdown provides a wealth of ways to quickly format your content. For the details, I strongly recommend the [Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet). I won't repeat here what that page tells you. However, there are some CWiki-specific things that you should know about, especially some [GitHub-Flavored Markdown](https://github.github.com/gfm/) (GFM) items and how they are handled.
 

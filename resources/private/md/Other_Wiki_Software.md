@@ -1,13 +1,10 @@
----
-author: CWiki
-title: Other Wiki Software
-date: 2017-10-10T13:20:24.000-04:00
-modified: 2018-12-05T17:44:34.237-05:00
-tags:
-  - alternatives
-  - note-taking software
-  - wiki software
----
++++
+author = "CWiki"
+title = "Other Wiki Software"
+tags = ["alternatives" "note-taking software" "wiki software"]
+date = 2017-10-10T13:20:24.000-04:00
+modified = 2018-12-05T17:44:34.237-05:00
++++
 
 Here are some other wikis (and note-taking apps and personal knowledge bases) that I find interesting. Some of these are quite mature and very polished. Each has an opinionated approach to information management that works very smoothly when used as intended. Of course, each is missing something that I want. Otherwise, I would not have found it necessary to write CWiki.
 

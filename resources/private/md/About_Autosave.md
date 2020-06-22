@@ -1,13 +1,10 @@
----
-author: david
-title: About Autosave
-date: 2019-01-12T14:05:42.267-05:00
-modified: 2019-01-12T14:20:42.968-05:00
-tags:
-  - about
-  - autosave
-  - editor
----
++++
+author = "CWiki"
+title = "About Autosave"
+tags = ["about" "autosave" "editor"]
+date = 2019-01-12T14:05:42.267-05:00
+modified = 2019-01-12T14:20:42.968-05:00
++++
 
 By default, changes you make in the editor will be saved automatically after a short period of keyboard inactivity.
 

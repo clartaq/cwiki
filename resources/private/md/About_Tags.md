@@ -1,18 +1,10 @@
----
-author: CWiki
-
-title: About Tags
-
-date: 2018-01-22T17:45:17.000-05:00
-modified: 2020-05-15T17:54:00.701-04:00
-tags:
-  - help
-
-  - tags
-
-  - about
-
----
++++
+author = "CWiki"
+title = "About Tags"
+tags = ["about" "help" "tags"]
+date = 2018-01-22T17:45:17.000-05:00
+modified = 2020-05-15T17:54:00.701-04:00
++++
 
 ​
 Tags are a convenience that lets you classify your information in some (hopefully) systematic way. They are just words or short phrases that you can associate with a page.

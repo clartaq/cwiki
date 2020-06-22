@@ -1,14 +1,10 @@
----
-author: david
-title: Technical Note on the Editor CSS
-date: 2018-11-24T12:27:35.123-05:00
-modified: 2018-11-29T16:32:17.829-05:00
-tags:
-  - CSS
-  - cwiki
-  - editor
-  - technical note
----
++++
+author = "CWiki"
+title = "Technical Note on the Editor CSS"
+tags = ["CSS" "cwiki" "editor" "technical note"]
+date = 2018-11-24T12:27:35.123-05:00
+modified = 2018-11-29T16:32:17.829-05:00
++++
 
 Initially, it was easy to get the CSS to do what I wanted. All I had to do was view the sidebar, the main article, a header, and (at that time) a footer. 
 

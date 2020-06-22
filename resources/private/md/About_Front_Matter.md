@@ -1,18 +1,10 @@
----
-author: CWiki
-
-title: About Front Matter
-
-date: 2017-12-24T17:15:16.000-05:00
-modified: 2020-05-16T10:11:59.766-04:00
-tags:
-  - front matter
-
-  - about
-
-  - metadata
-
----
++++
+author = "CWiki"
+title = "About Front Matter"
+tags = ["about" "front matter" "metadata"]
+date = 2017-12-24T17:15:16.000-05:00
+modified = 2020-05-16T10:11:59.766-04:00
++++
 
 This information is relevant only if you use the [[About Import-Export|Import/Export]] capabilities of CWiki to read and save posts to and from disk.
 

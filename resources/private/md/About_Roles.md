@@ -1,14 +1,10 @@
----
-author: CWiki
-title: About Roles
-date: 2017-11-15T09:10:33.000-05:00
-modified: 2020-04-04T17:58:37.763-04:00
-tags:
-  - about
-  - roles
----
-
-
++++
+author = "CWiki"
+title = "About Roles"
+tags = ["about" "roles"]
+date = 2017-11-15T09:10:33.000-05:00
+modified = 2020-04-04T17:58:37.763-04:00
++++
 
 CWiki supports different roles for different users. The different roles have different capabilities regarding what the user is allowed to do.
 

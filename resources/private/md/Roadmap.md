@@ -1,24 +1,10 @@
----
-author: CWiki
-
-title: Roadmap
-
-date: 2018-09-20T11:11:38.543-04:00
-modified: 2020-05-31T16:49:32.359-04:00
-tags:
-  - process
-
-  - technical note
-
-  - cwiki
-
-  - editor
-
-  - enhancements
-
-  - architecture
-
----
++++
+author = "CWiki"
+title = "Roadmap"
+tags = ["architecture" "cwiki" "editor" "enhancements" "process" "technical note"]
+date = 2018-09-20T11:11:38.543-04:00
+modified = 2020-05-31T16:49:32.359-04:00
++++
 
 This project roadmap is an ever-evolving list of things to be changed and improved. Topic​s will appear and disappear from this page as development continues.
 

@@ -1,12 +1,10 @@
----
-author: david
-title: Speed
-date: 2018-08-21T16:21:18.719-04:00
-modified: 2018-08-28T16:05:31.513-04:00
-tags:
-  - performance
-  - VPS
----
++++
+author = "CWiki"
+title = "Speed"
+tags = ["performance" "VPS"]
+date = 2018-08-21T16:21:18.719-04:00
+modified = 2018-08-28T16:05:31.513-04:00
++++
 
 Just like any other application, CWiki should be fast enough that the user does not notice any delays in their work. It should minimize the friction of creating, finding and reading the information contained in the wiki.
 

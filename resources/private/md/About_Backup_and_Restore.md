@@ -1,22 +1,10 @@
----
-author: CWiki
-
-title: About Backup and Restore
-
-date: 2017-12-03T10:12:36.000-05:00
-modified: 2020-05-24T12:31:39.879-04:00
-tags:
-  - backup
-
-  - restore
-
-  - admin
-
-  - special pages
-
-  - about
-
----
++++
+author = "CWiki"
+title = "About Backup and Restore"
+tags = ["about" "admin" "backup" "restore" "special pages"]
+date = 2017-12-03T10:12:36.000-05:00
+modified = 2020-05-24T12:31:39.879-04:00
++++
 
 Backing up and restoring the database file is pretty easy and can be accomplished in different ways.
 

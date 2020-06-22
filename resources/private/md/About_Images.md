@@ -1,14 +1,10 @@
----
-author: CWiki
-title: About Images
-date: 2017-12-02T10:50:59.000-05:00
-modified: 2018-09-18T18:04:58.794-04:00
-tags:
-  - about
-  - images
----
-
-
++++
+author = "CWiki"
+title = "About Images"
+tags = ["about" "images"]
+date = 2017-12-02T10:50:59.000-05:00
+modified = 2018-09-18T18:04:58.794-04:00
++++
 
 Just as you can insert links to images in Markdown, you can insert links to images in CWiki. There are a couple of ways to do it.
 

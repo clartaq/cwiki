@@ -1,16 +1,10 @@
----
-author: CWiki
-title: About Search
-date: 2018-08-07T17:47:35.761-04:00
-modified: 2019-05-26T16:35:31.790-04:00
-tags:
-  - About
-  - full text search
-  - search
-  - Special Pages
----
-
-
++++
+author = "CWiki"
+title = "About Search"
+tags = ["About" "full text search" "search" "Special Pages"]
+date = 2018-08-07T17:47:35.761-04:00
+modified = 2019-05-26T16:35:31.790-04:00
++++
 
 ​CWiki supports some basic search functionality.
 

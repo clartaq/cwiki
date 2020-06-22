@@ -1,13 +1,10 @@
----
-author: CWki
-title: How to Insert a Timestamp in the Editor
-date: 2018-12-31T11:00:04.974-05:00
-modified: 2020-04-07T14:26:04.004-04:00
-tags:
-  - editor
-  - how-to
-  - timestamp
----
++++
+author = "CWiki"
+title = "How to Insert a Timestamp in the Editor"
+tags = ["editor" "how-to" "timestamp"]
+date = 2018-12-31T11:00:04.974-05:00
+modified = 2020-04-07T14:26:04.004-04:00
++++
 
 Often, I like to record the date and time that I write something. To make it easy, there is an icon in the toolbar. It looks like a clock.
 

@@ -1,12 +1,10 @@
----
-title: Limits
-author: CWiki
-date: 1/7/2018 10:00:07 AM  
-updated: 2018-03-11T16:55:27.944313-04:00
-tags:
-  - technical note
-  - limitations
----
++++
+author = "CWiki"
+title = "Limits"
+tags = ["limitations" "technical note"]
+date = 2018-01-07T10:00:07.000-05:00
+modified = 2018-03-11T16:55:27.944-04:00
++++
 
 Like all programs, CWiki has it's limitations. Here are some of them.
 

@@ -1,13 +1,10 @@
----
-author: CWiki
-title: Admin
-date: 2017-11-09T09:24:01.000-05:00
-modified: 2020-04-04T17:56:24.918-04:00
-tags:
-  - admin
-  - special pages
----
-
++++
+author = "CWiki"
+title = "Admin"
+tags = ["admin" "special pages"]
+date = 2017-11-09T09:24:01.000-05:00
+modified = 2020-04-04T17:56:24.918-04:00
++++
 
 This page is basically just a menu pointing to admin maintenance pages.
 

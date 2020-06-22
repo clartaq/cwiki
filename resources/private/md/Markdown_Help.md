@@ -1,16 +1,10 @@
----
-author: CWiki
-
-title: Markdown Help
-
-date: 2018-11-18T15:39:33.103-05:00
-modified: 2020-05-31T13:59:08.740-04:00
-tags:
-  - help
-
-  - Markdown
-
----
++++
+author = "CWiki"
+title = "Markdown Help"
+tags = ["help" "Markdown"]
+date = 2018-11-18T15:39:33.103-05:00
+modified = 2020-05-31T13:59:08.740-04:00
++++
 
 <a name="top"></a>
 This list is largely copied and adapted from the

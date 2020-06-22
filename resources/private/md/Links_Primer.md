@@ -1,14 +1,10 @@
----
-author: CWiki
-title: Links Primer
-date: 2017-10-24T08:55:54.000-04:00
-modified: 2018-12-15T17:35:03.233-05:00
-tags:
-  - about
-  - help
-  - links
----
-
++++
+author = "CWiki"
+title = "Links Primer"
+tags = ["about" "help" "links"]
+date = 2017-10-24T08:55:54.000-04:00
+modified = 2018-12-15T17:35:03.233-05:00
++++
 
 ​
 This is a page that details how to create and use links in the wiki.
