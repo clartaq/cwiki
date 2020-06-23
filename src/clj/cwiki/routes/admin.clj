@@ -111,7 +111,6 @@
   (let [params (:multipart-params req)
         referer (get params "referer")
         zip-file-name (backup-database)]
-    (backup-database)
     (layout/confirm-backup-database (str "\"" zip-file-name "\"") referer)))
 
 (defn- get-restore-database
