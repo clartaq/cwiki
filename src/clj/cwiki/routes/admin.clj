@@ -18,7 +18,8 @@
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
             [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]])
+                                     trace debug info warn error]]
+            [clojure.java.io :as io])
   (:import (java.util.zip ZipOutputStream ZipEntry)
            (java.io FileOutputStream File)
            (java.nio.file FileSystems Path Files FileVisitOption)))
@@ -100,6 +101,7 @@
                            "-" timestamp ".zip")
         page-names (filter #(not (empty? %))
                            (map :page_title (db/get-all-page-names-in-db)))]
+    (io/make-parents zip-file-name)
     (with-open [zos (ZipOutputStream. (FileOutputStream. ^String zip-file-name))]
       (mapv (fn [pn idx]
               (backup-helper zos pn idx)) page-names (iterate inc 0)))
