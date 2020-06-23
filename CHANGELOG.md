@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Pages that `POST` to the server, basically any form that sends information back to the server, now use an anti-forgery field in the page. This probably doesn't make any difference if you are running CWiki locally, like I do. Might make a difference if you run CWiki on a server.
 - Updated to MathJax 3. In addition to keeping up with the technology, there is no more "MathJax Jitter" when editing documents with math and a live preview.
 - Now including the MathJax package in the jar file at the expense of adding about 2MB to its size. Now you don't have to be online to edit pages with math in them.
+- Temporary files are no longer written to disk during database backup or restore.
 
 ### Fixed ###
 
@@ -35,6 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Resolved a couple of development issues that led to error messages in the browser when using development builds.
 - Fixed Issue #11. Turning off realtime preview in the editor restores responsiveness to typing.
 - Removed some files that are no longer used from the seed pages.
+- The backup operation now assures that the `backup` directory exists.
 
 ## [0.1.7] - 2020-04-07 ##
 
