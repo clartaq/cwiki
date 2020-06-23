@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Parts of some long page titles are no longer overwritten by the scroll bars on the "All Pages" page.
 - Resolved a couple of development issues that led to error messages in the browser when using development builds.
 - Fixed Issue #11. Turning off realtime preview in the editor restores responsiveness to typing.
+- Removed some files that are no longer used from the seed pages.
 
 ## [0.1.7] - 2020-04-07 ##
 

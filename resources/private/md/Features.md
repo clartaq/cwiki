@@ -3,7 +3,7 @@ author = "CWiki"
 title = "Features"
 tags = ["cwiki" "features"]
 date = 2017-09-09T09:24:01.000-04:00
-modified = 2020-05-31T15:27:02.043-04:00
+modified = 2020-06-23T15:02:46.290-04:00
 +++
 
 These are some features of CWiki.
@@ -13,7 +13,7 @@ These are some features of CWiki.
 * Because the native markup language is Markdown with some extensions for internal [[Wikilinks]], the pages you write can freely link to the external [World Wide Web](https://en.wikipedia.org/wiki/World_Wide_Web) and other pages inside your local wiki.
 * CWiki includes a straightforward​ Markdown editor with live preview.
 * Each page that you write can have tags associated with it.
-* You're data are not locked in. You can export the contents of the wiki to plain text Markdown with YAML front matter. You can export individual pages or all of the pages at once.
+* You're data are not locked in. You can export the contents of the wiki to plain text Markdown with TOML front matter. You can export individual pages or all of the pages at once.
 * You can use CWiki to create pages that attractively format mathematics. For example, here is an inline equation $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$, and here is the same equation on it's own line:
 $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
 Math typesetting​ is made possible by using the [MathJax](https://www.mathjax.org/) engine to display mathematics.

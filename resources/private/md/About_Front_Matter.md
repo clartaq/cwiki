@@ -3,29 +3,26 @@ author = "CWiki"
 title = "About Front Matter"
 tags = ["about" "front matter" "metadata"]
 date = 2017-12-24T17:15:16.000-05:00
-modified = 2020-05-16T10:11:59.766-04:00
+modified = 2020-06-22T17:58:09.041-04:00
 +++
 
 This information is relevant only if you use the [[About Import-Export|Import/Export]] capabilities of CWiki to read and save posts to and from disk.
 
-Front matter is meta-information you can include in your post file in a special section of text at the top of a Markdown file. CWiki supports front matter in the [YAML](http://yaml.org/) format as supported by the [Hugo](https://gohugo.io) or [Jekyll](https://github.com/jekyll/jekyll) static blog generators. (CWiki does not support templating as both Hugo and Jekyll do.)
+Front matter is meta-information you can include in your post file in a special section of text at the top of a Markdown file. CWiki supports front matter in the [TOML](https://github.com/toml-lang/toml#user-content-local-date-time) format as supported by the [Hugo](https://gohugo.io) or [Jekyll](https://github.com/jekyll/jekyll) static blog generators. (CWiki does not support templating as both Hugo and Jekyll do.)
 
 CWiki handles a minimal subset of what YAML can do. It just looks for a few different tags to use in wiki page descriptions. For example, the front matter for this page consists of:
 
-```yaml
----
-title: About Front Matter
-author: CWiki
-date: 2017-12-24T17:15:16.000000-05:00 
-updated: 2018-03-11T10:20:12.235913-04:00
-tags:
-  - about
-  - front matter
-  - metadata
----
+```toml
++++
+author = "CWiki"
+title = "About Front Matter"
+tags = ["about" "front matter" "metadata"]
+date = 2017-12-24T17:15:16.000-05:00
+modified = 2020-05-16T10:11:59.766-04:00
++++
 ```
 
-Note that the section starts and ends with three hyphen characters. This section is not shown​ in the wiki posts that you view. In fact, after loading a file, the front matter is discarded.
+Note that the section starts and ends with three "plus" characters. This section is not shown​ in the wiki posts that you view. In fact, after loading a file, the front matter is discarded.
 
 The keys that CWiki understands include:
 
@@ -62,3 +59,5 @@ The creation date and time will be shown as the date and time that the file was 
 
 ### If there is no modification date, the creation date and time will be used ###
 The creation and modification date/time will be the same in this case.
+
+**Note**: Historically, CWiki originally read and created front matter in the YAML format. It was changed to TOML after Hugo began supporting that format. YAML is now deprecated and will be removed in a future release.

@@ -3,7 +3,7 @@ author = "CWiki"
 title = "About Import-Export"
 tags = ["about" "export" "help" "import"]
 date = 2017-12-10T09:47:06.000-05:00
-modified = 2020-04-20T14:00:24.405-04:00
+modified = 2020-06-23T15:05:24.215-04:00
 +++
 
 CWiki lets you import ([[About Roles|if you are allowed]]) and export content from the wiki to the file system and *vice versa*. There are two ways to do it, explained below.
@@ -16,7 +16,7 @@ Import is just as easy. [[Pages Primer|Create a new page]] (click "New" up in th
 
 ## Reading and Writing to the File System
 
-Importing and exporting files is supported by commands on the drop-down menu up in the title bar. Under the "More" drop-down, there are items for "Import" (if allowed), "Export" to export a single page, and "Export All" to export the entire contents of the wiki. These methods work with Markdown files that contain [[About Front Matter|YAML front matter]].
+Importing and exporting files is supported by commands on the drop-down menu up in the title bar. Under the "More" drop-down, there are items for "Import" (if allowed), "Export" to export a single page, and "Export All" to export the entire contents of the wiki. These methods work with Markdown files that contain [[About Front Matter|TOML front matter]].
 
 This method can be more convenient in some cases. If your role is a "reader," it is your only option since you will not be able to open an editing page. Readers can only export, they are not allowed to import content into the wiki.
 
