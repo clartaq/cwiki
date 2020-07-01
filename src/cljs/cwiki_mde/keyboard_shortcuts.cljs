@@ -4,8 +4,8 @@
 ;;;;
 
 (ns cwiki-mde.keyboard-shortcuts
-  (:require [cljs-time.core :as t]
-            [cljs-time.format :as f]
+  (:require ;[cljs-time.core :as t]
+            ;[cljs-time.format :as f]
             [cwiki-mde.editor-commands :as cmd]
             [keybind.core :as kbs]))
 
@@ -55,9 +55,7 @@
                (cmd/quit-editor-cmd editor-state)
                (.preventDefault evt)
                (.stopPropagation evt)
-               false))
-
-  )
+               false)))
 
 (defn unbind-shortcut-keys
   "Un-bind all of the shortcut keys."
