@@ -538,27 +538,6 @@
         :on-click #(toggle-markdown-help-modal)}
        [:i.editor-button-bar--icon.question-circle-o-icon]]]]))
 
-;(defn editor-key-up-handler
-;  [key ele editor-state]
-;  ;(println "editor-key-up-handler: key: " key)
-;  ;(println "    keyCode: " (.-keyCode key))
-;  ;(println "    (type keyCode): " (type (.-keyCode key)))
-;  ;(println "    (nil? keyCode): " (nil? (.-keyCode key)))
-;  ;(println "    charCode: " (.-charCode key))
-;  ;(println "    (type charCode): " (type (.-charCode key)))
-;  ;(println "    (nil? charCode): " (nil? (.-charCode key)))
-;  (when-not (or (.-shiftKey key)
-;                (.-ctrlKey key)
-;                (.-metaKey key)
-;                (.-altKey key))
-;    ;(println "    Didn't see any shifty keys")
-;    ;(println "    (or (.-charCode key) (.-keyCode key)): "
-;    ;         (or (.-charCode key) (.-keyCode key)))
-;    (when (or (= 13 (.-charCode key))
-;              (= 13 (.-keyCode key)))
-;      ;(print "Return Key Up")
-;      (cmd/auto-indent ele editor-state))))
-
 (defn- layout-editor-pane
   "This is the editing area, just a textarea. It sends an update message
   oover the websocket server when editor-state are so configured."

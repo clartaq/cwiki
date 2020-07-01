@@ -1,0 +1,17 @@
+^{
+  ;; use an alternative landing page for the tests so that we don't
+  ;; launch the application
+  :open-url "http://[[server-hostname]]:[[server-port]]/test.html"
+  
+  ;; uncomment to launch tests in a headless environment
+  ;; you will have to figure out the path to chrome on your system
+  ;; :launch-js ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" "--headless" "--disable-gpu" "--repl" :open-url]
+
+  ;; This works for me (DDC) since I don't use Chrome
+  ;; :launch-js ["/Applications/Brave Browser.app/Contents/MacOS/Brave Browser" "--headless" "--disable-gpu" "--repl" :open-url]
+  ;; Another option is Opera. But it still opens the browser, but then closes it.
+  ;; :launch-js ["/Applications/Opera.app/Contents/MacOS/Opera" "--headless" "--disable-gpu" "--repl" :open-url]
+  ;; I think Firefox (developer) should work, but you should probably launce it
+  ;; for another profile than the one you used to do your browsing/testing.
+  }
+{:main fwm-example.test-runner}

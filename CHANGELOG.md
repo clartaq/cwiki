@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Changed ###
 
+- ClojureScript testing is now done _via_ `figwheel-main`.
 - Import now allows importing of multiple files at once. Existing pages with the same name are silently overwritten.
 - Changed implementation of header menus. Now smoother with no "gaps".
 - The Sente library, used for websocket communications between the server and client, has been updated. The new version includes a fix to a bug that didn't handle CSRF tokens correctly. This resolves issue #1.

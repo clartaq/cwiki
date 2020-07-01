@@ -1,0 +1,23 @@
+;;; This is a minimal deps file intended only to be used for testing
+;;; ClojureScript. Don't use it to try to build executables.
+;;;
+;;; IMPORTANT! You have to manually keep the dependencies in synch with those
+;;; in the project.clj file.
+
+{:deps    {org.clojure/clojure         {:mvn/version "1.10.1"}
+           org.clojure/clojurescript   {:mvn/version "1.10.520"}
+
+           com.andrewmcveigh/cljs-time {:mvn/version "0.5.2"}
+           com.taoensso/sente          {:mvn/version "1.15.0"}
+           com.taoensso/timbre         {:mvn/version "4.10.0"}
+           cljs-ajax                   {:mvn/version "0.8.0"}
+           keybind                     {:mvn/version "2.2.0"}
+           reagent                     {:mvn/version "0.8.1"}}
+ :paths   ["src/cljs" "resources"]
+ :aliases {:fig   {:extra-deps
+                                {com.bhauman/rebel-readline-cljs {:mvn/version "0.1.4"}
+                                 com.bhauman/figwheel-main       {:mvn/version "0.2.9"}}
+                   :extra-paths ["target" "test/cljs"]}
+           ;:build {:main-opts ["-m" "figwheel.main" "-b" "dev" "-r"]}
+           ;:min   {:main-opts ["-m" "figwheel.main" "-O" "advanced" "-bo" "dev"]}
+           :test  {:main-opts ["-m" "figwheel.main" "-co" "test.cljs.edn" "-m" "cwiki-test.test-runner"]}}}

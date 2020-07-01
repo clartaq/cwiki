@@ -70,7 +70,7 @@
   ;:minify-assets [[:css {:source "resources/public/css/styles.css"
   ;                       :target "resources/public/css/styles.min.css"}]]
 
-  :aliases {"test-cljs"  ["do" "clean," "doo" "firefox-headless" "test" "once"]
+  :aliases {;"test-cljs"  ["do" "clean," "doo" "firefox-headless" "test" "once"]
             "start-prod" ["do" "clean," "cljsbuild" "once" "min," "run"]}
 
   :ring {:handler cwiki.handler/app}
@@ -81,7 +81,7 @@
                                       :nrepl-middleware [cider.piggieback/wrap-cljs-repl]}
 
                        :dependencies [[org.clojure/tools.nrepl "0.2.13"]
-                                      [binaryage/devtools "1.0.0"]
+                                      [binaryage/devtools "1.0.2"]
                                       [cider/piggieback "0.5.0"]
                                       [figwheel-sidecar "0.5.20" :exclusions [org.clojure/tools.nrepl]]
                                       [prone "2020-01-17"]
@@ -99,7 +99,7 @@
                        :env          {:profile-type "development"
                                       :debugging-css "true"}}
 
-             :test    {:env {:profile-type "test"}}
+             ;:test    {:env {:profile-type "test"}}
 
              :uberjar {:aot          :all
                        :omit-source  true
@@ -141,12 +141,12 @@
                                :pretty-print  true
                                :externs       ["externs/syntax.js"]}}
 
-               {:id           "test"
-                :source-paths ["src/cljs" "test/cljs"]
-                :compiler     {:output-to     "resources/public/js/compiled/test.js"
-                               :output-dir    "resources/public/js/compiled/test"
-                               :main          cwiki-test.runner
-                               :optimizations :none
-                               :externs       ["externs/syntax.js"]}}
+               ;{:id           "test"
+               ; :source-paths ["src/cljs" "test/cljs"]
+               ; :compiler     {:output-to     "resources/public/js/compiled/test.js"
+               ;                :output-dir    "resources/public/js/compiled/test"
+               ;                :main          cwiki-test.runner
+               ;                :optimizations :none
+               ;                :externs       ["externs/syntax.js"]}}
                ]}
   )

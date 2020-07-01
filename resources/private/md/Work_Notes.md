@@ -3,10 +3,22 @@ author = "CWiki"
 title = "Work Notes"
 tags = ["cwiki" "design" "keyboard" "shortcut" "technical note"]
 date = 2018-11-18T10:10:30.985-05:00
-modified = 2020-06-17T16:49:35.372-04:00
+modified = 2020-07-01T15:39:46.679-04:00
 +++
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Unit Testing ClojureScript is Just Too Painful with Leiningen, 01 Jul 2020, 10:59:26 am ####
+
+All the stuff behind testing seems to be changing constantly or being abandoned or something. I have have very good luck doing ClojureScript testing with [Figwheel Main](https://figwheel.org). Will look into using that here too.
+
+**Update**: Set up ClojureScript testing to run with Figwheel Main. Sooo much less hassle. No external setup required for new users. Don't have to worry about development stopping on Javascript testing frameworks, going obsolete, setting up Node. Yada, yada, yada. Bruce Hauman is my hero.
+
+Yes, it feels weird to use figwheel "classic" and Figwheel Main in the same project.
+
+#### The Backup Link Makes Two Backups at Once, 23 Jun 2020, 04:15:07 pm ####
+
+Just noticed that the backup function makes two backup files at once. Now how did that happen?!
 
 #### Switching Front Matter from YAML to TOML, 17 Jun 2020, 04:28:18 pm ####
 

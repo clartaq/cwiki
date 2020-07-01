@@ -110,41 +110,13 @@ To run tests on the Clojure code, open a terminal in the project directory and e
 
 ### ClojureScript ###
 
-Once configured (see below), you can run tests on the ClojureScript code by opening a terminal and typing:
+You can run tests on the ClojureScript code by opening a terminal and typing:
 
-`lein cljs-test`
+`clj -A:fig:test`
 
-#### Prerequisites ####
+(I switched to using the Clojure command line interface (CLI) and `deps` ([guide](https://clojure.org/guides/deps_and_cli)) along with [Figwheel Main](https://figwheel.org) because of the painful mess that is ClojureScript testing with Leiningen. It is no fault of the Leiningen tool. It's just that the stack of tools is constantly changing and losing support or moving on to next "shiny new thing". There is much less setup this way and it just works.
 
-Configuring your environment for testing is a little more complicated for ClojureScript. My main development environment these days is macOS and these instructions apply to that environment. They are probably similar in Windows and Linux. I used this [article](https://lispcast.com/testing-clojurescript/) and this [repository](https://github.com/cloojure/cljs-template) for guidance.
-
-##### Node #####
-
-Now you must have [Nodejs](https://nodejs.org/en/) installed. I used [Homebrew](https://brew.sh) in a terminal to install it:
-
-`brew install node`
-
-That will install the current version, which is not neccessarily the one recommended for most users.
-
-##### Set Up the Karma Test Environment #####
-
-In a terminal change to the project directory and enter:
-
-```bash
-npm install karma-cli -g
-npm install karma karma-cljs-test  --save-dev
-npm install karma-junit-reporter   --save-dev
-npm install karma-opera-launcher  karma-firefox-launcher  karma-safari-launcher  --save-dev
-```
-I use the Firefox Developer Edition on my system as well as Safari, Opera, and Brave. (No launcher for Brave at the moment.) The Karma launcher doesn't know how to launch Firefox Developer Edition. For that to work I had to add the following to my `.bash_profile` or `.zshrc`to tell the launcher where to look.
-
-`export FIREFOX_BIN=/Applications/"Firefox Developer Edition.app"/Contents/MacOS/firefox`
-
-Don't forget the double quotes.
-
-##### The ClojureScript Testing Alias #####
-
-The `test-cljs` alias in the project file uses the `firefox-headless` environment for testing. I also have used the `safari` and `opera` test environments. Note that some of the expected results will change when using Safari. See `font-detection-test.cljs` for details.
+Yes, it's pretty weird to use both figwheel "classic" and Figwheel Main in the same project.)
 
 ## License ##
 
