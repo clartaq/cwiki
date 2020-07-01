@@ -6,8 +6,10 @@
 (ns cwiki-mde.editor-commands
   (:require [cljs-time.core :as t]
             [cljs-time.format :as f]
-            [clojure.string :refer [escape]]
-            [cwiki-mde.ws :as ws]))
+            [clojure.string :as s :refer [escape]]
+            ;[cwiki-mde.chunks :as chunks]
+            [cwiki-mde.ws :as ws]
+            [reagent.core :as r]))
 
 ;-------------------------------------------------------------------------------
 ; Utilities
@@ -123,6 +125,103 @@
         highlighted (.substr (.-value ele) start (- end start))
         encoded (percent-encode highlighted)]
     (insert-text-cmd ele encoded input-atom editor-state)))
+
+;; Original comment from pagedown:
+;; These two regex are identical except at the beginning and end. Should
+;; probably use the regex extension function to make this clearer.
+;(def prev-items-regex #"(\n|^)(([ ]{0,3}([*+-]|\d+[.])[ \t]+.*)(\n.+|\n{2,}([*+-].*|\d+[.])[ \t]+.*|\n{2,}[ \t]+\S.*)*)\n*$")
+;(def next-items-regex #"^\n*(([ ]{0,3}([*+-]|\d+[.])[ \t]+.*)(\n.+|\n{2,}([*+-].*|\d+[.])[ \t]+.*|\n{2,}[ \t]+\S.*)*)\n*")
+;(def bullet "-")
+;(def num 1);
+
+;(defn- extend-list
+;  [chunks]
+;  (println "extend-list")
+;  )
+
+  ;// These are identical except at the very beginning and end.
+  ;// Should probably use the regex extension function to make this clearer.
+  ;var previousItemsRegex = /(\n|^)(([ ]{0,3}([*+-]|\d+[.])[ \t]+.*)(\n.+|\n{2,}([*+-].*|\d+[.])[ \t]+.*|\n{2,}[ \t]+\S.*)*)\n*$/;
+  ;var nextItemsRegex = /^\n*(([ ]{0,3}([*+-]|\d+[.])[ \t]+.*)(\n.+|\n{2,}([*+-].*|\d+[.])[ \t]+.*|\n{2,}[ \t]+\S.*)*)\n*/;
+  ;
+  ;// The default bullet is a dash but others are possible.
+  ;// This has nothing to do with the particular HTML bullet,
+  ;// it's just a markdown bullet.
+  ;var bullet = "-";
+  ;
+  ;// The number in a numbered list.
+  ;var num = 1;
+
+
+;(defn- extend-blockquote
+;  [chunks]
+;  (println "extend-blockquote"))
+;
+;(defn- extend-code-block
+;  [chunks]
+;  (println "extend-code-block"))
+;
+;(defn auto-indent
+;  [ele editor-state]
+;  (println "auto-indent")
+;  (let [chunks (chunks/ele->chunks ele)]
+;    (println "    @chunks: " @chunks)
+;    (let [fake-selection (atom false)
+;          content-ratom (:page-content-ratom editor-state)]
+;      ;; Remove empty items and block-quote lines.
+;      (swap! chunks assoc :before (-> (:before @chunks)
+;                                      ;; Match an empty list item alone on a line.
+;                                      (s/replace
+;                                        #"(\n|^)[ ]{0,3}([*+-]|\d+[.])[ \t]*\n$" "\n\n")
+;                                      ;; Match any empty block-quoted lines.
+;                                      (s/replace #"(\n|^)[ ]{0,3}>[ \t]*\n$" "\n\n")
+;                                      ;; Match any lines containing just whitespace.
+;                                      (s/replace #"(\n|^)[ \t]+\n$" "\n\n")))
+;
+;      ;; There is no selection and the cursor wan't at the end of the line:
+;      ;; The user wants to split the current list item /  code line /
+;      ;; blockquote line (for the latter, it doesn't really matter) in two.
+;      ;; Temporarily select the (rest of the) line to achieve this.
+;
+;      (when (and (empty? (:selection @chunks))
+;                 (nil? (re-find #"^[ \\t]*(?:\\n|$)" (:after @chunks))))
+;        (println "WooHoo"))
+;
+;      ;      // There's no selection, end the cursor wasn't at the end of the line:
+;      ;      // The user wants to split the current list item / code line / blockquote line
+;      ;      // (for the latter it doesn't really matter) in two. Temporarily select the
+;      ;      // (rest of the) line to achieve this.
+;      ;      if (!chunk.selection && !/^[ \t]*(?:\n|$)/.test(chunk.after)) {
+;      ;          chunk.after = chunk.after.replace(/^[^\n]*/, function (wholeMatch) {
+;      ;              chunk.selection = wholeMatch;
+;      ;              return "";
+;      ;      });
+;      ;          fakeSelection = true;
+;      ;      }
+;
+;      (cond
+;
+;        ;; Handle automatic extension of lists.
+;        (re-find #"(\n|^)[ ]{0,3}([*+-]|\d+[.])[ \t]+.*\n$" (:before @chunks))
+;        (extend-list chunks)
+;
+;        ;; Handle extension of blockquote.
+;        (re-find #"(\n|^)[ ]{0,3}>[ \t]+.*\n$" (:before @chunks))
+;        (extend-blockquote chunks)
+;
+;        ;; Handle extension of code block.
+;        (re-find @"(\\n|^)(\\t|[ ]{4,}).*\\n$" (:before @chunks))
+;        (extend-code-block chunks)
+;
+;        )
+;
+;      (reset! content-ratom (str (:before @chunks) (:selection @chunks) (:after @chunks)))
+;      (println "    (count clean-b4): " (count (:before @chunks))) ;clean-b4))
+;      (r/after-render (fn []
+;                        (.focus ele)
+;                        (let [cnt (count (:before @chunks))] ;clean-b4)]
+;                          (println "    (count clean-b4): " (count (:before @chunks))) ;clean-b4))
+;                          (.setSelectionRange ele cnt cnt)))))))
 
 (defn quit-editor-cmd
   "Quit the editor."
