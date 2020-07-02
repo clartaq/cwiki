@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.8] - 2020-07-01
+
 ### Added ###
 
 - The "Backup", "Restore", "Import", and "Export All" pages display a short animation when the user clicks the button to proceed to indicate that _something_ is going on.
