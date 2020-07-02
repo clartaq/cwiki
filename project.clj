@@ -1,4 +1,4 @@
-(defproject cwiki "0.1.8"
+(defproject cwiki "0.1.9-SNAPSHOT"
   :description "A personal wiki written in Clojure and Clojurescript."
   :url "https://github.com/clartaq/cwiki"
   :license {:name         "Simplfied BSD"
