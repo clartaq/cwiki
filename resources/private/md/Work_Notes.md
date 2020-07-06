@@ -3,10 +3,16 @@ author = "CWiki"
 title = "Work Notes"
 tags = ["cwiki" "design" "keyboard" "shortcut" "technical note"]
 date = 2018-11-18T10:10:30.985-05:00
-modified = 2020-07-01T15:39:46.679-04:00
+modified = 2020-07-06T10:27:27.347-04:00
 +++
 
 This page is the on-going saga of working on the CWiki program.
+
+#### The "All Pages" Page Builds and Loads Too Slowly, 06 Jul 2020, 10:26:25 am ####
+
+Something seems wrong about this page. It loads so slowly. I thought it should be quite fast, having a separate index on the page titles, but that is not the case.
+
+Do something better.
 
 #### Unit Testing ClojureScript is Just Too Painful with Leiningen, 01 Jul 2020, 10:59:26 am ####
 
