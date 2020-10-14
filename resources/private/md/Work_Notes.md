@@ -3,10 +3,18 @@ author = "CWiki"
 title = "Work Notes"
 tags = ["cwiki" "design" "keyboard" "shortcut" "technical note"]
 date = 2018-11-18T10:10:30.985-05:00
-modified = 2020-07-06T10:27:27.347-04:00
+modified = 2020-07-16T12:45:42.994-04:00
 +++
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Speed, Consider Changing Database, 16 Jul 2020, 12:37:01 pm ####
+
+As usual, I'm getting concerned about speed. This time the issue seems to be with the database. As I add more and more pages to the wiki, just accessing the "All Pages" page seems to take longer than it should. The "All Tags" lookup seems to be quicker even though it has more entries.
+
+Maybe I should consider an "in memory" database like [DataScript](https://github.com/tonsky/datascript). [Roam Research](https://roamresearch.com) uses it and their site seems very speedy. In the past, I've shied away from in-memory data because I've assumed it might fill up available RAM. Then what? If Roam is not experiencing a problem, then I probably won't either.
+
+The disadvantage, of course, is that I have a lot of well-tested, reliable database code. Not sure how difficult a transition it might be.
 
 #### The "All Pages" Page Builds and Loads Too Slowly, 06 Jul 2020, 10:26:25 am ####
 

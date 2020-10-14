@@ -3,7 +3,7 @@ author = "CWiki"
 title = "Other Wiki Software"
 tags = ["alternatives" "note-taking software" "wiki software"]
 date = 2017-10-10T13:20:24.000-04:00
-modified = 2020-06-23T15:44:12.529-04:00
+modified = 2020-07-16T13:03:47.866-04:00
 +++
 
 Here are some other wikis (and note-taking apps and personal knowledge bases) that I find interesting. Some of these are quite mature and very polished. Each has an opinionated approach to information management that works very smoothly when used as intended. Of course, each is missing something that I want. Otherwise, I would not have found it necessary to write CWiki.
@@ -34,6 +34,29 @@ I have used [TiddlyWiki](http://tiddlywiki.com/) for many years, over a decade. 
 
 - Can get very slow with an extensive collection of data.
 - It seems like the user community is shrinking.
+
+## Zettlr ##
+
+[Zettlr](https://www.zettlr.com) comes very close to what I want. It does not bill itself as a wiki but has many of the essential features, like wikilinks.
+
+### Features ###
+
+- Can be used as a [zettelkasten](https://zettelkasten.de/posts/overview/), note-taking app, or a good Markdown editor.
+- Supports [[Links Primer|wikilinks]].
+
+### Pros ###
+
+- Open source
+- Good documentation
+- Active community
+- No data lock-in. Input data are just Markdown files in you file system.
+
+### Cons ###
+
+- Another huge Electron-based app written in JavaScript
+- Large number of build dependencies
+- Requires installation of additional packages for full functionality like PanDoc and Katex.
+- There are some concerns about performance.
 
 ## WikidPad ##
 
