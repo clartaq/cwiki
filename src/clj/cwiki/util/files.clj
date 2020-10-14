@@ -331,8 +331,8 @@
   "Build and return a string containing front matter for the page. The
   front matter is in the TOML configuration language."
   [page-map author-name tags]
-  ;(build-yaml-front-matter page-map author-name tags)
-  (build-toml-front-matter page-map author-name tags))
+  (build-yaml-front-matter page-map author-name tags))
+  ;(build-toml-front-matter page-map author-name tags))
 
 (defn- save-page
   "Save the page described in the page-map to a file."
