@@ -112,7 +112,7 @@ To run tests on the Clojure code, open a terminal in the project directory and e
 
 You can run tests on the ClojureScript code by opening a terminal and typing:
 
-`clj -A:fig:test`
+`clj -M:fig:test`
 
 (I switched to using the Clojure command line interface (CLI) and `deps` ([guide](https://clojure.org/guides/deps_and_cli)) along with [Figwheel Main](https://figwheel.org) because of the painful mess that is ClojureScript testing with Leiningen. It is no fault of the Leiningen tool. It's just that the stack of tools is constantly changing and losing support or moving on to next "shiny new thing". There is much less setup this way and it just works.
 
