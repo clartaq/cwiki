@@ -40,6 +40,7 @@ Other_Wiki_Software.md
 Pages_Primer.md
 Roadmap.md
 Running_on_a_VPS.md
+Security.md
 Sidebar.md
 Special_Pages.md
 Speed.md
