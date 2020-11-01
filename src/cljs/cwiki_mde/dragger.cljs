@@ -5,7 +5,8 @@
 
 (ns cwiki-mde.dragger
   (:require [ajax.core :refer [ajax-request text-request-format
-                               text-response-format]]))
+                               text-response-format]]
+            [cwiki-mde.ws :as ws]))
 
 ;; The minimum allowable width for the sidebar.
 (def ^{:private true :const true} min-sidebar-basis 150)
@@ -34,13 +35,13 @@
 
 (defn persist-new-basis
   [new-basis]
-  (ajax-request
-    {:uri             "/width-of-sidebar"
-     :method          :post
-     :body            new-basis
-     :handler         response-handler
-     :format          (text-request-format)
-     :response-format (text-response-format)}))
+  (ajax-request {:uri             "/width-of-sidebar"
+                 :method          :post
+                 :headers         {:X-CSRF-Token ws/?csrf-token}
+                 :body            new-basis
+                 :handler         response-handler
+                 :format          (text-request-format)
+                 :response-format (text-response-format)}))
 
 (defn- move [evt]
   (when @dragging
@@ -54,6 +55,8 @@
     (reset! dragging false)
     (.removeEventListener js/window "mousemove" move)
     (when (not= @starting-basis @new-basis)
+      (println "stop-tracking: @starting-basis: " @starting-basis
+               ", @new-basis: " @new-basis)
       (persist-new-basis @new-basis))))
 
 (defn- start-tracking [evt]
