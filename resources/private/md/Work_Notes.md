@@ -1,12 +1,46 @@
-+++
-author = "CWiki"
-title = "Work Notes"
-tags = ["cwiki" "design" "keyboard" "shortcut" "technical note"]
-date = 2018-11-18T10:10:30.985-05:00
-modified = 2020-07-16T12:45:42.994-04:00
-+++
+---
+author: CWiki
+
+title: Work Notes
+
+date: 2018-11-18T10:10:30.985-05:00
+modified: 2020-11-01T17:47:43.681-05:00
+tags:
+  - technical note
+
+  - design
+
+  - cwiki
+
+  - keyboard
+
+  - shortcut
+
+---
 
 This page is the on-going saga of working on the CWiki program.
+
+#### Preferences for Widths not Stored Correctly, 01 Nov 2020, 12:37:19 pm ####
+
+For some reason, the changes to column widths, whether from the dialog or the drag bar, are not being stored and restored correctly.
+
+**Update:** Had to add a header containing the CSRF security token to the AJAX request that saves the new width in the `cwiki-mde.dragger.cljs` function `persist-new-basis`. The token, `?csrf-token`, was already available from `cwiki-mde.ws` as part of the handshake when setting up the web socket stuff.
+
+#### Search should have Special Syntax for Tags, 01 Nov 2020, 10:19:01 am ####
+
+Search should be beefed up a bit with special syntax to include searching for tags and Zettel IDs. Maybe use the prefix character `:` when searching for tags and `[` when searching for Zettel IDs.
+
+Maybe think about including logical `and`, `or`, and grouping operations with parentheses.
+
+#### Including a Zettel ID for Each Page, 01 Nov 2020, 10:02:13 am ####
+
+I'm considering adding a "Zettel ID" for each wiki page. The idea, of course, comes from the practice of using a [Zettelkasten](https://zettelkasten.de). Such an idea would only be useful if the search and wiki link functionality were extended to be able to handle them.
+
+Such an id should be created exactly once at the time a page is created. As such, it could be derived from the creation time stamp at any time. I think maintaining it independently in the database might make lookups a bit easier though. Particularly the lookup for existing pages when coloring the links on a page.
+
+#### Reverting to YAML Front Matter, 14 Oct 2020, 05:30:39 pm ####
+
+The program has been reverted to generating front matter in YAML. Hugo didn't like the TOML I generated (my issue that I don't have time to fix right now) and YAML is just used in so many more systems like this. Sigh.
 
 #### Speed, Consider Changing Database, 16 Jul 2020, 12:37:01 pm ####
 

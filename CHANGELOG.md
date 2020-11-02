@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added ###
+
+- Started building, testing, and running with SDK 15.
+
+### Changed ###
+
 - Reverted to YAML front matter.
 - Updated dependencies.
-- Updated content.
+- Updated content, in particular, added a few notes on data security.
+
+### Fixed ###
+
+- Fixed issue #29. Dragging the right border of the sidebar now persists the change across sessions and page reloads.
 
 ## [0.1.8] - 2020-07-01
 
