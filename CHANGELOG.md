@@ -1,19 +1,23 @@
-# Changelog
+# Changelog #
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unpublished]
+## [Unpublished] ##
 
 ### Added ###
 
 ### Changes ###
 
+- Started building, testing, and running with SDK 17
+- Both the normal page display and the editor preview pull their CSS from the same (local) file.
+- Updated `highlight.pack.js` dependency to 10.5.0.
+
 ### Fixed ###
 
-## [0.1.9] - 2020-11-03
+## [0.1.9] - 2020-11-03 ##
 
 A small release to update dependencies, fix a bug, and talk a little about security.
 
@@ -31,7 +35,7 @@ A small release to update dependencies, fix a bug, and talk a little about secur
 
 - Fixed issue #29. Dragging the right border of the sidebar now persists the change across sessions and page reloads.
 
-## [0.1.8] - 2020-07-01
+## [0.1.8] - 2020-07-01 ##
 
 ### Added ###
 
