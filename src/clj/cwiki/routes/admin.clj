@@ -17,8 +17,8 @@
             [cwiki.util.files :as files]
             [cwiki.util.req-info :as ri]
             [ring.util.response :refer [redirect status]]
-            [taoensso.timbre :refer [tracef debugf infof warnf errorf
-                                     trace debug info warn error]]
+;;            [taoensso.timbre :refer [tracef debugf infof warnf errorf
+;;                                     trace debug info warn error]]
             [clojure.java.io :as io])
   (:import (java.util.zip ZipOutputStream ZipEntry)
            (java.io FileOutputStream File)
@@ -126,7 +126,7 @@
   (let [backup-dir (files/get-backup-directory)
         backup-file-path-str (str backup-dir files/sep backup-file-name)
         path (.toPath (File. backup-file-path-str))
-        fs (FileSystems/newFileSystem path nil)
+        fs (FileSystems/newFileSystem ^Path path)
         root (first (.getRootDirectories fs))
         strm (Files/walk root (into-array FileVisitOption nil))
         default-author (db/get-cwiki-user-name)]
