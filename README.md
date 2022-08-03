@@ -33,7 +33,7 @@ CWiki is alpha-quality software. It does useful things, but many planned feature
 
 ### Prerequisites ###
 
-Java 11 (AdoptOpenJDK 11) for development and testing. It should compile and run under version 8, but this is not tested. 
+Java 17 (OpenJDK/Temurin 17) for development and testing. It should compile and run under version 8, but this is not tested. 
 
 ### Run a Prebuilt Jar ###
 
