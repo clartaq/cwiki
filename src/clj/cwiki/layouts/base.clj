@@ -163,9 +163,9 @@
      (include-css (get-development-css-path))
      (include-css (get-production-css-path)))
    (when (= which-highlighter :editor-highlighter)
-     (include-css "//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/default.min.css"))
+     (include-css "js/styles/github.css"))
    (when (= which-highlighter :page-highlighter)
-     (include-css (str "/js/styles/default.css")))])        ;)
+     (include-css "/js/styles/github.css"))])
 
 (defn standard-end-of-body
   "Returns a div with the standard scripts to include in the page."
