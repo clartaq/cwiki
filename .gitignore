@@ -37,6 +37,7 @@ doo-index.html
 exported-pages/
 figwheel_server.log
 node_modules/
+misunderstood_node_modules/
 notes/
 package-lock.json
 push-to-bitbucket.sh
