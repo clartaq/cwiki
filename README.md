@@ -1,4 +1,4 @@
-# CWiki ##
+# CWiki #
 
 CWiki is a simple personal wiki application. You use your browser to view and edit the content. It runs on your local machine. You can link to external sites on the internet, but the content you create stays on your computer.
 
@@ -122,4 +122,4 @@ Yes, it's pretty weird to use both figwheel "classic" and Figwheel Main in the s
 
 This software is licensed under the BSD Simplified 2-Clause License. See the [LICENSE.txt](https://bitbucket.org/David_Clark/cwiki/src/default/LICENSE.txt) file.
 
-Copyright © 2017-2020 David D. Clark
+Copyright © 2017-2022 David D. Clark
