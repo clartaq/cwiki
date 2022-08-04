@@ -79,7 +79,7 @@
   [(with-meta
      (fn []
        [:div {:dangerouslySetInnerHTML
-              {:__html (-> content str js/marked)}}])
+              {:__html (-> content str js/marked.parse)}}])
      {:component-did-mount
       (fn [this]
         (let [node (rdom/dom-node this)]
